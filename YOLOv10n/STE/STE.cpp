@@ -32,7 +32,6 @@
 #include "StreamingWindowSelector.hpp"
 #include "StreamingLUT.hpp"
 #include "StreamingSplit.hpp"
-#include "StreamingFusedSoftmaxMatmul.hpp"
 #include "StreamingReLU.hpp"
 #include "StreamToNHWC.hpp"
 #include "StreamingMemory.hpp"
