@@ -135,9 +135,10 @@ These components are shared across all models.
 
 3.  Run HLS synthesis and simulation:
 
-    -   Use `csynth_design` and `export_design` to retrieve resource
-        usage
-    -   Use `csynth_design` and `cosim_design` to measure latency and II
+    -   Modify script.tcl to use the chosen kernel + testbench couple.
+    -   Uncomment `csynth_design` and `export_design` to retrieve resource
+        usage.
+    -   Uncomment `csynth_design` and `cosim_design` to measure latency and II.
 
 4.  Optionally run STE:
 
