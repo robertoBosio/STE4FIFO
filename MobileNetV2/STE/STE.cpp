@@ -14012,7 +14012,7 @@ void mobilenet_v2(void)
     done_simulation:
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-    std::ofstream report_file("/workspace/NN2FPGA/work/mobilenet_v2_dse/depth-sim/fifo_depth.json");
+    std::ofstream report_file("fifo_depth.json");
     report_file << "{\n";
     report_file << "	\"fifo_depth\": {\n";
     report_file << "		\"NHWCToStream_0_out0_stream_0_\": " << stream_max_size[0] << ",\n";

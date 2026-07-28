@@ -2,7 +2,7 @@ set type "original"
 
 # Resolve paths relative to this script's directory
 set script_dir  [file dirname [file normalize [info script]]]
-set inc_dir     [file normalize [file join $script_dir ../include]]
+set inc_dir     [file normalize [file join $script_dir ../nn2FPGA/include]]
 set data_dir    [file normalize [file join $script_dir data]]
 set kernel_cpp  [file normalize [file join $script_dir kernels/kernel_${type}.cpp]]
 set tb_cpp      [file normalize [file join $script_dir testbenches/testbench_original.cpp]]
@@ -12,13 +12,13 @@ set proj_name   "yolov5nu_${type}_HLS_project"
 set sol_name    "solution_0"
 
 # Create/clean project & solution
-open_project $proj_name
+open_project -reset $proj_name
 set_top yolov5nu
 add_files $kernel_cpp  -cflags [format {-I%s} $inc_dir]
 add_files -tb $tb_cpp  -cflags [format {-I%s} $inc_dir]
 add_files -tb $data_dir
 
-open_solution $sol_name
+open_solution -reset $sol_name
 set_part xczu9eg-ffvb1156-2-e
 create_clock -period 5
 
@@ -32,4 +32,3 @@ config_compile -pipeline_style flp
 #export_design -flow syn
 
 exit
-

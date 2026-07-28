@@ -1,0 +1,74 @@
+# Install and Basic Use
+
+## 1. Unpack or Clone the Artifact
+
+Place the artifact on a Linux machine with AMD Vitis HLS 2023.2 installed.
+
+## 2. Check the Environment
+
+From the repository root, run:
+
+```bash
+artifact/check_environment.sh
+```
+
+The script checks for the expected repository layout and reports whether
+`vitis_hls` is available on `PATH`.
+
+## 3. Run an STE Model
+
+Run the STE model for a benchmark, for example:
+
+```bash
+artifact/run_ste.sh ResNet8
+```
+
+Valid benchmark names are:
+
+- `ResNet8`
+- `ResNet20`
+- `MobileNetV2`
+- `YOLOv5nu`
+- `YOLOv10n`
+
+Each run produces `fifo_depth.json` in the corresponding `STE/` directory.
+
+## 4. Reproduce Table I
+
+Table I is reproduced with a dedicated HLS/cosim script that uses the
+memory-interface kernel variants and generates multi-transaction testbenches for
+II measurement:
+
+```bash
+artifact/table1/run_table1.py
+```
+
+To run one benchmark:
+
+```bash
+artifact/table1/run_table1.py ResNet8
+```
+
+MobileNetV2 and the YOLO benchmarks can take days to complete in HLS/cosim,
+depending on the machine and Vitis installation.
+
+## 5. Expected Results
+
+The expected proposed-method FIFO memory sizes from Table II are summarized in:
+
+```bash
+artifact/expected_ste_results.md
+```
+
+The coverage of each paper table is documented in:
+
+```bash
+artifact/table_coverage.md
+```
+
+## 6. Optional HLS C Simulation
+
+Each benchmark also contains a `script.tcl` file for Vitis HLS. The default flow
+keeps `csim_design`, `csynth_design`, `cosim_design`, and `export_design`
+commented. Reviewers may uncomment the desired commands depending on the part of
+the HLS flow they want to run.

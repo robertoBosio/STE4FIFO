@@ -27,6 +27,10 @@ int main(int argc, char** argv)
     std::string file_global_out_1 = argv[4];
     hls::stream<ap_axiu<128, 0, 0, 0>> global_out_1;
     txt_to_hls_stream<ap_axiu<128, 0, 0, 0>, ap_int<8>, char>(file_global_in, global_in, 16);
+    txt_to_hls_stream<ap_axiu<128, 0, 0, 0>, ap_int<8>, char>(file_global_in, global_in, 16);
+    txt_to_hls_stream<ap_axiu<128, 0, 0, 0>, ap_int<8>, char>(file_global_in, global_in, 16);
+    yolov10n(global_in, global_out_2, global_out, global_out_1);
+    yolov10n(global_in, global_out_2, global_out, global_out_1);
     yolov10n(global_in, global_out_2, global_out, global_out_1);
     return 0;
 }

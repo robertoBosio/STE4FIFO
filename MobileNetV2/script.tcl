@@ -2,7 +2,7 @@ set type "original"
 
 # Resolve paths relative to this script's directory
 set script_dir  [file dirname [file normalize [info script]]]
-set inc_dir     [file normalize [file join $script_dir ../include]]
+set inc_dir     [file normalize [file join $script_dir ../nn2FPGA/include]]
 set data_dir    [file normalize [file join $script_dir data]]
 set kernel_cpp  [file normalize [file join $script_dir kernels/kernel_${type}.cpp]]
 set tb_cpp      [file normalize [file join $script_dir testbenches/testbench_original.cpp]]
@@ -32,4 +32,3 @@ config_compile -pipeline_style flp
 #export_design -flow syn
 
 exit
-

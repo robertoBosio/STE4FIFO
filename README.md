@@ -1,146 +1,145 @@
-# STE4FIFO
+# STE4FIFO Artifact
 
-This repository contains the source code used to produce the results of\
-**"One-Shot Cosimulation-Free Buffer Sizing for Large-Scale HLS Dataflow
-Designs"**.
+This repository contains the artifact for:
 
-It includes benchmark networks and the corresponding kernels generated
-through different FIFO sizing strategies, along with testbenches and
-scripts for simulation and evaluation.
+**One-Shot Cosimulation-Free Buffer Sizing for Large-Scale HLS Dataflow Designs**
 
-------------------------------------------------------------------------
+The artifact focuses on the core contribution of the paper: Self-Timed
+Execution (STE) models used to compute FIFO sizes for large HLS dataflow
+designs. It also includes generated HLS kernel variants sized by the proposed
+method and by comparison techniques.
+
+The accepted paper PDF is included as `ESWEEK_FIFO2026_MAIN_RESPONSE.pdf`.
+
+## Artifact Scope
+
+Included:
+
+- STE source code for each benchmark model
+- Generated HLS kernels for the proposed method and comparison techniques
+- Testbenches and input/golden-output data used by the benchmark kernels
+- Shared nn2FPGA-derived HLS operator headers
+- Documentation required for artifact evaluation
+
+Not included:
+
+- FIFOAdvisor installation and exploration flow
+- LightningSim installation and instrumentation flow
+- Full C/RTL cosimulation or FPGA deployment automation
+
+The artifact is intended to support inspection and execution of the included
+STE models. It can regenerate the proposed-method FIFO sizes reported in Table
+II and provides a dedicated HLS/cosim script for Table I. It does not fully
+regenerate FIFOAdvisor exploration times or Table III LightningSim comparisons.
 
 ## Repository Structure
 
-    .
-    ├── ResNet8/
-    ├── ResNet20/
-    ├── MobileNetV2/
-    ├── YOLOv5nu/
-    ├── YOLOv10n/
-    ├── nn2FPGA/
+```text
+.
+├── artifact/                         # Review scripts and result notes
+├── ResNet8/                          # Benchmark source, data, kernels, STE
+├── ResNet20/
+├── MobileNetV2/
+├── YOLOv5nu/
+├── YOLOv10n/
+├── nn2FPGA/                          # Shared HLS operator headers
+├── ESWEEK_FIFO2026_MAIN_RESPONSE.pdf
+├── INSTALL
+├── LICENSE
+├── REQUIREMENTS
+└── STATUS
+```
 
--   The first five directories correspond to the **benchmarks used in
-    the paper**.
--   `nn2FPGA/` contains the **operators and base infrastructure**
-    derived from the nn2FPGA framework.
+Each benchmark directory has the following layout:
 
-------------------------------------------------------------------------
+```text
+benchmark/
+├── data/                             # Input data and golden references
+├── kernels/                          # Generated HLS kernels
+├── testbenches/                      # HLS testbenches
+├── STE/                              # Self-Timed Execution model
+└── script.tcl                        # Vitis HLS project script
+```
 
 ## Benchmarks
 
-Each benchmark directory (`ResNet8`, `ResNet20`, `MobileNetV2`,
-`YOLOv5nu`, `YOLOv10n`) has the same internal structure:
+The artifact contains the five DNN benchmarks used in the paper:
 
-    benchmark/
-    ├── data/
-    ├── kernels/
-    ├── testbenches/
-    ├── STE/
+- `ResNet8`
+- `ResNet20`
+- `MobileNetV2`
+- `YOLOv5nu`
+- `YOLOv10n`
 
-### `data/`
+The HLS source code for the benchmark designs was generated from nn2FPGA-based
+flows and then modified to instantiate FIFO depths from the evaluated sizing
+techniques.
 
-Contains: - Input data for simulation - Expected outputs (golden
-references)
+## Kernel Variants
 
-Used to validate correctness during simulations.
+The `kernels/` directory of each benchmark contains variants for several FIFO
+sizing techniques:
 
-------------------------------------------------------------------------
+- `kernel_original.cpp`: original nn2FPGA-style kernel
+- `kernel_heuristic.cpp`: FIFOAdvisor heuristic-sized kernel
+- `kernel_bisection.cpp`: bisection-sized kernel
+- `kernel_sa.cpp`: simulated-annealing-sized kernel
+- `kernel_group-sa.cpp`: grouped simulated-annealing-sized kernel
+- `kernel_mem.cpp` or `kernel_lightning.cpp`: memory-interface variants used for external tools
+- `kernel_stream_*.cpp`: stream-interface variants used for resource-oriented HLS runs
 
-### `kernels/`
+These generated kernels are provided so reviewers can inspect the resulting FIFO
+depth annotations and run selected HLS flows if desired.
 
-Contains the generated kernels obtained through FIFOAdvisor exploration
-using four algorithms:
+## Quick Start
 
--   **Bisection**
--   **Heuristic**
--   **Simulated Annealing (SA)**
--   **Group Simulated Annealing (Group-SA)**
+Check the local environment:
 
-Each kernel exists in multiple variants:
+```bash
+artifact/check_environment.sh
+```
 
--   **Stream-based version**\
-    Uses streaming interfaces and includes weight loading at startup.\
-    This version is used to collect resource utilization.
+Run the STE model for a single benchmark:
 
-    Example:
+```bash
+artifact/run_ste.sh ResNet8
+```
 
-        kernel_stream_heuristic.cpp
+The STE run writes `fifo_depth.json` in the selected benchmark's `STE/`
+directory, for example `ResNet8/STE/fifo_depth.json`.
 
--   **Reduced version (no weight streaming)**\
-    Identical to the stream-based version but without weight loading
-    logic.\
-    This version is used to measure latency and Initiation Interval
-    (II).
+Expected proposed-method FIFO sizes are listed in
+`artifact/expected_ste_results.md`.
 
-    Example:
+Run the Table I HLS/cosim flow:
 
-        kernel_heuristic.cpp
+```bash
+artifact/table1/run_table1.py
+```
 
--   **nn2FPGA original version**\
-    Original nn2FPGA kernel with FIFOs sized using the STE technique.
+MobileNetV2 and the YOLO benchmarks can take days to complete in HLS/cosim,
+depending on the machine and Vitis installation.
 
-    Example:
+## Requirements
 
-        kernel_original.cpp
+Running the included HLS/STE flows requires AMD Vitis HLS 2023.2 or a compatible
+installation that provides the HLS headers and `vitis_hls` executable.
 
--   **LightningSim version**\
-    Uses memory interfaces instead of streams, since LightningSim (and
-    FIFOAdvisor) do not support streaming interfaces.
+See `REQUIREMENTS` and `INSTALL` for details.
 
-    Example:
+## Paper Result Coverage
 
-        kernel_lightning.cpp
+The artifact intentionally separates the included core STE flow from results
+that require additional third-party infrastructure. See
+`artifact/table_coverage.md` for a table-by-table summary.
 
-------------------------------------------------------------------------
+In short:
 
-### `testbenches/`
+- Table II proposed-method FIFO sizes: supported by the included STE code
+- Table II FIFOAdvisor exploration times: not regenerated here
+- Table I process/FIFO/latency/II rows: supported by `artifact/table1/run_table1.py`
+- Table III LightningSim comparison: not regenerated here
 
-Three types of testbenches are provided:
+## License
 
-1.  **Full streaming testbench (nn2FPGA original)**
-    -   Streams both inputs and weights
-    -   Matches the original nn2FPGA interface
-2.  **Streaming testbench without weight stream**
-    -   Used for **II measurement in RTL simulation**
-    -   Reduces simulation time significantly
-3.  **Memory-based interface testbench**
-    -   Uses memory instead of streams
-    -   Required for **LightningSim**
-
-------------------------------------------------------------------------
-
-### `STE/` (Self-Timed Execution)
-
-Contains the source code implementing **Self-Timed Execution (STE)** of
-the network and the script to launch STE simulations.
-
-------------------------------------------------------------------------
-
-## nn2FPGA Components
-
-The `nn2FPGA/` directory contains the operators used by the benchmarks.\
-These components are shared across all models.
-
-------------------------------------------------------------------------
-
-## How to Replicate Results
-
-1.  Select a benchmark (e.g., `ResNet20`)
-
-2.  Choose:
-
-    -   A kernel variant (algorithm + interface type)
-    -   A corresponding testbench
-
-3.  Run HLS synthesis and simulation:
-
-    -   Modify script.tcl to use the chosen kernel + testbench couple.
-    -   Uncomment `csynth_design` and `export_design` to retrieve resource
-        usage.
-    -   Uncomment `csynth_design` and `cosim_design` to measure latency and II.
-
-4.  Optionally run STE:
-
-        cd STE
-        vitis_hls -f run_ste.tcl
+This artifact is released under the MIT License. See `LICENSE`.
