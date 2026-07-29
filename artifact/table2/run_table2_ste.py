@@ -29,10 +29,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     return parser
 
-def run_ste(benchmark: str) -> None:
+def run_ste(benchmark) -> None:
+    benchmark.ste_json.unlink(missing_ok=True)
     subprocess.run(
-        [str(REPO_ROOT / "artifact" / "run_ste.sh"), benchmark],
-        cwd=REPO_ROOT,
+        ["vitis_hls", "-f", "run_ste.tcl"],
+        cwd=benchmark.ste_dir,
         check=True,
     )
 
@@ -133,7 +134,7 @@ def main() -> None:
     args = build_parser().parse_args()
     for benchmark in select_benchmarks(args.benchmark):
         if not args.parse_only:
-            run_ste(benchmark.name)
+            run_ste(benchmark)
             tcl_path = make_csynth_tcl(benchmark)
             print(f"Wrote {tcl_path}")
             run_csynth(tcl_path)

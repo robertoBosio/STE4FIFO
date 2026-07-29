@@ -5,14 +5,15 @@ This directory contains helper scripts and notes for artifact evaluation.
 Scripts:
 
 - `check_environment.sh`: checks repository layout and Vitis HLS availability
-- `run_ste.sh`: runs the STE model for one benchmark
 - `table1/run_table1.py`: runs HLS/cosim on memory-interface kernels and prints Table I rows
+- `table2/run_table2_ste.py`: runs the Table II proposed-method STE and csynth flow
+- `table2/run_table2_fifoadvisor.py`: runs the Table II FIFOAdvisor comparison flow
+- `table2/run_table2_resources.py`: runs the Table II resource flow
+- `table3/run_table3.py`: runs the Table III observed-memory flow
 
 Documentation:
 
-- `expected_ste_results.md`: expected proposed-method FIFO sizes from Table II
 - `table1/README.md`: Table I HLS/cosim reproduction flow
-- `table_coverage.md`: what paper results are supported by this artifact
 
-The scripts intentionally avoid FIFOAdvisor and LightningSim because those flows
-are not bundled with this artifact.
+FIFOAdvisor-dependent flows are supported through
+`artifact/fifoadvisor/setup_env.sh`.

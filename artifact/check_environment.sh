@@ -37,3 +37,9 @@ if command -v vitis_hls >/dev/null 2>&1; then
 else
   printf 'vitis_hls not found on PATH. Install/source AMD Vitis HLS 2023.2 to run STE flows.\n'
 fi
+
+if command -v fifo-advisor >/dev/null 2>&1; then
+  printf 'fifo-advisor found: %s\n' "$(command -v fifo-advisor)"
+else
+  printf 'fifo-advisor not found on PATH. Run "source artifact/fifoadvisor/setup_env.sh" before FIFOAdvisor-dependent flows.\n'
+fi

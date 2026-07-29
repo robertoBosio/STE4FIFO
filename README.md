@@ -87,14 +87,14 @@ artifact/check_environment.sh
 Run the STE model for a single benchmark:
 
 ```bash
-artifact/run_ste.sh ResNet8
+vitis_hls -f ResNet8/STE/run_ste.tcl
 ```
 
 The STE run writes `fifo_depth.json` in the selected benchmark's `STE/`
 directory, for example `ResNet8/STE/fifo_depth.json`.
 
-Expected proposed-method FIFO sizes are listed in
-`artifact/expected_ste_results.md`.
+This JSON file contains the per-FIFO depth output used by the Table II
+proposed-method flow.
 
 ## Kernel Variants
 
@@ -113,13 +113,13 @@ depth annotations and run selected HLS flows if desired.
 
 ## Result Reproduction Matrix
 
-| Result | Command path | Required tools | Notes |
-| --- | --- | --- | --- |
-| Table I process, FIFO, latency, and II rows | `artifact/table1/run_table1.py` | AMD Vitis HLS 2023.2 | MobileNetV2 and YOLO runs can take days. |
-| Table II proposed-method FIFO size and timing rows | `artifact/table2/run_table2_ste.py` | AMD Vitis HLS 2023.2 | Generates normalized outputs under `artifact/table2/results/`. |
-| Table II FIFOAdvisor comparison rows | `artifact/table2/run_table2_fifoadvisor.py` | AMD Vitis HLS 2023.2, FIFOAdvisor setup | Run `artifact/fifoadvisor/setup_env.sh` first. |
-| Table II resource section | `artifact/table2/run_table2_resources.py` | AMD Vitis HLS 2023.2, Vivado, ZCU102 license | Requires the additional licensed implementation flow. |
-| Table III observed FIFO memory comparison | `artifact/table3/run_table3.py` | AMD Vitis HLS 2023.2, FIFOAdvisor setup | Run `artifact/fifoadvisor/setup_env.sh` first. |
+| Result | Command path | Required tools |
+| --- | --- | --- |
+| Table I process, FIFO, latency, and II rows | `artifact/table1/run_table1.py` | AMD Vitis HLS 2023.2 |
+| Table II proposed-method FIFO size and timing rows | `artifact/table2/run_table2_ste.py` | AMD Vitis HLS 2023.2 |
+| Table II FIFOAdvisor comparison rows | `artifact/table2/run_table2_fifoadvisor.py` | AMD Vitis HLS 2023.2, FIFOAdvisor setup |
+| Table II resource section | `artifact/table2/run_table2_resources.py` | AMD Vitis HLS 2023.2, Vivado, ZCU102 license |
+| Table III observed FIFO memory comparison | `artifact/table3/run_table3.py` | AMD Vitis HLS 2023.2, FIFOAdvisor setup |
 
 ## Tool-Specific Setup
 
@@ -225,11 +225,6 @@ Running the included flows requires AMD Vitis HLS 2023.2. Table II resource
 reproduction additionally requires Vivado and a ZCU102 license.
 
 See `REQUIREMENTS` and `INSTALL` for details.
-
-## Paper Result Coverage
-
-See `artifact/table_coverage.md` for a table-by-table summary of the workflows,
-their outputs, and their tool requirements.
 
 ## License
 
