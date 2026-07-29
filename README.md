@@ -154,6 +154,10 @@ artifact/table1/run_table1.py --parse-only
 
 Generated TCL scripts and HLS projects are written under `artifact/table1/generated/`.
 
+The script prints the Table I rows directly from the generated reports. The
+supporting cosimulation and synthesis reports used to collect those values are
+stored under `artifact/table1/generated/`.
+
 MobileNetV2 and the YOLO benchmarks can take days to complete in HLS/cosim,
 depending on the machine and Vitis installation.
 
@@ -179,6 +183,18 @@ artifact/table2/run_table2_resources.py --benchmark ResNet8
 
 The Table II resource section requires Vivado and a ZCU102 license.
 
+Generated HLS projects and implementation reports are written under
+`artifact/table2/generated/`.
+
+Collected Table II outputs are written under `artifact/table2/results/`:
+
+- normalized per-benchmark summaries: `artifact/table2/results/normalized/`
+- raw FIFOAdvisor outputs: `artifact/table2/results/raw/fifoadvisor/`
+- raw resource summaries: `artifact/table2/results/raw/resources/`
+
+Use `artifact/table2/collect_table2.py` to read the normalized outputs and
+print the collected Table II rows.
+
 ## Reproducing Table III
 
 Activate the FIFOAdvisor environment first:
@@ -193,7 +209,15 @@ Then run:
 artifact/table3/run_table3.py --benchmark ResNet8
 ```
 
-Outputs are written under `artifact/table3/results/`.
+Generated HLS projects are written under `artifact/table3/generated/`.
+
+Collected Table III outputs are written under `artifact/table3/results/`:
+
+- raw observed-depth reports: `artifact/table3/results/raw/`
+- normalized per-benchmark summaries: `artifact/table3/results/normalized/`
+
+The script prints the Table III rows and also stores the normalized JSON
+summaries in `artifact/table3/results/normalized/`.
 
 ## Requirements
 
