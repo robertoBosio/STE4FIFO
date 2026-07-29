@@ -6,14 +6,15 @@ and Vivado implementation runs.
 
 ## What Is Regenerated
 
-- `Our method`: runs the included STE model and reads `STE/fifo_depth.json`.
+- `Our method`: runs the included STE model for timing and reads the total FIFO
+  size from the `kernel_original.cpp` C synthesis report.
 - FIFOAdvisor methods: runs FIFOAdvisor on an HLS solution built from
   `kernels/kernel_lightning.cpp`.
 - The collector reports naive size, final time, final size, and size delta.
 
 ## Usage
 
-Generate the FIFOAdvisor HLS solution and width report for one benchmark:
+Generate the FIFOAdvisor HLS solution and observed-depth report for one benchmark:
 
 ```bash
 artifact/table2/run_table2_fifoadvisor.py --benchmark ResNet8 --observed-depths-only
@@ -47,9 +48,9 @@ script only when you explicitly want to normalize an existing `fifo_depth.json`.
 
 ## Notes
 
-- `Our method` byte accounting treats STE depths as observed occupancies and
-  reports capacities as `observed_depth + 1`. The STE-only channels
-  `StreamingMemory_*` and `NHWCToStream_1_*` are excluded from the Table II
-  size. FIFO widths come from the FIFOAdvisor width report when available, with
-  the corresponding `STE.cpp` stream declarations used as a fallback.
+- `Our method` keeps STE as the timing source, but derives FIFO memory size from
+  the `Total` row of `solution_0/syn/report/<top>_csynth.rpt` for
+  `kernels/kernel_original.cpp`.
+- The csynth report stores the total FIFO size in bits. This flow converts that
+  value to bytes with round-up division.
 - MobileNetV2 and YOLO runs can be long. Validate changes on ResNet8 first.

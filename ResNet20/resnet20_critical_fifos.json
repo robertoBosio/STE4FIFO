@@ -1,0 +1,14 @@
+{
+  "overrides": [
+    {
+      "fifo_id": 617,
+      "delta": 100,
+      "reason": "Avoid known LightningSim false deadlock before exploration"
+    },
+    {
+      "fifo_id": 618,
+      "delta": 100,
+      "reason": "Avoid known LightningSim false deadlock before exploration"
+    }
+  ]
+}

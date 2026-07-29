@@ -1,6 +1,11 @@
 # Table I Reproduction
 
-`run_table1.py` runs the Table I HLS/cosim flow and prints the table rows.
+`run_table1.py` has a reviewer-facing interface with two modes:
+
+- run HLS/cosim and print Table I rows
+- parse existing reports with `--parse-only`
+
+Generated TCL scripts are written under `artifact/table1/generated/`.
 
 From the repository root:
 

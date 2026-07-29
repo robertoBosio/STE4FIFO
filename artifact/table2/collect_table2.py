@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import csv
 import json
 from pathlib import Path
 
@@ -71,40 +70,14 @@ def collect(benchmarks) -> dict:
                     "final_time_seconds": result["final_time_seconds"],
                     "final_size_bytes": size,
                     "delta_size_percent": delta,
+                    "lut": result.get("lut"),
+                    "ff": result.get("ff"),
+                    "dsp": result.get("dsp"),
+                    "bram": result.get("bram"),
                     "source_path": result.get("source_path"),
                 }
             )
     return {"rows": rows}
-
-
-def write_json(payload: dict) -> Path:
-    out = RESULTS_DIR / "table2_size_time.json"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(payload, indent=2) + "\n")
-    return out
-
-
-def write_csv(payload: dict) -> Path:
-    out = RESULTS_DIR / "table2_size_time.csv"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    with out.open("w", newline="") as fh:
-        writer = csv.DictWriter(
-            fh,
-            fieldnames=[
-                "benchmark",
-                "naive_size_bytes",
-                "technique",
-                "technique_label",
-                "final_time_seconds",
-                "final_size_bytes",
-                "delta_size_percent",
-                "source_path",
-            ],
-        )
-        writer.writeheader()
-        for row in payload["rows"]:
-            writer.writerow(row)
-    return out
 
 
 def write_markdown(payload: dict) -> Path:
@@ -113,18 +86,22 @@ def write_markdown(payload: dict) -> Path:
     lines = [
         "# Table II Size/Time Results",
         "",
-        "| Model | Naive size (B) | Technique | Final time (s) | size (B) | Delta size (%) |",
-        "| --- | ---: | --- | ---: | ---: | ---: |",
+        "| Model | Naive size (B) | Technique | Final time (s) | size (B) | Delta size (%) | LUT | FF | DSP | BRAM |",
+        "| --- | ---: | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for row in payload["rows"]:
         lines.append(
-            "| {benchmark} | {naive} | {technique} | {time} | {size} | {delta} |".format(
+            "| {benchmark} | {naive} | {technique} | {time} | {size} | {delta} | {lut} | {ff} | {dsp} | {bram} |".format(
                 benchmark=row["benchmark"],
                 naive=format_int(row["naive_size_bytes"]),
                 technique=row["technique_label"],
                 time=format_time(row["final_time_seconds"]),
                 size=format_int(row["final_size_bytes"]),
                 delta=format_delta(row["delta_size_percent"]),
+                lut=format_int(row["lut"]),
+                ff=format_int(row["ff"]),
+                dsp=format_int(row["dsp"]),
+                bram=format_int(row["bram"]),
             )
         )
     out.write_text("\n".join(lines) + "\n")
@@ -134,8 +111,8 @@ def write_markdown(payload: dict) -> Path:
 def main() -> None:
     args = build_parser().parse_args()
     payload = collect(select_benchmarks(args.benchmark))
-    for path in (write_json(payload), write_csv(payload), write_markdown(payload)):
-        print(f"Wrote {path}")
+    path = write_markdown(payload)
+    print(f"Wrote {path}")
 
 
 if __name__ == "__main__":

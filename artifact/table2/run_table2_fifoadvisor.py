@@ -45,12 +45,6 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Only write the FIFOAdvisor start-vs-observed width/depth report.",
     )
-    parser.add_argument("--n-samples", type=int, default=None)
-    parser.add_argument("--seed", type=int, default=None)
-    parser.add_argument("--maxfun", type=int, default=None)
-    parser.add_argument("--n-scaling-factors", type=int, default=None)
-    parser.add_argument("--round-type", default=None)
-    parser.add_argument("--init-with-largest", action="store_true")
     return parser
 
 
@@ -94,7 +88,7 @@ def fifo_advisor_base_cmd(command: str) -> list[str]:
 
 def common_fifo_advisor_args(args, benchmark, output: Path) -> list[str]:
     command = [str(hls_solution_dir(benchmark)), "--output", str(output)]
-    if benchmark.fifo_override_json.exists():
+    if benchmark.fifo_override_json is not None:
         command.extend(["--fifo-depth-overrides", str(benchmark.fifo_override_json)])
     return command
 
@@ -111,18 +105,17 @@ def run_observed_depth_report(args, benchmark) -> Path:
     return out
 
 
-def solver_extra_args(args) -> list[str]:
+def solver_extra_args(benchmark, solver: str) -> list[str]:
+    config = benchmark.solver_configs[solver]
     extra: list[str] = []
     for flag, value in (
-        ("--n-samples", args.n_samples),
-        ("--seed", args.seed),
-        ("--maxfun", args.maxfun),
-        ("--n-scaling-factors", args.n_scaling_factors),
-        ("--round-type", args.round_type),
+        ("--maxfun", config.maxfun),
+        ("--n-scaling-factors", config.n_scaling_factors),
+        ("--round-type", config.round_type),
     ):
         if value is not None:
             extra.extend([flag, str(value)])
-    if args.init_with_largest:
+    if config.init_with_largest:
         extra.append("--init-with-largest")
     return extra
 
@@ -156,7 +149,7 @@ def run_solver(args, benchmark, solver: str) -> Path:
     command = fifo_advisor_base_cmd(args.fifo_advisor_cmd)
     command.extend(common_fifo_advisor_args(args, benchmark, raw_path))
     command.extend(["--solver", solver])
-    command.extend(solver_extra_args(args))
+    command.extend(solver_extra_args(benchmark, solver))
     subprocess.run(command, cwd=REPO_ROOT, check=True)
     return normalize_solver_result(benchmark, solver, raw_path)
 

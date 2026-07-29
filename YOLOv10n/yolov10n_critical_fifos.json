@@ -1,0 +1,59 @@
+{
+  "overrides": [
+    {
+      "fifo_id": 98,
+      "delta": 1000,
+      "reason": "Avoid known LightningSim false deadlock before exploration"
+    },
+    {
+      "fifo_id": 99,
+      "delta": 1000,
+      "reason": "Avoid known LightningSim false deadlock before exploration"
+    },
+    {
+      "fifo_id": 520,
+      "delta": 1000,
+      "reason": "Avoid known LightningSim false deadlock before exploration"
+    },
+    {
+      "fifo_id": 521,
+      "delta": 1000,
+      "reason": "Avoid known LightningSim false deadlock before exploration"
+    },
+    {
+      "fifo_id": 700,
+      "delta": 1000,
+      "reason": "Avoid known LightningSim false deadlock before exploration"
+    },
+    {
+      "fifo_id": 772,
+      "delta": 1000,
+      "reason": "Avoid known LightningSim false deadlock before exploration"
+    },
+    {
+      "fifo_id": 773,
+      "delta": 1000,
+      "reason": "Avoid known LightningSim false deadlock before exploration"
+    },
+    {
+      "fifo_id": 1122,
+      "delta": 1000,
+      "reason": "Avoid known LightningSim false deadlock before exploration"
+    },
+    {
+      "fifo_id": 1123,
+      "delta": 1000,
+      "reason": "Avoid known LightningSim false deadlock before exploration"
+    },
+    {
+      "fifo_id": 1238,
+      "delta": 1000,
+      "reason": "Avoid known LightningSim false deadlock before exploration"
+    },
+    {
+      "fifo_id": 1632,
+      "delta": 1000,
+      "reason": "Avoid known LightningSim false deadlock before exploration"
+    }
+  ]
+}

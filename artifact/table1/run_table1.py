@@ -66,9 +66,10 @@ csim_design -argv $cosim_argv
 csynth_design
 cosim_design -argv $cosim_argv
 
-exit
+    exit
 """
     output = generated_dir / benchmark.directory / "run_table1.tcl"
+    output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(tcl)
     return output
 
@@ -159,28 +160,16 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Run and report Table I HLS/cosim metrics.")
     parser.add_argument("benchmarks", nargs="*", help="Optional benchmark names to run/report.")
     parser.add_argument("--parse-only", action="store_true", help="Only parse existing reports; do not run Vitis HLS.")
-    parser.add_argument("--generate-only", action="store_true", help="Generate Table I testbenches/TCL files and exit.")
-    parser.add_argument("--calls", type=int, default=3, help="Number of top-level transactions in the generated testbench.")
     args = parser.parse_args()
-
-    if args.calls < 2:
-        raise SystemExit("--calls must be at least 2 to measure II")
 
     root = repo_root()
     benchmarks = [benchmark_by_name(name) for name in args.benchmarks] if args.benchmarks else BENCHMARKS
     generated_dir = root / "artifact" / "table1" / "generated"
 
-    if args.parse_only and args.generate_only:
-        raise SystemExit("--parse-only and --generate-only are mutually exclusive")
-
     if not args.parse_only:
         for benchmark in benchmarks:
             tcl = make_table1_tcl(root, benchmark, generated_dir)
-            if not args.generate_only:
-                run_hls(root, benchmark, tcl)
-
-    if args.generate_only:
-        return 0
+            run_hls(root, benchmark, tcl)
 
     rows = [collect_row(root, benchmark) for benchmark in benchmarks]
     print_table(rows)

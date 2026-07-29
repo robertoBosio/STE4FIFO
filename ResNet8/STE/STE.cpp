@@ -217,7 +217,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_0;
-    StreamingLineBuffer_0_pixel_0.step_init(2, 4);
+    StreamingLineBuffer_0_pixel_0.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_int<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -238,7 +238,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_1;
-    StreamingLineBuffer_0_pixel_1.step_init(2, 4);
+    StreamingLineBuffer_0_pixel_1.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_int<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -259,7 +259,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_2;
-    StreamingLineBuffer_0_pixel_2.step_init(2, 22);
+    StreamingLineBuffer_0_pixel_2.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_int<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -280,7 +280,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_3;
-    StreamingLineBuffer_0_pixel_3.step_init(2, 22);
+    StreamingLineBuffer_0_pixel_3.step_init(2, 2);
     StreamingMemory <
         std::array<ap_uint<32>, 1>,  // TInput
         ap_int<16>,  // TOutput
@@ -313,7 +313,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_4;
-    StreamingLineBuffer_0_pixel_4.step_init(1, 25);
+    StreamingLineBuffer_0_pixel_4.step_init(1, 4);
     StreamingWindowSelector <
         std::array<ap_int<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -334,7 +334,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_5;
-    StreamingLineBuffer_0_pixel_5.step_init(2, 25);
+    StreamingLineBuffer_0_pixel_5.step_init(2, 4);
     StreamingWindowSelector <
         std::array<ap_int<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -409,7 +409,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_6;
-    StreamingLineBuffer_0_pixel_6.step_init(2, 4);
+    StreamingLineBuffer_0_pixel_6.step_init(2, 25);
     StreamingWindowSelector <
         std::array<ap_int<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -430,7 +430,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_7;
-    StreamingLineBuffer_0_pixel_7.step_init(2, 4);
+    StreamingLineBuffer_0_pixel_7.step_init(2, 25);
     StreamingWindowSelector <
         std::array<ap_int<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -451,7 +451,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_14;
-    StreamingLineBuffer_0_pixel_14.step_init(2, 2);
+    StreamingLineBuffer_0_pixel_14.step_init(2, 22);
     StreamingWindowSelector <
         std::array<ap_int<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -472,7 +472,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_15;
-    StreamingLineBuffer_0_pixel_15.step_init(2, 2);
+    StreamingLineBuffer_0_pixel_15.step_init(2, 22);
     StreamingMemory <
         std::array<ap_uint<32>, 1>,  // TInput
         ap_int<16>,  // TOutput
@@ -505,7 +505,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_10;
-    StreamingLineBuffer_0_pixel_10.step_init(2, 25);
+    StreamingLineBuffer_0_pixel_10.step_init(2, 4);
     StreamingWindowSelector <
         std::array<ap_int<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -526,7 +526,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_11;
-    StreamingLineBuffer_0_pixel_11.step_init(2, 25);
+    StreamingLineBuffer_0_pixel_11.step_init(2, 4);
     StreamingMemory <
         std::array<ap_uint<32>, 1>,  // TInput
         ap_int<8>,  // TOutput
@@ -559,7 +559,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_12;
-    StreamingLineBuffer_0_pixel_12.step_init(2, 4);
+    StreamingLineBuffer_0_pixel_12.step_init(2, 25);
     StreamingWindowSelector <
         std::array<ap_int<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -580,7 +580,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_13;
-    StreamingLineBuffer_0_pixel_13.step_init(2, 4);
+    StreamingLineBuffer_0_pixel_13.step_init(2, 25);
     StreamingMemory <
         std::array<ap_uint<32>, 1>,  // TInput
         ap_int<16>,  // TOutput
@@ -613,7 +613,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_16;
-    StreamingLineBuffer_0_pixel_16.step_init(2, 2);
+    StreamingLineBuffer_0_pixel_16.step_init(2, 4);
     StreamingWindowSelector <
         std::array<ap_int<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -634,7 +634,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_17;
-    StreamingLineBuffer_0_pixel_17.step_init(2, 2);
+    StreamingLineBuffer_0_pixel_17.step_init(2, 4);
     StreamingMemory <
         std::array<ap_uint<32>, 1>,  // TInput
         ap_int<8>,  // TOutput
@@ -760,7 +760,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_0;
-    StreamingLineBuffer_1_pixel_0.step_init(2, 17);
+    StreamingLineBuffer_1_pixel_0.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -781,7 +781,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_1;
-    StreamingLineBuffer_1_pixel_1.step_init(2, 17);
+    StreamingLineBuffer_1_pixel_1.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -802,7 +802,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_2;
-    StreamingLineBuffer_1_pixel_2.step_init(2, 113);
+    StreamingLineBuffer_1_pixel_2.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -823,7 +823,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_3;
-    StreamingLineBuffer_1_pixel_3.step_init(2, 113);
+    StreamingLineBuffer_1_pixel_3.step_init(2, 2);
     StreamingMemory <
         std::array<ap_uint<32>, 1>,  // TInput
         ap_int<8>,  // TOutput
@@ -856,7 +856,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_4;
-    StreamingLineBuffer_1_pixel_4.step_init(2, 129);
+    StreamingLineBuffer_1_pixel_4.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -877,7 +877,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_5;
-    StreamingLineBuffer_1_pixel_5.step_init(2, 129);
+    StreamingLineBuffer_1_pixel_5.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -952,7 +952,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_6;
-    StreamingLineBuffer_1_pixel_6.step_init(2, 17);
+    StreamingLineBuffer_1_pixel_6.step_init(2, 129);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -973,7 +973,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_7;
-    StreamingLineBuffer_1_pixel_7.step_init(1, 17);
+    StreamingLineBuffer_1_pixel_7.step_init(1, 129);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -994,7 +994,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_14;
-    StreamingLineBuffer_1_pixel_14.step_init(1, 2);
+    StreamingLineBuffer_1_pixel_14.step_init(1, 113);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -1015,7 +1015,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_15;
-    StreamingLineBuffer_1_pixel_15.step_init(1, 2);
+    StreamingLineBuffer_1_pixel_15.step_init(1, 113);
     StreamingMemory <
         std::array<ap_uint<32>, 1>,  // TInput
         ap_int<8>,  // TOutput
@@ -1048,7 +1048,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_10;
-    StreamingLineBuffer_1_pixel_10.step_init(1, 129);
+    StreamingLineBuffer_1_pixel_10.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -1069,7 +1069,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_11;
-    StreamingLineBuffer_1_pixel_11.step_init(2, 129);
+    StreamingLineBuffer_1_pixel_11.step_init(2, 17);
     StreamingMemory <
         std::array<ap_uint<32>, 1>,  // TInput
         ap_int<16>,  // TOutput
@@ -1102,7 +1102,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_12;
-    StreamingLineBuffer_1_pixel_12.step_init(2, 17);
+    StreamingLineBuffer_1_pixel_12.step_init(2, 129);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -1123,7 +1123,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_13;
-    StreamingLineBuffer_1_pixel_13.step_init(2, 17);
+    StreamingLineBuffer_1_pixel_13.step_init(2, 129);
     StreamingMemory <
         std::array<ap_uint<32>, 1>,  // TInput
         ap_int<8>,  // TOutput
@@ -1156,7 +1156,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_16;
-    StreamingLineBuffer_1_pixel_16.step_init(1, 2);
+    StreamingLineBuffer_1_pixel_16.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -1177,7 +1177,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_17;
-    StreamingLineBuffer_1_pixel_17.step_init(1, 2);
+    StreamingLineBuffer_1_pixel_17.step_init(1, 17);
     StreamingMemory <
         std::array<ap_uint<32>, 1>,  // TInput
         ap_int<16>,  // TOutput
@@ -1282,7 +1282,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_0;
-    StreamingLineBuffer_2_pixel_0.step_init(2, 5);
+    StreamingLineBuffer_2_pixel_0.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 4>,  // TWord
         32,  // IN_HEIGHT
@@ -1303,7 +1303,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_1;
-    StreamingLineBuffer_2_pixel_1.step_init(2, 5);
+    StreamingLineBuffer_2_pixel_1.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 4>,  // TWord
         32,  // IN_HEIGHT
@@ -1324,7 +1324,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_2;
-    StreamingLineBuffer_2_pixel_2.step_init(2, 29);
+    StreamingLineBuffer_2_pixel_2.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 4>,  // TWord
         32,  // IN_HEIGHT
@@ -1345,7 +1345,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_3;
-    StreamingLineBuffer_2_pixel_3.step_init(2, 29);
+    StreamingLineBuffer_2_pixel_3.step_init(2, 2);
     StreamingMemory <
         std::array<ap_uint<32>, 1>,  // TInput
         ap_int<8>,  // TOutput
@@ -1378,7 +1378,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_4;
-    StreamingLineBuffer_2_pixel_4.step_init(2, 33);
+    StreamingLineBuffer_2_pixel_4.step_init(2, 5);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 4>,  // TWord
         32,  // IN_HEIGHT
@@ -1399,7 +1399,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_5;
-    StreamingLineBuffer_2_pixel_5.step_init(2, 33);
+    StreamingLineBuffer_2_pixel_5.step_init(2, 5);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 4>,  // TWord
         32,  // IN_HEIGHT
@@ -1474,7 +1474,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_6;
-    StreamingLineBuffer_2_pixel_6.step_init(2, 5);
+    StreamingLineBuffer_2_pixel_6.step_init(2, 33);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 4>,  // TWord
         32,  // IN_HEIGHT
@@ -1495,7 +1495,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_7;
-    StreamingLineBuffer_2_pixel_7.step_init(1, 5);
+    StreamingLineBuffer_2_pixel_7.step_init(1, 33);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 4>,  // TWord
         32,  // IN_HEIGHT
@@ -1516,7 +1516,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_14;
-    StreamingLineBuffer_2_pixel_14.step_init(1, 2);
+    StreamingLineBuffer_2_pixel_14.step_init(1, 29);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 4>,  // TWord
         32,  // IN_HEIGHT
@@ -1537,7 +1537,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_15;
-    StreamingLineBuffer_2_pixel_15.step_init(1, 2);
+    StreamingLineBuffer_2_pixel_15.step_init(1, 29);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 4>,  // TWord
         32,  // IN_HEIGHT
@@ -1558,7 +1558,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_10;
-    StreamingLineBuffer_2_pixel_10.step_init(1, 33);
+    StreamingLineBuffer_2_pixel_10.step_init(1, 5);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 4>,  // TWord
         32,  // IN_HEIGHT
@@ -1579,7 +1579,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_11;
-    StreamingLineBuffer_2_pixel_11.step_init(2, 33);
+    StreamingLineBuffer_2_pixel_11.step_init(2, 5);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 4>,  // TWord
         32,  // IN_HEIGHT
@@ -1600,7 +1600,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_12;
-    StreamingLineBuffer_2_pixel_12.step_init(2, 5);
+    StreamingLineBuffer_2_pixel_12.step_init(2, 33);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 4>,  // TWord
         32,  // IN_HEIGHT
@@ -1621,7 +1621,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_13;
-    StreamingLineBuffer_2_pixel_13.step_init(2, 5);
+    StreamingLineBuffer_2_pixel_13.step_init(2, 33);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 4>,  // TWord
         32,  // IN_HEIGHT
@@ -1642,7 +1642,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_16;
-    StreamingLineBuffer_2_pixel_16.step_init(1, 2);
+    StreamingLineBuffer_2_pixel_16.step_init(1, 5);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 4>,  // TWord
         32,  // IN_HEIGHT
@@ -1663,7 +1663,7 @@ void resnet8(void)
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_17;
-    StreamingLineBuffer_2_pixel_17.step_init(1, 2);
+    StreamingLineBuffer_2_pixel_17.step_init(1, 5);
     StreamingPad <
         std::array<ap_uint<8>, 4>,  // TWord
         ap_uint<8>,  // TData
@@ -1760,7 +1760,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_0;
-    StreamingLineBuffer_3_pixel_0.step_init(2, 17);
+    StreamingLineBuffer_3_pixel_0.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -1781,7 +1781,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_1;
-    StreamingLineBuffer_3_pixel_1.step_init(2, 17);
+    StreamingLineBuffer_3_pixel_1.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -1802,7 +1802,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_2;
-    StreamingLineBuffer_3_pixel_2.step_init(2, 17);
+    StreamingLineBuffer_3_pixel_2.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -1823,7 +1823,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_3;
-    StreamingLineBuffer_3_pixel_3.step_init(2, 17);
+    StreamingLineBuffer_3_pixel_3.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -1844,7 +1844,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_0;
-    StreamingLineBuffer_4_pixel_0.step_init(2, 17);
+    StreamingLineBuffer_4_pixel_0.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -1865,7 +1865,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_1;
-    StreamingLineBuffer_4_pixel_1.step_init(2, 17);
+    StreamingLineBuffer_4_pixel_1.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -1886,7 +1886,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_2;
-    StreamingLineBuffer_4_pixel_2.step_init(2, 17);
+    StreamingLineBuffer_4_pixel_2.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -1949,7 +1949,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_5;
-    StreamingLineBuffer_3_pixel_5.step_init(2, 113);
+    StreamingLineBuffer_3_pixel_5.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -1970,7 +1970,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_6;
-    StreamingLineBuffer_3_pixel_6.step_init(2, 113);
+    StreamingLineBuffer_3_pixel_6.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -1991,7 +1991,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_7;
-    StreamingLineBuffer_3_pixel_7.step_init(2, 97);
+    StreamingLineBuffer_3_pixel_7.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2012,7 +2012,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_4;
-    StreamingLineBuffer_4_pixel_4.step_init(1, 2);
+    StreamingLineBuffer_4_pixel_4.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2033,7 +2033,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_5;
-    StreamingLineBuffer_4_pixel_5.step_init(1, 2);
+    StreamingLineBuffer_4_pixel_5.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2054,7 +2054,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_6;
-    StreamingLineBuffer_4_pixel_6.step_init(1, 2);
+    StreamingLineBuffer_4_pixel_6.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2075,7 +2075,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_8;
-    StreamingLineBuffer_3_pixel_8.step_init(2, 113);
+    StreamingLineBuffer_3_pixel_8.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2096,7 +2096,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_10;
-    StreamingLineBuffer_3_pixel_10.step_init(2, 17);
+    StreamingLineBuffer_3_pixel_10.step_init(2, 113);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2117,7 +2117,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_11;
-    StreamingLineBuffer_3_pixel_11.step_init(2, 17);
+    StreamingLineBuffer_3_pixel_11.step_init(2, 113);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2138,7 +2138,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_12;
-    StreamingLineBuffer_3_pixel_12.step_init(2, 17);
+    StreamingLineBuffer_3_pixel_12.step_init(2, 97);
     StreamingConv <
         std::array<ap_uint<8>, 1>,  // TInputWord
         ap_uint<8>,  // TInput
@@ -2186,7 +2186,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_9;
-    StreamingLineBuffer_3_pixel_9.step_init(2, 17);
+    StreamingLineBuffer_3_pixel_9.step_init(2, 113);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2207,7 +2207,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_14;
-    StreamingLineBuffer_3_pixel_14.step_init(2, 113);
+    StreamingLineBuffer_3_pixel_14.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2228,7 +2228,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_15;
-    StreamingLineBuffer_3_pixel_15.step_init(2, 113);
+    StreamingLineBuffer_3_pixel_15.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2249,7 +2249,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_16;
-    StreamingLineBuffer_3_pixel_16.step_init(2, 97);
+    StreamingLineBuffer_3_pixel_16.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2291,7 +2291,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_19;
-    StreamingLineBuffer_3_pixel_19.step_init(2, 17);
+    StreamingLineBuffer_3_pixel_19.step_init(2, 113);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2312,7 +2312,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_20;
-    StreamingLineBuffer_3_pixel_20.step_init(2, 17);
+    StreamingLineBuffer_3_pixel_20.step_init(2, 113);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2333,7 +2333,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_21;
-    StreamingLineBuffer_3_pixel_21.step_init(2, 17);
+    StreamingLineBuffer_3_pixel_21.step_init(2, 97);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2354,7 +2354,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_17;
-    StreamingLineBuffer_3_pixel_17.step_init(2, 113);
+    StreamingLineBuffer_3_pixel_17.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2375,7 +2375,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_23;
-    StreamingLineBuffer_3_pixel_23.step_init(1, 2);
+    StreamingLineBuffer_3_pixel_23.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2396,7 +2396,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_24;
-    StreamingLineBuffer_3_pixel_24.step_init(1, 2);
+    StreamingLineBuffer_3_pixel_24.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2417,7 +2417,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_25;
-    StreamingLineBuffer_3_pixel_25.step_init(1, 2);
+    StreamingLineBuffer_3_pixel_25.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2438,7 +2438,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_18;
-    StreamingLineBuffer_3_pixel_18.step_init(2, 17);
+    StreamingLineBuffer_3_pixel_18.step_init(2, 113);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 1>,  // TWord
         32,  // IN_HEIGHT
@@ -2480,7 +2480,7 @@ void resnet8(void)
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_26;
-    StreamingLineBuffer_3_pixel_26.step_init(1, 2);
+    StreamingLineBuffer_3_pixel_26.step_init(1, 17);
     StreamingPad <
         std::array<ap_uint<8>, 1>,  // TWord
         ap_uint<8>,  // TData
@@ -2549,7 +2549,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_0;
-    StreamingLineBuffer_5_pixel_0.step_init(2, 17);
+    StreamingLineBuffer_5_pixel_0.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2570,7 +2570,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_1;
-    StreamingLineBuffer_5_pixel_1.step_init(2, 17);
+    StreamingLineBuffer_5_pixel_1.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2591,7 +2591,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_2;
-    StreamingLineBuffer_5_pixel_2.step_init(2, 49);
+    StreamingLineBuffer_5_pixel_2.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2612,7 +2612,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_3;
-    StreamingLineBuffer_5_pixel_3.step_init(2, 49);
+    StreamingLineBuffer_5_pixel_3.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2633,7 +2633,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_4;
-    StreamingLineBuffer_5_pixel_4.step_init(2, 65);
+    StreamingLineBuffer_5_pixel_4.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2654,7 +2654,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_5;
-    StreamingLineBuffer_5_pixel_5.step_init(2, 65);
+    StreamingLineBuffer_5_pixel_5.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2717,7 +2717,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_6;
-    StreamingLineBuffer_5_pixel_6.step_init(2, 17);
+    StreamingLineBuffer_5_pixel_6.step_init(2, 65);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2738,7 +2738,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_7;
-    StreamingLineBuffer_5_pixel_7.step_init(1, 17);
+    StreamingLineBuffer_5_pixel_7.step_init(1, 65);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2759,7 +2759,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_14;
-    StreamingLineBuffer_5_pixel_14.step_init(1, 2);
+    StreamingLineBuffer_5_pixel_14.step_init(1, 49);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2780,7 +2780,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_15;
-    StreamingLineBuffer_5_pixel_15.step_init(1, 2);
+    StreamingLineBuffer_5_pixel_15.step_init(1, 49);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2801,7 +2801,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_10;
-    StreamingLineBuffer_5_pixel_10.step_init(1, 65);
+    StreamingLineBuffer_5_pixel_10.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2822,7 +2822,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_11;
-    StreamingLineBuffer_5_pixel_11.step_init(2, 65);
+    StreamingLineBuffer_5_pixel_11.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2843,7 +2843,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_12;
-    StreamingLineBuffer_5_pixel_12.step_init(2, 17);
+    StreamingLineBuffer_5_pixel_12.step_init(2, 65);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2864,7 +2864,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_13;
-    StreamingLineBuffer_5_pixel_13.step_init(2, 17);
+    StreamingLineBuffer_5_pixel_13.step_init(2, 65);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2885,7 +2885,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_16;
-    StreamingLineBuffer_5_pixel_16.step_init(1, 2);
+    StreamingLineBuffer_5_pixel_16.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -2906,7 +2906,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_17;
-    StreamingLineBuffer_5_pixel_17.step_init(1, 2);
+    StreamingLineBuffer_5_pixel_17.step_init(1, 17);
     StreamingPad <
         std::array<ap_uint<8>, 2>,  // TWord
         ap_uint<8>,  // TData
@@ -3003,7 +3003,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_0;
-    StreamingLineBuffer_6_pixel_0.step_init(2, 17);
+    StreamingLineBuffer_6_pixel_0.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3024,7 +3024,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_1;
-    StreamingLineBuffer_6_pixel_1.step_init(2, 17);
+    StreamingLineBuffer_6_pixel_1.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3045,7 +3045,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_2;
-    StreamingLineBuffer_6_pixel_2.step_init(2, 17);
+    StreamingLineBuffer_6_pixel_2.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3066,7 +3066,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_3;
-    StreamingLineBuffer_6_pixel_3.step_init(1, 17);
+    StreamingLineBuffer_6_pixel_3.step_init(1, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3087,7 +3087,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_7_pixel_0;
-    StreamingLineBuffer_7_pixel_0.step_init(2, 17);
+    StreamingLineBuffer_7_pixel_0.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3108,7 +3108,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_7_pixel_1;
-    StreamingLineBuffer_7_pixel_1.step_init(2, 17);
+    StreamingLineBuffer_7_pixel_1.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3129,7 +3129,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_7_pixel_2;
-    StreamingLineBuffer_7_pixel_2.step_init(2, 17);
+    StreamingLineBuffer_7_pixel_2.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3192,7 +3192,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_5;
-    StreamingLineBuffer_6_pixel_5.step_init(1, 49);
+    StreamingLineBuffer_6_pixel_5.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3213,7 +3213,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_6;
-    StreamingLineBuffer_6_pixel_6.step_init(1, 49);
+    StreamingLineBuffer_6_pixel_6.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3234,7 +3234,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_7;
-    StreamingLineBuffer_6_pixel_7.step_init(1, 33);
+    StreamingLineBuffer_6_pixel_7.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3255,7 +3255,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_7_pixel_4;
-    StreamingLineBuffer_7_pixel_4.step_init(2, 2);
+    StreamingLineBuffer_7_pixel_4.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3276,7 +3276,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_7_pixel_5;
-    StreamingLineBuffer_7_pixel_5.step_init(2, 2);
+    StreamingLineBuffer_7_pixel_5.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3297,7 +3297,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_7_pixel_6;
-    StreamingLineBuffer_7_pixel_6.step_init(2, 2);
+    StreamingLineBuffer_7_pixel_6.step_init(2, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3318,7 +3318,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_8;
-    StreamingLineBuffer_6_pixel_8.step_init(1, 49);
+    StreamingLineBuffer_6_pixel_8.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3339,7 +3339,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_10;
-    StreamingLineBuffer_6_pixel_10.step_init(2, 17);
+    StreamingLineBuffer_6_pixel_10.step_init(2, 49);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3360,7 +3360,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_11;
-    StreamingLineBuffer_6_pixel_11.step_init(2, 17);
+    StreamingLineBuffer_6_pixel_11.step_init(2, 49);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3381,7 +3381,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_12;
-    StreamingLineBuffer_6_pixel_12.step_init(1, 17);
+    StreamingLineBuffer_6_pixel_12.step_init(1, 33);
     StreamingConv <
         std::array<ap_uint<8>, 2>,  // TInputWord
         ap_uint<8>,  // TInput
@@ -3429,7 +3429,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_9;
-    StreamingLineBuffer_6_pixel_9.step_init(2, 17);
+    StreamingLineBuffer_6_pixel_9.step_init(2, 49);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3450,7 +3450,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_14;
-    StreamingLineBuffer_6_pixel_14.step_init(1, 49);
+    StreamingLineBuffer_6_pixel_14.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3471,7 +3471,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_15;
-    StreamingLineBuffer_6_pixel_15.step_init(1, 49);
+    StreamingLineBuffer_6_pixel_15.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3492,7 +3492,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_16;
-    StreamingLineBuffer_6_pixel_16.step_init(1, 33);
+    StreamingLineBuffer_6_pixel_16.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3534,7 +3534,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_19;
-    StreamingLineBuffer_6_pixel_19.step_init(1, 17);
+    StreamingLineBuffer_6_pixel_19.step_init(1, 49);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3555,7 +3555,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_20;
-    StreamingLineBuffer_6_pixel_20.step_init(1, 17);
+    StreamingLineBuffer_6_pixel_20.step_init(1, 49);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3576,7 +3576,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_21;
-    StreamingLineBuffer_6_pixel_21.step_init(1, 17);
+    StreamingLineBuffer_6_pixel_21.step_init(1, 33);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3597,7 +3597,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_17;
-    StreamingLineBuffer_6_pixel_17.step_init(1, 49);
+    StreamingLineBuffer_6_pixel_17.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3618,7 +3618,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_23;
-    StreamingLineBuffer_6_pixel_23.step_init(1, 2);
+    StreamingLineBuffer_6_pixel_23.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3639,7 +3639,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_24;
-    StreamingLineBuffer_6_pixel_24.step_init(1, 2);
+    StreamingLineBuffer_6_pixel_24.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3660,7 +3660,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_25;
-    StreamingLineBuffer_6_pixel_25.step_init(1, 2);
+    StreamingLineBuffer_6_pixel_25.step_init(1, 17);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3681,7 +3681,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_18;
-    StreamingLineBuffer_6_pixel_18.step_init(1, 17);
+    StreamingLineBuffer_6_pixel_18.step_init(1, 49);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         16,  // IN_HEIGHT
@@ -3723,7 +3723,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_26;
-    StreamingLineBuffer_6_pixel_26.step_init(1, 2);
+    StreamingLineBuffer_6_pixel_26.step_init(1, 17);
     StreamingPad <
         std::array<ap_uint<8>, 2>,  // TWord
         ap_uint<8>,  // TData
@@ -3792,7 +3792,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_0;
-    StreamingLineBuffer_8_pixel_0.step_init(2, 33);
+    StreamingLineBuffer_8_pixel_0.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -3813,7 +3813,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_1;
-    StreamingLineBuffer_8_pixel_1.step_init(2, 33);
+    StreamingLineBuffer_8_pixel_1.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -3834,7 +3834,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_2;
-    StreamingLineBuffer_8_pixel_2.step_init(2, 33);
+    StreamingLineBuffer_8_pixel_2.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -3855,7 +3855,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_3;
-    StreamingLineBuffer_8_pixel_3.step_init(2, 33);
+    StreamingLineBuffer_8_pixel_3.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -3876,7 +3876,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_4;
-    StreamingLineBuffer_8_pixel_4.step_init(2, 65);
+    StreamingLineBuffer_8_pixel_4.step_init(2, 33);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -3897,7 +3897,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_5;
-    StreamingLineBuffer_8_pixel_5.step_init(2, 65);
+    StreamingLineBuffer_8_pixel_5.step_init(2, 33);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -3960,7 +3960,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_6;
-    StreamingLineBuffer_8_pixel_6.step_init(2, 33);
+    StreamingLineBuffer_8_pixel_6.step_init(2, 65);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -3981,7 +3981,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_7;
-    StreamingLineBuffer_8_pixel_7.step_init(1, 33);
+    StreamingLineBuffer_8_pixel_7.step_init(1, 65);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -4002,7 +4002,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_14;
-    StreamingLineBuffer_8_pixel_14.step_init(1, 2);
+    StreamingLineBuffer_8_pixel_14.step_init(1, 33);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -4023,7 +4023,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_15;
-    StreamingLineBuffer_8_pixel_15.step_init(1, 2);
+    StreamingLineBuffer_8_pixel_15.step_init(1, 33);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -4044,7 +4044,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_10;
-    StreamingLineBuffer_8_pixel_10.step_init(1, 65);
+    StreamingLineBuffer_8_pixel_10.step_init(1, 33);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -4065,7 +4065,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_11;
-    StreamingLineBuffer_8_pixel_11.step_init(2, 65);
+    StreamingLineBuffer_8_pixel_11.step_init(2, 33);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -4086,7 +4086,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_12;
-    StreamingLineBuffer_8_pixel_12.step_init(2, 33);
+    StreamingLineBuffer_8_pixel_12.step_init(2, 65);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -4107,7 +4107,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_13;
-    StreamingLineBuffer_8_pixel_13.step_init(2, 33);
+    StreamingLineBuffer_8_pixel_13.step_init(2, 65);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -4128,7 +4128,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_16;
-    StreamingLineBuffer_8_pixel_16.step_init(1, 2);
+    StreamingLineBuffer_8_pixel_16.step_init(1, 33);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -4149,7 +4149,7 @@ void resnet8(void)
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_17;
-    StreamingLineBuffer_8_pixel_17.step_init(1, 2);
+    StreamingLineBuffer_8_pixel_17.step_init(1, 33);
     StreamingPad <
         std::array<ap_uint<8>, 2>,  // TWord
         ap_uint<8>,  // TData
@@ -4252,7 +4252,7 @@ void resnet8(void)
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_0;
-    StreamingLineBuffer_9_pixel_0.step_init(2, 33);
+    StreamingLineBuffer_9_pixel_0.step_init(2, 2);
     StreamingWindowSelector <
         std::array<ap_uint<8>, 2>,  // TWord
         8,  // IN_HEIGHT
@@ -5575,7 +5575,7 @@ void resnet8(void)
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_63;
-    StreamingLineBuffer_9_pixel_63.step_init(1, 2);
+    StreamingLineBuffer_9_pixel_63.step_init(1, 33);
     StreamingMaxPool <
         std::array<ap_uint<8>, 2>,  // TInputStruct
         ap_uint<8>,  // TInput

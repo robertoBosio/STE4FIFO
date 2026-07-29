@@ -2,12 +2,19 @@
 from __future__ import annotations
 
 import argparse
-from collections import Counter
 import json
 import re
 import subprocess
+from pathlib import Path
 
-from benchmarks import REPO_ROOT, normalized_path, raw_fifoadvisor_dir, select_benchmarks
+from benchmarks import (
+    GENERATED_DIR,
+    REPO_ROOT,
+    normalized_path,
+    resource_csynth_report_path,
+    resource_solution_dir,
+    select_benchmarks,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -18,91 +25,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--parse-only",
         action="store_true",
-        help="Do not rerun STE; parse existing fifo_depth.json files.",
+        help="Do not rerun STE or csynth; parse existing fifo_depth.json and csynth reports.",
     )
     return parser
-
-
-def normalize_fifo_name(name: str) -> str:
-    return name[:-1] if name.endswith("_") else name
-
-
-EXCLUDED_STE_PREFIXES = (
-    "StreamingMemory_",
-    "NHWCToStream_1_",
-)
-
-
-def load_widths(width_report) -> dict[str, int]:
-    payload = json.loads(width_report.read_text())
-    widths: dict[str, int] = {}
-    for fifo in payload.get("per_fifo", []):
-        name = fifo.get("name")
-        width_bytes = fifo.get("width_bytes")
-        if name is not None and width_bytes is not None:
-            width = int(width_bytes)
-            widths[normalize_fifo_name(str(name))] = width
-    return widths
-
-
-def type_width_bits(type_name: str) -> int | None:
-    array_match = re.fullmatch(r"std::array<\s*(.+)\s*,\s*(\d+)\s*>", type_name)
-    if array_match:
-        inner_width = type_width_bits(array_match.group(1).strip())
-        if inner_width is None:
-            return None
-        return inner_width * int(array_match.group(2))
-
-    scalar_match = re.fullmatch(r"ap_(?:u?int)<\s*(\d+)\s*>", type_name)
-    if scalar_match:
-        return int(scalar_match.group(1))
-
-    axis_match = re.fullmatch(r"ap_axiu<\s*(\d+)\s*,.*>", type_name)
-    if axis_match:
-        return int(axis_match.group(1))
-
-    return None
-
-
-def load_ste_widths(ste_cpp: Path) -> dict[str, int]:
-    widths: dict[str, int] = {}
-    declaration_re = re.compile(r"\s*hls::stream<(.+)>\s+(\w+)(?:\[(\d+)\])?;")
-    for line in ste_cpp.read_text().splitlines():
-        match = declaration_re.fullmatch(line)
-        if not match:
-            continue
-
-        width_bits = type_width_bits(match.group(1).strip())
-        if width_bits is None:
-            continue
-        width_bytes = (width_bits + 7) // 8
-        base_name = match.group(2)
-        count = int(match.group(3) or 1)
-        for index in range(count):
-            widths[f"{base_name}_{index}_"] = width_bytes
-            widths[f"{base_name}_{index}"] = width_bytes
-    return widths
-
-
-def compute_size_bytes(depths: dict[str, int], widths: dict[str, int]) -> int:
-    missing = sorted(name for name in depths if normalize_fifo_name(name) not in widths and name not in widths)
-    if missing:
-        preview = ", ".join(missing[:10])
-        raise SystemExit(
-            "Cannot compute STE FIFO memory because width metadata is missing for "
-            f"{len(missing)} FIFO(s): {preview}"
-        )
-    total = 0
-    for name, depth in depths.items():
-        width = widths.get(normalize_fifo_name(name), widths.get(name))
-        total += (int(depth) + 1) * width
-    return total
-
-
-def prefix_histogram(names: list[str]) -> dict[str, int]:
-    counts = Counter(name.split("_", 1)[0] for name in names)
-    return dict(sorted(counts.items()))
-
 
 def run_ste(benchmark: str) -> None:
     subprocess.run(
@@ -112,31 +37,78 @@ def run_ste(benchmark: str) -> None:
     )
 
 
-def normalize_ste(benchmark) -> Path:
-    width_report = raw_fifoadvisor_dir(benchmark) / "observed_depths.json"
-    if not width_report.exists():
-        raise SystemExit(
-            f"Missing FIFOAdvisor width report: {width_report}\n"
-            "Generate it with: artifact/table2/run_table2_fifoadvisor.py "
-            f"--benchmark {benchmark.name} --observed-depths-only"
-        )
+def make_csynth_tcl(benchmark) -> Path:
+    gen_dir = GENERATED_DIR / benchmark.name
+    gen_dir.mkdir(parents=True, exist_ok=True)
+    kernel_cpp = benchmark.bench_dir / "kernels" / "kernel_original.cpp"
+    tb_cpp = benchmark.bench_dir / "testbenches" / "testbench_original.cpp"
+    proj_dir = resource_solution_dir(benchmark, "our_method").parent
+    tcl_path = gen_dir / "build_our_method_csynth.tcl"
+    tcl = f"""set script_dir  [file normalize \"{benchmark.bench_dir}\"]
+set inc_dir     [file normalize \"{benchmark.include_dir}\"]
+set kernel_cpp  [file normalize \"{kernel_cpp}\"]
+set tb_cpp      [file normalize \"{tb_cpp}\"]
+set proj_dir    [file normalize \"{proj_dir}\"]
+set sol_name    \"solution_0\"
 
-    payload = json.loads(benchmark.ste_json.read_text())
-    depths = {str(name): int(depth) for name, depth in payload["fifo_depth"].items()}
-    hls_widths = load_widths(width_report)
-    ste_widths = load_ste_widths(benchmark.ste_dir / "STE.cpp")
+open_project -reset $proj_dir
+set_top {benchmark.top}
+add_files $kernel_cpp -cflags [format {{-I%s}} $inc_dir]
+add_files -tb $tb_cpp -cflags [format {{-I%s}} $inc_dir]
 
-    included_depths: dict[str, int] = {}
-    excluded_names: list[str] = []
-    for name, depth in depths.items():
-        if any(name.startswith(prefix) for prefix in EXCLUDED_STE_PREFIXES):
-            excluded_names.append(name)
+open_solution -reset $sol_name
+set_part {benchmark.part}
+create_clock -period 5
+config_compile -pipeline_style flp
+
+csynth_design
+
+exit
+"""
+    tcl_path.write_text(tcl)
+    return tcl_path
+
+
+def run_csynth(tcl_path: Path) -> None:
+    subprocess.run(["vitis_hls", "-f", str(tcl_path)], cwd=REPO_ROOT, check=True)
+
+
+def parse_total_fifo_bits(report: Path) -> int:
+    if not report.exists():
+        raise SystemExit(f"Missing csynth report: {report}")
+
+    total_row = re.compile(r"^\|\s*Total\s*\|(?P<body>.*)\|$")
+    in_fifo_section = False
+    for raw_line in report.read_text().splitlines():
+        line = raw_line.strip()
+        if not in_fifo_section:
+            if line == "* FIFO:":
+                in_fifo_section = True
             continue
-        included_depths[name] = depth
 
-    widths = {**ste_widths, **hls_widths}
-    size_bytes = compute_size_bytes(included_depths, widths)
+        match = total_row.match(line)
+        if not match:
+            continue
+        fields = [field.strip() for field in match.group("body").split("|")]
+        if len(fields) < 7:
+            break
+        try:
+            return int(fields[-1])
+        except ValueError as error:
+            raise SystemExit(f"Could not parse total FIFO bits from {report}: {raw_line}") from error
+
+    raise SystemExit(f"Could not find FIFO Total row in {report}")
+
+
+def fifo_bytes_from_report(report: Path) -> int:
+    return (parse_total_fifo_bits(report) + 7) // 8
+
+
+def normalize_ste(benchmark) -> Path:
+    payload = json.loads(benchmark.ste_json.read_text())
     time_ms = float(payload["Simulation time (ms)"])
+    size_report = resource_csynth_report_path(benchmark, "our_method")
+    size_bytes = fifo_bytes_from_report(size_report)
 
     result = {
         "benchmark": benchmark.name,
@@ -145,12 +117,7 @@ def normalize_ste(benchmark) -> Path:
         "final_size_bytes": size_bytes,
         "final_time_seconds": time_ms / 1000.0,
         "source_path": str(benchmark.ste_json.relative_to(REPO_ROOT)),
-        "width_source_path": str((benchmark.ste_dir / "STE.cpp").relative_to(REPO_ROOT)),
-        "width_report_path": str(width_report.relative_to(REPO_ROOT)),
-        "included_fifo_count": len(included_depths),
-        "excluded_fifo_count": len(excluded_names),
-        "excluded_examples": sorted(excluded_names)[:20],
-        "excluded_prefix_histogram": prefix_histogram(excluded_names),
+        "size_report_path": str(size_report.relative_to(REPO_ROOT)),
         "simulation_cycles": payload.get("Simulation cycles"),
         "ii": payload.get("II"),
         "notes": [],
@@ -167,8 +134,14 @@ def main() -> None:
     for benchmark in select_benchmarks(args.benchmark):
         if not args.parse_only:
             run_ste(benchmark.name)
+            tcl_path = make_csynth_tcl(benchmark)
+            print(f"Wrote {tcl_path}")
+            run_csynth(tcl_path)
         if not benchmark.ste_json.exists():
             raise SystemExit(f"Missing STE output: {benchmark.ste_json}")
+        size_report = resource_csynth_report_path(benchmark, "our_method")
+        if not size_report.exists():
+            raise SystemExit(f"Missing csynth report: {size_report}")
         out = normalize_ste(benchmark)
         print(f"Wrote {out}")
 

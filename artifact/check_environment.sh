@@ -9,7 +9,6 @@ required_paths=(
   "REQUIREMENTS"
   "STATUS"
   "LICENSE"
-  "ESWEEK_FIFO2026_MAIN_RESPONSE.pdf"
   "nn2FPGA/include"
   "ResNet8/STE/run_ste.tcl"
   "ResNet20/STE/run_ste.tcl"

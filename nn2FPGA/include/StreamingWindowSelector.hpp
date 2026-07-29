@@ -275,7 +275,10 @@ public:
 
     // Compute firing condition.
     bool firing_condition = true;
-    if (i_data.empty()) {
+    // if (i_data.empty()) {
+    //   firing_condition = false;
+    // }
+    if (i_data.size() < st.shift_stream_depth) {
       firing_condition = false;
     }
 
