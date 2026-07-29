@@ -118,32 +118,32 @@ class StreamingOnlineSoftmax {
 
   StreamingOnlineSoftmax() = default;
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_data[LANE_PAR],
            const TLUT lut_table[LUT_SIZE],
            hls::stream<TOutputWord> o_data[LANE_PAR]) {
-    
-    
-    TInputWord in_row[LANE_PAR][DIM_REDUCTION / REDUCE_PAR];
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      TInputWord in_row[LANE_PAR][DIM_REDUCTION / REDUCE_PAR];
 
-    // Loop over groups of lanes.
-    for (size_t i_lane_group = 0;
-         i_lane_group < DIM_LANES / LANE_PAR; i_lane_group++) {
-      
-      // Tracking the max and sum for each lane in the group.
-      TInput max[LANE_PAR] = {LimitsImpl<TInput>::min()};
-      TAcc sum[LANE_PAR] = {0};
+      // Loop over groups of lanes.
+      for (size_t i_lane_group = 0;
+           i_lane_group < DIM_LANES / LANE_PAR; i_lane_group++) {
+        
+        // Tracking the max and sum for each lane in the group.
+        TInput max[LANE_PAR] = {LimitsImpl<TInput>::min()};
+        TAcc sum[LANE_PAR] = {0};
 
-      // Loop over the two steps of the softmax computation for each group of lanes.
-      for (size_t i_step = 0; i_step < 2; i_step++) {
+        // Loop over the two steps of the softmax computation for each group of lanes.
+        for (size_t i_step = 0; i_step < 2; i_step++) {
 
-        // Loop over the groups of unrolled operations in the lane.
-        for (size_t i_red_group = 0; i_red_group < DIM_REDUCTION / REDUCE_PAR;
-             i_red_group++) {
-        STREAMINGSOFTMAX_RUN_LOOP:
+          // Loop over the groups of unrolled operations in the lane.
+          for (size_t i_red_group = 0; i_red_group < DIM_REDUCTION / REDUCE_PAR;
+               i_red_group++) {
+          STREAMINGSOFTMAX_RUN_LOOP:
 #pragma HLS PIPELINE II = 1
-          StreamingOnlineSoftmax::pipeline_body(
-              i_data, lut_table, o_data, i_red_group, i_step, max, sum, in_row);
+            StreamingOnlineSoftmax::pipeline_body(
+                i_data, lut_table, o_data, i_red_group, i_step, max, sum, in_row);
+          }
         }
       }
     }
@@ -368,32 +368,32 @@ class StreamingSoftmax {
 
   StreamingSoftmax() = default;
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_data[LANE_PAR],
            const TLUT lut_table[LUT_SIZE],
            hls::stream<TOutputWord> o_data[LANE_PAR]) {
-    
-    
-    TInputWord in_row[LANE_PAR][DIM_REDUCTION / REDUCE_PAR];
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      TInputWord in_row[LANE_PAR][DIM_REDUCTION / REDUCE_PAR];
 
-    // Loop over groups of lanes.
-    for (size_t i_lane_group = 0;
-         i_lane_group < DIM_LANES / LANE_PAR; i_lane_group++) {
-      
-      // Tracking the max and sum for each lane in the group.
-      TInput max[LANE_PAR] = {LimitsImpl<TInput>::min()};
-      TAcc sum[LANE_PAR] = {0};
+      // Loop over groups of lanes.
+      for (size_t i_lane_group = 0;
+           i_lane_group < DIM_LANES / LANE_PAR; i_lane_group++) {
+        
+        // Tracking the max and sum for each lane in the group.
+        TInput max[LANE_PAR] = {LimitsImpl<TInput>::min()};
+        TAcc sum[LANE_PAR] = {0};
 
-      // Loop over the three steps of the softmax computation for each group of lanes.
-      for (size_t i_step = 0; i_step < 3; i_step++) {
+        // Loop over the three steps of the softmax computation for each group of lanes.
+        for (size_t i_step = 0; i_step < 3; i_step++) {
 
-        // Loop over the groups of unrolled operations in the lane.
-        for (size_t i_red_group = 0; i_red_group < DIM_REDUCTION / REDUCE_PAR;
-             i_red_group++) {
-        STREAMINGSOFTMAX_RUN_LOOP:
+          // Loop over the groups of unrolled operations in the lane.
+          for (size_t i_red_group = 0; i_red_group < DIM_REDUCTION / REDUCE_PAR;
+               i_red_group++) {
+          STREAMINGSOFTMAX_RUN_LOOP:
 #pragma HLS PIPELINE II = 1
-          StreamingSoftmax::pipeline_body(
-              i_data, lut_table, o_data, i_red_group, i_step, max, sum, in_row);
+            StreamingSoftmax::pipeline_body(
+                i_data, lut_table, o_data, i_red_group, i_step, max, sum, in_row);
+          }
         }
       }
     }

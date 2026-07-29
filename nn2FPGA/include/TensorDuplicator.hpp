@@ -76,16 +76,18 @@ public:
     st.init(pipeline_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TWord> i_data[W_PAR], hls::stream<TWord> o_data0[W_PAR],
            hls::stream<TWord> o_data1[W_PAR]) {
 
-    // Loop through the input height and width.
-    for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH / W_PAR; i_hw++) {
-    TENSORDUPLICATOR_RUN_LOOP:
-      for (size_t i_ch = 0; i_ch < IN_CH / CH_PAR; i_ch++) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      // Loop through the input height and width.
+      for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH / W_PAR; i_hw++) {
+      TENSORDUPLICATOR_RUN_LOOP:
+        for (size_t i_ch = 0; i_ch < IN_CH / CH_PAR; i_ch++) {
 #pragma HLS pipeline II = 1
-        TensorDuplicator::pipeline_body(i_data, o_data0, o_data1);
+          TensorDuplicator::pipeline_body(i_data, o_data0, o_data1);
+        }
       }
     }
   }

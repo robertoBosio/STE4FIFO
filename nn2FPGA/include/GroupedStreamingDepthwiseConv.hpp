@@ -117,34 +117,38 @@ public:
     st.init(pipeline_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWindow> i_data[1],
            hls::stream<TWeightWindow> i_weights[1],
            hls::stream<TBiasWord> i_biases[1],
            hls::stream<TOutputWord> o_data[W_PAR]) {
 
-    for (size_t i_hw = 0; i_hw < OUT_HEIGHT * OUT_WIDTH / W_PAR; i_hw++) {
-    STREAMINGDEPTHWISECONV_RUN_LOOP:
-      for (size_t i_ch = 0; i_ch < IN_CH; i_ch += CH_PAR) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_hw = 0; i_hw < OUT_HEIGHT * OUT_WIDTH / W_PAR; i_hw++) {
+      STREAMINGDEPTHWISECONV_RUN_LOOP:
+        for (size_t i_ch = 0; i_ch < IN_CH; i_ch += CH_PAR) {
 #pragma HLS pipeline II = 1
-        StreamingDepthwiseConv::pipeline_body(
-            i_data, i_weights, i_biases, o_data);
+          StreamingDepthwiseConv::pipeline_body(
+              i_data, i_weights, i_biases, o_data);
+        }
       }
     }
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWindow> i_data[1],
            TWeight i_weights[CH_GROUPS][CH_PAR][FH * FW],
            TBias i_biases[OUT_CH / CH_PAR][CH_PAR][1],
            hls::stream<TOutputWord> o_data[W_PAR]) {
 
-    for (size_t i_hw = 0; i_hw < OUT_HEIGHT * OUT_WIDTH / W_PAR; i_hw++) {
-      for (size_t i_ch = 0, weight_group = 0; i_ch < IN_CH;
-           i_ch += CH_PAR, weight_group++) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_hw = 0; i_hw < OUT_HEIGHT * OUT_WIDTH / W_PAR; i_hw++) {
+        for (size_t i_ch = 0, weight_group = 0; i_ch < IN_CH;
+             i_ch += CH_PAR, weight_group++) {
 #pragma HLS pipeline II = 1
-        StreamingDepthwiseConv::pipeline_body(i_data, i_weights[weight_group],
-                                              i_biases[weight_group], o_data);
+          StreamingDepthwiseConv::pipeline_body(i_data, i_weights[weight_group],
+                                                i_biases[weight_group], o_data);
+        }
       }
     }
   }

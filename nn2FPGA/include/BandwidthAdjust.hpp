@@ -59,17 +59,19 @@ public:
     st.init(pipeline_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> input_data_stream[IN_W_PAR],
            hls::stream<TOutputWord> output_data_stream[OUT_W_PAR]) {
-    for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH; i_hw += OUT_W_PAR) {
-      for (size_t i_out_stream = 0; i_out_stream < OUT_W_PAR;
-           i_out_stream += IN_W_PAR) {
-      BANDWIDTHADJUSTINCREASESTREAMS_RUN_LOOP:
-        for (size_t i_ch = 0; i_ch < IN_CH; i_ch += OUT_CH_PAR) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH; i_hw += OUT_W_PAR) {
+        for (size_t i_out_stream = 0; i_out_stream < OUT_W_PAR;
+             i_out_stream += IN_W_PAR) {
+        BANDWIDTHADJUSTINCREASESTREAMS_RUN_LOOP:
+          for (size_t i_ch = 0; i_ch < IN_CH; i_ch += OUT_CH_PAR) {
 #pragma HLS pipeline II = 1
-          BandwidthAdjustIncreaseStreams::pipeline_body(
-              input_data_stream, output_data_stream, i_out_stream);
+            BandwidthAdjustIncreaseStreams::pipeline_body(
+                input_data_stream, output_data_stream, i_out_stream);
+          }
         }
       }
     }
@@ -234,17 +236,19 @@ public:
     st.init(pipeline_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> input_data_stream[IN_W_PAR],
            hls::stream<TOutputWord> output_data_stream[OUT_W_PAR]) {
-    for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH; i_hw += IN_W_PAR) {
-      for (size_t i_in_stream = 0; i_in_stream < IN_W_PAR;
-           i_in_stream += OUT_W_PAR) {
-      BANDWIDTHADJUSTDECREASESTREAMS_RUN_LOOP:
-        for (size_t i_ch = 0; i_ch < IN_CH; i_ch += OUT_CH_PAR) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH; i_hw += IN_W_PAR) {
+        for (size_t i_in_stream = 0; i_in_stream < IN_W_PAR;
+             i_in_stream += OUT_W_PAR) {
+        BANDWIDTHADJUSTDECREASESTREAMS_RUN_LOOP:
+          for (size_t i_ch = 0; i_ch < IN_CH; i_ch += OUT_CH_PAR) {
 #pragma HLS pipeline II = 1
-          BandwidthAdjustDecreaseStreams::pipeline_body(
-              input_data_stream, output_data_stream, i_in_stream);
+            BandwidthAdjustDecreaseStreams::pipeline_body(
+                input_data_stream, output_data_stream, i_in_stream);
+          }
         }
       }
     }
@@ -407,19 +411,21 @@ public:
     st.init(pipeline_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> input_data_stream[IN_W_PAR],
            hls::stream<TOutputWord> output_data_stream[OUT_W_PAR]) {
-    TOutputWord
-        output_data[OUT_W_PAR]; // Output structure to hold the results.
-    for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH; i_hw += IN_W_PAR) {
-      for (size_t i_ch = 0; i_ch < IN_CH; i_ch += OUT_CH_PAR) {
-      BANDWIDTHADJUSTINCREASECHANNELS_RUN_LOOP:
-        for (size_t i_och_par = 0; i_och_par < OUT_CH_PAR;
-             i_och_par += IN_CH_PAR) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      TOutputWord
+          output_data[OUT_W_PAR]; // Output structure to hold the results.
+      for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH; i_hw += IN_W_PAR) {
+        for (size_t i_ch = 0; i_ch < IN_CH; i_ch += OUT_CH_PAR) {
+        BANDWIDTHADJUSTINCREASECHANNELS_RUN_LOOP:
+          for (size_t i_och_par = 0; i_och_par < OUT_CH_PAR;
+               i_och_par += IN_CH_PAR) {
 #pragma HLS pipeline II = 1
-          BandwidthAdjustIncreaseChannels::pipeline_body(
-              input_data_stream, output_data_stream, output_data, i_och_par);
+            BandwidthAdjustIncreaseChannels::pipeline_body(
+                input_data_stream, output_data_stream, output_data, i_och_par);
+          }
         }
       }
     }
@@ -590,18 +596,20 @@ public:
     st.init(pipeline_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> input_data_stream[IN_W_PAR],
            hls::stream<TOutputWord> output_data_stream[OUT_W_PAR]) {
-    TInputWord input_data[IN_W_PAR]; // Input structure to hold the data read.
-    for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH; i_hw += IN_W_PAR) {
-      for (size_t i_ch = 0; i_ch < IN_CH; i_ch += IN_CH_PAR) {
-      BANDWIDTHADJUSTDECREASECHANNELS_RUN_LOOP:
-        for (size_t i_ich_par = 0; i_ich_par < IN_CH_PAR;
-             i_ich_par += OUT_CH_PAR) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      TInputWord input_data[IN_W_PAR]; // Input structure to hold the data read.
+      for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH; i_hw += IN_W_PAR) {
+        for (size_t i_ch = 0; i_ch < IN_CH; i_ch += IN_CH_PAR) {
+        BANDWIDTHADJUSTDECREASECHANNELS_RUN_LOOP:
+          for (size_t i_ich_par = 0; i_ich_par < IN_CH_PAR;
+               i_ich_par += OUT_CH_PAR) {
 #pragma HLS pipeline II = 1
-          BandwidthAdjustDecreaseChannels::pipeline_body(
-              input_data_stream, output_data_stream, input_data, i_ich_par);
+            BandwidthAdjustDecreaseChannels::pipeline_body(
+                input_data_stream, output_data_stream, input_data, i_ich_par);
+          }
         }
       }
     }

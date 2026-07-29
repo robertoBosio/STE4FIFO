@@ -45,15 +45,17 @@ class StreamingAdd {
 
   StreamingAdd() = default;
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWordA> i_dataA[W_PAR],
            hls::stream<TInputWordB> i_dataB[W_PAR],
            hls::stream<TOutputWord> o_data[W_PAR]) {
-  STREAMINGADD_RUN_LOOP:
-    for (size_t i = 0; i < IN_HEIGHT * IN_WIDTH * IN_CH / (CH_PAR * W_PAR);
-         i++) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+    STREAMINGADD_RUN_LOOP:
+      for (size_t i = 0; i < IN_HEIGHT * IN_WIDTH * IN_CH / (CH_PAR * W_PAR);
+           i++) {
 #pragma HLS PIPELINE II = 1
-      StreamingAdd::pipeline_body(i_dataA, i_dataB, o_data);
+        StreamingAdd::pipeline_body(i_dataA, i_dataB, o_data);
+      }
     }
   }
 

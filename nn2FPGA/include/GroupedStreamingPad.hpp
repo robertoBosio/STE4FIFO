@@ -59,15 +59,17 @@ public:
     st.init(pipeline_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TWord> i_data[FH * FW_EXPAND],
            hls::stream<TWindow> o_data[1]) {
-    for (size_t i_h = 0; i_h < OUT_HEIGHT; i_h++) {
-      for (size_t i_w = 0; i_w < OUT_WIDTH; i_w += W_PAR) {
-      STREAMINGPAD_RUN_LOOP:
-        for (size_t i_ch = 0; i_ch < IN_CH; i_ch += CH_PAR) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_h = 0; i_h < OUT_HEIGHT; i_h++) {
+        for (size_t i_w = 0; i_w < OUT_WIDTH; i_w += W_PAR) {
+        STREAMINGPAD_RUN_LOOP:
+          for (size_t i_ch = 0; i_ch < IN_CH; i_ch += CH_PAR) {
 #pragma HLS pipeline II = 1
-          StreamingPad::pipeline_body(i_data, o_data, i_h, i_w);
+            StreamingPad::pipeline_body(i_data, o_data, i_h, i_w);
+          }
         }
       }
     }

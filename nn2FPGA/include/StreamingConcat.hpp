@@ -44,15 +44,17 @@ class StreamingConcatChannel {
 
   StreamingConcatChannel() = default;
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_dataA[W_PAR],
            hls::stream<TInputWord> i_dataB[W_PAR],
            hls::stream<TOutputWord> o_data[W_PAR]) {
-  STREAMINGCONCATCHANNEL_RUN_LOOP:
-    for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH / W_PAR; i_hw++) {
-      for (size_t i_ch = 0; i_ch < (IN_CH_A + IN_CH_B) / CH_PAR; i_ch++) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+    STREAMINGCONCATCHANNEL_RUN_LOOP:
+      for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH / W_PAR; i_hw++) {
+        for (size_t i_ch = 0; i_ch < (IN_CH_A + IN_CH_B) / CH_PAR; i_ch++) {
 #pragma HLS PIPELINE II = 1
-        StreamingConcatChannel::pipeline_body(i_dataA, i_dataB, o_data, i_ch);
+          StreamingConcatChannel::pipeline_body(i_dataA, i_dataB, o_data, i_ch);
+        }
       }
     }
   }
@@ -197,16 +199,18 @@ class StreamingConcatHeight {
 
   StreamingConcatHeight() = default;
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_dataA[W_PAR],
            hls::stream<TInputWord> i_dataB[W_PAR],
            hls::stream<TOutputWord> o_data[W_PAR]) {
-    for (size_t i_h = 0; i_h < (IN_HEIGHT_A + IN_HEIGHT_B); i_h++) {
-      for (size_t i_w = 0; i_w < IN_WIDTH / W_PAR; i_w++) {
-  STREAMINGCONCATHEIGHT_RUN_LOOP:
-        for (size_t i_ch = 0; i_ch < IN_CH / CH_PAR; i_ch++) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_h = 0; i_h < (IN_HEIGHT_A + IN_HEIGHT_B); i_h++) {
+        for (size_t i_w = 0; i_w < IN_WIDTH / W_PAR; i_w++) {
+    STREAMINGCONCATHEIGHT_RUN_LOOP:
+          for (size_t i_ch = 0; i_ch < IN_CH / CH_PAR; i_ch++) {
 #pragma HLS PIPELINE II = 1
-          StreamingConcatHeight::pipeline_body(i_dataA, i_dataB, o_data, i_h);
+            StreamingConcatHeight::pipeline_body(i_dataA, i_dataB, o_data, i_h);
+          }
         }
       }
     }
@@ -356,16 +360,18 @@ class StreamingConcatWidth {
 
   StreamingConcatWidth() = default;
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_dataA[W_PAR],
            hls::stream<TInputWord> i_dataB[W_PAR],
            hls::stream<TOutputWord> o_data[W_PAR]) {
-    for (size_t i_h = 0; i_h < IN_HEIGHT; i_h++) {
-      for (size_t i_w = 0; i_w < (IN_WIDTH_A + IN_WIDTH_B); i_w += W_PAR) {
-      STREAMINGCONCATWIDTH_RUN_LOOP:
-        for (size_t i_ch = 0; i_ch < IN_CH / CH_PAR; i_ch++) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_h = 0; i_h < IN_HEIGHT; i_h++) {
+        for (size_t i_w = 0; i_w < (IN_WIDTH_A + IN_WIDTH_B); i_w += W_PAR) {
+        STREAMINGCONCATWIDTH_RUN_LOOP:
+          for (size_t i_ch = 0; i_ch < IN_CH / CH_PAR; i_ch++) {
 #pragma HLS PIPELINE II = 1
-          StreamingConcatWidth::pipeline_body(i_dataA, i_dataB, o_data, i_w);
+            StreamingConcatWidth::pipeline_body(i_dataA, i_dataB, o_data, i_w);
+          }
         }
       }
     }

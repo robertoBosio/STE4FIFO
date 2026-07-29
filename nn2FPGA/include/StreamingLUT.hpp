@@ -51,16 +51,18 @@ public:
     st.init(pipeline_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_data[W_PAR],
            const TOutput LUTmem[LUT_SIZE],
            hls::stream<TOutputWord> o_data[W_PAR]) {
-    // Loop through the input height and width.
-    for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH / W_PAR; i_hw++) {
-    STREAMINGRELU_RUN_LOOP:
-      for (size_t i_ch = 0; i_ch < IN_CH / CH_PAR; i_ch++) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      // Loop through the input height and width.
+      for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH / W_PAR; i_hw++) {
+      STREAMINGRELU_RUN_LOOP:
+        for (size_t i_ch = 0; i_ch < IN_CH / CH_PAR; i_ch++) {
 #pragma HLS pipeline II = 1
-        StreamingLUT::pipeline_body(i_data, LUTmem, o_data);
+          StreamingLUT::pipeline_body(i_data, LUTmem, o_data);
+        }
       }
     }
   }

@@ -131,28 +131,30 @@ public:
     return st.actor_status;
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TQInputWord> i_data_q[DIM_HEADS],
            hls::stream<TKInputWord> i_data_k[DIM_HEADS],
            hls::stream<TOutputWord> o_data_qk[DIM_HEADS]) {
 
-    TKInputWord k_matrix[DIM_HEADS][DIM_K][DIM_SEQ / REDUCE_PAR];
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      TKInputWord k_matrix[DIM_HEADS][DIM_K][DIM_SEQ / REDUCE_PAR];
 #pragma HLS array_partition variable = k_matrix complete dim = 4
-    TQInputWord q_row[DIM_SEQ / REDUCE_PAR];
+      TQInputWord q_row[DIM_SEQ / REDUCE_PAR];
 #pragma HLS array_partition variable = q_row complete dim = 2
-    TAcc acc;
+      TAcc acc;
 
-    for (size_t i_qrow = 0; i_qrow < DIM_Q; i_qrow++) {
-      for (size_t i_heads = 0; i_heads < DIM_HEADS; i_heads++) {
-        for (size_t i_kcol = 0; i_kcol < DIM_K; i_kcol++) {
-          for (size_t i_group_reduce = 0; i_group_reduce < DIM_SEQ / REDUCE_PAR;
-               i_group_reduce++) {
+      for (size_t i_qrow = 0; i_qrow < DIM_Q; i_qrow++) {
+        for (size_t i_heads = 0; i_heads < DIM_HEADS; i_heads++) {
+          for (size_t i_kcol = 0; i_kcol < DIM_K; i_kcol++) {
+            for (size_t i_group_reduce = 0; i_group_reduce < DIM_SEQ / REDUCE_PAR;
+                 i_group_reduce++) {
 #pragma HLS PIPELINE II = 1
-            QKMatMul::pipeline_body(i_data_q[i_heads], i_data_k[i_heads],
-                                    o_data_qk[i_heads], i_qrow, i_kcol,
-                                    i_group_reduce, acc,
-                                    k_matrix[i_heads][i_kcol][i_group_reduce],
-                                    q_row[i_group_reduce]);
+              QKMatMul::pipeline_body(i_data_q[i_heads], i_data_k[i_heads],
+                                      o_data_qk[i_heads], i_qrow, i_kcol,
+                                      i_group_reduce, acc,
+                                      k_matrix[i_heads][i_kcol][i_group_reduce],
+                                      q_row[i_group_reduce]);
+            }
           }
         }
       }

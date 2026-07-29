@@ -1,3 +1,4 @@
+#include "utils/stream_utils.hpp"
 /*
 * This file was automatically generated using csnake v0.4.0.
 *
@@ -33,13 +34,32 @@
 #include "StreamingAdd.hpp"
 #include "NHWCToStream.hpp"
 #include "BandwidthAdjust.hpp"
-void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<128, 0, 0, 0>>& global_out)
+void resnet8(
+    std::array<std::array<ap_int<8>, 3>, 4> in_data[256],
+    std::array<std::array<ap_int<8>, 2>, 1> out_data[6],
+    ap_int<8> StreamingConv_0_weights[48][1][9],
+    ap_int<16> StreamingConv_0_biases[16][1][1],
+    ap_int<8> StreamingConv_1_weights[64][4][9],
+    ap_int<16> StreamingConv_1_biases[4][4][1],
+    ap_int<8> StreamingConv_2_weights[64][4][9],
+    ap_int<16> StreamingConv_2_biases[16][1][1],
+    ap_int<8> StreamingConv_4_weights[256][2][1],
+    ap_int<16> StreamingConv_4_biases[16][2][1],
+    ap_int<8> StreamingConv_3_weights[256][2][9],
+    ap_int<16> StreamingConv_3_biases[16][2][1],
+    ap_int<8> StreamingConv_5_weights[256][4][9],
+    ap_int<16> StreamingConv_5_biases[16][2][1],
+    ap_int<8> StreamingConv_7_weights[512][4][1],
+    ap_int<16> StreamingConv_7_biases[32][2][1],
+    ap_int<8> StreamingConv_6_weights[512][4][9],
+    ap_int<16> StreamingConv_6_biases[32][2][1],
+    ap_int<8> StreamingConv_8_weights[1024][4][9],
+    ap_int<16> StreamingConv_8_biases[32][2][1],
+    ap_int<8> StreamingConv_9_weights[160][4][1],
+    ap_int<16> StreamingConv_9_biases[5][2][1]
+)
 {
     #pragma HLS TOP
-    #pragma HLS DATAFLOW disable_start_propagation
-    #pragma HLS INTERFACE ap_ctrl_none port=return
-    #pragma HLS INTERFACE axis port=global_in
-    #pragma HLS INTERFACE axis port=global_out
     hls::stream<std::array<ap_int<8>, 3>> NHWCToStream_0_out0_stream[4];
     #pragma HLS STREAM variable=NHWCToStream_0_out0_stream[0] depth=2
     #pragma HLS STREAM variable=NHWCToStream_0_out0_stream[1] depth=2
@@ -51,693 +71,682 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
     #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_0_out0_stream[2] depth=2
     #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_0_out0_stream[3] depth=2
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_0_out0_stream[18];
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[2] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[3] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[4] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[7] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[9] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[10] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[11] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[12] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[13] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[14] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[15] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[16] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[17] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[0] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[1] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[2] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[3] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[4] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[5] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[6] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[7] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[8] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[9] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[10] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[11] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[12] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[13] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[14] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[15] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[16] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[17] depth=14
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_0_out0_stream_prepad[18];
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[0] depth=43
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[1] depth=44
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[2] depth=50
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[3] depth=50
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[4] depth=46
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[5] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[6] depth=24
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[7] depth=25
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[8] depth=29
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[9] depth=29
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[10] depth=27
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[11] depth=22
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[12] depth=3
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[13] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[14] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[15] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[16] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[17] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[0] depth=9
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[1] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[2] depth=42
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[3] depth=42
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[4] depth=8
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[6] depth=12
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[7] depth=8
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[8] depth=19
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[9] depth=19
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[10] depth=12
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[11] depth=10
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[12] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[13] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[14] depth=18
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[15] depth=18
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[16] depth=18
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[17] depth=15
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_0_buffer_stream[14];
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[2] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[3] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[4] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[7] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[9] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[10] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[11] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[12] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[13] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[1] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[2] depth=25
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[3] depth=25
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[4] depth=22
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[5] depth=22
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[6] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[7] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[8] depth=25
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[9] depth=25
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[10] depth=22
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[11] depth=22
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[12] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[13] depth=4
     hls::stream<std::array<ap_uint<8>, 1>> StreamingConv_0_out0_stream[4];
-    #pragma HLS STREAM variable=StreamingConv_0_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingConv_0_out0_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingConv_0_out0_stream[2] depth=2
-    #pragma HLS STREAM variable=StreamingConv_0_out0_stream[3] depth=2
+    #pragma HLS STREAM variable=StreamingConv_0_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingConv_0_out0_stream[1] depth=3
+    #pragma HLS STREAM variable=StreamingConv_0_out0_stream[2] depth=3
+    #pragma HLS STREAM variable=StreamingConv_0_out0_stream[3] depth=3
     hls::stream<std::array<ap_uint<8>, 1>> TensorDuplicator_0_out0_stream[4];
-    #pragma HLS STREAM variable=TensorDuplicator_0_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=TensorDuplicator_0_out0_stream[1] depth=2
-    #pragma HLS STREAM variable=TensorDuplicator_0_out0_stream[2] depth=2
-    #pragma HLS STREAM variable=TensorDuplicator_0_out0_stream[3] depth=2
+    #pragma HLS STREAM variable=TensorDuplicator_0_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_0_out0_stream[1] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_0_out0_stream[2] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_0_out0_stream[3] depth=3
     hls::stream<std::array<ap_uint<8>, 1>> TensorDuplicator_0_out1_stream[4];
-    #pragma HLS STREAM variable=TensorDuplicator_0_out1_stream[0] depth=656
-    #pragma HLS STREAM variable=TensorDuplicator_0_out1_stream[1] depth=656
-    #pragma HLS STREAM variable=TensorDuplicator_0_out1_stream[2] depth=656
-    #pragma HLS STREAM variable=TensorDuplicator_0_out1_stream[3] depth=656
+    #pragma HLS STREAM variable=TensorDuplicator_0_out1_stream[0] depth=419
+    #pragma HLS STREAM variable=TensorDuplicator_0_out1_stream[1] depth=419
+    #pragma HLS STREAM variable=TensorDuplicator_0_out1_stream[2] depth=419
+    #pragma HLS STREAM variable=TensorDuplicator_0_out1_stream[3] depth=419
     hls::stream<std::array<ap_uint<8>, 1>> StreamingLineBuffer_1_out0_stream[18];
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[0] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[1] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[2] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[3] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[4] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[5] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[6] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[7] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[8] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[9] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[10] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[11] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[12] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[13] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[14] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[15] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[16] depth=4
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[17] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[0] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[1] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[2] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[3] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[4] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[5] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[6] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[7] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[8] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[9] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[10] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[11] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[12] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[13] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[14] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[15] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[16] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[17] depth=49
     hls::stream<std::array<ap_uint<8>, 1>> StreamingLineBuffer_1_out0_stream_prepad[18];
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[0] depth=257
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[1] depth=273
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[2] depth=273
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[3] depth=273
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[4] depth=273
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[5] depth=225
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[6] depth=145
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[7] depth=146
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[8] depth=146
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[9] depth=146
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[10] depth=146
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[11] depth=113
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[12] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[13] depth=17
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[14] depth=19
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[15] depth=19
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[16] depth=19
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[17] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[0] depth=35
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[1] depth=19
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[2] depth=198
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[3] depth=198
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[4] depth=21
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[6] depth=38
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[7] depth=21
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[8] depth=71
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[9] depth=71
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[10] depth=38
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[11] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[12] depth=56
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[13] depth=40
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[14] depth=57
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[15] depth=57
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[16] depth=57
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[17] depth=41
     hls::stream<std::array<ap_uint<8>, 1>> StreamingLineBuffer_1_buffer_stream[14];
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[2] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[3] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[4] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[7] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[9] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[10] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[11] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[12] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[13] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[0] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[1] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[2] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[3] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[4] depth=113
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[5] depth=113
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[6] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[7] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[8] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[9] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[10] depth=113
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[11] depth=113
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[12] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[13] depth=17
     hls::stream<std::array<ap_uint<8>, 4>> StreamingConv_1_out0_stream[4];
-    #pragma HLS STREAM variable=StreamingConv_1_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingConv_1_out0_stream[0] depth=2
     #pragma HLS STREAM variable=StreamingConv_1_out0_stream[1] depth=2
     #pragma HLS STREAM variable=StreamingConv_1_out0_stream[2] depth=2
     #pragma HLS STREAM variable=StreamingConv_1_out0_stream[3] depth=2
     hls::stream<std::array<ap_uint<8>, 4>> StreamingLineBuffer_2_out0_stream[18];
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[2] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[3] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[4] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[7] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[9] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[10] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[11] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[12] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[13] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[14] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[15] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[16] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[17] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[0] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[1] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[2] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[3] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[4] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[5] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[6] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[7] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[8] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[9] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[10] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[11] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[12] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[13] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[14] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[15] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[16] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[17] depth=16
     hls::stream<std::array<ap_uint<8>, 4>> StreamingLineBuffer_2_out0_stream_prepad[18];
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[0] depth=65
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[1] depth=69
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[2] depth=69
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[3] depth=69
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[4] depth=69
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[5] depth=57
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[6] depth=37
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[7] depth=38
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[8] depth=38
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[9] depth=38
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[10] depth=38
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[11] depth=29
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[12] depth=9
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[13] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[14] depth=7
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[15] depth=7
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[16] depth=7
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[17] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[0] depth=11
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[1] depth=7
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[2] depth=54
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[3] depth=54
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[4] depth=9
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[6] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[7] depth=9
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[8] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[9] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[10] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[11] depth=11
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[12] depth=20
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[13] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[14] depth=20
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[15] depth=20
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[16] depth=20
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[17] depth=16
     hls::stream<std::array<ap_uint<8>, 4>> StreamingLineBuffer_2_buffer_stream[14];
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[0] depth=3
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[2] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[3] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[4] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[7] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[9] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[10] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[11] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[12] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[13] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[2] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[3] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[4] depth=29
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[5] depth=29
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[7] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[8] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[9] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[10] depth=29
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[11] depth=29
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[12] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_buffer_stream[13] depth=5
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_2_out0_stream[4];
-    #pragma HLS STREAM variable=StreamingConv_2_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingConv_2_out0_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingConv_2_out0_stream[2] depth=2
-    #pragma HLS STREAM variable=StreamingConv_2_out0_stream[3] depth=2
+    #pragma HLS STREAM variable=StreamingConv_2_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingConv_2_out0_stream[1] depth=3
+    #pragma HLS STREAM variable=StreamingConv_2_out0_stream[2] depth=3
+    #pragma HLS STREAM variable=StreamingConv_2_out0_stream[3] depth=3
     hls::stream<std::array<ap_uint<8>, 1>> StreamingAdd_0_out0_stream[4];
-    #pragma HLS STREAM variable=StreamingAdd_0_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingAdd_0_out0_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingAdd_0_out0_stream[2] depth=2
-    #pragma HLS STREAM variable=StreamingAdd_0_out0_stream[3] depth=2
+    #pragma HLS STREAM variable=StreamingAdd_0_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingAdd_0_out0_stream[1] depth=4
+    #pragma HLS STREAM variable=StreamingAdd_0_out0_stream[2] depth=4
+    #pragma HLS STREAM variable=StreamingAdd_0_out0_stream[3] depth=4
     hls::stream<std::array<ap_uint<8>, 1>> TensorDuplicator_1_out0_stream[4];
-    #pragma HLS STREAM variable=TensorDuplicator_1_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=TensorDuplicator_1_out0_stream[1] depth=2
-    #pragma HLS STREAM variable=TensorDuplicator_1_out0_stream[2] depth=2
-    #pragma HLS STREAM variable=TensorDuplicator_1_out0_stream[3] depth=2
+    #pragma HLS STREAM variable=TensorDuplicator_1_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_1_out0_stream[1] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_1_out0_stream[2] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_1_out0_stream[3] depth=3
     hls::stream<std::array<ap_uint<8>, 1>> TensorDuplicator_1_out1_stream[4];
-    #pragma HLS STREAM variable=TensorDuplicator_1_out1_stream[0] depth=2
-    #pragma HLS STREAM variable=TensorDuplicator_1_out1_stream[1] depth=2
-    #pragma HLS STREAM variable=TensorDuplicator_1_out1_stream[2] depth=2
-    #pragma HLS STREAM variable=TensorDuplicator_1_out1_stream[3] depth=2
+    #pragma HLS STREAM variable=TensorDuplicator_1_out1_stream[0] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_1_out1_stream[1] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_1_out1_stream[2] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_1_out1_stream[3] depth=3
     hls::stream<std::array<ap_uint<8>, 1>> StreamingLineBuffer_3_out0_stream[27];
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[0] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[1] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[2] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[3] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[4] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[5] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[6] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[7] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[8] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[9] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[10] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[11] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[12] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[13] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[14] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[15] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[16] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[17] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[18] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[19] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[20] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[21] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[22] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[23] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[24] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[25] depth=40
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[26] depth=40
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[0] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[1] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[2] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[3] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[4] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[5] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[6] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[7] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[8] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[9] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[10] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[11] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[12] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[13] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[14] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[15] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[16] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[17] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[18] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[19] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[20] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[21] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[22] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[23] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[24] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[25] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[26] depth=51
     hls::stream<std::array<ap_uint<8>, 1>> StreamingLineBuffer_3_out0_stream_prepad[27];
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[0] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[1] depth=79
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[2] depth=79
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[3] depth=79
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[4] depth=79
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[5] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[6] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[7] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[8] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[9] depth=49
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[10] depth=65
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[11] depth=65
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[12] depth=65
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[13] depth=65
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[14] depth=65
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[15] depth=65
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[16] depth=65
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[17] depth=65
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[18] depth=16
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[19] depth=17
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[20] depth=17
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[21] depth=17
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[22] depth=17
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[23] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[24] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[25] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[26] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[0] depth=19
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[1] depth=51
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[2] depth=35
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[3] depth=35
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[4] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[5] depth=40
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[6] depth=24
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[7] depth=24
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[9] depth=20
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[10] depth=36
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[11] depth=25
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[12] depth=25
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[13] depth=20
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[14] depth=36
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[15] depth=26
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[16] depth=26
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[17] depth=20
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[18] depth=26
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[19] depth=27
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[20] depth=27
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[21] depth=27
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[22] depth=27
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[23] depth=28
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[24] depth=28
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[25] depth=28
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[26] depth=28
     hls::stream<std::array<ap_uint<8>, 1>> StreamingLineBuffer_3_buffer_stream[23];
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[2] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[3] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[4] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[7] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[9] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[10] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[11] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[12] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[13] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[14] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[15] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[16] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[17] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[18] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[19] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[20] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[21] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[22] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[0] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[1] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[2] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[3] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[4] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[5] depth=113
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[6] depth=113
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[7] depth=113
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[8] depth=97
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[9] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[10] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[11] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[12] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[13] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[14] depth=113
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[15] depth=113
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[16] depth=113
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[17] depth=97
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[18] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[19] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[20] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[21] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_buffer_stream[22] depth=17
     hls::stream<std::array<ap_uint<8>, 1>> StreamingLineBuffer_4_out0_stream[7];
-    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[0] depth=43
-    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[1] depth=43
-    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[2] depth=43
-    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[3] depth=43
-    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[4] depth=39
-    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[5] depth=39
-    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[6] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[0] depth=46
+    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[1] depth=46
+    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[2] depth=46
+    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[3] depth=46
+    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[4] depth=43
+    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[5] depth=43
+    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[6] depth=43
     hls::stream<std::array<ap_uint<8>, 1>> StreamingLineBuffer_4_buffer_stream[3];
-    #pragma HLS STREAM variable=StreamingLineBuffer_4_buffer_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_4_buffer_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_4_buffer_stream[2] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_4_buffer_stream[0] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_4_buffer_stream[1] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_4_buffer_stream[2] depth=17
     hls::stream<std::array<ap_uint<8>, 2>> StreamingConv_3_out0_stream[4];
     #pragma HLS STREAM variable=StreamingConv_3_out0_stream[0] depth=2
     #pragma HLS STREAM variable=StreamingConv_3_out0_stream[1] depth=2
     #pragma HLS STREAM variable=StreamingConv_3_out0_stream[2] depth=2
     #pragma HLS STREAM variable=StreamingConv_3_out0_stream[3] depth=2
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_4_out0_stream[4];
-    #pragma HLS STREAM variable=StreamingConv_4_out0_stream[0] depth=145
-    #pragma HLS STREAM variable=StreamingConv_4_out0_stream[1] depth=145
-    #pragma HLS STREAM variable=StreamingConv_4_out0_stream[2] depth=145
-    #pragma HLS STREAM variable=StreamingConv_4_out0_stream[3] depth=145
+    #pragma HLS STREAM variable=StreamingConv_4_out0_stream[0] depth=178
+    #pragma HLS STREAM variable=StreamingConv_4_out0_stream[1] depth=178
+    #pragma HLS STREAM variable=StreamingConv_4_out0_stream[2] depth=178
+    #pragma HLS STREAM variable=StreamingConv_4_out0_stream[3] depth=178
     hls::stream<std::array<ap_uint<8>, 2>> StreamingLineBuffer_5_out0_stream[18];
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[0] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[1] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[2] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[3] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[4] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[5] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[6] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[7] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[8] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[9] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[10] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[11] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[12] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[13] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[14] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[15] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[16] depth=11
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[17] depth=11
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[0] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[1] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[2] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[3] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[4] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[5] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[6] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[7] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[8] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[9] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[10] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[11] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[12] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[13] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[14] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[15] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[16] depth=39
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[17] depth=39
     hls::stream<std::array<ap_uint<8>, 2>> StreamingLineBuffer_5_out0_stream_prepad[18];
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[0] depth=129
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[1] depth=145
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[2] depth=145
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[3] depth=145
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[4] depth=145
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[5] depth=97
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[6] depth=81
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[7] depth=82
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[8] depth=82
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[9] depth=82
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[10] depth=82
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[11] depth=49
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[12] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[13] depth=17
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[14] depth=19
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[15] depth=19
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[16] depth=19
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[17] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[0] depth=35
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[1] depth=19
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[2] depth=134
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[3] depth=134
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[4] depth=21
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[6] depth=38
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[7] depth=21
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[8] depth=71
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[9] depth=71
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[10] depth=38
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[11] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[12] depth=52
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[13] depth=40
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[14] depth=57
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[15] depth=57
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[16] depth=57
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[17] depth=41
     hls::stream<std::array<ap_uint<8>, 2>> StreamingLineBuffer_5_buffer_stream[14];
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[2] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[3] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[4] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[7] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[9] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[10] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[11] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[12] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[13] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[0] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[1] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[2] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[3] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[4] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[5] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[6] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[7] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[8] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[9] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[10] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[11] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[12] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[13] depth=17
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_5_out0_stream[4];
     #pragma HLS STREAM variable=StreamingConv_5_out0_stream[0] depth=3
     #pragma HLS STREAM variable=StreamingConv_5_out0_stream[1] depth=3
     #pragma HLS STREAM variable=StreamingConv_5_out0_stream[2] depth=3
     #pragma HLS STREAM variable=StreamingConv_5_out0_stream[3] depth=3
     hls::stream<std::array<ap_uint<8>, 2>> StreamingAdd_1_out0_stream[4];
-    #pragma HLS STREAM variable=StreamingAdd_1_out0_stream[0] depth=3
-    #pragma HLS STREAM variable=StreamingAdd_1_out0_stream[1] depth=3
-    #pragma HLS STREAM variable=StreamingAdd_1_out0_stream[2] depth=3
-    #pragma HLS STREAM variable=StreamingAdd_1_out0_stream[3] depth=3
+    #pragma HLS STREAM variable=StreamingAdd_1_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingAdd_1_out0_stream[1] depth=4
+    #pragma HLS STREAM variable=StreamingAdd_1_out0_stream[2] depth=4
+    #pragma HLS STREAM variable=StreamingAdd_1_out0_stream[3] depth=4
     hls::stream<std::array<ap_uint<8>, 2>> TensorDuplicator_2_out0_stream[4];
-    #pragma HLS STREAM variable=TensorDuplicator_2_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=TensorDuplicator_2_out0_stream[1] depth=2
-    #pragma HLS STREAM variable=TensorDuplicator_2_out0_stream[2] depth=2
-    #pragma HLS STREAM variable=TensorDuplicator_2_out0_stream[3] depth=2
+    #pragma HLS STREAM variable=TensorDuplicator_2_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_2_out0_stream[1] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_2_out0_stream[2] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_2_out0_stream[3] depth=3
     hls::stream<std::array<ap_uint<8>, 2>> TensorDuplicator_2_out1_stream[4];
     #pragma HLS STREAM variable=TensorDuplicator_2_out1_stream[0] depth=3
     #pragma HLS STREAM variable=TensorDuplicator_2_out1_stream[1] depth=3
     #pragma HLS STREAM variable=TensorDuplicator_2_out1_stream[2] depth=3
-    #pragma HLS STREAM variable=TensorDuplicator_2_out1_stream[3] depth=2
+    #pragma HLS STREAM variable=TensorDuplicator_2_out1_stream[3] depth=3
     hls::stream<std::array<ap_uint<8>, 2>> StreamingLineBuffer_6_out0_stream[27];
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[0] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[1] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[2] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[3] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[4] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[5] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[6] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[7] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[8] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[9] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[10] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[11] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[12] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[13] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[14] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[15] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[16] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[17] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[18] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[19] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[20] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[21] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[22] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[23] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[24] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[25] depth=8
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[26] depth=8
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[0] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[1] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[2] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[3] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[4] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[5] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[6] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[7] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[8] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[9] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[10] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[11] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[12] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[13] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[14] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[15] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[16] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[17] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[18] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[19] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[20] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[21] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[22] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[23] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[24] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[25] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[26] depth=23
     hls::stream<std::array<ap_uint<8>, 2>> StreamingLineBuffer_6_out0_stream_prepad[27];
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[0] depth=32
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[1] depth=47
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[2] depth=47
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[3] depth=47
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[4] depth=47
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[5] depth=32
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[6] depth=32
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[7] depth=32
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[8] depth=32
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[9] depth=17
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[10] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[11] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[12] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[13] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[14] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[15] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[16] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[17] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[18] depth=16
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[19] depth=17
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[20] depth=17
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[21] depth=17
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[22] depth=17
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[23] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[24] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[25] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[26] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[0] depth=19
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[1] depth=35
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[2] depth=35
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[3] depth=35
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[4] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[5] depth=36
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[6] depth=24
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[7] depth=24
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[9] depth=20
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[10] depth=36
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[11] depth=25
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[12] depth=25
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[13] depth=20
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[14] depth=36
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[15] depth=26
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[16] depth=26
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[17] depth=20
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[18] depth=20
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[19] depth=27
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[20] depth=27
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[21] depth=27
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[22] depth=27
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[23] depth=28
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[24] depth=28
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[25] depth=28
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[26] depth=28
     hls::stream<std::array<ap_uint<8>, 2>> StreamingLineBuffer_6_buffer_stream[23];
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[2] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[3] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[4] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[7] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[9] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[10] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[11] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[12] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[13] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[14] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[15] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[16] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[17] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[18] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[19] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[20] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[21] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[22] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[0] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[1] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[2] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[3] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[4] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[5] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[6] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[7] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[8] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[9] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[10] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[11] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[12] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[13] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[14] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[15] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[16] depth=49
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[17] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[18] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[19] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[20] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[21] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_buffer_stream[22] depth=17
     hls::stream<std::array<ap_uint<8>, 2>> StreamingLineBuffer_7_out0_stream[7];
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[0] depth=23
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[1] depth=23
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[2] depth=23
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[3] depth=23
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[4] depth=7
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[5] depth=7
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[6] depth=7
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[0] depth=28
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[1] depth=28
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[2] depth=28
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[3] depth=28
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[4] depth=21
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[5] depth=21
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[6] depth=21
     hls::stream<std::array<ap_uint<8>, 2>> StreamingLineBuffer_7_buffer_stream[3];
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[2] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[0] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[1] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[2] depth=17
     hls::stream<std::array<ap_uint<8>, 2>> StreamingConv_6_out0_stream[4];
     #pragma HLS STREAM variable=StreamingConv_6_out0_stream[0] depth=2
     #pragma HLS STREAM variable=StreamingConv_6_out0_stream[1] depth=2
     #pragma HLS STREAM variable=StreamingConv_6_out0_stream[2] depth=2
     #pragma HLS STREAM variable=StreamingConv_6_out0_stream[3] depth=2
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_7_out0_stream[4];
-    #pragma HLS STREAM variable=StreamingConv_7_out0_stream[0] depth=193
-    #pragma HLS STREAM variable=StreamingConv_7_out0_stream[1] depth=193
-    #pragma HLS STREAM variable=StreamingConv_7_out0_stream[2] depth=193
-    #pragma HLS STREAM variable=StreamingConv_7_out0_stream[3] depth=193
+    #pragma HLS STREAM variable=StreamingConv_7_out0_stream[0] depth=258
+    #pragma HLS STREAM variable=StreamingConv_7_out0_stream[1] depth=258
+    #pragma HLS STREAM variable=StreamingConv_7_out0_stream[2] depth=258
+    #pragma HLS STREAM variable=StreamingConv_7_out0_stream[3] depth=258
     hls::stream<std::array<ap_uint<8>, 2>> StreamingLineBuffer_8_out0_stream[18];
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[0] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[1] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[2] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[3] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[4] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[5] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[6] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[7] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[8] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[9] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[10] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[11] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[12] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[13] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[14] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[15] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[16] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[17] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[0] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[1] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[2] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[3] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[4] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[5] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[6] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[7] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[8] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[9] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[10] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[11] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[12] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[13] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[14] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[15] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[16] depth=78
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[17] depth=78
     hls::stream<std::array<ap_uint<8>, 2>> StreamingLineBuffer_8_out0_stream_prepad[18];
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[0] depth=97
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[1] depth=161
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[2] depth=161
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[3] depth=161
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[4] depth=161
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[5] depth=65
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[6] depth=65
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[7] depth=98
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[8] depth=98
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[9] depth=98
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[10] depth=98
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[11] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[12] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[13] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[14] depth=35
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[15] depth=35
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[16] depth=35
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[17] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[0] depth=35
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[1] depth=35
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[2] depth=198
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[3] depth=198
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[4] depth=37
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[6] depth=36
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[7] depth=37
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[8] depth=135
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[9] depth=135
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[10] depth=70
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[11] depth=36
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[12] depth=68
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[13] depth=72
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[14] depth=105
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[15] depth=105
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[16] depth=105
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[17] depth=41
     hls::stream<std::array<ap_uint<8>, 2>> StreamingLineBuffer_8_buffer_stream[14];
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[2] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[3] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[4] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[7] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[9] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[10] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[11] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[12] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[13] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[0] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[1] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[2] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[3] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[4] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[5] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[6] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[7] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[8] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[9] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[10] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[11] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[12] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_buffer_stream[13] depth=33
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_8_out0_stream[4];
-    #pragma HLS STREAM variable=StreamingConv_8_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingConv_8_out0_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingConv_8_out0_stream[2] depth=2
-    #pragma HLS STREAM variable=StreamingConv_8_out0_stream[3] depth=2
+    #pragma HLS STREAM variable=StreamingConv_8_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingConv_8_out0_stream[1] depth=3
+    #pragma HLS STREAM variable=StreamingConv_8_out0_stream[2] depth=3
+    #pragma HLS STREAM variable=StreamingConv_8_out0_stream[3] depth=3
     hls::stream<std::array<ap_uint<8>, 2>> StreamingAdd_2_out0_stream[4];
-    #pragma HLS STREAM variable=StreamingAdd_2_out0_stream[0] depth=33
+    #pragma HLS STREAM variable=StreamingAdd_2_out0_stream[0] depth=4
     #pragma HLS STREAM variable=StreamingAdd_2_out0_stream[1] depth=35
-    #pragma HLS STREAM variable=StreamingAdd_2_out0_stream[2] depth=65
-    #pragma HLS STREAM variable=StreamingAdd_2_out0_stream[3] depth=65
+    #pragma HLS STREAM variable=StreamingAdd_2_out0_stream[2] depth=35
+    #pragma HLS STREAM variable=StreamingAdd_2_out0_stream[3] depth=35
     hls::stream<std::array<ap_uint<8>, 2>> BandwidthAdjustDecreaseStreams_0_out0_stream[1];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_0_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_0_out0_stream[0] depth=3
     hls::stream<std::array<ap_uint<8>, 2>> StreamingLineBuffer_9_out0_stream[64];
     #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[0] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[1] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[2] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[3] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[4] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[5] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[6] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[7] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[8] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[9] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[10] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[11] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[12] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[13] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[14] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[15] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[16] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[17] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[18] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[19] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[20] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[21] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[22] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[23] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[24] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[25] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[26] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[27] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[28] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[29] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[30] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[1] depth=3
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[2] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[3] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[5] depth=7
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[6] depth=8
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[7] depth=9
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[8] depth=10
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[9] depth=11
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[10] depth=12
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[11] depth=13
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[12] depth=14
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[13] depth=15
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[14] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[15] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[16] depth=18
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[17] depth=19
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[18] depth=20
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[19] depth=21
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[20] depth=22
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[21] depth=23
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[22] depth=24
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[23] depth=25
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[24] depth=26
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[25] depth=27
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[26] depth=28
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[27] depth=29
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[28] depth=30
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[29] depth=31
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[30] depth=32
     #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[31] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[32] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[33] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[34] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[35] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[36] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[37] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[38] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[39] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[40] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[41] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[42] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[43] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[44] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[45] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[46] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[47] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[48] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[49] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[50] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[51] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[52] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[53] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[54] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[55] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[56] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[57] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[58] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[59] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[60] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[61] depth=33
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[62] depth=32
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[63] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[32] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[33] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[34] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[35] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[36] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[37] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[38] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[39] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[40] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[41] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[42] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[43] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[44] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[45] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[46] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[47] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[48] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[49] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[50] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[51] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[52] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[53] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[54] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[55] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[56] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[57] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[58] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[59] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[60] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[61] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[62] depth=34
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[63] depth=34
     hls::stream<std::array<ap_uint<8>, 2>> StreamingLineBuffer_9_buffer_stream[63];
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[2] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[3] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[4] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[7] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[9] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[10] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[11] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[12] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[13] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[14] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[15] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[16] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[17] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[18] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[19] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[20] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[21] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[22] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[23] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[24] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[25] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[26] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[27] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[28] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[29] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[30] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[31] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[32] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[33] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[34] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[35] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[36] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[37] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[38] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[39] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[40] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[41] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[42] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[43] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[44] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[45] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[46] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[47] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[48] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[49] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[50] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[51] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[52] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[53] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[54] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[55] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[56] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[57] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[58] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[59] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[60] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[61] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[62] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[0] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[1] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[2] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[3] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[4] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[5] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[6] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[7] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[8] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[9] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[10] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[11] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[12] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[13] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[14] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[15] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[16] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[17] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[18] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[19] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[20] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[21] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[22] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[23] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[24] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[25] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[26] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[27] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[28] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[29] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[30] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[31] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[32] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[33] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[34] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[35] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[36] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[37] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[38] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[39] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[40] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[41] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[42] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[43] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[44] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[45] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[46] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[47] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[48] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[49] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[50] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[51] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[52] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[53] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[54] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[55] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[56] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[57] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[58] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[59] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[60] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[61] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_buffer_stream[62] depth=33
     hls::stream<std::array<ap_int<8>, 2>> StreamingMaxPool_0_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingMaxPool_0_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=StreamingMaxPool_0_out0_stream[0] depth=30
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_9_out0_stream[1];
     #pragma HLS STREAM variable=StreamingConv_9_out0_stream[0] depth=2
-    NHWCToStream <
-        ap_axiu<128, 0, 0, 0>,  // TInputStruct
-        ap_uint<128>,  // TInput
-        std::array<ap_int<8>, 3>,  // TOutputStruct
-        ap_int<8>,  // TOutput
-        DequantQuantEqual<ap_int<8>>,  // Quantizer
-        16,  // DATA_PER_WORD
-        32,  // HEIGHT
-        32,  // WIDTH
-        3,  // CH
-        4,  // OUT_W_PAR
-        3  // OUT_CH_PAR
-    > NHWCToStream_0;
-    NHWCToStream_0.run<0>(global_in, NHWCToStream_0_out0_stream);
+
+    #pragma HLS DATAFLOW
+    mm2s<ap_int<8>, 3, 4, 256, 3>(in_data, NHWCToStream_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "NHWCToStream_0_out0_stream_0," << NHWCToStream_0_out0_stream[0].size() << std::endl;
     #endif
@@ -764,7 +773,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         3,  // IN_CH_PAR
         1  // OUT_CH_PAR
     > BandwidthAdjustDecreaseChannels_0;
-    BandwidthAdjustDecreaseChannels_0.run<1>(NHWCToStream_0_out0_stream, BandwidthAdjustDecreaseChannels_0_out0_stream);
+    BandwidthAdjustDecreaseChannels_0.run<1, 3>(NHWCToStream_0_out0_stream, BandwidthAdjustDecreaseChannels_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseChannels_0_out0_stream_0," << BandwidthAdjustDecreaseChannels_0_out0_stream[0].size() << std::endl;
     #endif
@@ -797,7 +806,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_0;
-    StreamingLineBuffer_0_pixel_0.run<2>(BandwidthAdjustDecreaseChannels_0_out0_stream[0], StreamingLineBuffer_0_out0_stream_prepad[17], StreamingLineBuffer_0_buffer_stream[0]);
+    StreamingLineBuffer_0_pixel_0.run<2, 3>(BandwidthAdjustDecreaseChannels_0_out0_stream[0], StreamingLineBuffer_0_out0_stream_prepad[17], StreamingLineBuffer_0_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_17," << StreamingLineBuffer_0_out0_stream_prepad[17].size() << std::endl;
     #endif
@@ -824,7 +833,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_1;
-    StreamingLineBuffer_0_pixel_1.run<3>(BandwidthAdjustDecreaseChannels_0_out0_stream[3], StreamingLineBuffer_0_out0_stream_prepad[16], StreamingLineBuffer_0_buffer_stream[1]);
+    StreamingLineBuffer_0_pixel_1.run<3, 3>(BandwidthAdjustDecreaseChannels_0_out0_stream[3], StreamingLineBuffer_0_out0_stream_prepad[16], StreamingLineBuffer_0_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_16," << StreamingLineBuffer_0_out0_stream_prepad[16].size() << std::endl;
     #endif
@@ -851,7 +860,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_2;
-    StreamingLineBuffer_0_pixel_2.run<4>(BandwidthAdjustDecreaseChannels_0_out0_stream[2], StreamingLineBuffer_0_out0_stream_prepad[15], StreamingLineBuffer_0_buffer_stream[4]);
+    StreamingLineBuffer_0_pixel_2.run<4, 3>(BandwidthAdjustDecreaseChannels_0_out0_stream[2], StreamingLineBuffer_0_out0_stream_prepad[15], StreamingLineBuffer_0_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_15," << StreamingLineBuffer_0_out0_stream_prepad[15].size() << std::endl;
     #endif
@@ -878,7 +887,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_3;
-    StreamingLineBuffer_0_pixel_3.run<5>(BandwidthAdjustDecreaseChannels_0_out0_stream[1], StreamingLineBuffer_0_out0_stream_prepad[14], StreamingLineBuffer_0_buffer_stream[5]);
+    StreamingLineBuffer_0_pixel_3.run<5, 3>(BandwidthAdjustDecreaseChannels_0_out0_stream[1], StreamingLineBuffer_0_out0_stream_prepad[14], StreamingLineBuffer_0_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_14," << StreamingLineBuffer_0_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -905,7 +914,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_4;
-    StreamingLineBuffer_0_pixel_4.run<6>(StreamingLineBuffer_0_buffer_stream[0], StreamingLineBuffer_0_out0_stream_prepad[13], StreamingLineBuffer_0_buffer_stream[2]);
+    StreamingLineBuffer_0_pixel_4.run<6, 3>(StreamingLineBuffer_0_buffer_stream[0], StreamingLineBuffer_0_out0_stream_prepad[13], StreamingLineBuffer_0_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_13," << StreamingLineBuffer_0_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -932,7 +941,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_5;
-    StreamingLineBuffer_0_pixel_5.run<7>(StreamingLineBuffer_0_buffer_stream[1], StreamingLineBuffer_0_out0_stream_prepad[12], StreamingLineBuffer_0_buffer_stream[3]);
+    StreamingLineBuffer_0_pixel_5.run<7, 3>(StreamingLineBuffer_0_buffer_stream[1], StreamingLineBuffer_0_out0_stream_prepad[12], StreamingLineBuffer_0_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_12," << StreamingLineBuffer_0_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -959,7 +968,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_8;
-    StreamingLineBuffer_0_pixel_8.run<10>(StreamingLineBuffer_0_buffer_stream[4], StreamingLineBuffer_0_out0_stream_prepad[9], StreamingLineBuffer_0_buffer_stream[10]);
+    StreamingLineBuffer_0_pixel_8.run<10, 3>(StreamingLineBuffer_0_buffer_stream[4], StreamingLineBuffer_0_out0_stream_prepad[9], StreamingLineBuffer_0_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_9," << StreamingLineBuffer_0_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -986,7 +995,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_9;
-    StreamingLineBuffer_0_pixel_9.run<11>(StreamingLineBuffer_0_buffer_stream[5], StreamingLineBuffer_0_out0_stream_prepad[8], StreamingLineBuffer_0_buffer_stream[11]);
+    StreamingLineBuffer_0_pixel_9.run<11, 3>(StreamingLineBuffer_0_buffer_stream[5], StreamingLineBuffer_0_out0_stream_prepad[8], StreamingLineBuffer_0_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_8," << StreamingLineBuffer_0_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -1013,7 +1022,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_6;
-    StreamingLineBuffer_0_pixel_6.run<8>(StreamingLineBuffer_0_buffer_stream[2], StreamingLineBuffer_0_out0_stream_prepad[11], StreamingLineBuffer_0_buffer_stream[6]);
+    StreamingLineBuffer_0_pixel_6.run<8, 3>(StreamingLineBuffer_0_buffer_stream[2], StreamingLineBuffer_0_out0_stream_prepad[11], StreamingLineBuffer_0_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_11," << StreamingLineBuffer_0_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -1040,7 +1049,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_7;
-    StreamingLineBuffer_0_pixel_7.run<9>(StreamingLineBuffer_0_buffer_stream[3], StreamingLineBuffer_0_out0_stream_prepad[10], StreamingLineBuffer_0_buffer_stream[7]);
+    StreamingLineBuffer_0_pixel_7.run<9, 3>(StreamingLineBuffer_0_buffer_stream[3], StreamingLineBuffer_0_out0_stream_prepad[10], StreamingLineBuffer_0_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_10," << StreamingLineBuffer_0_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -1067,7 +1076,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_14;
-    StreamingLineBuffer_0_pixel_14.run<16>(StreamingLineBuffer_0_buffer_stream[10], StreamingLineBuffer_0_out0_stream_prepad[3]);
+    StreamingLineBuffer_0_pixel_14.run<16, 3>(StreamingLineBuffer_0_buffer_stream[10], StreamingLineBuffer_0_out0_stream_prepad[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_3," << StreamingLineBuffer_0_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -1091,7 +1100,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_15;
-    StreamingLineBuffer_0_pixel_15.run<17>(StreamingLineBuffer_0_buffer_stream[11], StreamingLineBuffer_0_out0_stream_prepad[2]);
+    StreamingLineBuffer_0_pixel_15.run<17, 3>(StreamingLineBuffer_0_buffer_stream[11], StreamingLineBuffer_0_out0_stream_prepad[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_2," << StreamingLineBuffer_0_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -1115,7 +1124,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_10;
-    StreamingLineBuffer_0_pixel_10.run<12>(StreamingLineBuffer_0_buffer_stream[6], StreamingLineBuffer_0_out0_stream_prepad[7], StreamingLineBuffer_0_buffer_stream[8]);
+    StreamingLineBuffer_0_pixel_10.run<12, 3>(StreamingLineBuffer_0_buffer_stream[6], StreamingLineBuffer_0_out0_stream_prepad[7], StreamingLineBuffer_0_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_7," << StreamingLineBuffer_0_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -1142,7 +1151,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_11;
-    StreamingLineBuffer_0_pixel_11.run<13>(StreamingLineBuffer_0_buffer_stream[7], StreamingLineBuffer_0_out0_stream_prepad[6], StreamingLineBuffer_0_buffer_stream[9]);
+    StreamingLineBuffer_0_pixel_11.run<13, 3>(StreamingLineBuffer_0_buffer_stream[7], StreamingLineBuffer_0_out0_stream_prepad[6], StreamingLineBuffer_0_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_6," << StreamingLineBuffer_0_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -1169,7 +1178,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_12;
-    StreamingLineBuffer_0_pixel_12.run<14>(StreamingLineBuffer_0_buffer_stream[8], StreamingLineBuffer_0_out0_stream_prepad[5], StreamingLineBuffer_0_buffer_stream[12]);
+    StreamingLineBuffer_0_pixel_12.run<14, 3>(StreamingLineBuffer_0_buffer_stream[8], StreamingLineBuffer_0_out0_stream_prepad[5], StreamingLineBuffer_0_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_5," << StreamingLineBuffer_0_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -1196,7 +1205,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_13;
-    StreamingLineBuffer_0_pixel_13.run<15>(StreamingLineBuffer_0_buffer_stream[9], StreamingLineBuffer_0_out0_stream_prepad[4], StreamingLineBuffer_0_buffer_stream[13]);
+    StreamingLineBuffer_0_pixel_13.run<15, 3>(StreamingLineBuffer_0_buffer_stream[9], StreamingLineBuffer_0_out0_stream_prepad[4], StreamingLineBuffer_0_buffer_stream[13]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_4," << StreamingLineBuffer_0_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -1223,7 +1232,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_16;
-    StreamingLineBuffer_0_pixel_16.run<18>(StreamingLineBuffer_0_buffer_stream[12], StreamingLineBuffer_0_out0_stream_prepad[1]);
+    StreamingLineBuffer_0_pixel_16.run<18, 3>(StreamingLineBuffer_0_buffer_stream[12], StreamingLineBuffer_0_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_1," << StreamingLineBuffer_0_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -1247,7 +1256,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_17;
-    StreamingLineBuffer_0_pixel_17.run<19>(StreamingLineBuffer_0_buffer_stream[13], StreamingLineBuffer_0_out0_stream_prepad[0]);
+    StreamingLineBuffer_0_pixel_17.run<19, 3>(StreamingLineBuffer_0_buffer_stream[13], StreamingLineBuffer_0_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_0," << StreamingLineBuffer_0_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -1271,7 +1280,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_0_pad;
-    StreamingLineBuffer_0_pad.run<20>(StreamingLineBuffer_0_out0_stream_prepad, StreamingLineBuffer_0_out0_stream);
+    StreamingLineBuffer_0_pad.run<20, 3>(StreamingLineBuffer_0_out0_stream_prepad, StreamingLineBuffer_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_0," << StreamingLineBuffer_0_out0_stream[0].size() << std::endl;
     #endif
@@ -1326,10 +1335,8 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_17," << StreamingLineBuffer_0_out0_stream[17].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_0_weights[48][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_0_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_0_weights dim=2 complete
-    ap_int<16> StreamingConv_0_biases[16][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_0_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_0_biases dim=2 complete
     StreamingConv <
@@ -1358,7 +1365,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // OUT_CH_PAR
         4  // W_PAR
     > StreamingConv_0;
-    StreamingConv_0.run<21>(StreamingLineBuffer_0_out0_stream, StreamingConv_0_weights, StreamingConv_0_biases, StreamingConv_0_out0_stream);
+    StreamingConv_0.run<21, 3>(StreamingLineBuffer_0_out0_stream, StreamingConv_0_weights, StreamingConv_0_biases, StreamingConv_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_0_out0_stream_0," << StreamingConv_0_out0_stream[0].size() << std::endl;
     #endif
@@ -1379,7 +1386,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // CH_PAR
         4  // W_PAR
     > TensorDuplicator_0;
-    TensorDuplicator_0.run<22>(StreamingConv_0_out0_stream, TensorDuplicator_0_out0_stream, TensorDuplicator_0_out1_stream);
+    TensorDuplicator_0.run<22, 3>(StreamingConv_0_out0_stream, TensorDuplicator_0_out0_stream, TensorDuplicator_0_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_0_out0_stream_0," << TensorDuplicator_0_out0_stream[0].size() << std::endl;
     #endif
@@ -1424,7 +1431,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_0;
-    StreamingLineBuffer_1_pixel_0.run<23>(TensorDuplicator_0_out0_stream[0], StreamingLineBuffer_1_out0_stream_prepad[17], StreamingLineBuffer_1_buffer_stream[0]);
+    StreamingLineBuffer_1_pixel_0.run<23, 3>(TensorDuplicator_0_out0_stream[0], StreamingLineBuffer_1_out0_stream_prepad[17], StreamingLineBuffer_1_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_17," << StreamingLineBuffer_1_out0_stream_prepad[17].size() << std::endl;
     #endif
@@ -1451,7 +1458,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_1;
-    StreamingLineBuffer_1_pixel_1.run<24>(TensorDuplicator_0_out0_stream[3], StreamingLineBuffer_1_out0_stream_prepad[16], StreamingLineBuffer_1_buffer_stream[1]);
+    StreamingLineBuffer_1_pixel_1.run<24, 3>(TensorDuplicator_0_out0_stream[3], StreamingLineBuffer_1_out0_stream_prepad[16], StreamingLineBuffer_1_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_16," << StreamingLineBuffer_1_out0_stream_prepad[16].size() << std::endl;
     #endif
@@ -1478,7 +1485,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_2;
-    StreamingLineBuffer_1_pixel_2.run<25>(TensorDuplicator_0_out0_stream[2], StreamingLineBuffer_1_out0_stream_prepad[15], StreamingLineBuffer_1_buffer_stream[4]);
+    StreamingLineBuffer_1_pixel_2.run<25, 3>(TensorDuplicator_0_out0_stream[2], StreamingLineBuffer_1_out0_stream_prepad[15], StreamingLineBuffer_1_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_15," << StreamingLineBuffer_1_out0_stream_prepad[15].size() << std::endl;
     #endif
@@ -1505,7 +1512,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_3;
-    StreamingLineBuffer_1_pixel_3.run<26>(TensorDuplicator_0_out0_stream[1], StreamingLineBuffer_1_out0_stream_prepad[14], StreamingLineBuffer_1_buffer_stream[5]);
+    StreamingLineBuffer_1_pixel_3.run<26, 3>(TensorDuplicator_0_out0_stream[1], StreamingLineBuffer_1_out0_stream_prepad[14], StreamingLineBuffer_1_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_14," << StreamingLineBuffer_1_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -1532,7 +1539,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_4;
-    StreamingLineBuffer_1_pixel_4.run<27>(StreamingLineBuffer_1_buffer_stream[0], StreamingLineBuffer_1_out0_stream_prepad[13], StreamingLineBuffer_1_buffer_stream[2]);
+    StreamingLineBuffer_1_pixel_4.run<27, 3>(StreamingLineBuffer_1_buffer_stream[0], StreamingLineBuffer_1_out0_stream_prepad[13], StreamingLineBuffer_1_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_13," << StreamingLineBuffer_1_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -1559,7 +1566,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_5;
-    StreamingLineBuffer_1_pixel_5.run<28>(StreamingLineBuffer_1_buffer_stream[1], StreamingLineBuffer_1_out0_stream_prepad[12], StreamingLineBuffer_1_buffer_stream[3]);
+    StreamingLineBuffer_1_pixel_5.run<28, 3>(StreamingLineBuffer_1_buffer_stream[1], StreamingLineBuffer_1_out0_stream_prepad[12], StreamingLineBuffer_1_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_12," << StreamingLineBuffer_1_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -1586,7 +1593,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_8;
-    StreamingLineBuffer_1_pixel_8.run<31>(StreamingLineBuffer_1_buffer_stream[4], StreamingLineBuffer_1_out0_stream_prepad[9], StreamingLineBuffer_1_buffer_stream[10]);
+    StreamingLineBuffer_1_pixel_8.run<31, 3>(StreamingLineBuffer_1_buffer_stream[4], StreamingLineBuffer_1_out0_stream_prepad[9], StreamingLineBuffer_1_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_9," << StreamingLineBuffer_1_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -1613,7 +1620,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_9;
-    StreamingLineBuffer_1_pixel_9.run<32>(StreamingLineBuffer_1_buffer_stream[5], StreamingLineBuffer_1_out0_stream_prepad[8], StreamingLineBuffer_1_buffer_stream[11]);
+    StreamingLineBuffer_1_pixel_9.run<32, 3>(StreamingLineBuffer_1_buffer_stream[5], StreamingLineBuffer_1_out0_stream_prepad[8], StreamingLineBuffer_1_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_8," << StreamingLineBuffer_1_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -1640,7 +1647,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_6;
-    StreamingLineBuffer_1_pixel_6.run<29>(StreamingLineBuffer_1_buffer_stream[2], StreamingLineBuffer_1_out0_stream_prepad[11], StreamingLineBuffer_1_buffer_stream[6]);
+    StreamingLineBuffer_1_pixel_6.run<29, 3>(StreamingLineBuffer_1_buffer_stream[2], StreamingLineBuffer_1_out0_stream_prepad[11], StreamingLineBuffer_1_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_11," << StreamingLineBuffer_1_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -1667,7 +1674,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_7;
-    StreamingLineBuffer_1_pixel_7.run<30>(StreamingLineBuffer_1_buffer_stream[3], StreamingLineBuffer_1_out0_stream_prepad[10], StreamingLineBuffer_1_buffer_stream[7]);
+    StreamingLineBuffer_1_pixel_7.run<30, 3>(StreamingLineBuffer_1_buffer_stream[3], StreamingLineBuffer_1_out0_stream_prepad[10], StreamingLineBuffer_1_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_10," << StreamingLineBuffer_1_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -1694,7 +1701,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_14;
-    StreamingLineBuffer_1_pixel_14.run<37>(StreamingLineBuffer_1_buffer_stream[10], StreamingLineBuffer_1_out0_stream_prepad[3]);
+    StreamingLineBuffer_1_pixel_14.run<37, 3>(StreamingLineBuffer_1_buffer_stream[10], StreamingLineBuffer_1_out0_stream_prepad[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_3," << StreamingLineBuffer_1_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -1718,7 +1725,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_15;
-    StreamingLineBuffer_1_pixel_15.run<38>(StreamingLineBuffer_1_buffer_stream[11], StreamingLineBuffer_1_out0_stream_prepad[2]);
+    StreamingLineBuffer_1_pixel_15.run<38, 3>(StreamingLineBuffer_1_buffer_stream[11], StreamingLineBuffer_1_out0_stream_prepad[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_2," << StreamingLineBuffer_1_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -1742,7 +1749,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_10;
-    StreamingLineBuffer_1_pixel_10.run<33>(StreamingLineBuffer_1_buffer_stream[6], StreamingLineBuffer_1_out0_stream_prepad[7], StreamingLineBuffer_1_buffer_stream[8]);
+    StreamingLineBuffer_1_pixel_10.run<33, 3>(StreamingLineBuffer_1_buffer_stream[6], StreamingLineBuffer_1_out0_stream_prepad[7], StreamingLineBuffer_1_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_7," << StreamingLineBuffer_1_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -1769,7 +1776,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_11;
-    StreamingLineBuffer_1_pixel_11.run<34>(StreamingLineBuffer_1_buffer_stream[7], StreamingLineBuffer_1_out0_stream_prepad[6], StreamingLineBuffer_1_buffer_stream[9]);
+    StreamingLineBuffer_1_pixel_11.run<34, 3>(StreamingLineBuffer_1_buffer_stream[7], StreamingLineBuffer_1_out0_stream_prepad[6], StreamingLineBuffer_1_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_6," << StreamingLineBuffer_1_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -1796,7 +1803,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_12;
-    StreamingLineBuffer_1_pixel_12.run<35>(StreamingLineBuffer_1_buffer_stream[8], StreamingLineBuffer_1_out0_stream_prepad[5], StreamingLineBuffer_1_buffer_stream[12]);
+    StreamingLineBuffer_1_pixel_12.run<35, 3>(StreamingLineBuffer_1_buffer_stream[8], StreamingLineBuffer_1_out0_stream_prepad[5], StreamingLineBuffer_1_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_5," << StreamingLineBuffer_1_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -1823,7 +1830,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_13;
-    StreamingLineBuffer_1_pixel_13.run<36>(StreamingLineBuffer_1_buffer_stream[9], StreamingLineBuffer_1_out0_stream_prepad[4], StreamingLineBuffer_1_buffer_stream[13]);
+    StreamingLineBuffer_1_pixel_13.run<36, 3>(StreamingLineBuffer_1_buffer_stream[9], StreamingLineBuffer_1_out0_stream_prepad[4], StreamingLineBuffer_1_buffer_stream[13]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_4," << StreamingLineBuffer_1_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -1850,7 +1857,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_16;
-    StreamingLineBuffer_1_pixel_16.run<39>(StreamingLineBuffer_1_buffer_stream[12], StreamingLineBuffer_1_out0_stream_prepad[1]);
+    StreamingLineBuffer_1_pixel_16.run<39, 3>(StreamingLineBuffer_1_buffer_stream[12], StreamingLineBuffer_1_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_1," << StreamingLineBuffer_1_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -1874,7 +1881,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_17;
-    StreamingLineBuffer_1_pixel_17.run<40>(StreamingLineBuffer_1_buffer_stream[13], StreamingLineBuffer_1_out0_stream_prepad[0]);
+    StreamingLineBuffer_1_pixel_17.run<40, 3>(StreamingLineBuffer_1_buffer_stream[13], StreamingLineBuffer_1_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_0," << StreamingLineBuffer_1_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -1898,7 +1905,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_1_pad;
-    StreamingLineBuffer_1_pad.run<41>(StreamingLineBuffer_1_out0_stream_prepad, StreamingLineBuffer_1_out0_stream);
+    StreamingLineBuffer_1_pad.run<41, 3>(StreamingLineBuffer_1_out0_stream_prepad, StreamingLineBuffer_1_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_0," << StreamingLineBuffer_1_out0_stream[0].size() << std::endl;
     #endif
@@ -1953,10 +1960,8 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_17," << StreamingLineBuffer_1_out0_stream[17].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_1_weights[64][4][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_1_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_1_weights dim=2 complete
-    ap_int<16> StreamingConv_1_biases[4][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_1_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_1_biases dim=2 complete
     StreamingConv <
@@ -1985,7 +1990,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // OUT_CH_PAR
         4  // W_PAR
     > StreamingConv_1;
-    StreamingConv_1.run<42>(StreamingLineBuffer_1_out0_stream, StreamingConv_1_weights, StreamingConv_1_biases, StreamingConv_1_out0_stream);
+    StreamingConv_1.run<42, 3>(StreamingLineBuffer_1_out0_stream, StreamingConv_1_weights, StreamingConv_1_biases, StreamingConv_1_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_1_out0_stream_0," << StreamingConv_1_out0_stream[0].size() << std::endl;
     #endif
@@ -2018,7 +2023,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_0;
-    StreamingLineBuffer_2_pixel_0.run<43>(StreamingConv_1_out0_stream[0], StreamingLineBuffer_2_out0_stream_prepad[17], StreamingLineBuffer_2_buffer_stream[0]);
+    StreamingLineBuffer_2_pixel_0.run<43, 3>(StreamingConv_1_out0_stream[0], StreamingLineBuffer_2_out0_stream_prepad[17], StreamingLineBuffer_2_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_17," << StreamingLineBuffer_2_out0_stream_prepad[17].size() << std::endl;
     #endif
@@ -2045,7 +2050,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_1;
-    StreamingLineBuffer_2_pixel_1.run<44>(StreamingConv_1_out0_stream[3], StreamingLineBuffer_2_out0_stream_prepad[16], StreamingLineBuffer_2_buffer_stream[1]);
+    StreamingLineBuffer_2_pixel_1.run<44, 3>(StreamingConv_1_out0_stream[3], StreamingLineBuffer_2_out0_stream_prepad[16], StreamingLineBuffer_2_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_16," << StreamingLineBuffer_2_out0_stream_prepad[16].size() << std::endl;
     #endif
@@ -2072,7 +2077,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_2;
-    StreamingLineBuffer_2_pixel_2.run<45>(StreamingConv_1_out0_stream[2], StreamingLineBuffer_2_out0_stream_prepad[15], StreamingLineBuffer_2_buffer_stream[4]);
+    StreamingLineBuffer_2_pixel_2.run<45, 3>(StreamingConv_1_out0_stream[2], StreamingLineBuffer_2_out0_stream_prepad[15], StreamingLineBuffer_2_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_15," << StreamingLineBuffer_2_out0_stream_prepad[15].size() << std::endl;
     #endif
@@ -2099,7 +2104,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_3;
-    StreamingLineBuffer_2_pixel_3.run<46>(StreamingConv_1_out0_stream[1], StreamingLineBuffer_2_out0_stream_prepad[14], StreamingLineBuffer_2_buffer_stream[5]);
+    StreamingLineBuffer_2_pixel_3.run<46, 3>(StreamingConv_1_out0_stream[1], StreamingLineBuffer_2_out0_stream_prepad[14], StreamingLineBuffer_2_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_14," << StreamingLineBuffer_2_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -2126,7 +2131,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_4;
-    StreamingLineBuffer_2_pixel_4.run<47>(StreamingLineBuffer_2_buffer_stream[0], StreamingLineBuffer_2_out0_stream_prepad[13], StreamingLineBuffer_2_buffer_stream[2]);
+    StreamingLineBuffer_2_pixel_4.run<47, 3>(StreamingLineBuffer_2_buffer_stream[0], StreamingLineBuffer_2_out0_stream_prepad[13], StreamingLineBuffer_2_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_13," << StreamingLineBuffer_2_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -2153,7 +2158,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_5;
-    StreamingLineBuffer_2_pixel_5.run<48>(StreamingLineBuffer_2_buffer_stream[1], StreamingLineBuffer_2_out0_stream_prepad[12], StreamingLineBuffer_2_buffer_stream[3]);
+    StreamingLineBuffer_2_pixel_5.run<48, 3>(StreamingLineBuffer_2_buffer_stream[1], StreamingLineBuffer_2_out0_stream_prepad[12], StreamingLineBuffer_2_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_12," << StreamingLineBuffer_2_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -2180,7 +2185,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_8;
-    StreamingLineBuffer_2_pixel_8.run<51>(StreamingLineBuffer_2_buffer_stream[4], StreamingLineBuffer_2_out0_stream_prepad[9], StreamingLineBuffer_2_buffer_stream[10]);
+    StreamingLineBuffer_2_pixel_8.run<51, 3>(StreamingLineBuffer_2_buffer_stream[4], StreamingLineBuffer_2_out0_stream_prepad[9], StreamingLineBuffer_2_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_9," << StreamingLineBuffer_2_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -2207,7 +2212,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_9;
-    StreamingLineBuffer_2_pixel_9.run<52>(StreamingLineBuffer_2_buffer_stream[5], StreamingLineBuffer_2_out0_stream_prepad[8], StreamingLineBuffer_2_buffer_stream[11]);
+    StreamingLineBuffer_2_pixel_9.run<52, 3>(StreamingLineBuffer_2_buffer_stream[5], StreamingLineBuffer_2_out0_stream_prepad[8], StreamingLineBuffer_2_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_8," << StreamingLineBuffer_2_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -2234,7 +2239,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_6;
-    StreamingLineBuffer_2_pixel_6.run<49>(StreamingLineBuffer_2_buffer_stream[2], StreamingLineBuffer_2_out0_stream_prepad[11], StreamingLineBuffer_2_buffer_stream[6]);
+    StreamingLineBuffer_2_pixel_6.run<49, 3>(StreamingLineBuffer_2_buffer_stream[2], StreamingLineBuffer_2_out0_stream_prepad[11], StreamingLineBuffer_2_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_11," << StreamingLineBuffer_2_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -2261,7 +2266,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_7;
-    StreamingLineBuffer_2_pixel_7.run<50>(StreamingLineBuffer_2_buffer_stream[3], StreamingLineBuffer_2_out0_stream_prepad[10], StreamingLineBuffer_2_buffer_stream[7]);
+    StreamingLineBuffer_2_pixel_7.run<50, 3>(StreamingLineBuffer_2_buffer_stream[3], StreamingLineBuffer_2_out0_stream_prepad[10], StreamingLineBuffer_2_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_10," << StreamingLineBuffer_2_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -2288,7 +2293,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_14;
-    StreamingLineBuffer_2_pixel_14.run<57>(StreamingLineBuffer_2_buffer_stream[10], StreamingLineBuffer_2_out0_stream_prepad[3]);
+    StreamingLineBuffer_2_pixel_14.run<57, 3>(StreamingLineBuffer_2_buffer_stream[10], StreamingLineBuffer_2_out0_stream_prepad[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_3," << StreamingLineBuffer_2_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -2312,7 +2317,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_15;
-    StreamingLineBuffer_2_pixel_15.run<58>(StreamingLineBuffer_2_buffer_stream[11], StreamingLineBuffer_2_out0_stream_prepad[2]);
+    StreamingLineBuffer_2_pixel_15.run<58, 3>(StreamingLineBuffer_2_buffer_stream[11], StreamingLineBuffer_2_out0_stream_prepad[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_2," << StreamingLineBuffer_2_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -2336,7 +2341,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_10;
-    StreamingLineBuffer_2_pixel_10.run<53>(StreamingLineBuffer_2_buffer_stream[6], StreamingLineBuffer_2_out0_stream_prepad[7], StreamingLineBuffer_2_buffer_stream[8]);
+    StreamingLineBuffer_2_pixel_10.run<53, 3>(StreamingLineBuffer_2_buffer_stream[6], StreamingLineBuffer_2_out0_stream_prepad[7], StreamingLineBuffer_2_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_7," << StreamingLineBuffer_2_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -2363,7 +2368,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_11;
-    StreamingLineBuffer_2_pixel_11.run<54>(StreamingLineBuffer_2_buffer_stream[7], StreamingLineBuffer_2_out0_stream_prepad[6], StreamingLineBuffer_2_buffer_stream[9]);
+    StreamingLineBuffer_2_pixel_11.run<54, 3>(StreamingLineBuffer_2_buffer_stream[7], StreamingLineBuffer_2_out0_stream_prepad[6], StreamingLineBuffer_2_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_6," << StreamingLineBuffer_2_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -2390,7 +2395,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_12;
-    StreamingLineBuffer_2_pixel_12.run<55>(StreamingLineBuffer_2_buffer_stream[8], StreamingLineBuffer_2_out0_stream_prepad[5], StreamingLineBuffer_2_buffer_stream[12]);
+    StreamingLineBuffer_2_pixel_12.run<55, 3>(StreamingLineBuffer_2_buffer_stream[8], StreamingLineBuffer_2_out0_stream_prepad[5], StreamingLineBuffer_2_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_5," << StreamingLineBuffer_2_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -2417,7 +2422,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_13;
-    StreamingLineBuffer_2_pixel_13.run<56>(StreamingLineBuffer_2_buffer_stream[9], StreamingLineBuffer_2_out0_stream_prepad[4], StreamingLineBuffer_2_buffer_stream[13]);
+    StreamingLineBuffer_2_pixel_13.run<56, 3>(StreamingLineBuffer_2_buffer_stream[9], StreamingLineBuffer_2_out0_stream_prepad[4], StreamingLineBuffer_2_buffer_stream[13]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_4," << StreamingLineBuffer_2_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -2444,7 +2449,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_16;
-    StreamingLineBuffer_2_pixel_16.run<59>(StreamingLineBuffer_2_buffer_stream[12], StreamingLineBuffer_2_out0_stream_prepad[1]);
+    StreamingLineBuffer_2_pixel_16.run<59, 3>(StreamingLineBuffer_2_buffer_stream[12], StreamingLineBuffer_2_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_1," << StreamingLineBuffer_2_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -2468,7 +2473,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_2_pixel_17;
-    StreamingLineBuffer_2_pixel_17.run<60>(StreamingLineBuffer_2_buffer_stream[13], StreamingLineBuffer_2_out0_stream_prepad[0]);
+    StreamingLineBuffer_2_pixel_17.run<60, 3>(StreamingLineBuffer_2_buffer_stream[13], StreamingLineBuffer_2_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_0," << StreamingLineBuffer_2_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -2492,7 +2497,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_2_pad;
-    StreamingLineBuffer_2_pad.run<61>(StreamingLineBuffer_2_out0_stream_prepad, StreamingLineBuffer_2_out0_stream);
+    StreamingLineBuffer_2_pad.run<61, 3>(StreamingLineBuffer_2_out0_stream_prepad, StreamingLineBuffer_2_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_0," << StreamingLineBuffer_2_out0_stream[0].size() << std::endl;
     #endif
@@ -2547,10 +2552,8 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_17," << StreamingLineBuffer_2_out0_stream[17].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_2_weights[64][4][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_2_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_2_weights dim=2 complete
-    ap_int<16> StreamingConv_2_biases[16][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_2_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_2_biases dim=2 complete
     StreamingConv <
@@ -2579,7 +2582,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // OUT_CH_PAR
         4  // W_PAR
     > StreamingConv_2;
-    StreamingConv_2.run<62>(StreamingLineBuffer_2_out0_stream, StreamingConv_2_weights, StreamingConv_2_biases, StreamingConv_2_out0_stream);
+    StreamingConv_2.run<62, 3>(StreamingLineBuffer_2_out0_stream, StreamingConv_2_weights, StreamingConv_2_biases, StreamingConv_2_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_2_out0_stream_0," << StreamingConv_2_out0_stream[0].size() << std::endl;
     #endif
@@ -2610,7 +2613,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingAdd_0;
-    StreamingAdd_0.run<63>(StreamingConv_2_out0_stream, TensorDuplicator_0_out1_stream, StreamingAdd_0_out0_stream);
+    StreamingAdd_0.run<63, 3>(StreamingConv_2_out0_stream, TensorDuplicator_0_out1_stream, StreamingAdd_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingAdd_0_out0_stream_0," << StreamingAdd_0_out0_stream[0].size() << std::endl;
     #endif
@@ -2631,7 +2634,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // CH_PAR
         4  // W_PAR
     > TensorDuplicator_1;
-    TensorDuplicator_1.run<64>(StreamingAdd_0_out0_stream, TensorDuplicator_1_out0_stream, TensorDuplicator_1_out1_stream);
+    TensorDuplicator_1.run<64, 3>(StreamingAdd_0_out0_stream, TensorDuplicator_1_out0_stream, TensorDuplicator_1_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_1_out0_stream_0," << TensorDuplicator_1_out0_stream[0].size() << std::endl;
     #endif
@@ -2676,7 +2679,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_0;
-    StreamingLineBuffer_3_pixel_0.run<65>(TensorDuplicator_1_out0_stream[3], StreamingLineBuffer_3_out0_stream_prepad[26], StreamingLineBuffer_3_buffer_stream[0]);
+    StreamingLineBuffer_3_pixel_0.run<65, 3>(TensorDuplicator_1_out0_stream[3], StreamingLineBuffer_3_out0_stream_prepad[26], StreamingLineBuffer_3_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_26," << StreamingLineBuffer_3_out0_stream_prepad[26].size() << std::endl;
     #endif
@@ -2703,7 +2706,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_1;
-    StreamingLineBuffer_3_pixel_1.run<66>(TensorDuplicator_1_out0_stream[2], StreamingLineBuffer_3_out0_stream_prepad[25], StreamingLineBuffer_3_buffer_stream[1]);
+    StreamingLineBuffer_3_pixel_1.run<66, 3>(TensorDuplicator_1_out0_stream[2], StreamingLineBuffer_3_out0_stream_prepad[25], StreamingLineBuffer_3_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_25," << StreamingLineBuffer_3_out0_stream_prepad[25].size() << std::endl;
     #endif
@@ -2730,7 +2733,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_2;
-    StreamingLineBuffer_3_pixel_2.run<67>(TensorDuplicator_1_out0_stream[1], StreamingLineBuffer_3_out0_stream_prepad[24], StreamingLineBuffer_3_buffer_stream[2]);
+    StreamingLineBuffer_3_pixel_2.run<67, 3>(TensorDuplicator_1_out0_stream[1], StreamingLineBuffer_3_out0_stream_prepad[24], StreamingLineBuffer_3_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_24," << StreamingLineBuffer_3_out0_stream_prepad[24].size() << std::endl;
     #endif
@@ -2757,7 +2760,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_3;
-    StreamingLineBuffer_3_pixel_3.run<68>(TensorDuplicator_1_out0_stream[0], StreamingLineBuffer_3_out0_stream_prepad[23], StreamingLineBuffer_3_buffer_stream[3]);
+    StreamingLineBuffer_3_pixel_3.run<68, 3>(TensorDuplicator_1_out0_stream[0], StreamingLineBuffer_3_out0_stream_prepad[23], StreamingLineBuffer_3_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_23," << StreamingLineBuffer_3_out0_stream_prepad[23].size() << std::endl;
     #endif
@@ -2784,7 +2787,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_0;
-    StreamingLineBuffer_4_pixel_0.run<93>(TensorDuplicator_1_out1_stream[2], StreamingLineBuffer_4_out0_stream[6], StreamingLineBuffer_4_buffer_stream[0]);
+    StreamingLineBuffer_4_pixel_0.run<93, 3>(TensorDuplicator_1_out1_stream[2], StreamingLineBuffer_4_out0_stream[6], StreamingLineBuffer_4_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_4_out0_stream_6," << StreamingLineBuffer_4_out0_stream[6].size() << std::endl;
     #endif
@@ -2811,7 +2814,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_1;
-    StreamingLineBuffer_4_pixel_1.run<94>(TensorDuplicator_1_out1_stream[1], StreamingLineBuffer_4_out0_stream[5], StreamingLineBuffer_4_buffer_stream[1]);
+    StreamingLineBuffer_4_pixel_1.run<94, 3>(TensorDuplicator_1_out1_stream[1], StreamingLineBuffer_4_out0_stream[5], StreamingLineBuffer_4_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_4_out0_stream_5," << StreamingLineBuffer_4_out0_stream[5].size() << std::endl;
     #endif
@@ -2838,7 +2841,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_2;
-    StreamingLineBuffer_4_pixel_2.run<95>(TensorDuplicator_1_out1_stream[0], StreamingLineBuffer_4_out0_stream[4], StreamingLineBuffer_4_buffer_stream[2]);
+    StreamingLineBuffer_4_pixel_2.run<95, 3>(TensorDuplicator_1_out1_stream[0], StreamingLineBuffer_4_out0_stream[4], StreamingLineBuffer_4_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_4_out0_stream_4," << StreamingLineBuffer_4_out0_stream[4].size() << std::endl;
     #endif
@@ -2865,7 +2868,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_3;
-    StreamingLineBuffer_4_pixel_3.run<96>(TensorDuplicator_1_out1_stream[3], StreamingLineBuffer_4_out0_stream[3]);
+    StreamingLineBuffer_4_pixel_3.run<96, 3>(TensorDuplicator_1_out1_stream[3], StreamingLineBuffer_4_out0_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_4_out0_stream_3," << StreamingLineBuffer_4_out0_stream[3].size() << std::endl;
     #endif
@@ -2889,7 +2892,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_4;
-    StreamingLineBuffer_3_pixel_4.run<69>(StreamingLineBuffer_3_buffer_stream[0], StreamingLineBuffer_3_out0_stream_prepad[22], StreamingLineBuffer_3_buffer_stream[4]);
+    StreamingLineBuffer_3_pixel_4.run<69, 3>(StreamingLineBuffer_3_buffer_stream[0], StreamingLineBuffer_3_out0_stream_prepad[22], StreamingLineBuffer_3_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_22," << StreamingLineBuffer_3_out0_stream_prepad[22].size() << std::endl;
     #endif
@@ -2916,7 +2919,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_5;
-    StreamingLineBuffer_3_pixel_5.run<70>(StreamingLineBuffer_3_buffer_stream[1], StreamingLineBuffer_3_out0_stream_prepad[21], StreamingLineBuffer_3_buffer_stream[6]);
+    StreamingLineBuffer_3_pixel_5.run<70, 3>(StreamingLineBuffer_3_buffer_stream[1], StreamingLineBuffer_3_out0_stream_prepad[21], StreamingLineBuffer_3_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_21," << StreamingLineBuffer_3_out0_stream_prepad[21].size() << std::endl;
     #endif
@@ -2943,7 +2946,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_6;
-    StreamingLineBuffer_3_pixel_6.run<71>(StreamingLineBuffer_3_buffer_stream[2], StreamingLineBuffer_3_out0_stream_prepad[20], StreamingLineBuffer_3_buffer_stream[7]);
+    StreamingLineBuffer_3_pixel_6.run<71, 3>(StreamingLineBuffer_3_buffer_stream[2], StreamingLineBuffer_3_out0_stream_prepad[20], StreamingLineBuffer_3_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_20," << StreamingLineBuffer_3_out0_stream_prepad[20].size() << std::endl;
     #endif
@@ -2970,7 +2973,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_7;
-    StreamingLineBuffer_3_pixel_7.run<72>(StreamingLineBuffer_3_buffer_stream[3], StreamingLineBuffer_3_out0_stream_prepad[19], StreamingLineBuffer_3_buffer_stream[8]);
+    StreamingLineBuffer_3_pixel_7.run<72, 3>(StreamingLineBuffer_3_buffer_stream[3], StreamingLineBuffer_3_out0_stream_prepad[19], StreamingLineBuffer_3_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_19," << StreamingLineBuffer_3_out0_stream_prepad[19].size() << std::endl;
     #endif
@@ -2997,7 +3000,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_4;
-    StreamingLineBuffer_4_pixel_4.run<97>(StreamingLineBuffer_4_buffer_stream[0], StreamingLineBuffer_4_out0_stream[2]);
+    StreamingLineBuffer_4_pixel_4.run<97, 3>(StreamingLineBuffer_4_buffer_stream[0], StreamingLineBuffer_4_out0_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_4_out0_stream_2," << StreamingLineBuffer_4_out0_stream[2].size() << std::endl;
     #endif
@@ -3021,7 +3024,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_5;
-    StreamingLineBuffer_4_pixel_5.run<98>(StreamingLineBuffer_4_buffer_stream[1], StreamingLineBuffer_4_out0_stream[1]);
+    StreamingLineBuffer_4_pixel_5.run<98, 3>(StreamingLineBuffer_4_buffer_stream[1], StreamingLineBuffer_4_out0_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_4_out0_stream_1," << StreamingLineBuffer_4_out0_stream[1].size() << std::endl;
     #endif
@@ -3045,7 +3048,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_6;
-    StreamingLineBuffer_4_pixel_6.run<99>(StreamingLineBuffer_4_buffer_stream[2], StreamingLineBuffer_4_out0_stream[0]);
+    StreamingLineBuffer_4_pixel_6.run<99, 3>(StreamingLineBuffer_4_buffer_stream[2], StreamingLineBuffer_4_out0_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_4_out0_stream_0," << StreamingLineBuffer_4_out0_stream[0].size() << std::endl;
     #endif
@@ -3069,7 +3072,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_8;
-    StreamingLineBuffer_3_pixel_8.run<73>(StreamingLineBuffer_3_buffer_stream[4], StreamingLineBuffer_3_out0_stream_prepad[18], StreamingLineBuffer_3_buffer_stream[5]);
+    StreamingLineBuffer_3_pixel_8.run<73, 3>(StreamingLineBuffer_3_buffer_stream[4], StreamingLineBuffer_3_out0_stream_prepad[18], StreamingLineBuffer_3_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_18," << StreamingLineBuffer_3_out0_stream_prepad[18].size() << std::endl;
     #endif
@@ -3096,7 +3099,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_10;
-    StreamingLineBuffer_3_pixel_10.run<75>(StreamingLineBuffer_3_buffer_stream[6], StreamingLineBuffer_3_out0_stream_prepad[16], StreamingLineBuffer_3_buffer_stream[10]);
+    StreamingLineBuffer_3_pixel_10.run<75, 3>(StreamingLineBuffer_3_buffer_stream[6], StreamingLineBuffer_3_out0_stream_prepad[16], StreamingLineBuffer_3_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_16," << StreamingLineBuffer_3_out0_stream_prepad[16].size() << std::endl;
     #endif
@@ -3123,7 +3126,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_11;
-    StreamingLineBuffer_3_pixel_11.run<76>(StreamingLineBuffer_3_buffer_stream[7], StreamingLineBuffer_3_out0_stream_prepad[15], StreamingLineBuffer_3_buffer_stream[11]);
+    StreamingLineBuffer_3_pixel_11.run<76, 3>(StreamingLineBuffer_3_buffer_stream[7], StreamingLineBuffer_3_out0_stream_prepad[15], StreamingLineBuffer_3_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_15," << StreamingLineBuffer_3_out0_stream_prepad[15].size() << std::endl;
     #endif
@@ -3150,17 +3153,15 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_12;
-    StreamingLineBuffer_3_pixel_12.run<77>(StreamingLineBuffer_3_buffer_stream[8], StreamingLineBuffer_3_out0_stream_prepad[14], StreamingLineBuffer_3_buffer_stream[12]);
+    StreamingLineBuffer_3_pixel_12.run<77, 3>(StreamingLineBuffer_3_buffer_stream[8], StreamingLineBuffer_3_out0_stream_prepad[14], StreamingLineBuffer_3_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_14," << StreamingLineBuffer_3_out0_stream_prepad[14].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_buffer_stream_12," << StreamingLineBuffer_3_buffer_stream[12].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_4_weights[256][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_4_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_4_weights dim=2 complete
-    ap_int<16> StreamingConv_4_biases[16][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_4_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_4_biases dim=2 complete
     StreamingConv <
@@ -3189,7 +3190,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         2,  // OUT_CH_PAR
         4  // W_PAR
     > StreamingConv_4;
-    StreamingConv_4.run<101>(StreamingLineBuffer_4_out0_stream, StreamingConv_4_weights, StreamingConv_4_biases, StreamingConv_4_out0_stream);
+    StreamingConv_4.run<101, 3>(StreamingLineBuffer_4_out0_stream, StreamingConv_4_weights, StreamingConv_4_biases, StreamingConv_4_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_4_out0_stream_0," << StreamingConv_4_out0_stream[0].size() << std::endl;
     #endif
@@ -3222,7 +3223,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_9;
-    StreamingLineBuffer_3_pixel_9.run<74>(StreamingLineBuffer_3_buffer_stream[5], StreamingLineBuffer_3_out0_stream_prepad[17], StreamingLineBuffer_3_buffer_stream[9]);
+    StreamingLineBuffer_3_pixel_9.run<74, 3>(StreamingLineBuffer_3_buffer_stream[5], StreamingLineBuffer_3_out0_stream_prepad[17], StreamingLineBuffer_3_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_17," << StreamingLineBuffer_3_out0_stream_prepad[17].size() << std::endl;
     #endif
@@ -3249,7 +3250,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_14;
-    StreamingLineBuffer_3_pixel_14.run<79>(StreamingLineBuffer_3_buffer_stream[10], StreamingLineBuffer_3_out0_stream_prepad[12], StreamingLineBuffer_3_buffer_stream[15]);
+    StreamingLineBuffer_3_pixel_14.run<79, 3>(StreamingLineBuffer_3_buffer_stream[10], StreamingLineBuffer_3_out0_stream_prepad[12], StreamingLineBuffer_3_buffer_stream[15]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_12," << StreamingLineBuffer_3_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -3276,7 +3277,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_15;
-    StreamingLineBuffer_3_pixel_15.run<80>(StreamingLineBuffer_3_buffer_stream[11], StreamingLineBuffer_3_out0_stream_prepad[11], StreamingLineBuffer_3_buffer_stream[16]);
+    StreamingLineBuffer_3_pixel_15.run<80, 3>(StreamingLineBuffer_3_buffer_stream[11], StreamingLineBuffer_3_out0_stream_prepad[11], StreamingLineBuffer_3_buffer_stream[16]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_11," << StreamingLineBuffer_3_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -3303,7 +3304,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_16;
-    StreamingLineBuffer_3_pixel_16.run<81>(StreamingLineBuffer_3_buffer_stream[12], StreamingLineBuffer_3_out0_stream_prepad[10], StreamingLineBuffer_3_buffer_stream[17]);
+    StreamingLineBuffer_3_pixel_16.run<81, 3>(StreamingLineBuffer_3_buffer_stream[12], StreamingLineBuffer_3_out0_stream_prepad[10], StreamingLineBuffer_3_buffer_stream[17]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_10," << StreamingLineBuffer_3_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -3330,7 +3331,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_13;
-    StreamingLineBuffer_3_pixel_13.run<78>(StreamingLineBuffer_3_buffer_stream[9], StreamingLineBuffer_3_out0_stream_prepad[13], StreamingLineBuffer_3_buffer_stream[13]);
+    StreamingLineBuffer_3_pixel_13.run<78, 3>(StreamingLineBuffer_3_buffer_stream[9], StreamingLineBuffer_3_out0_stream_prepad[13], StreamingLineBuffer_3_buffer_stream[13]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_13," << StreamingLineBuffer_3_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -3357,7 +3358,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_19;
-    StreamingLineBuffer_3_pixel_19.run<84>(StreamingLineBuffer_3_buffer_stream[15], StreamingLineBuffer_3_out0_stream_prepad[7], StreamingLineBuffer_3_buffer_stream[19]);
+    StreamingLineBuffer_3_pixel_19.run<84, 3>(StreamingLineBuffer_3_buffer_stream[15], StreamingLineBuffer_3_out0_stream_prepad[7], StreamingLineBuffer_3_buffer_stream[19]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_7," << StreamingLineBuffer_3_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -3384,7 +3385,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_20;
-    StreamingLineBuffer_3_pixel_20.run<85>(StreamingLineBuffer_3_buffer_stream[16], StreamingLineBuffer_3_out0_stream_prepad[6], StreamingLineBuffer_3_buffer_stream[20]);
+    StreamingLineBuffer_3_pixel_20.run<85, 3>(StreamingLineBuffer_3_buffer_stream[16], StreamingLineBuffer_3_out0_stream_prepad[6], StreamingLineBuffer_3_buffer_stream[20]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_6," << StreamingLineBuffer_3_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -3411,7 +3412,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_21;
-    StreamingLineBuffer_3_pixel_21.run<86>(StreamingLineBuffer_3_buffer_stream[17], StreamingLineBuffer_3_out0_stream_prepad[5], StreamingLineBuffer_3_buffer_stream[21]);
+    StreamingLineBuffer_3_pixel_21.run<86, 3>(StreamingLineBuffer_3_buffer_stream[17], StreamingLineBuffer_3_out0_stream_prepad[5], StreamingLineBuffer_3_buffer_stream[21]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_5," << StreamingLineBuffer_3_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -3438,7 +3439,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_17;
-    StreamingLineBuffer_3_pixel_17.run<82>(StreamingLineBuffer_3_buffer_stream[13], StreamingLineBuffer_3_out0_stream_prepad[9], StreamingLineBuffer_3_buffer_stream[14]);
+    StreamingLineBuffer_3_pixel_17.run<82, 3>(StreamingLineBuffer_3_buffer_stream[13], StreamingLineBuffer_3_out0_stream_prepad[9], StreamingLineBuffer_3_buffer_stream[14]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_9," << StreamingLineBuffer_3_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -3465,7 +3466,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_23;
-    StreamingLineBuffer_3_pixel_23.run<88>(StreamingLineBuffer_3_buffer_stream[19], StreamingLineBuffer_3_out0_stream_prepad[3]);
+    StreamingLineBuffer_3_pixel_23.run<88, 3>(StreamingLineBuffer_3_buffer_stream[19], StreamingLineBuffer_3_out0_stream_prepad[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_3," << StreamingLineBuffer_3_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -3489,7 +3490,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_24;
-    StreamingLineBuffer_3_pixel_24.run<89>(StreamingLineBuffer_3_buffer_stream[20], StreamingLineBuffer_3_out0_stream_prepad[2]);
+    StreamingLineBuffer_3_pixel_24.run<89, 3>(StreamingLineBuffer_3_buffer_stream[20], StreamingLineBuffer_3_out0_stream_prepad[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_2," << StreamingLineBuffer_3_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -3513,7 +3514,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_25;
-    StreamingLineBuffer_3_pixel_25.run<90>(StreamingLineBuffer_3_buffer_stream[21], StreamingLineBuffer_3_out0_stream_prepad[1]);
+    StreamingLineBuffer_3_pixel_25.run<90, 3>(StreamingLineBuffer_3_buffer_stream[21], StreamingLineBuffer_3_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_1," << StreamingLineBuffer_3_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -3537,7 +3538,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_18;
-    StreamingLineBuffer_3_pixel_18.run<83>(StreamingLineBuffer_3_buffer_stream[14], StreamingLineBuffer_3_out0_stream_prepad[8], StreamingLineBuffer_3_buffer_stream[18]);
+    StreamingLineBuffer_3_pixel_18.run<83, 3>(StreamingLineBuffer_3_buffer_stream[14], StreamingLineBuffer_3_out0_stream_prepad[8], StreamingLineBuffer_3_buffer_stream[18]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_8," << StreamingLineBuffer_3_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -3564,7 +3565,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_22;
-    StreamingLineBuffer_3_pixel_22.run<87>(StreamingLineBuffer_3_buffer_stream[18], StreamingLineBuffer_3_out0_stream_prepad[4], StreamingLineBuffer_3_buffer_stream[22]);
+    StreamingLineBuffer_3_pixel_22.run<87, 3>(StreamingLineBuffer_3_buffer_stream[18], StreamingLineBuffer_3_out0_stream_prepad[4], StreamingLineBuffer_3_buffer_stream[22]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_4," << StreamingLineBuffer_3_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -3591,7 +3592,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_3_pixel_26;
-    StreamingLineBuffer_3_pixel_26.run<91>(StreamingLineBuffer_3_buffer_stream[22], StreamingLineBuffer_3_out0_stream_prepad[0]);
+    StreamingLineBuffer_3_pixel_26.run<91, 3>(StreamingLineBuffer_3_buffer_stream[22], StreamingLineBuffer_3_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_0," << StreamingLineBuffer_3_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -3615,7 +3616,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_3_pad;
-    StreamingLineBuffer_3_pad.run<92>(StreamingLineBuffer_3_out0_stream_prepad, StreamingLineBuffer_3_out0_stream);
+    StreamingLineBuffer_3_pad.run<92, 3>(StreamingLineBuffer_3_out0_stream_prepad, StreamingLineBuffer_3_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_0," << StreamingLineBuffer_3_out0_stream[0].size() << std::endl;
     #endif
@@ -3697,10 +3698,8 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_26," << StreamingLineBuffer_3_out0_stream[26].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_3_weights[256][2][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_3_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_3_weights dim=2 complete
-    ap_int<16> StreamingConv_3_biases[16][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_3_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_3_biases dim=2 complete
     StreamingConv <
@@ -3729,7 +3728,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         2,  // OUT_CH_PAR
         4  // W_PAR
     > StreamingConv_3;
-    StreamingConv_3.run<100>(StreamingLineBuffer_3_out0_stream, StreamingConv_3_weights, StreamingConv_3_biases, StreamingConv_3_out0_stream);
+    StreamingConv_3.run<100, 3>(StreamingLineBuffer_3_out0_stream, StreamingConv_3_weights, StreamingConv_3_biases, StreamingConv_3_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_3_out0_stream_0," << StreamingConv_3_out0_stream[0].size() << std::endl;
     #endif
@@ -3762,7 +3761,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_0;
-    StreamingLineBuffer_5_pixel_0.run<102>(StreamingConv_3_out0_stream[0], StreamingLineBuffer_5_out0_stream_prepad[17], StreamingLineBuffer_5_buffer_stream[0]);
+    StreamingLineBuffer_5_pixel_0.run<102, 3>(StreamingConv_3_out0_stream[0], StreamingLineBuffer_5_out0_stream_prepad[17], StreamingLineBuffer_5_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_17," << StreamingLineBuffer_5_out0_stream_prepad[17].size() << std::endl;
     #endif
@@ -3789,7 +3788,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_1;
-    StreamingLineBuffer_5_pixel_1.run<103>(StreamingConv_3_out0_stream[3], StreamingLineBuffer_5_out0_stream_prepad[16], StreamingLineBuffer_5_buffer_stream[1]);
+    StreamingLineBuffer_5_pixel_1.run<103, 3>(StreamingConv_3_out0_stream[3], StreamingLineBuffer_5_out0_stream_prepad[16], StreamingLineBuffer_5_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_16," << StreamingLineBuffer_5_out0_stream_prepad[16].size() << std::endl;
     #endif
@@ -3816,7 +3815,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_2;
-    StreamingLineBuffer_5_pixel_2.run<104>(StreamingConv_3_out0_stream[2], StreamingLineBuffer_5_out0_stream_prepad[15], StreamingLineBuffer_5_buffer_stream[4]);
+    StreamingLineBuffer_5_pixel_2.run<104, 3>(StreamingConv_3_out0_stream[2], StreamingLineBuffer_5_out0_stream_prepad[15], StreamingLineBuffer_5_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_15," << StreamingLineBuffer_5_out0_stream_prepad[15].size() << std::endl;
     #endif
@@ -3843,7 +3842,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_3;
-    StreamingLineBuffer_5_pixel_3.run<105>(StreamingConv_3_out0_stream[1], StreamingLineBuffer_5_out0_stream_prepad[14], StreamingLineBuffer_5_buffer_stream[5]);
+    StreamingLineBuffer_5_pixel_3.run<105, 3>(StreamingConv_3_out0_stream[1], StreamingLineBuffer_5_out0_stream_prepad[14], StreamingLineBuffer_5_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_14," << StreamingLineBuffer_5_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -3870,7 +3869,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_4;
-    StreamingLineBuffer_5_pixel_4.run<106>(StreamingLineBuffer_5_buffer_stream[0], StreamingLineBuffer_5_out0_stream_prepad[13], StreamingLineBuffer_5_buffer_stream[2]);
+    StreamingLineBuffer_5_pixel_4.run<106, 3>(StreamingLineBuffer_5_buffer_stream[0], StreamingLineBuffer_5_out0_stream_prepad[13], StreamingLineBuffer_5_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_13," << StreamingLineBuffer_5_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -3897,7 +3896,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_5;
-    StreamingLineBuffer_5_pixel_5.run<107>(StreamingLineBuffer_5_buffer_stream[1], StreamingLineBuffer_5_out0_stream_prepad[12], StreamingLineBuffer_5_buffer_stream[3]);
+    StreamingLineBuffer_5_pixel_5.run<107, 3>(StreamingLineBuffer_5_buffer_stream[1], StreamingLineBuffer_5_out0_stream_prepad[12], StreamingLineBuffer_5_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_12," << StreamingLineBuffer_5_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -3924,7 +3923,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_8;
-    StreamingLineBuffer_5_pixel_8.run<110>(StreamingLineBuffer_5_buffer_stream[4], StreamingLineBuffer_5_out0_stream_prepad[9], StreamingLineBuffer_5_buffer_stream[10]);
+    StreamingLineBuffer_5_pixel_8.run<110, 3>(StreamingLineBuffer_5_buffer_stream[4], StreamingLineBuffer_5_out0_stream_prepad[9], StreamingLineBuffer_5_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_9," << StreamingLineBuffer_5_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -3951,7 +3950,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_9;
-    StreamingLineBuffer_5_pixel_9.run<111>(StreamingLineBuffer_5_buffer_stream[5], StreamingLineBuffer_5_out0_stream_prepad[8], StreamingLineBuffer_5_buffer_stream[11]);
+    StreamingLineBuffer_5_pixel_9.run<111, 3>(StreamingLineBuffer_5_buffer_stream[5], StreamingLineBuffer_5_out0_stream_prepad[8], StreamingLineBuffer_5_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_8," << StreamingLineBuffer_5_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -3978,7 +3977,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_6;
-    StreamingLineBuffer_5_pixel_6.run<108>(StreamingLineBuffer_5_buffer_stream[2], StreamingLineBuffer_5_out0_stream_prepad[11], StreamingLineBuffer_5_buffer_stream[6]);
+    StreamingLineBuffer_5_pixel_6.run<108, 3>(StreamingLineBuffer_5_buffer_stream[2], StreamingLineBuffer_5_out0_stream_prepad[11], StreamingLineBuffer_5_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_11," << StreamingLineBuffer_5_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -4005,7 +4004,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_7;
-    StreamingLineBuffer_5_pixel_7.run<109>(StreamingLineBuffer_5_buffer_stream[3], StreamingLineBuffer_5_out0_stream_prepad[10], StreamingLineBuffer_5_buffer_stream[7]);
+    StreamingLineBuffer_5_pixel_7.run<109, 3>(StreamingLineBuffer_5_buffer_stream[3], StreamingLineBuffer_5_out0_stream_prepad[10], StreamingLineBuffer_5_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_10," << StreamingLineBuffer_5_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -4032,7 +4031,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_14;
-    StreamingLineBuffer_5_pixel_14.run<116>(StreamingLineBuffer_5_buffer_stream[10], StreamingLineBuffer_5_out0_stream_prepad[3]);
+    StreamingLineBuffer_5_pixel_14.run<116, 3>(StreamingLineBuffer_5_buffer_stream[10], StreamingLineBuffer_5_out0_stream_prepad[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_3," << StreamingLineBuffer_5_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -4056,7 +4055,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_15;
-    StreamingLineBuffer_5_pixel_15.run<117>(StreamingLineBuffer_5_buffer_stream[11], StreamingLineBuffer_5_out0_stream_prepad[2]);
+    StreamingLineBuffer_5_pixel_15.run<117, 3>(StreamingLineBuffer_5_buffer_stream[11], StreamingLineBuffer_5_out0_stream_prepad[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_2," << StreamingLineBuffer_5_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -4080,7 +4079,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_10;
-    StreamingLineBuffer_5_pixel_10.run<112>(StreamingLineBuffer_5_buffer_stream[6], StreamingLineBuffer_5_out0_stream_prepad[7], StreamingLineBuffer_5_buffer_stream[8]);
+    StreamingLineBuffer_5_pixel_10.run<112, 3>(StreamingLineBuffer_5_buffer_stream[6], StreamingLineBuffer_5_out0_stream_prepad[7], StreamingLineBuffer_5_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_7," << StreamingLineBuffer_5_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -4107,7 +4106,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_11;
-    StreamingLineBuffer_5_pixel_11.run<113>(StreamingLineBuffer_5_buffer_stream[7], StreamingLineBuffer_5_out0_stream_prepad[6], StreamingLineBuffer_5_buffer_stream[9]);
+    StreamingLineBuffer_5_pixel_11.run<113, 3>(StreamingLineBuffer_5_buffer_stream[7], StreamingLineBuffer_5_out0_stream_prepad[6], StreamingLineBuffer_5_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_6," << StreamingLineBuffer_5_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -4134,7 +4133,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_12;
-    StreamingLineBuffer_5_pixel_12.run<114>(StreamingLineBuffer_5_buffer_stream[8], StreamingLineBuffer_5_out0_stream_prepad[5], StreamingLineBuffer_5_buffer_stream[12]);
+    StreamingLineBuffer_5_pixel_12.run<114, 3>(StreamingLineBuffer_5_buffer_stream[8], StreamingLineBuffer_5_out0_stream_prepad[5], StreamingLineBuffer_5_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_5," << StreamingLineBuffer_5_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -4161,7 +4160,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_13;
-    StreamingLineBuffer_5_pixel_13.run<115>(StreamingLineBuffer_5_buffer_stream[9], StreamingLineBuffer_5_out0_stream_prepad[4], StreamingLineBuffer_5_buffer_stream[13]);
+    StreamingLineBuffer_5_pixel_13.run<115, 3>(StreamingLineBuffer_5_buffer_stream[9], StreamingLineBuffer_5_out0_stream_prepad[4], StreamingLineBuffer_5_buffer_stream[13]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_4," << StreamingLineBuffer_5_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -4188,7 +4187,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_16;
-    StreamingLineBuffer_5_pixel_16.run<118>(StreamingLineBuffer_5_buffer_stream[12], StreamingLineBuffer_5_out0_stream_prepad[1]);
+    StreamingLineBuffer_5_pixel_16.run<118, 3>(StreamingLineBuffer_5_buffer_stream[12], StreamingLineBuffer_5_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_1," << StreamingLineBuffer_5_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -4212,7 +4211,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_5_pixel_17;
-    StreamingLineBuffer_5_pixel_17.run<119>(StreamingLineBuffer_5_buffer_stream[13], StreamingLineBuffer_5_out0_stream_prepad[0]);
+    StreamingLineBuffer_5_pixel_17.run<119, 3>(StreamingLineBuffer_5_buffer_stream[13], StreamingLineBuffer_5_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_0," << StreamingLineBuffer_5_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -4236,7 +4235,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_5_pad;
-    StreamingLineBuffer_5_pad.run<120>(StreamingLineBuffer_5_out0_stream_prepad, StreamingLineBuffer_5_out0_stream);
+    StreamingLineBuffer_5_pad.run<120, 3>(StreamingLineBuffer_5_out0_stream_prepad, StreamingLineBuffer_5_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_0," << StreamingLineBuffer_5_out0_stream[0].size() << std::endl;
     #endif
@@ -4291,10 +4290,8 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_17," << StreamingLineBuffer_5_out0_stream[17].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_5_weights[256][4][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_5_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_5_weights dim=2 complete
-    ap_int<16> StreamingConv_5_biases[16][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_5_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_5_biases dim=2 complete
     StreamingConv <
@@ -4323,7 +4320,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         2,  // OUT_CH_PAR
         4  // W_PAR
     > StreamingConv_5;
-    StreamingConv_5.run<121>(StreamingLineBuffer_5_out0_stream, StreamingConv_5_weights, StreamingConv_5_biases, StreamingConv_5_out0_stream);
+    StreamingConv_5.run<121, 3>(StreamingLineBuffer_5_out0_stream, StreamingConv_5_weights, StreamingConv_5_biases, StreamingConv_5_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_5_out0_stream_0," << StreamingConv_5_out0_stream[0].size() << std::endl;
     #endif
@@ -4354,7 +4351,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingAdd_1;
-    StreamingAdd_1.run<122>(StreamingConv_5_out0_stream, StreamingConv_4_out0_stream, StreamingAdd_1_out0_stream);
+    StreamingAdd_1.run<122, 3>(StreamingConv_5_out0_stream, StreamingConv_4_out0_stream, StreamingAdd_1_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingAdd_1_out0_stream_0," << StreamingAdd_1_out0_stream[0].size() << std::endl;
     #endif
@@ -4375,7 +4372,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         2,  // CH_PAR
         4  // W_PAR
     > TensorDuplicator_2;
-    TensorDuplicator_2.run<123>(StreamingAdd_1_out0_stream, TensorDuplicator_2_out0_stream, TensorDuplicator_2_out1_stream);
+    TensorDuplicator_2.run<123, 3>(StreamingAdd_1_out0_stream, TensorDuplicator_2_out0_stream, TensorDuplicator_2_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_2_out0_stream_0," << TensorDuplicator_2_out0_stream[0].size() << std::endl;
     #endif
@@ -4420,7 +4417,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_0;
-    StreamingLineBuffer_6_pixel_0.run<124>(TensorDuplicator_2_out0_stream[3], StreamingLineBuffer_6_out0_stream_prepad[26], StreamingLineBuffer_6_buffer_stream[0]);
+    StreamingLineBuffer_6_pixel_0.run<124, 3>(TensorDuplicator_2_out0_stream[3], StreamingLineBuffer_6_out0_stream_prepad[26], StreamingLineBuffer_6_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_26," << StreamingLineBuffer_6_out0_stream_prepad[26].size() << std::endl;
     #endif
@@ -4447,7 +4444,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_1;
-    StreamingLineBuffer_6_pixel_1.run<125>(TensorDuplicator_2_out0_stream[2], StreamingLineBuffer_6_out0_stream_prepad[25], StreamingLineBuffer_6_buffer_stream[1]);
+    StreamingLineBuffer_6_pixel_1.run<125, 3>(TensorDuplicator_2_out0_stream[2], StreamingLineBuffer_6_out0_stream_prepad[25], StreamingLineBuffer_6_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_25," << StreamingLineBuffer_6_out0_stream_prepad[25].size() << std::endl;
     #endif
@@ -4474,7 +4471,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_2;
-    StreamingLineBuffer_6_pixel_2.run<126>(TensorDuplicator_2_out0_stream[1], StreamingLineBuffer_6_out0_stream_prepad[24], StreamingLineBuffer_6_buffer_stream[2]);
+    StreamingLineBuffer_6_pixel_2.run<126, 3>(TensorDuplicator_2_out0_stream[1], StreamingLineBuffer_6_out0_stream_prepad[24], StreamingLineBuffer_6_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_24," << StreamingLineBuffer_6_out0_stream_prepad[24].size() << std::endl;
     #endif
@@ -4501,7 +4498,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_3;
-    StreamingLineBuffer_6_pixel_3.run<127>(TensorDuplicator_2_out0_stream[0], StreamingLineBuffer_6_out0_stream_prepad[23], StreamingLineBuffer_6_buffer_stream[3]);
+    StreamingLineBuffer_6_pixel_3.run<127, 3>(TensorDuplicator_2_out0_stream[0], StreamingLineBuffer_6_out0_stream_prepad[23], StreamingLineBuffer_6_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_23," << StreamingLineBuffer_6_out0_stream_prepad[23].size() << std::endl;
     #endif
@@ -4528,7 +4525,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_7_pixel_0;
-    StreamingLineBuffer_7_pixel_0.run<152>(TensorDuplicator_2_out1_stream[2], StreamingLineBuffer_7_out0_stream[6], StreamingLineBuffer_7_buffer_stream[0]);
+    StreamingLineBuffer_7_pixel_0.run<152, 3>(TensorDuplicator_2_out1_stream[2], StreamingLineBuffer_7_out0_stream[6], StreamingLineBuffer_7_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_6," << StreamingLineBuffer_7_out0_stream[6].size() << std::endl;
     #endif
@@ -4555,7 +4552,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_7_pixel_1;
-    StreamingLineBuffer_7_pixel_1.run<153>(TensorDuplicator_2_out1_stream[1], StreamingLineBuffer_7_out0_stream[5], StreamingLineBuffer_7_buffer_stream[1]);
+    StreamingLineBuffer_7_pixel_1.run<153, 3>(TensorDuplicator_2_out1_stream[1], StreamingLineBuffer_7_out0_stream[5], StreamingLineBuffer_7_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_5," << StreamingLineBuffer_7_out0_stream[5].size() << std::endl;
     #endif
@@ -4582,7 +4579,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_7_pixel_2;
-    StreamingLineBuffer_7_pixel_2.run<154>(TensorDuplicator_2_out1_stream[0], StreamingLineBuffer_7_out0_stream[4], StreamingLineBuffer_7_buffer_stream[2]);
+    StreamingLineBuffer_7_pixel_2.run<154, 3>(TensorDuplicator_2_out1_stream[0], StreamingLineBuffer_7_out0_stream[4], StreamingLineBuffer_7_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_4," << StreamingLineBuffer_7_out0_stream[4].size() << std::endl;
     #endif
@@ -4609,7 +4606,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_7_pixel_3;
-    StreamingLineBuffer_7_pixel_3.run<155>(TensorDuplicator_2_out1_stream[3], StreamingLineBuffer_7_out0_stream[3]);
+    StreamingLineBuffer_7_pixel_3.run<155, 3>(TensorDuplicator_2_out1_stream[3], StreamingLineBuffer_7_out0_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_3," << StreamingLineBuffer_7_out0_stream[3].size() << std::endl;
     #endif
@@ -4633,7 +4630,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_4;
-    StreamingLineBuffer_6_pixel_4.run<128>(StreamingLineBuffer_6_buffer_stream[0], StreamingLineBuffer_6_out0_stream_prepad[22], StreamingLineBuffer_6_buffer_stream[4]);
+    StreamingLineBuffer_6_pixel_4.run<128, 3>(StreamingLineBuffer_6_buffer_stream[0], StreamingLineBuffer_6_out0_stream_prepad[22], StreamingLineBuffer_6_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_22," << StreamingLineBuffer_6_out0_stream_prepad[22].size() << std::endl;
     #endif
@@ -4660,7 +4657,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_5;
-    StreamingLineBuffer_6_pixel_5.run<129>(StreamingLineBuffer_6_buffer_stream[1], StreamingLineBuffer_6_out0_stream_prepad[21], StreamingLineBuffer_6_buffer_stream[6]);
+    StreamingLineBuffer_6_pixel_5.run<129, 3>(StreamingLineBuffer_6_buffer_stream[1], StreamingLineBuffer_6_out0_stream_prepad[21], StreamingLineBuffer_6_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_21," << StreamingLineBuffer_6_out0_stream_prepad[21].size() << std::endl;
     #endif
@@ -4687,7 +4684,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_6;
-    StreamingLineBuffer_6_pixel_6.run<130>(StreamingLineBuffer_6_buffer_stream[2], StreamingLineBuffer_6_out0_stream_prepad[20], StreamingLineBuffer_6_buffer_stream[7]);
+    StreamingLineBuffer_6_pixel_6.run<130, 3>(StreamingLineBuffer_6_buffer_stream[2], StreamingLineBuffer_6_out0_stream_prepad[20], StreamingLineBuffer_6_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_20," << StreamingLineBuffer_6_out0_stream_prepad[20].size() << std::endl;
     #endif
@@ -4714,7 +4711,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_7;
-    StreamingLineBuffer_6_pixel_7.run<131>(StreamingLineBuffer_6_buffer_stream[3], StreamingLineBuffer_6_out0_stream_prepad[19], StreamingLineBuffer_6_buffer_stream[8]);
+    StreamingLineBuffer_6_pixel_7.run<131, 3>(StreamingLineBuffer_6_buffer_stream[3], StreamingLineBuffer_6_out0_stream_prepad[19], StreamingLineBuffer_6_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_19," << StreamingLineBuffer_6_out0_stream_prepad[19].size() << std::endl;
     #endif
@@ -4741,7 +4738,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_7_pixel_4;
-    StreamingLineBuffer_7_pixel_4.run<156>(StreamingLineBuffer_7_buffer_stream[0], StreamingLineBuffer_7_out0_stream[2]);
+    StreamingLineBuffer_7_pixel_4.run<156, 3>(StreamingLineBuffer_7_buffer_stream[0], StreamingLineBuffer_7_out0_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_2," << StreamingLineBuffer_7_out0_stream[2].size() << std::endl;
     #endif
@@ -4765,7 +4762,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_7_pixel_5;
-    StreamingLineBuffer_7_pixel_5.run<157>(StreamingLineBuffer_7_buffer_stream[1], StreamingLineBuffer_7_out0_stream[1]);
+    StreamingLineBuffer_7_pixel_5.run<157, 3>(StreamingLineBuffer_7_buffer_stream[1], StreamingLineBuffer_7_out0_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_1," << StreamingLineBuffer_7_out0_stream[1].size() << std::endl;
     #endif
@@ -4789,7 +4786,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_7_pixel_6;
-    StreamingLineBuffer_7_pixel_6.run<158>(StreamingLineBuffer_7_buffer_stream[2], StreamingLineBuffer_7_out0_stream[0]);
+    StreamingLineBuffer_7_pixel_6.run<158, 3>(StreamingLineBuffer_7_buffer_stream[2], StreamingLineBuffer_7_out0_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_0," << StreamingLineBuffer_7_out0_stream[0].size() << std::endl;
     #endif
@@ -4813,7 +4810,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_8;
-    StreamingLineBuffer_6_pixel_8.run<132>(StreamingLineBuffer_6_buffer_stream[4], StreamingLineBuffer_6_out0_stream_prepad[18], StreamingLineBuffer_6_buffer_stream[5]);
+    StreamingLineBuffer_6_pixel_8.run<132, 3>(StreamingLineBuffer_6_buffer_stream[4], StreamingLineBuffer_6_out0_stream_prepad[18], StreamingLineBuffer_6_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_18," << StreamingLineBuffer_6_out0_stream_prepad[18].size() << std::endl;
     #endif
@@ -4840,7 +4837,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_10;
-    StreamingLineBuffer_6_pixel_10.run<134>(StreamingLineBuffer_6_buffer_stream[6], StreamingLineBuffer_6_out0_stream_prepad[16], StreamingLineBuffer_6_buffer_stream[10]);
+    StreamingLineBuffer_6_pixel_10.run<134, 3>(StreamingLineBuffer_6_buffer_stream[6], StreamingLineBuffer_6_out0_stream_prepad[16], StreamingLineBuffer_6_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_16," << StreamingLineBuffer_6_out0_stream_prepad[16].size() << std::endl;
     #endif
@@ -4867,7 +4864,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_11;
-    StreamingLineBuffer_6_pixel_11.run<135>(StreamingLineBuffer_6_buffer_stream[7], StreamingLineBuffer_6_out0_stream_prepad[15], StreamingLineBuffer_6_buffer_stream[11]);
+    StreamingLineBuffer_6_pixel_11.run<135, 3>(StreamingLineBuffer_6_buffer_stream[7], StreamingLineBuffer_6_out0_stream_prepad[15], StreamingLineBuffer_6_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_15," << StreamingLineBuffer_6_out0_stream_prepad[15].size() << std::endl;
     #endif
@@ -4894,17 +4891,15 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_12;
-    StreamingLineBuffer_6_pixel_12.run<136>(StreamingLineBuffer_6_buffer_stream[8], StreamingLineBuffer_6_out0_stream_prepad[14], StreamingLineBuffer_6_buffer_stream[12]);
+    StreamingLineBuffer_6_pixel_12.run<136, 3>(StreamingLineBuffer_6_buffer_stream[8], StreamingLineBuffer_6_out0_stream_prepad[14], StreamingLineBuffer_6_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_14," << StreamingLineBuffer_6_out0_stream_prepad[14].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_buffer_stream_12," << StreamingLineBuffer_6_buffer_stream[12].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_7_weights[512][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_7_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_7_weights dim=2 complete
-    ap_int<16> StreamingConv_7_biases[32][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_7_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_7_biases dim=2 complete
     StreamingConv <
@@ -4933,7 +4928,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         2,  // OUT_CH_PAR
         4  // W_PAR
     > StreamingConv_7;
-    StreamingConv_7.run<160>(StreamingLineBuffer_7_out0_stream, StreamingConv_7_weights, StreamingConv_7_biases, StreamingConv_7_out0_stream);
+    StreamingConv_7.run<160, 3>(StreamingLineBuffer_7_out0_stream, StreamingConv_7_weights, StreamingConv_7_biases, StreamingConv_7_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_7_out0_stream_0," << StreamingConv_7_out0_stream[0].size() << std::endl;
     #endif
@@ -4966,7 +4961,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_9;
-    StreamingLineBuffer_6_pixel_9.run<133>(StreamingLineBuffer_6_buffer_stream[5], StreamingLineBuffer_6_out0_stream_prepad[17], StreamingLineBuffer_6_buffer_stream[9]);
+    StreamingLineBuffer_6_pixel_9.run<133, 3>(StreamingLineBuffer_6_buffer_stream[5], StreamingLineBuffer_6_out0_stream_prepad[17], StreamingLineBuffer_6_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_17," << StreamingLineBuffer_6_out0_stream_prepad[17].size() << std::endl;
     #endif
@@ -4993,7 +4988,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_14;
-    StreamingLineBuffer_6_pixel_14.run<138>(StreamingLineBuffer_6_buffer_stream[10], StreamingLineBuffer_6_out0_stream_prepad[12], StreamingLineBuffer_6_buffer_stream[15]);
+    StreamingLineBuffer_6_pixel_14.run<138, 3>(StreamingLineBuffer_6_buffer_stream[10], StreamingLineBuffer_6_out0_stream_prepad[12], StreamingLineBuffer_6_buffer_stream[15]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_12," << StreamingLineBuffer_6_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -5020,7 +5015,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_15;
-    StreamingLineBuffer_6_pixel_15.run<139>(StreamingLineBuffer_6_buffer_stream[11], StreamingLineBuffer_6_out0_stream_prepad[11], StreamingLineBuffer_6_buffer_stream[16]);
+    StreamingLineBuffer_6_pixel_15.run<139, 3>(StreamingLineBuffer_6_buffer_stream[11], StreamingLineBuffer_6_out0_stream_prepad[11], StreamingLineBuffer_6_buffer_stream[16]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_11," << StreamingLineBuffer_6_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -5047,7 +5042,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_16;
-    StreamingLineBuffer_6_pixel_16.run<140>(StreamingLineBuffer_6_buffer_stream[12], StreamingLineBuffer_6_out0_stream_prepad[10], StreamingLineBuffer_6_buffer_stream[17]);
+    StreamingLineBuffer_6_pixel_16.run<140, 3>(StreamingLineBuffer_6_buffer_stream[12], StreamingLineBuffer_6_out0_stream_prepad[10], StreamingLineBuffer_6_buffer_stream[17]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_10," << StreamingLineBuffer_6_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -5074,7 +5069,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_13;
-    StreamingLineBuffer_6_pixel_13.run<137>(StreamingLineBuffer_6_buffer_stream[9], StreamingLineBuffer_6_out0_stream_prepad[13], StreamingLineBuffer_6_buffer_stream[13]);
+    StreamingLineBuffer_6_pixel_13.run<137, 3>(StreamingLineBuffer_6_buffer_stream[9], StreamingLineBuffer_6_out0_stream_prepad[13], StreamingLineBuffer_6_buffer_stream[13]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_13," << StreamingLineBuffer_6_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -5101,7 +5096,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_19;
-    StreamingLineBuffer_6_pixel_19.run<143>(StreamingLineBuffer_6_buffer_stream[15], StreamingLineBuffer_6_out0_stream_prepad[7], StreamingLineBuffer_6_buffer_stream[19]);
+    StreamingLineBuffer_6_pixel_19.run<143, 3>(StreamingLineBuffer_6_buffer_stream[15], StreamingLineBuffer_6_out0_stream_prepad[7], StreamingLineBuffer_6_buffer_stream[19]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_7," << StreamingLineBuffer_6_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -5128,7 +5123,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_20;
-    StreamingLineBuffer_6_pixel_20.run<144>(StreamingLineBuffer_6_buffer_stream[16], StreamingLineBuffer_6_out0_stream_prepad[6], StreamingLineBuffer_6_buffer_stream[20]);
+    StreamingLineBuffer_6_pixel_20.run<144, 3>(StreamingLineBuffer_6_buffer_stream[16], StreamingLineBuffer_6_out0_stream_prepad[6], StreamingLineBuffer_6_buffer_stream[20]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_6," << StreamingLineBuffer_6_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -5155,7 +5150,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_21;
-    StreamingLineBuffer_6_pixel_21.run<145>(StreamingLineBuffer_6_buffer_stream[17], StreamingLineBuffer_6_out0_stream_prepad[5], StreamingLineBuffer_6_buffer_stream[21]);
+    StreamingLineBuffer_6_pixel_21.run<145, 3>(StreamingLineBuffer_6_buffer_stream[17], StreamingLineBuffer_6_out0_stream_prepad[5], StreamingLineBuffer_6_buffer_stream[21]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_5," << StreamingLineBuffer_6_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -5182,7 +5177,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_17;
-    StreamingLineBuffer_6_pixel_17.run<141>(StreamingLineBuffer_6_buffer_stream[13], StreamingLineBuffer_6_out0_stream_prepad[9], StreamingLineBuffer_6_buffer_stream[14]);
+    StreamingLineBuffer_6_pixel_17.run<141, 3>(StreamingLineBuffer_6_buffer_stream[13], StreamingLineBuffer_6_out0_stream_prepad[9], StreamingLineBuffer_6_buffer_stream[14]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_9," << StreamingLineBuffer_6_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -5209,7 +5204,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_23;
-    StreamingLineBuffer_6_pixel_23.run<147>(StreamingLineBuffer_6_buffer_stream[19], StreamingLineBuffer_6_out0_stream_prepad[3]);
+    StreamingLineBuffer_6_pixel_23.run<147, 3>(StreamingLineBuffer_6_buffer_stream[19], StreamingLineBuffer_6_out0_stream_prepad[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_3," << StreamingLineBuffer_6_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -5233,7 +5228,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_24;
-    StreamingLineBuffer_6_pixel_24.run<148>(StreamingLineBuffer_6_buffer_stream[20], StreamingLineBuffer_6_out0_stream_prepad[2]);
+    StreamingLineBuffer_6_pixel_24.run<148, 3>(StreamingLineBuffer_6_buffer_stream[20], StreamingLineBuffer_6_out0_stream_prepad[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_2," << StreamingLineBuffer_6_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -5257,7 +5252,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_25;
-    StreamingLineBuffer_6_pixel_25.run<149>(StreamingLineBuffer_6_buffer_stream[21], StreamingLineBuffer_6_out0_stream_prepad[1]);
+    StreamingLineBuffer_6_pixel_25.run<149, 3>(StreamingLineBuffer_6_buffer_stream[21], StreamingLineBuffer_6_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_1," << StreamingLineBuffer_6_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -5281,7 +5276,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_18;
-    StreamingLineBuffer_6_pixel_18.run<142>(StreamingLineBuffer_6_buffer_stream[14], StreamingLineBuffer_6_out0_stream_prepad[8], StreamingLineBuffer_6_buffer_stream[18]);
+    StreamingLineBuffer_6_pixel_18.run<142, 3>(StreamingLineBuffer_6_buffer_stream[14], StreamingLineBuffer_6_out0_stream_prepad[8], StreamingLineBuffer_6_buffer_stream[18]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_8," << StreamingLineBuffer_6_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -5308,7 +5303,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_22;
-    StreamingLineBuffer_6_pixel_22.run<146>(StreamingLineBuffer_6_buffer_stream[18], StreamingLineBuffer_6_out0_stream_prepad[4], StreamingLineBuffer_6_buffer_stream[22]);
+    StreamingLineBuffer_6_pixel_22.run<146, 3>(StreamingLineBuffer_6_buffer_stream[18], StreamingLineBuffer_6_out0_stream_prepad[4], StreamingLineBuffer_6_buffer_stream[22]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_4," << StreamingLineBuffer_6_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -5335,7 +5330,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_6_pixel_26;
-    StreamingLineBuffer_6_pixel_26.run<150>(StreamingLineBuffer_6_buffer_stream[22], StreamingLineBuffer_6_out0_stream_prepad[0]);
+    StreamingLineBuffer_6_pixel_26.run<150, 3>(StreamingLineBuffer_6_buffer_stream[22], StreamingLineBuffer_6_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_0," << StreamingLineBuffer_6_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -5359,7 +5354,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_6_pad;
-    StreamingLineBuffer_6_pad.run<151>(StreamingLineBuffer_6_out0_stream_prepad, StreamingLineBuffer_6_out0_stream);
+    StreamingLineBuffer_6_pad.run<151, 3>(StreamingLineBuffer_6_out0_stream_prepad, StreamingLineBuffer_6_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_0," << StreamingLineBuffer_6_out0_stream[0].size() << std::endl;
     #endif
@@ -5441,10 +5436,8 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_26," << StreamingLineBuffer_6_out0_stream[26].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_6_weights[512][4][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_6_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_6_weights dim=2 complete
-    ap_int<16> StreamingConv_6_biases[32][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_6_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_6_biases dim=2 complete
     StreamingConv <
@@ -5473,7 +5466,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         2,  // OUT_CH_PAR
         4  // W_PAR
     > StreamingConv_6;
-    StreamingConv_6.run<159>(StreamingLineBuffer_6_out0_stream, StreamingConv_6_weights, StreamingConv_6_biases, StreamingConv_6_out0_stream);
+    StreamingConv_6.run<159, 3>(StreamingLineBuffer_6_out0_stream, StreamingConv_6_weights, StreamingConv_6_biases, StreamingConv_6_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_6_out0_stream_0," << StreamingConv_6_out0_stream[0].size() << std::endl;
     #endif
@@ -5506,7 +5499,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_0;
-    StreamingLineBuffer_8_pixel_0.run<161>(StreamingConv_6_out0_stream[0], StreamingLineBuffer_8_out0_stream_prepad[17], StreamingLineBuffer_8_buffer_stream[0]);
+    StreamingLineBuffer_8_pixel_0.run<161, 3>(StreamingConv_6_out0_stream[0], StreamingLineBuffer_8_out0_stream_prepad[17], StreamingLineBuffer_8_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_17," << StreamingLineBuffer_8_out0_stream_prepad[17].size() << std::endl;
     #endif
@@ -5533,7 +5526,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_1;
-    StreamingLineBuffer_8_pixel_1.run<162>(StreamingConv_6_out0_stream[3], StreamingLineBuffer_8_out0_stream_prepad[16], StreamingLineBuffer_8_buffer_stream[1]);
+    StreamingLineBuffer_8_pixel_1.run<162, 3>(StreamingConv_6_out0_stream[3], StreamingLineBuffer_8_out0_stream_prepad[16], StreamingLineBuffer_8_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_16," << StreamingLineBuffer_8_out0_stream_prepad[16].size() << std::endl;
     #endif
@@ -5560,7 +5553,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_2;
-    StreamingLineBuffer_8_pixel_2.run<163>(StreamingConv_6_out0_stream[2], StreamingLineBuffer_8_out0_stream_prepad[15], StreamingLineBuffer_8_buffer_stream[4]);
+    StreamingLineBuffer_8_pixel_2.run<163, 3>(StreamingConv_6_out0_stream[2], StreamingLineBuffer_8_out0_stream_prepad[15], StreamingLineBuffer_8_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_15," << StreamingLineBuffer_8_out0_stream_prepad[15].size() << std::endl;
     #endif
@@ -5587,7 +5580,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_3;
-    StreamingLineBuffer_8_pixel_3.run<164>(StreamingConv_6_out0_stream[1], StreamingLineBuffer_8_out0_stream_prepad[14], StreamingLineBuffer_8_buffer_stream[5]);
+    StreamingLineBuffer_8_pixel_3.run<164, 3>(StreamingConv_6_out0_stream[1], StreamingLineBuffer_8_out0_stream_prepad[14], StreamingLineBuffer_8_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_14," << StreamingLineBuffer_8_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -5614,7 +5607,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_4;
-    StreamingLineBuffer_8_pixel_4.run<165>(StreamingLineBuffer_8_buffer_stream[0], StreamingLineBuffer_8_out0_stream_prepad[13], StreamingLineBuffer_8_buffer_stream[2]);
+    StreamingLineBuffer_8_pixel_4.run<165, 3>(StreamingLineBuffer_8_buffer_stream[0], StreamingLineBuffer_8_out0_stream_prepad[13], StreamingLineBuffer_8_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_13," << StreamingLineBuffer_8_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -5641,7 +5634,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_5;
-    StreamingLineBuffer_8_pixel_5.run<166>(StreamingLineBuffer_8_buffer_stream[1], StreamingLineBuffer_8_out0_stream_prepad[12], StreamingLineBuffer_8_buffer_stream[3]);
+    StreamingLineBuffer_8_pixel_5.run<166, 3>(StreamingLineBuffer_8_buffer_stream[1], StreamingLineBuffer_8_out0_stream_prepad[12], StreamingLineBuffer_8_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_12," << StreamingLineBuffer_8_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -5668,7 +5661,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_8;
-    StreamingLineBuffer_8_pixel_8.run<169>(StreamingLineBuffer_8_buffer_stream[4], StreamingLineBuffer_8_out0_stream_prepad[9], StreamingLineBuffer_8_buffer_stream[10]);
+    StreamingLineBuffer_8_pixel_8.run<169, 3>(StreamingLineBuffer_8_buffer_stream[4], StreamingLineBuffer_8_out0_stream_prepad[9], StreamingLineBuffer_8_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_9," << StreamingLineBuffer_8_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -5695,7 +5688,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_9;
-    StreamingLineBuffer_8_pixel_9.run<170>(StreamingLineBuffer_8_buffer_stream[5], StreamingLineBuffer_8_out0_stream_prepad[8], StreamingLineBuffer_8_buffer_stream[11]);
+    StreamingLineBuffer_8_pixel_9.run<170, 3>(StreamingLineBuffer_8_buffer_stream[5], StreamingLineBuffer_8_out0_stream_prepad[8], StreamingLineBuffer_8_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_8," << StreamingLineBuffer_8_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -5722,7 +5715,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_6;
-    StreamingLineBuffer_8_pixel_6.run<167>(StreamingLineBuffer_8_buffer_stream[2], StreamingLineBuffer_8_out0_stream_prepad[11], StreamingLineBuffer_8_buffer_stream[6]);
+    StreamingLineBuffer_8_pixel_6.run<167, 3>(StreamingLineBuffer_8_buffer_stream[2], StreamingLineBuffer_8_out0_stream_prepad[11], StreamingLineBuffer_8_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_11," << StreamingLineBuffer_8_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -5749,7 +5742,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_7;
-    StreamingLineBuffer_8_pixel_7.run<168>(StreamingLineBuffer_8_buffer_stream[3], StreamingLineBuffer_8_out0_stream_prepad[10], StreamingLineBuffer_8_buffer_stream[7]);
+    StreamingLineBuffer_8_pixel_7.run<168, 3>(StreamingLineBuffer_8_buffer_stream[3], StreamingLineBuffer_8_out0_stream_prepad[10], StreamingLineBuffer_8_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_10," << StreamingLineBuffer_8_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -5776,7 +5769,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_14;
-    StreamingLineBuffer_8_pixel_14.run<175>(StreamingLineBuffer_8_buffer_stream[10], StreamingLineBuffer_8_out0_stream_prepad[3]);
+    StreamingLineBuffer_8_pixel_14.run<175, 3>(StreamingLineBuffer_8_buffer_stream[10], StreamingLineBuffer_8_out0_stream_prepad[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_3," << StreamingLineBuffer_8_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -5800,7 +5793,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_15;
-    StreamingLineBuffer_8_pixel_15.run<176>(StreamingLineBuffer_8_buffer_stream[11], StreamingLineBuffer_8_out0_stream_prepad[2]);
+    StreamingLineBuffer_8_pixel_15.run<176, 3>(StreamingLineBuffer_8_buffer_stream[11], StreamingLineBuffer_8_out0_stream_prepad[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_2," << StreamingLineBuffer_8_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -5824,7 +5817,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_10;
-    StreamingLineBuffer_8_pixel_10.run<171>(StreamingLineBuffer_8_buffer_stream[6], StreamingLineBuffer_8_out0_stream_prepad[7], StreamingLineBuffer_8_buffer_stream[8]);
+    StreamingLineBuffer_8_pixel_10.run<171, 3>(StreamingLineBuffer_8_buffer_stream[6], StreamingLineBuffer_8_out0_stream_prepad[7], StreamingLineBuffer_8_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_7," << StreamingLineBuffer_8_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -5851,7 +5844,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_11;
-    StreamingLineBuffer_8_pixel_11.run<172>(StreamingLineBuffer_8_buffer_stream[7], StreamingLineBuffer_8_out0_stream_prepad[6], StreamingLineBuffer_8_buffer_stream[9]);
+    StreamingLineBuffer_8_pixel_11.run<172, 3>(StreamingLineBuffer_8_buffer_stream[7], StreamingLineBuffer_8_out0_stream_prepad[6], StreamingLineBuffer_8_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_6," << StreamingLineBuffer_8_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -5878,7 +5871,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_12;
-    StreamingLineBuffer_8_pixel_12.run<173>(StreamingLineBuffer_8_buffer_stream[8], StreamingLineBuffer_8_out0_stream_prepad[5], StreamingLineBuffer_8_buffer_stream[12]);
+    StreamingLineBuffer_8_pixel_12.run<173, 3>(StreamingLineBuffer_8_buffer_stream[8], StreamingLineBuffer_8_out0_stream_prepad[5], StreamingLineBuffer_8_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_5," << StreamingLineBuffer_8_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -5905,7 +5898,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_13;
-    StreamingLineBuffer_8_pixel_13.run<174>(StreamingLineBuffer_8_buffer_stream[9], StreamingLineBuffer_8_out0_stream_prepad[4], StreamingLineBuffer_8_buffer_stream[13]);
+    StreamingLineBuffer_8_pixel_13.run<174, 3>(StreamingLineBuffer_8_buffer_stream[9], StreamingLineBuffer_8_out0_stream_prepad[4], StreamingLineBuffer_8_buffer_stream[13]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_4," << StreamingLineBuffer_8_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -5932,7 +5925,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_16;
-    StreamingLineBuffer_8_pixel_16.run<177>(StreamingLineBuffer_8_buffer_stream[12], StreamingLineBuffer_8_out0_stream_prepad[1]);
+    StreamingLineBuffer_8_pixel_16.run<177, 3>(StreamingLineBuffer_8_buffer_stream[12], StreamingLineBuffer_8_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_1," << StreamingLineBuffer_8_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -5956,7 +5949,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_17;
-    StreamingLineBuffer_8_pixel_17.run<178>(StreamingLineBuffer_8_buffer_stream[13], StreamingLineBuffer_8_out0_stream_prepad[0]);
+    StreamingLineBuffer_8_pixel_17.run<178, 3>(StreamingLineBuffer_8_buffer_stream[13], StreamingLineBuffer_8_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_0," << StreamingLineBuffer_8_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -5980,7 +5973,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_8_pad;
-    StreamingLineBuffer_8_pad.run<179>(StreamingLineBuffer_8_out0_stream_prepad, StreamingLineBuffer_8_out0_stream);
+    StreamingLineBuffer_8_pad.run<179, 3>(StreamingLineBuffer_8_out0_stream_prepad, StreamingLineBuffer_8_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_0," << StreamingLineBuffer_8_out0_stream[0].size() << std::endl;
     #endif
@@ -6035,10 +6028,8 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_17," << StreamingLineBuffer_8_out0_stream[17].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_8_weights[1024][4][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_8_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_8_weights dim=2 complete
-    ap_int<16> StreamingConv_8_biases[32][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_8_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_8_biases dim=2 complete
     StreamingConv <
@@ -6067,7 +6058,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         2,  // OUT_CH_PAR
         4  // W_PAR
     > StreamingConv_8;
-    StreamingConv_8.run<180>(StreamingLineBuffer_8_out0_stream, StreamingConv_8_weights, StreamingConv_8_biases, StreamingConv_8_out0_stream);
+    StreamingConv_8.run<180, 3>(StreamingLineBuffer_8_out0_stream, StreamingConv_8_weights, StreamingConv_8_biases, StreamingConv_8_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_8_out0_stream_0," << StreamingConv_8_out0_stream[0].size() << std::endl;
     #endif
@@ -6098,7 +6089,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         4,  // W_PAR
         2  // CH_PAR
     > StreamingAdd_2;
-    StreamingAdd_2.run<181>(StreamingConv_8_out0_stream, StreamingConv_7_out0_stream, StreamingAdd_2_out0_stream);
+    StreamingAdd_2.run<181, 3>(StreamingConv_8_out0_stream, StreamingConv_7_out0_stream, StreamingAdd_2_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingAdd_2_out0_stream_0," << StreamingAdd_2_out0_stream[0].size() << std::endl;
     #endif
@@ -6125,7 +6116,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         2,  // IN_CH_PAR
         2  // OUT_CH_PAR
     > BandwidthAdjustDecreaseStreams_0;
-    BandwidthAdjustDecreaseStreams_0.run<182>(StreamingAdd_2_out0_stream, BandwidthAdjustDecreaseStreams_0_out0_stream);
+    BandwidthAdjustDecreaseStreams_0.run<182, 3>(StreamingAdd_2_out0_stream, BandwidthAdjustDecreaseStreams_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseStreams_0_out0_stream_0," << BandwidthAdjustDecreaseStreams_0_out0_stream[0].size() << std::endl;
     #endif
@@ -6149,7 +6140,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_0;
-    StreamingLineBuffer_9_pixel_0.run<183>(BandwidthAdjustDecreaseStreams_0_out0_stream[0], StreamingLineBuffer_9_out0_stream[63], StreamingLineBuffer_9_buffer_stream[0]);
+    StreamingLineBuffer_9_pixel_0.run<183, 3>(BandwidthAdjustDecreaseStreams_0_out0_stream[0], StreamingLineBuffer_9_out0_stream[63], StreamingLineBuffer_9_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_63," << StreamingLineBuffer_9_out0_stream[63].size() << std::endl;
     #endif
@@ -6176,7 +6167,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_1;
-    StreamingLineBuffer_9_pixel_1.run<184>(StreamingLineBuffer_9_buffer_stream[0], StreamingLineBuffer_9_out0_stream[62], StreamingLineBuffer_9_buffer_stream[1]);
+    StreamingLineBuffer_9_pixel_1.run<184, 3>(StreamingLineBuffer_9_buffer_stream[0], StreamingLineBuffer_9_out0_stream[62], StreamingLineBuffer_9_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_62," << StreamingLineBuffer_9_out0_stream[62].size() << std::endl;
     #endif
@@ -6203,7 +6194,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_2;
-    StreamingLineBuffer_9_pixel_2.run<185>(StreamingLineBuffer_9_buffer_stream[1], StreamingLineBuffer_9_out0_stream[61], StreamingLineBuffer_9_buffer_stream[2]);
+    StreamingLineBuffer_9_pixel_2.run<185, 3>(StreamingLineBuffer_9_buffer_stream[1], StreamingLineBuffer_9_out0_stream[61], StreamingLineBuffer_9_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_61," << StreamingLineBuffer_9_out0_stream[61].size() << std::endl;
     #endif
@@ -6230,7 +6221,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_3;
-    StreamingLineBuffer_9_pixel_3.run<186>(StreamingLineBuffer_9_buffer_stream[2], StreamingLineBuffer_9_out0_stream[60], StreamingLineBuffer_9_buffer_stream[3]);
+    StreamingLineBuffer_9_pixel_3.run<186, 3>(StreamingLineBuffer_9_buffer_stream[2], StreamingLineBuffer_9_out0_stream[60], StreamingLineBuffer_9_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_60," << StreamingLineBuffer_9_out0_stream[60].size() << std::endl;
     #endif
@@ -6257,7 +6248,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_4;
-    StreamingLineBuffer_9_pixel_4.run<187>(StreamingLineBuffer_9_buffer_stream[3], StreamingLineBuffer_9_out0_stream[59], StreamingLineBuffer_9_buffer_stream[4]);
+    StreamingLineBuffer_9_pixel_4.run<187, 3>(StreamingLineBuffer_9_buffer_stream[3], StreamingLineBuffer_9_out0_stream[59], StreamingLineBuffer_9_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_59," << StreamingLineBuffer_9_out0_stream[59].size() << std::endl;
     #endif
@@ -6284,7 +6275,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_5;
-    StreamingLineBuffer_9_pixel_5.run<188>(StreamingLineBuffer_9_buffer_stream[4], StreamingLineBuffer_9_out0_stream[58], StreamingLineBuffer_9_buffer_stream[5]);
+    StreamingLineBuffer_9_pixel_5.run<188, 3>(StreamingLineBuffer_9_buffer_stream[4], StreamingLineBuffer_9_out0_stream[58], StreamingLineBuffer_9_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_58," << StreamingLineBuffer_9_out0_stream[58].size() << std::endl;
     #endif
@@ -6311,7 +6302,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_6;
-    StreamingLineBuffer_9_pixel_6.run<189>(StreamingLineBuffer_9_buffer_stream[5], StreamingLineBuffer_9_out0_stream[57], StreamingLineBuffer_9_buffer_stream[6]);
+    StreamingLineBuffer_9_pixel_6.run<189, 3>(StreamingLineBuffer_9_buffer_stream[5], StreamingLineBuffer_9_out0_stream[57], StreamingLineBuffer_9_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_57," << StreamingLineBuffer_9_out0_stream[57].size() << std::endl;
     #endif
@@ -6338,7 +6329,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_7;
-    StreamingLineBuffer_9_pixel_7.run<190>(StreamingLineBuffer_9_buffer_stream[6], StreamingLineBuffer_9_out0_stream[56], StreamingLineBuffer_9_buffer_stream[7]);
+    StreamingLineBuffer_9_pixel_7.run<190, 3>(StreamingLineBuffer_9_buffer_stream[6], StreamingLineBuffer_9_out0_stream[56], StreamingLineBuffer_9_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_56," << StreamingLineBuffer_9_out0_stream[56].size() << std::endl;
     #endif
@@ -6365,7 +6356,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_8;
-    StreamingLineBuffer_9_pixel_8.run<191>(StreamingLineBuffer_9_buffer_stream[7], StreamingLineBuffer_9_out0_stream[55], StreamingLineBuffer_9_buffer_stream[8]);
+    StreamingLineBuffer_9_pixel_8.run<191, 3>(StreamingLineBuffer_9_buffer_stream[7], StreamingLineBuffer_9_out0_stream[55], StreamingLineBuffer_9_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_55," << StreamingLineBuffer_9_out0_stream[55].size() << std::endl;
     #endif
@@ -6392,7 +6383,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_9;
-    StreamingLineBuffer_9_pixel_9.run<192>(StreamingLineBuffer_9_buffer_stream[8], StreamingLineBuffer_9_out0_stream[54], StreamingLineBuffer_9_buffer_stream[9]);
+    StreamingLineBuffer_9_pixel_9.run<192, 3>(StreamingLineBuffer_9_buffer_stream[8], StreamingLineBuffer_9_out0_stream[54], StreamingLineBuffer_9_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_54," << StreamingLineBuffer_9_out0_stream[54].size() << std::endl;
     #endif
@@ -6419,7 +6410,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_10;
-    StreamingLineBuffer_9_pixel_10.run<193>(StreamingLineBuffer_9_buffer_stream[9], StreamingLineBuffer_9_out0_stream[53], StreamingLineBuffer_9_buffer_stream[10]);
+    StreamingLineBuffer_9_pixel_10.run<193, 3>(StreamingLineBuffer_9_buffer_stream[9], StreamingLineBuffer_9_out0_stream[53], StreamingLineBuffer_9_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_53," << StreamingLineBuffer_9_out0_stream[53].size() << std::endl;
     #endif
@@ -6446,7 +6437,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_11;
-    StreamingLineBuffer_9_pixel_11.run<194>(StreamingLineBuffer_9_buffer_stream[10], StreamingLineBuffer_9_out0_stream[52], StreamingLineBuffer_9_buffer_stream[11]);
+    StreamingLineBuffer_9_pixel_11.run<194, 3>(StreamingLineBuffer_9_buffer_stream[10], StreamingLineBuffer_9_out0_stream[52], StreamingLineBuffer_9_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_52," << StreamingLineBuffer_9_out0_stream[52].size() << std::endl;
     #endif
@@ -6473,7 +6464,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_12;
-    StreamingLineBuffer_9_pixel_12.run<195>(StreamingLineBuffer_9_buffer_stream[11], StreamingLineBuffer_9_out0_stream[51], StreamingLineBuffer_9_buffer_stream[12]);
+    StreamingLineBuffer_9_pixel_12.run<195, 3>(StreamingLineBuffer_9_buffer_stream[11], StreamingLineBuffer_9_out0_stream[51], StreamingLineBuffer_9_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_51," << StreamingLineBuffer_9_out0_stream[51].size() << std::endl;
     #endif
@@ -6500,7 +6491,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_13;
-    StreamingLineBuffer_9_pixel_13.run<196>(StreamingLineBuffer_9_buffer_stream[12], StreamingLineBuffer_9_out0_stream[50], StreamingLineBuffer_9_buffer_stream[13]);
+    StreamingLineBuffer_9_pixel_13.run<196, 3>(StreamingLineBuffer_9_buffer_stream[12], StreamingLineBuffer_9_out0_stream[50], StreamingLineBuffer_9_buffer_stream[13]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_50," << StreamingLineBuffer_9_out0_stream[50].size() << std::endl;
     #endif
@@ -6527,7 +6518,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_14;
-    StreamingLineBuffer_9_pixel_14.run<197>(StreamingLineBuffer_9_buffer_stream[13], StreamingLineBuffer_9_out0_stream[49], StreamingLineBuffer_9_buffer_stream[14]);
+    StreamingLineBuffer_9_pixel_14.run<197, 3>(StreamingLineBuffer_9_buffer_stream[13], StreamingLineBuffer_9_out0_stream[49], StreamingLineBuffer_9_buffer_stream[14]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_49," << StreamingLineBuffer_9_out0_stream[49].size() << std::endl;
     #endif
@@ -6554,7 +6545,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_15;
-    StreamingLineBuffer_9_pixel_15.run<198>(StreamingLineBuffer_9_buffer_stream[14], StreamingLineBuffer_9_out0_stream[48], StreamingLineBuffer_9_buffer_stream[15]);
+    StreamingLineBuffer_9_pixel_15.run<198, 3>(StreamingLineBuffer_9_buffer_stream[14], StreamingLineBuffer_9_out0_stream[48], StreamingLineBuffer_9_buffer_stream[15]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_48," << StreamingLineBuffer_9_out0_stream[48].size() << std::endl;
     #endif
@@ -6581,7 +6572,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_16;
-    StreamingLineBuffer_9_pixel_16.run<199>(StreamingLineBuffer_9_buffer_stream[15], StreamingLineBuffer_9_out0_stream[47], StreamingLineBuffer_9_buffer_stream[16]);
+    StreamingLineBuffer_9_pixel_16.run<199, 3>(StreamingLineBuffer_9_buffer_stream[15], StreamingLineBuffer_9_out0_stream[47], StreamingLineBuffer_9_buffer_stream[16]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_47," << StreamingLineBuffer_9_out0_stream[47].size() << std::endl;
     #endif
@@ -6608,7 +6599,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_17;
-    StreamingLineBuffer_9_pixel_17.run<200>(StreamingLineBuffer_9_buffer_stream[16], StreamingLineBuffer_9_out0_stream[46], StreamingLineBuffer_9_buffer_stream[17]);
+    StreamingLineBuffer_9_pixel_17.run<200, 3>(StreamingLineBuffer_9_buffer_stream[16], StreamingLineBuffer_9_out0_stream[46], StreamingLineBuffer_9_buffer_stream[17]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_46," << StreamingLineBuffer_9_out0_stream[46].size() << std::endl;
     #endif
@@ -6635,7 +6626,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_18;
-    StreamingLineBuffer_9_pixel_18.run<201>(StreamingLineBuffer_9_buffer_stream[17], StreamingLineBuffer_9_out0_stream[45], StreamingLineBuffer_9_buffer_stream[18]);
+    StreamingLineBuffer_9_pixel_18.run<201, 3>(StreamingLineBuffer_9_buffer_stream[17], StreamingLineBuffer_9_out0_stream[45], StreamingLineBuffer_9_buffer_stream[18]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_45," << StreamingLineBuffer_9_out0_stream[45].size() << std::endl;
     #endif
@@ -6662,7 +6653,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_19;
-    StreamingLineBuffer_9_pixel_19.run<202>(StreamingLineBuffer_9_buffer_stream[18], StreamingLineBuffer_9_out0_stream[44], StreamingLineBuffer_9_buffer_stream[19]);
+    StreamingLineBuffer_9_pixel_19.run<202, 3>(StreamingLineBuffer_9_buffer_stream[18], StreamingLineBuffer_9_out0_stream[44], StreamingLineBuffer_9_buffer_stream[19]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_44," << StreamingLineBuffer_9_out0_stream[44].size() << std::endl;
     #endif
@@ -6689,7 +6680,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_20;
-    StreamingLineBuffer_9_pixel_20.run<203>(StreamingLineBuffer_9_buffer_stream[19], StreamingLineBuffer_9_out0_stream[43], StreamingLineBuffer_9_buffer_stream[20]);
+    StreamingLineBuffer_9_pixel_20.run<203, 3>(StreamingLineBuffer_9_buffer_stream[19], StreamingLineBuffer_9_out0_stream[43], StreamingLineBuffer_9_buffer_stream[20]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_43," << StreamingLineBuffer_9_out0_stream[43].size() << std::endl;
     #endif
@@ -6716,7 +6707,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_21;
-    StreamingLineBuffer_9_pixel_21.run<204>(StreamingLineBuffer_9_buffer_stream[20], StreamingLineBuffer_9_out0_stream[42], StreamingLineBuffer_9_buffer_stream[21]);
+    StreamingLineBuffer_9_pixel_21.run<204, 3>(StreamingLineBuffer_9_buffer_stream[20], StreamingLineBuffer_9_out0_stream[42], StreamingLineBuffer_9_buffer_stream[21]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_42," << StreamingLineBuffer_9_out0_stream[42].size() << std::endl;
     #endif
@@ -6743,7 +6734,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_22;
-    StreamingLineBuffer_9_pixel_22.run<205>(StreamingLineBuffer_9_buffer_stream[21], StreamingLineBuffer_9_out0_stream[41], StreamingLineBuffer_9_buffer_stream[22]);
+    StreamingLineBuffer_9_pixel_22.run<205, 3>(StreamingLineBuffer_9_buffer_stream[21], StreamingLineBuffer_9_out0_stream[41], StreamingLineBuffer_9_buffer_stream[22]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_41," << StreamingLineBuffer_9_out0_stream[41].size() << std::endl;
     #endif
@@ -6770,7 +6761,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_23;
-    StreamingLineBuffer_9_pixel_23.run<206>(StreamingLineBuffer_9_buffer_stream[22], StreamingLineBuffer_9_out0_stream[40], StreamingLineBuffer_9_buffer_stream[23]);
+    StreamingLineBuffer_9_pixel_23.run<206, 3>(StreamingLineBuffer_9_buffer_stream[22], StreamingLineBuffer_9_out0_stream[40], StreamingLineBuffer_9_buffer_stream[23]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_40," << StreamingLineBuffer_9_out0_stream[40].size() << std::endl;
     #endif
@@ -6797,7 +6788,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_24;
-    StreamingLineBuffer_9_pixel_24.run<207>(StreamingLineBuffer_9_buffer_stream[23], StreamingLineBuffer_9_out0_stream[39], StreamingLineBuffer_9_buffer_stream[24]);
+    StreamingLineBuffer_9_pixel_24.run<207, 3>(StreamingLineBuffer_9_buffer_stream[23], StreamingLineBuffer_9_out0_stream[39], StreamingLineBuffer_9_buffer_stream[24]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_39," << StreamingLineBuffer_9_out0_stream[39].size() << std::endl;
     #endif
@@ -6824,7 +6815,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_25;
-    StreamingLineBuffer_9_pixel_25.run<208>(StreamingLineBuffer_9_buffer_stream[24], StreamingLineBuffer_9_out0_stream[38], StreamingLineBuffer_9_buffer_stream[25]);
+    StreamingLineBuffer_9_pixel_25.run<208, 3>(StreamingLineBuffer_9_buffer_stream[24], StreamingLineBuffer_9_out0_stream[38], StreamingLineBuffer_9_buffer_stream[25]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_38," << StreamingLineBuffer_9_out0_stream[38].size() << std::endl;
     #endif
@@ -6851,7 +6842,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_26;
-    StreamingLineBuffer_9_pixel_26.run<209>(StreamingLineBuffer_9_buffer_stream[25], StreamingLineBuffer_9_out0_stream[37], StreamingLineBuffer_9_buffer_stream[26]);
+    StreamingLineBuffer_9_pixel_26.run<209, 3>(StreamingLineBuffer_9_buffer_stream[25], StreamingLineBuffer_9_out0_stream[37], StreamingLineBuffer_9_buffer_stream[26]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_37," << StreamingLineBuffer_9_out0_stream[37].size() << std::endl;
     #endif
@@ -6878,7 +6869,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_27;
-    StreamingLineBuffer_9_pixel_27.run<210>(StreamingLineBuffer_9_buffer_stream[26], StreamingLineBuffer_9_out0_stream[36], StreamingLineBuffer_9_buffer_stream[27]);
+    StreamingLineBuffer_9_pixel_27.run<210, 3>(StreamingLineBuffer_9_buffer_stream[26], StreamingLineBuffer_9_out0_stream[36], StreamingLineBuffer_9_buffer_stream[27]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_36," << StreamingLineBuffer_9_out0_stream[36].size() << std::endl;
     #endif
@@ -6905,7 +6896,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_28;
-    StreamingLineBuffer_9_pixel_28.run<211>(StreamingLineBuffer_9_buffer_stream[27], StreamingLineBuffer_9_out0_stream[35], StreamingLineBuffer_9_buffer_stream[28]);
+    StreamingLineBuffer_9_pixel_28.run<211, 3>(StreamingLineBuffer_9_buffer_stream[27], StreamingLineBuffer_9_out0_stream[35], StreamingLineBuffer_9_buffer_stream[28]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_35," << StreamingLineBuffer_9_out0_stream[35].size() << std::endl;
     #endif
@@ -6932,7 +6923,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_29;
-    StreamingLineBuffer_9_pixel_29.run<212>(StreamingLineBuffer_9_buffer_stream[28], StreamingLineBuffer_9_out0_stream[34], StreamingLineBuffer_9_buffer_stream[29]);
+    StreamingLineBuffer_9_pixel_29.run<212, 3>(StreamingLineBuffer_9_buffer_stream[28], StreamingLineBuffer_9_out0_stream[34], StreamingLineBuffer_9_buffer_stream[29]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_34," << StreamingLineBuffer_9_out0_stream[34].size() << std::endl;
     #endif
@@ -6959,7 +6950,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_30;
-    StreamingLineBuffer_9_pixel_30.run<213>(StreamingLineBuffer_9_buffer_stream[29], StreamingLineBuffer_9_out0_stream[33], StreamingLineBuffer_9_buffer_stream[30]);
+    StreamingLineBuffer_9_pixel_30.run<213, 3>(StreamingLineBuffer_9_buffer_stream[29], StreamingLineBuffer_9_out0_stream[33], StreamingLineBuffer_9_buffer_stream[30]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_33," << StreamingLineBuffer_9_out0_stream[33].size() << std::endl;
     #endif
@@ -6986,7 +6977,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_31;
-    StreamingLineBuffer_9_pixel_31.run<214>(StreamingLineBuffer_9_buffer_stream[30], StreamingLineBuffer_9_out0_stream[32], StreamingLineBuffer_9_buffer_stream[31]);
+    StreamingLineBuffer_9_pixel_31.run<214, 3>(StreamingLineBuffer_9_buffer_stream[30], StreamingLineBuffer_9_out0_stream[32], StreamingLineBuffer_9_buffer_stream[31]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_32," << StreamingLineBuffer_9_out0_stream[32].size() << std::endl;
     #endif
@@ -7013,7 +7004,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_32;
-    StreamingLineBuffer_9_pixel_32.run<215>(StreamingLineBuffer_9_buffer_stream[31], StreamingLineBuffer_9_out0_stream[31], StreamingLineBuffer_9_buffer_stream[32]);
+    StreamingLineBuffer_9_pixel_32.run<215, 3>(StreamingLineBuffer_9_buffer_stream[31], StreamingLineBuffer_9_out0_stream[31], StreamingLineBuffer_9_buffer_stream[32]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_31," << StreamingLineBuffer_9_out0_stream[31].size() << std::endl;
     #endif
@@ -7040,7 +7031,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_33;
-    StreamingLineBuffer_9_pixel_33.run<216>(StreamingLineBuffer_9_buffer_stream[32], StreamingLineBuffer_9_out0_stream[30], StreamingLineBuffer_9_buffer_stream[33]);
+    StreamingLineBuffer_9_pixel_33.run<216, 3>(StreamingLineBuffer_9_buffer_stream[32], StreamingLineBuffer_9_out0_stream[30], StreamingLineBuffer_9_buffer_stream[33]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_30," << StreamingLineBuffer_9_out0_stream[30].size() << std::endl;
     #endif
@@ -7067,7 +7058,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_34;
-    StreamingLineBuffer_9_pixel_34.run<217>(StreamingLineBuffer_9_buffer_stream[33], StreamingLineBuffer_9_out0_stream[29], StreamingLineBuffer_9_buffer_stream[34]);
+    StreamingLineBuffer_9_pixel_34.run<217, 3>(StreamingLineBuffer_9_buffer_stream[33], StreamingLineBuffer_9_out0_stream[29], StreamingLineBuffer_9_buffer_stream[34]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_29," << StreamingLineBuffer_9_out0_stream[29].size() << std::endl;
     #endif
@@ -7094,7 +7085,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_35;
-    StreamingLineBuffer_9_pixel_35.run<218>(StreamingLineBuffer_9_buffer_stream[34], StreamingLineBuffer_9_out0_stream[28], StreamingLineBuffer_9_buffer_stream[35]);
+    StreamingLineBuffer_9_pixel_35.run<218, 3>(StreamingLineBuffer_9_buffer_stream[34], StreamingLineBuffer_9_out0_stream[28], StreamingLineBuffer_9_buffer_stream[35]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_28," << StreamingLineBuffer_9_out0_stream[28].size() << std::endl;
     #endif
@@ -7121,7 +7112,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_36;
-    StreamingLineBuffer_9_pixel_36.run<219>(StreamingLineBuffer_9_buffer_stream[35], StreamingLineBuffer_9_out0_stream[27], StreamingLineBuffer_9_buffer_stream[36]);
+    StreamingLineBuffer_9_pixel_36.run<219, 3>(StreamingLineBuffer_9_buffer_stream[35], StreamingLineBuffer_9_out0_stream[27], StreamingLineBuffer_9_buffer_stream[36]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_27," << StreamingLineBuffer_9_out0_stream[27].size() << std::endl;
     #endif
@@ -7148,7 +7139,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_37;
-    StreamingLineBuffer_9_pixel_37.run<220>(StreamingLineBuffer_9_buffer_stream[36], StreamingLineBuffer_9_out0_stream[26], StreamingLineBuffer_9_buffer_stream[37]);
+    StreamingLineBuffer_9_pixel_37.run<220, 3>(StreamingLineBuffer_9_buffer_stream[36], StreamingLineBuffer_9_out0_stream[26], StreamingLineBuffer_9_buffer_stream[37]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_26," << StreamingLineBuffer_9_out0_stream[26].size() << std::endl;
     #endif
@@ -7175,7 +7166,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_38;
-    StreamingLineBuffer_9_pixel_38.run<221>(StreamingLineBuffer_9_buffer_stream[37], StreamingLineBuffer_9_out0_stream[25], StreamingLineBuffer_9_buffer_stream[38]);
+    StreamingLineBuffer_9_pixel_38.run<221, 3>(StreamingLineBuffer_9_buffer_stream[37], StreamingLineBuffer_9_out0_stream[25], StreamingLineBuffer_9_buffer_stream[38]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_25," << StreamingLineBuffer_9_out0_stream[25].size() << std::endl;
     #endif
@@ -7202,7 +7193,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_39;
-    StreamingLineBuffer_9_pixel_39.run<222>(StreamingLineBuffer_9_buffer_stream[38], StreamingLineBuffer_9_out0_stream[24], StreamingLineBuffer_9_buffer_stream[39]);
+    StreamingLineBuffer_9_pixel_39.run<222, 3>(StreamingLineBuffer_9_buffer_stream[38], StreamingLineBuffer_9_out0_stream[24], StreamingLineBuffer_9_buffer_stream[39]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_24," << StreamingLineBuffer_9_out0_stream[24].size() << std::endl;
     #endif
@@ -7229,7 +7220,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_40;
-    StreamingLineBuffer_9_pixel_40.run<223>(StreamingLineBuffer_9_buffer_stream[39], StreamingLineBuffer_9_out0_stream[23], StreamingLineBuffer_9_buffer_stream[40]);
+    StreamingLineBuffer_9_pixel_40.run<223, 3>(StreamingLineBuffer_9_buffer_stream[39], StreamingLineBuffer_9_out0_stream[23], StreamingLineBuffer_9_buffer_stream[40]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_23," << StreamingLineBuffer_9_out0_stream[23].size() << std::endl;
     #endif
@@ -7256,7 +7247,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_41;
-    StreamingLineBuffer_9_pixel_41.run<224>(StreamingLineBuffer_9_buffer_stream[40], StreamingLineBuffer_9_out0_stream[22], StreamingLineBuffer_9_buffer_stream[41]);
+    StreamingLineBuffer_9_pixel_41.run<224, 3>(StreamingLineBuffer_9_buffer_stream[40], StreamingLineBuffer_9_out0_stream[22], StreamingLineBuffer_9_buffer_stream[41]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_22," << StreamingLineBuffer_9_out0_stream[22].size() << std::endl;
     #endif
@@ -7283,7 +7274,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_42;
-    StreamingLineBuffer_9_pixel_42.run<225>(StreamingLineBuffer_9_buffer_stream[41], StreamingLineBuffer_9_out0_stream[21], StreamingLineBuffer_9_buffer_stream[42]);
+    StreamingLineBuffer_9_pixel_42.run<225, 3>(StreamingLineBuffer_9_buffer_stream[41], StreamingLineBuffer_9_out0_stream[21], StreamingLineBuffer_9_buffer_stream[42]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_21," << StreamingLineBuffer_9_out0_stream[21].size() << std::endl;
     #endif
@@ -7310,7 +7301,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_43;
-    StreamingLineBuffer_9_pixel_43.run<226>(StreamingLineBuffer_9_buffer_stream[42], StreamingLineBuffer_9_out0_stream[20], StreamingLineBuffer_9_buffer_stream[43]);
+    StreamingLineBuffer_9_pixel_43.run<226, 3>(StreamingLineBuffer_9_buffer_stream[42], StreamingLineBuffer_9_out0_stream[20], StreamingLineBuffer_9_buffer_stream[43]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_20," << StreamingLineBuffer_9_out0_stream[20].size() << std::endl;
     #endif
@@ -7337,7 +7328,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_44;
-    StreamingLineBuffer_9_pixel_44.run<227>(StreamingLineBuffer_9_buffer_stream[43], StreamingLineBuffer_9_out0_stream[19], StreamingLineBuffer_9_buffer_stream[44]);
+    StreamingLineBuffer_9_pixel_44.run<227, 3>(StreamingLineBuffer_9_buffer_stream[43], StreamingLineBuffer_9_out0_stream[19], StreamingLineBuffer_9_buffer_stream[44]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_19," << StreamingLineBuffer_9_out0_stream[19].size() << std::endl;
     #endif
@@ -7364,7 +7355,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_45;
-    StreamingLineBuffer_9_pixel_45.run<228>(StreamingLineBuffer_9_buffer_stream[44], StreamingLineBuffer_9_out0_stream[18], StreamingLineBuffer_9_buffer_stream[45]);
+    StreamingLineBuffer_9_pixel_45.run<228, 3>(StreamingLineBuffer_9_buffer_stream[44], StreamingLineBuffer_9_out0_stream[18], StreamingLineBuffer_9_buffer_stream[45]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_18," << StreamingLineBuffer_9_out0_stream[18].size() << std::endl;
     #endif
@@ -7391,7 +7382,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_46;
-    StreamingLineBuffer_9_pixel_46.run<229>(StreamingLineBuffer_9_buffer_stream[45], StreamingLineBuffer_9_out0_stream[17], StreamingLineBuffer_9_buffer_stream[46]);
+    StreamingLineBuffer_9_pixel_46.run<229, 3>(StreamingLineBuffer_9_buffer_stream[45], StreamingLineBuffer_9_out0_stream[17], StreamingLineBuffer_9_buffer_stream[46]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_17," << StreamingLineBuffer_9_out0_stream[17].size() << std::endl;
     #endif
@@ -7418,7 +7409,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_47;
-    StreamingLineBuffer_9_pixel_47.run<230>(StreamingLineBuffer_9_buffer_stream[46], StreamingLineBuffer_9_out0_stream[16], StreamingLineBuffer_9_buffer_stream[47]);
+    StreamingLineBuffer_9_pixel_47.run<230, 3>(StreamingLineBuffer_9_buffer_stream[46], StreamingLineBuffer_9_out0_stream[16], StreamingLineBuffer_9_buffer_stream[47]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_16," << StreamingLineBuffer_9_out0_stream[16].size() << std::endl;
     #endif
@@ -7445,7 +7436,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_48;
-    StreamingLineBuffer_9_pixel_48.run<231>(StreamingLineBuffer_9_buffer_stream[47], StreamingLineBuffer_9_out0_stream[15], StreamingLineBuffer_9_buffer_stream[48]);
+    StreamingLineBuffer_9_pixel_48.run<231, 3>(StreamingLineBuffer_9_buffer_stream[47], StreamingLineBuffer_9_out0_stream[15], StreamingLineBuffer_9_buffer_stream[48]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_15," << StreamingLineBuffer_9_out0_stream[15].size() << std::endl;
     #endif
@@ -7472,7 +7463,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_49;
-    StreamingLineBuffer_9_pixel_49.run<232>(StreamingLineBuffer_9_buffer_stream[48], StreamingLineBuffer_9_out0_stream[14], StreamingLineBuffer_9_buffer_stream[49]);
+    StreamingLineBuffer_9_pixel_49.run<232, 3>(StreamingLineBuffer_9_buffer_stream[48], StreamingLineBuffer_9_out0_stream[14], StreamingLineBuffer_9_buffer_stream[49]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_14," << StreamingLineBuffer_9_out0_stream[14].size() << std::endl;
     #endif
@@ -7499,7 +7490,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_50;
-    StreamingLineBuffer_9_pixel_50.run<233>(StreamingLineBuffer_9_buffer_stream[49], StreamingLineBuffer_9_out0_stream[13], StreamingLineBuffer_9_buffer_stream[50]);
+    StreamingLineBuffer_9_pixel_50.run<233, 3>(StreamingLineBuffer_9_buffer_stream[49], StreamingLineBuffer_9_out0_stream[13], StreamingLineBuffer_9_buffer_stream[50]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_13," << StreamingLineBuffer_9_out0_stream[13].size() << std::endl;
     #endif
@@ -7526,7 +7517,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_51;
-    StreamingLineBuffer_9_pixel_51.run<234>(StreamingLineBuffer_9_buffer_stream[50], StreamingLineBuffer_9_out0_stream[12], StreamingLineBuffer_9_buffer_stream[51]);
+    StreamingLineBuffer_9_pixel_51.run<234, 3>(StreamingLineBuffer_9_buffer_stream[50], StreamingLineBuffer_9_out0_stream[12], StreamingLineBuffer_9_buffer_stream[51]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_12," << StreamingLineBuffer_9_out0_stream[12].size() << std::endl;
     #endif
@@ -7553,7 +7544,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_52;
-    StreamingLineBuffer_9_pixel_52.run<235>(StreamingLineBuffer_9_buffer_stream[51], StreamingLineBuffer_9_out0_stream[11], StreamingLineBuffer_9_buffer_stream[52]);
+    StreamingLineBuffer_9_pixel_52.run<235, 3>(StreamingLineBuffer_9_buffer_stream[51], StreamingLineBuffer_9_out0_stream[11], StreamingLineBuffer_9_buffer_stream[52]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_11," << StreamingLineBuffer_9_out0_stream[11].size() << std::endl;
     #endif
@@ -7580,7 +7571,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_53;
-    StreamingLineBuffer_9_pixel_53.run<236>(StreamingLineBuffer_9_buffer_stream[52], StreamingLineBuffer_9_out0_stream[10], StreamingLineBuffer_9_buffer_stream[53]);
+    StreamingLineBuffer_9_pixel_53.run<236, 3>(StreamingLineBuffer_9_buffer_stream[52], StreamingLineBuffer_9_out0_stream[10], StreamingLineBuffer_9_buffer_stream[53]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_10," << StreamingLineBuffer_9_out0_stream[10].size() << std::endl;
     #endif
@@ -7607,7 +7598,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_54;
-    StreamingLineBuffer_9_pixel_54.run<237>(StreamingLineBuffer_9_buffer_stream[53], StreamingLineBuffer_9_out0_stream[9], StreamingLineBuffer_9_buffer_stream[54]);
+    StreamingLineBuffer_9_pixel_54.run<237, 3>(StreamingLineBuffer_9_buffer_stream[53], StreamingLineBuffer_9_out0_stream[9], StreamingLineBuffer_9_buffer_stream[54]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_9," << StreamingLineBuffer_9_out0_stream[9].size() << std::endl;
     #endif
@@ -7634,7 +7625,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_55;
-    StreamingLineBuffer_9_pixel_55.run<238>(StreamingLineBuffer_9_buffer_stream[54], StreamingLineBuffer_9_out0_stream[8], StreamingLineBuffer_9_buffer_stream[55]);
+    StreamingLineBuffer_9_pixel_55.run<238, 3>(StreamingLineBuffer_9_buffer_stream[54], StreamingLineBuffer_9_out0_stream[8], StreamingLineBuffer_9_buffer_stream[55]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_8," << StreamingLineBuffer_9_out0_stream[8].size() << std::endl;
     #endif
@@ -7661,7 +7652,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_56;
-    StreamingLineBuffer_9_pixel_56.run<239>(StreamingLineBuffer_9_buffer_stream[55], StreamingLineBuffer_9_out0_stream[7], StreamingLineBuffer_9_buffer_stream[56]);
+    StreamingLineBuffer_9_pixel_56.run<239, 3>(StreamingLineBuffer_9_buffer_stream[55], StreamingLineBuffer_9_out0_stream[7], StreamingLineBuffer_9_buffer_stream[56]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_7," << StreamingLineBuffer_9_out0_stream[7].size() << std::endl;
     #endif
@@ -7688,7 +7679,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_57;
-    StreamingLineBuffer_9_pixel_57.run<240>(StreamingLineBuffer_9_buffer_stream[56], StreamingLineBuffer_9_out0_stream[6], StreamingLineBuffer_9_buffer_stream[57]);
+    StreamingLineBuffer_9_pixel_57.run<240, 3>(StreamingLineBuffer_9_buffer_stream[56], StreamingLineBuffer_9_out0_stream[6], StreamingLineBuffer_9_buffer_stream[57]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_6," << StreamingLineBuffer_9_out0_stream[6].size() << std::endl;
     #endif
@@ -7715,7 +7706,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_58;
-    StreamingLineBuffer_9_pixel_58.run<241>(StreamingLineBuffer_9_buffer_stream[57], StreamingLineBuffer_9_out0_stream[5], StreamingLineBuffer_9_buffer_stream[58]);
+    StreamingLineBuffer_9_pixel_58.run<241, 3>(StreamingLineBuffer_9_buffer_stream[57], StreamingLineBuffer_9_out0_stream[5], StreamingLineBuffer_9_buffer_stream[58]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_5," << StreamingLineBuffer_9_out0_stream[5].size() << std::endl;
     #endif
@@ -7742,7 +7733,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_59;
-    StreamingLineBuffer_9_pixel_59.run<242>(StreamingLineBuffer_9_buffer_stream[58], StreamingLineBuffer_9_out0_stream[4], StreamingLineBuffer_9_buffer_stream[59]);
+    StreamingLineBuffer_9_pixel_59.run<242, 3>(StreamingLineBuffer_9_buffer_stream[58], StreamingLineBuffer_9_out0_stream[4], StreamingLineBuffer_9_buffer_stream[59]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_4," << StreamingLineBuffer_9_out0_stream[4].size() << std::endl;
     #endif
@@ -7769,7 +7760,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_60;
-    StreamingLineBuffer_9_pixel_60.run<243>(StreamingLineBuffer_9_buffer_stream[59], StreamingLineBuffer_9_out0_stream[3], StreamingLineBuffer_9_buffer_stream[60]);
+    StreamingLineBuffer_9_pixel_60.run<243, 3>(StreamingLineBuffer_9_buffer_stream[59], StreamingLineBuffer_9_out0_stream[3], StreamingLineBuffer_9_buffer_stream[60]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_3," << StreamingLineBuffer_9_out0_stream[3].size() << std::endl;
     #endif
@@ -7796,7 +7787,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_61;
-    StreamingLineBuffer_9_pixel_61.run<244>(StreamingLineBuffer_9_buffer_stream[60], StreamingLineBuffer_9_out0_stream[2], StreamingLineBuffer_9_buffer_stream[61]);
+    StreamingLineBuffer_9_pixel_61.run<244, 3>(StreamingLineBuffer_9_buffer_stream[60], StreamingLineBuffer_9_out0_stream[2], StreamingLineBuffer_9_buffer_stream[61]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_2," << StreamingLineBuffer_9_out0_stream[2].size() << std::endl;
     #endif
@@ -7823,7 +7814,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_62;
-    StreamingLineBuffer_9_pixel_62.run<245>(StreamingLineBuffer_9_buffer_stream[61], StreamingLineBuffer_9_out0_stream[1], StreamingLineBuffer_9_buffer_stream[62]);
+    StreamingLineBuffer_9_pixel_62.run<245, 3>(StreamingLineBuffer_9_buffer_stream[61], StreamingLineBuffer_9_out0_stream[1], StreamingLineBuffer_9_buffer_stream[62]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_1," << StreamingLineBuffer_9_out0_stream[1].size() << std::endl;
     #endif
@@ -7850,7 +7841,7 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_63;
-    StreamingLineBuffer_9_pixel_63.run<246>(StreamingLineBuffer_9_buffer_stream[62], StreamingLineBuffer_9_out0_stream[0]);
+    StreamingLineBuffer_9_pixel_63.run<246, 3>(StreamingLineBuffer_9_buffer_stream[62], StreamingLineBuffer_9_out0_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_0," << StreamingLineBuffer_9_out0_stream[0].size() << std::endl;
     #endif
@@ -7870,14 +7861,12 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         2,  // CH_PAR
         1  // W_PAR
     > StreamingMaxPool_0;
-    StreamingMaxPool_0.run<247>(StreamingLineBuffer_9_out0_stream, StreamingMaxPool_0_out0_stream);
+    StreamingMaxPool_0.run<247, 3>(StreamingLineBuffer_9_out0_stream, StreamingMaxPool_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingMaxPool_0_out0_stream_0," << StreamingMaxPool_0_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_9_weights[160][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_9_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_9_weights dim=2 complete
-    ap_int<16> StreamingConv_9_biases[5][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_9_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_9_biases dim=2 complete
     StreamingConv <
@@ -7906,23 +7895,9 @@ void resnet8(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<
         2,  // OUT_CH_PAR
         1  // W_PAR
     > StreamingConv_9;
-    StreamingConv_9.run<248>(StreamingMaxPool_0_out0_stream, StreamingConv_9_weights, StreamingConv_9_biases, StreamingConv_9_out0_stream);
+    StreamingConv_9.run<248, 3>(StreamingMaxPool_0_out0_stream, StreamingConv_9_weights, StreamingConv_9_biases, StreamingConv_9_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_9_out0_stream_0," << StreamingConv_9_out0_stream[0].size() << std::endl;
     #endif
-    StreamToNHWC <
-        std::array<ap_int<8>, 2>,  // TInputStruct
-        ap_int<8>,  // TInput
-        ap_axiu<128, 0, 0, 0>,  // TOutputStruct
-        ap_uint<128>,  // TOutput
-        DequantQuantEqual<ap_int<8>>,  // Quantizer
-        6,  // ITER
-        16,  // DATA_PER_WORD
-        1,  // HEIGHT
-        1,  // WIDTH
-        10,  // CH
-        1,  // IN_W_PAR
-        2  // IN_CH_PAR
-    > StreamToNHWC_0;
-    StreamToNHWC_0.run<249>(StreamingConv_9_out0_stream, global_out);
+    s2mm<ap_int<8>, 2, 1, 5, 3>(StreamingConv_9_out0_stream, out_data);
 }

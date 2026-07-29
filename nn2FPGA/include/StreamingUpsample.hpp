@@ -134,17 +134,19 @@ public:
     return st.actor_status;
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_data[IN_W_PAR],
            hls::stream<TOutputWord> o_data[OUT_W_PAR]) {
-    TOutputWord buffer[IN_WIDTH * IN_CH / (IN_W_PAR * CH_PAR)][IN_W_PAR];
-    for (size_t i_h = 0; i_h < IN_HEIGHT; i_h++) {
-      for (size_t sf_h = 0; sf_h < SCALE_FACTOR; sf_h++) {
-        for (size_t i_wch = 0; i_wch < IN_WIDTH * IN_CH / (IN_W_PAR * CH_PAR);
-             i_wch++) {
-        STREAMINGUPSAMPLE_RUN_LOOP:
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      TOutputWord buffer[IN_WIDTH * IN_CH / (IN_W_PAR * CH_PAR)][IN_W_PAR];
+      for (size_t i_h = 0; i_h < IN_HEIGHT; i_h++) {
+        for (size_t sf_h = 0; sf_h < SCALE_FACTOR; sf_h++) {
+          for (size_t i_wch = 0; i_wch < IN_WIDTH * IN_CH / (IN_W_PAR * CH_PAR);
+               i_wch++) {
+          STREAMINGUPSAMPLE_RUN_LOOP:
 #pragma HLS pipeline II = 1
-          StreamingUpsample::pipeline_body(i_data, buffer, o_data, sf_h, i_wch);
+            StreamingUpsample::pipeline_body(i_data, buffer, o_data, sf_h, i_wch);
+          }
         }
       }
     }

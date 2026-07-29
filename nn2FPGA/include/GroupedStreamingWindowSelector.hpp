@@ -166,18 +166,20 @@ public:
     st.init(pipeline_depth, shift_stream_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TWord> &i_data, hls::stream<TWord> &o_data,
            hls::stream<TWord> &o_shift_data) {
 
-    for (size_t i_h = 0; i_h < IN_HEIGHT; i_h++) {
-      for (size_t i_w = W_STREAM, i_w_stride = 0; i_w < IN_WIDTH;
-           i_w += W_PAR, i_w_stride++) {
-      WINDOWSELECTOR_RUN_LOOP:
-        for (size_t i_ch = 0; i_ch < IN_CH / CH_PAR; i_ch++) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_h = 0; i_h < IN_HEIGHT; i_h++) {
+        for (size_t i_w = W_STREAM, i_w_stride = 0; i_w < IN_WIDTH;
+             i_w += W_PAR, i_w_stride++) {
+        WINDOWSELECTOR_RUN_LOOP:
+          for (size_t i_ch = 0; i_ch < IN_CH / CH_PAR; i_ch++) {
 #pragma HLS pipeline II = 1
-          StreamingWindowSelector::pipeline_body(i_data, o_data, o_shift_data,
-                                                 i_h, i_w, i_w_stride);
+            StreamingWindowSelector::pipeline_body(i_data, o_data, o_shift_data,
+                                                   i_h, i_w, i_w_stride);
+          }
         }
       }
     }
@@ -261,16 +263,18 @@ public:
     return st.actor_status;
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TWord> &i_data, hls::stream<TWord> &o_data) {
-    for (size_t i_h = 0; i_h < IN_HEIGHT; i_h++) {
-      for (size_t i_w = W_STREAM, i_w_stride = 0; i_w < IN_WIDTH;
-           i_w += W_PAR, i_w_stride++) {
-      WINDOWSELECTOR_RUN_LOOP:
-        for (size_t i_ch = 0; i_ch < IN_CH / CH_PAR; i_ch++) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_h = 0; i_h < IN_HEIGHT; i_h++) {
+        for (size_t i_w = W_STREAM, i_w_stride = 0; i_w < IN_WIDTH;
+             i_w += W_PAR, i_w_stride++) {
+        WINDOWSELECTOR_RUN_LOOP:
+          for (size_t i_ch = 0; i_ch < IN_CH / CH_PAR; i_ch++) {
 #pragma HLS pipeline II = 1
-          StreamingWindowSelector::pipeline_body(i_data, o_data, i_h, i_w,
-                                                 i_w_stride);
+            StreamingWindowSelector::pipeline_body(i_data, o_data, i_h, i_w,
+                                                   i_w_stride);
+          }
         }
       }
     }

@@ -130,29 +130,31 @@ public:
     return st.actor_status;
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TVInputWord> i_data_v[DIM_HEADS],
            hls::stream<TPInputWord> i_data_p[DIM_HEADS],
            hls::stream<TOutputWord> o_data_vp[DIM_HEADS]) {
 
-    TVInputWord v_matrix[DIM_HEADS][DIM_V][DIM_SEQ / REDUCE_PAR];
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      TVInputWord v_matrix[DIM_HEADS][DIM_V][DIM_SEQ / REDUCE_PAR];
 #pragma HLS array_partition variable = v_matrix complete dim = 4
-    TPInputWord p_row[DIM_SEQ / REDUCE_PAR];
+      TPInputWord p_row[DIM_SEQ / REDUCE_PAR];
 #pragma HLS array_partition variable = p_row complete dim = 2
-    TAcc acc;
+      TAcc acc;
 
-    for (size_t i_pcol = 0; i_pcol < DIM_P; i_pcol++) {
-      for (size_t i_heads = 0; i_heads < DIM_HEADS; i_heads++) {
-        for (size_t i_vrow = 0; i_vrow < DIM_V; i_vrow++) {
-          for (size_t i_group_reduce = 0; i_group_reduce < DIM_SEQ / REDUCE_PAR;
-               i_group_reduce++) {
+      for (size_t i_pcol = 0; i_pcol < DIM_P; i_pcol++) {
+        for (size_t i_heads = 0; i_heads < DIM_HEADS; i_heads++) {
+          for (size_t i_vrow = 0; i_vrow < DIM_V; i_vrow++) {
+            for (size_t i_group_reduce = 0; i_group_reduce < DIM_SEQ / REDUCE_PAR;
+                 i_group_reduce++) {
 #pragma HLS loop_flatten
 #pragma HLS PIPELINE II = 1
-            VPMatMul::pipeline_body(i_data_v[i_heads], i_data_p[i_heads],
-                                    o_data_vp[i_heads], i_pcol, i_vrow,
-                                    i_group_reduce, acc,
-                                    v_matrix[i_heads][i_vrow][i_group_reduce],
-                                    p_row[i_group_reduce]);
+              VPMatMul::pipeline_body(i_data_v[i_heads], i_data_p[i_heads],
+                                      o_data_vp[i_heads], i_pcol, i_vrow,
+                                      i_group_reduce, acc,
+                                      v_matrix[i_heads][i_vrow][i_group_reduce],
+                                      p_row[i_group_reduce]);
+            }
           }
         }
       }

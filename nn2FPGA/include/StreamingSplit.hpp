@@ -142,15 +142,17 @@ public:
     return st.actor_status;
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_data[W_PAR],
            hls::stream<TOutputWord> o_data_1[W_PAR],
            hls::stream<TOutputWord> o_data_2[W_PAR]) {
-    for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH / W_PAR; i_hw++) {
-    STREAMINGSPLITCHANNELS_RUN_LOOP:
-      for (size_t i_ch = 0; i_ch < IN_CH; i_ch += CH_PAR) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH / W_PAR; i_hw++) {
+      STREAMINGSPLITCHANNELS_RUN_LOOP:
+        for (size_t i_ch = 0; i_ch < IN_CH; i_ch += CH_PAR) {
 #pragma HLS PIPELINE II = 1
-        pipeline_body(i_data, o_data_1, o_data_2, i_ch);
+          pipeline_body(i_data, o_data_1, o_data_2, i_ch);
+        }
       }
     }
   }
@@ -225,16 +227,18 @@ public:
     st.init(pipeline_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_data[W_PAR],
            hls::stream<TOutputWord> o_data_1[W_PAR],
            hls::stream<TOutputWord> o_data_2[W_PAR]) {
-    for (size_t i_h = 0; i_h < IN_HEIGHT; i_h++) {
-      for (size_t i_w = 0; i_w < IN_WIDTH; i_w += W_PAR) {
-      STREAMINGSPLITWIDTHS_RUN_LOOP:
-        for (size_t i_ch = 0; i_ch < IN_CH; i_ch += CH_PAR) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_h = 0; i_h < IN_HEIGHT; i_h++) {
+        for (size_t i_w = 0; i_w < IN_WIDTH; i_w += W_PAR) {
+        STREAMINGSPLITWIDTHS_RUN_LOOP:
+          for (size_t i_ch = 0; i_ch < IN_CH; i_ch += CH_PAR) {
 #pragma HLS PIPELINE II = 1
-          pipeline_body(i_data, o_data_1, o_data_2, i_w);
+            pipeline_body(i_data, o_data_1, o_data_2, i_w);
+          }
         }
       }
     }
@@ -395,15 +399,17 @@ public:
     st.init(pipeline_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_data[W_PAR],
            hls::stream<TOutputWord> o_data_1[W_PAR],
            hls::stream<TOutputWord> o_data_2[W_PAR]) {
-    for (size_t i_h = 0; i_h < IN_HEIGHT; i_h++) {
-      for (size_t i_w = 0; i_w < IN_WIDTH; i_w += W_PAR) {
-        for (size_t i_ch = 0; i_ch < IN_CH; i_ch += CH_PAR) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_h = 0; i_h < IN_HEIGHT; i_h++) {
+        for (size_t i_w = 0; i_w < IN_WIDTH; i_w += W_PAR) {
+          for (size_t i_ch = 0; i_ch < IN_CH; i_ch += CH_PAR) {
 #pragma HLS PIPELINE II = 1
-          pipeline_body(i_data, o_data_1, o_data_2, i_h);
+            pipeline_body(i_data, o_data_1, o_data_2, i_h);
+          }
         }
       }
     }

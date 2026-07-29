@@ -134,69 +134,73 @@ public:
     st.init(pipeline_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_data[FH * FW_EXPAND],
            hls::stream<TWeightWord> i_weights[FH * FW],
            hls::stream<TBiasWord> i_biases[1],
            hls::stream<TOutputWord> o_data[W_PAR]) {
 
-    // Accumulator buffer.
-    // The order of the loops impose that for each input window, we process
-    // all the output channels, thus we need to store an accumulator for
-    // each output channel.
-    // The number of accumulators used in parallel (i.e. the partitioning of the
-    // memory) are determined by OUT_CH_PAR and W_PAR. This means that at each
-    // clock cycle, the convolution will process OUT_CH_PAR output channels and
-    // W_PAR input windows.
-    TPartialSum acc_buff[OUT_CH / OUT_CH_PAR][OUT_CH_PAR * W_PAR];
-#pragma HLS ARRAY_PARTITION variable = acc_buff dim = 2 complete
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      // Accumulator buffer.
+      // The order of the loops impose that for each input window, we process
+      // all the output channels, thus we need to store an accumulator for
+      // each output channel.
+      // The number of accumulators used in parallel (i.e. the partitioning of the
+      // memory) are determined by OUT_CH_PAR and W_PAR. This means that at each
+      // clock cycle, the convolution will process OUT_CH_PAR output channels and
+      // W_PAR input windows.
+      TPartialSum acc_buff[OUT_CH / OUT_CH_PAR][OUT_CH_PAR * W_PAR];
+  #pragma HLS ARRAY_PARTITION variable = acc_buff dim = 2 complete
 
-    // Input structure to hold the input data.
-    TInputWord input_data[FH][FW_EXPAND];
-#pragma HLS ARRAY_PARTITION variable = input_data dim = 0
+      // Input structure to hold the input data.
+      TInputWord input_data[FH][FW_EXPAND];
+  #pragma HLS ARRAY_PARTITION variable = input_data dim = 0
 
-    for (size_t i_hw = 0; i_hw < OUT_HEIGHT * OUT_WIDTH / W_PAR; i_hw++) {
-      for (size_t i_ich = 0; i_ich < IN_CH; i_ich += IN_CH_PAR) {
-      STREAMINGCONV_RUN_LOOP:
-        for (size_t i_och = 0; i_och < OUT_CH; i_och += OUT_CH_PAR) {
-#pragma HLS pipeline II = 1
-          StreamingConv::pipeline_body(i_data, i_weights, i_biases, o_data,
-                                       input_data, acc_buff[i_och / OUT_CH_PAR],
-                                       i_ich, i_och);
+      for (size_t i_hw = 0; i_hw < OUT_HEIGHT * OUT_WIDTH / W_PAR; i_hw++) {
+        for (size_t i_ich = 0; i_ich < IN_CH; i_ich += IN_CH_PAR) {
+        STREAMINGCONV_RUN_LOOP:
+          for (size_t i_och = 0; i_och < OUT_CH; i_och += OUT_CH_PAR) {
+  #pragma HLS pipeline II = 1
+            StreamingConv::pipeline_body(i_data, i_weights, i_biases, o_data,
+                                         input_data, acc_buff[i_och / OUT_CH_PAR],
+                                         i_ich, i_och);
+          }
         }
       }
     }
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_data[FH * FW_EXPAND],
            TWeight i_weights[CH_GROUPS][OUT_CH_PAR * IN_CH_PAR][FH * FW],
            TBias i_biases[OUT_CH / OUT_CH_PAR][OUT_CH_PAR][1],
            hls::stream<TOutputWord> o_data[W_PAR]) {
 
-    // Accumulator buffer.
-    // The order of the loops impose that for each input window, we process
-    // all the output channels, thus we need to store an accumulator for
-    // each output channel.
-    // The number of accumulators used in parallel (i.e. the partitioning of the
-    // memory) are determined by OUT_CH_PAR and W_PAR. This means that at each
-    // clock cycle, the convolution will process OUT_CH_PAR output channels and
-    // W_PAR input windows.
-    TPartialSum acc_buff[OUT_CH / OUT_CH_PAR][OUT_CH_PAR * W_PAR];
-#pragma HLS ARRAY_PARTITION variable = acc_buff dim = 2 complete
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      // Accumulator buffer.
+      // The order of the loops impose that for each input window, we process
+      // all the output channels, thus we need to store an accumulator for
+      // each output channel.
+      // The number of accumulators used in parallel (i.e. the partitioning of the
+      // memory) are determined by OUT_CH_PAR and W_PAR. This means that at each
+      // clock cycle, the convolution will process OUT_CH_PAR output channels and
+      // W_PAR input windows.
+      TPartialSum acc_buff[OUT_CH / OUT_CH_PAR][OUT_CH_PAR * W_PAR];
+  #pragma HLS ARRAY_PARTITION variable = acc_buff dim = 2 complete
 
-    // Input structure to hold the input data.
-    TInputWord input_data[FH][FW_EXPAND];
-#pragma HLS ARRAY_PARTITION variable = input_data dim = 0
+      // Input structure to hold the input data.
+      TInputWord input_data[FH][FW_EXPAND];
+  #pragma HLS ARRAY_PARTITION variable = input_data dim = 0
 
-    for (size_t i_hw = 0; i_hw < OUT_HEIGHT * OUT_WIDTH / W_PAR; i_hw++) {
-      for (size_t i_ich = 0, weight_group = 0; i_ich < IN_CH; i_ich += IN_CH_PAR) {
-      STREAMINGCONV_RUN_LOOP:
-        for (size_t i_och = 0, bias_group = 0; i_och < OUT_CH; i_och += OUT_CH_PAR, bias_group++, weight_group++) {
-#pragma HLS pipeline II = 1
-          StreamingConv::pipeline_body(i_data, i_weights[weight_group], i_biases[bias_group], o_data,
-                                       input_data, acc_buff[i_och / OUT_CH_PAR],
-                                       i_ich, i_och);
+      for (size_t i_hw = 0; i_hw < OUT_HEIGHT * OUT_WIDTH / W_PAR; i_hw++) {
+        for (size_t i_ich = 0, weight_group = 0; i_ich < IN_CH; i_ich += IN_CH_PAR) {
+        STREAMINGCONV_RUN_LOOP:
+          for (size_t i_och = 0, bias_group = 0; i_och < OUT_CH; i_och += OUT_CH_PAR, bias_group++, weight_group++) {
+  #pragma HLS pipeline II = 1
+            StreamingConv::pipeline_body(i_data, i_weights[weight_group], i_biases[bias_group], o_data,
+                                         input_data, acc_buff[i_och / OUT_CH_PAR],
+                                         i_ich, i_och);
+          }
         }
       }
     }

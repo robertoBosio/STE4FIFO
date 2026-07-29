@@ -72,21 +72,23 @@ public:
 
   StreamToNHWC() = default;
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> input_data_stream[IN_W_PAR],
            hls::stream<TOutputWord> &output_data_stream) {
-    TInput circular_buffer[DATA_PER_WORD * 2];
-    ap_uint<bits_for(DATA_PER_WORD * 2)> head = 0;
-    ap_uint<1> tail = 0;
-    ap_uint<bits_for((DATA_PER_WORD * 2) + 1)> size = 0;
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      TInput circular_buffer[DATA_PER_WORD * 2];
+      ap_uint<bits_for(DATA_PER_WORD * 2)> head = 0;
+      ap_uint<1> tail = 0;
+      ap_uint<bits_for((DATA_PER_WORD * 2) + 1)> size = 0;
 
-    // Loop through the input height and width.
-  STREAM_TO_NHWC_MAINLOOP:
-    for (size_t i_input_word = 0; i_input_word < ITER; i_input_word++) {
+      // Loop through the input height and width.
+    STREAM_TO_NHWC_MAINLOOP:
+      for (size_t i_input_word = 0; i_input_word < ITER; i_input_word++) {
 #pragma HLS pipeline II = 1
-      StreamToNHWC::pipeline_body(input_data_stream, output_data_stream,
-                                  circular_buffer, head, size, tail,
-                                  i_input_word);
+        StreamToNHWC::pipeline_body(input_data_stream, output_data_stream,
+                                    circular_buffer, head, size, tail,
+                                    i_input_word);
+      }
     }
   }
 

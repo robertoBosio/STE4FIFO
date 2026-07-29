@@ -41,7 +41,7 @@ def benchmark_by_name(name: str) -> Benchmark:
 
 def make_table1_tcl(root: Path, benchmark: Benchmark, generated_dir: Path) -> Path:
     bench_dir = root / benchmark.directory
-    project_name = f"{benchmark.top}_table1_mem_HLS_project"
+    project_dir = generated_dir / benchmark.directory / f"{benchmark.top}_table1_mem_HLS_project"
     argv_files = " ".join(f"[file normalize [file join $script_dir data {name}]]" for name in benchmark.argv_files)
     tcl = f"""set script_dir  [file normalize \"{bench_dir}\"]
 set inc_dir     [file normalize [file join $script_dir ../nn2FPGA/include]]
@@ -49,10 +49,10 @@ set kernel_cpp  [file normalize [file join $script_dir kernels/kernel_mem.cpp]]
 set tb_cpp      [file normalize [file join $script_dir testbenches/testbench_mem.cpp]]
 set argv_files  [list {argv_files}]
 set cosim_argv  [join $argv_files " "]
-set proj_name   \"{project_name}\"
+set proj_dir    [file normalize \"{project_dir}\"]
 set sol_name    \"solution_0\"
 
-open_project -reset $proj_name
+open_project -reset $proj_dir
 set_top {benchmark.top}
 add_files $kernel_cpp -cflags [format {{-I%s}} $inc_dir]
 add_files -tb $tb_cpp -cflags [format {{-I%s}} $inc_dir]
@@ -78,11 +78,11 @@ def run_hls(root: Path, benchmark: Benchmark, tcl: Path) -> None:
     vitis_hls = shutil.which("vitis_hls")
     if vitis_hls is None:
         raise RuntimeError("vitis_hls not found in PATH")
-    subprocess.run([vitis_hls, "-f", str(tcl)], cwd=root / benchmark.directory, check=True)
+    subprocess.run([vitis_hls, "-f", str(tcl)], cwd=root, check=True)
 
 
-def project_dir(root: Path, benchmark: Benchmark) -> Path:
-    return root / benchmark.directory / f"{benchmark.top}_table1_mem_HLS_project" / "solution_0"
+def project_dir(root: Path, benchmark: Benchmark, generated_dir: Path) -> Path:
+    return generated_dir / benchmark.directory / f"{benchmark.top}_table1_mem_HLS_project" / "solution_0"
 
 
 def parse_cosim_report(solution_dir: Path, benchmark: Benchmark) -> tuple[str, str]:
@@ -127,9 +127,8 @@ def parse_fifos(root: Path, solution_dir: Path, benchmark: Benchmark) -> int:
     return int(match.group(1))
 
 
-def collect_row(root: Path, benchmark: Benchmark) -> dict[str, str | int]:
-    solution_dir = project_dir(root, benchmark)
-    print(solution_dir)
+def collect_row(root: Path, benchmark: Benchmark, generated_dir: Path) -> dict[str, str | int]:
+    solution_dir = project_dir(root, benchmark, generated_dir)
     latency, ii = parse_cosim_report(solution_dir, benchmark)
     return {
         "benchmark": benchmark.name,
@@ -158,12 +157,12 @@ def print_table(rows: list[dict[str, str | int]]) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run and report Table I HLS/cosim metrics.")
-    parser.add_argument("benchmarks", nargs="*", help="Optional benchmark names to run/report.")
+    parser.add_argument("--benchmark", action="append", help="Benchmark to run. May be repeated.")
     parser.add_argument("--parse-only", action="store_true", help="Only parse existing reports; do not run Vitis HLS.")
     args = parser.parse_args()
 
     root = repo_root()
-    benchmarks = [benchmark_by_name(name) for name in args.benchmarks] if args.benchmarks else BENCHMARKS
+    benchmarks = [benchmark_by_name(name) for name in args.benchmark] if args.benchmark else BENCHMARKS
     generated_dir = root / "artifact" / "table1" / "generated"
 
     if not args.parse_only:
@@ -171,7 +170,7 @@ def main() -> int:
             tcl = make_table1_tcl(root, benchmark, generated_dir)
             run_hls(root, benchmark, tcl)
 
-    rows = [collect_row(root, benchmark) for benchmark in benchmarks]
+    rows = [collect_row(root, benchmark, generated_dir) for benchmark in benchmarks]
     print_table(rows)
     return 0
 

@@ -15,15 +15,17 @@ public:
                 "IN_HEIGHT and IN_WIDTH must be greater than 0");
   TransposeRowCol() = default;
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TWord> i_data[1], hls::stream<TWord> o_data[1]) {
-    TWord buffer[IN_HEIGHT * IN_WIDTH * IN_CH];
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      TWord buffer[IN_HEIGHT * IN_WIDTH * IN_CH];
 #pragma HLS array_partition variable = buffer complete dim = 2
-    for (size_t i_step = 0; i_step < 2; i_step++) {
-    TRANSPOSE_RUN_LOOP:
-      for (size_t index = 0; index < IN_HEIGHT * IN_WIDTH * IN_CH; index++) {
+      for (size_t i_step = 0; i_step < 2; i_step++) {
+      TRANSPOSE_RUN_LOOP:
+        for (size_t index = 0; index < IN_HEIGHT * IN_WIDTH * IN_CH; index++) {
 #pragma HLS PIPELINE II = 1
-        TransposeRowCol::pipeline_body(i_data, o_data, buffer, i_step, index);
+          TransposeRowCol::pipeline_body(i_data, o_data, buffer, i_step, index);
+        }
       }
     }
   }

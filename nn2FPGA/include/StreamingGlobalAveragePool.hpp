@@ -94,22 +94,24 @@ public:
     st.init(pipeline_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_data[1],
            hls::stream<TOutputWord> o_data[1]) {
-    TAcc s_acc_buff[OUT_CH / OUT_CH_PAR]
-                   [OUT_CH_PAR]; // Accumulator buffer for each output channel.
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      TAcc s_acc_buff[OUT_CH / OUT_CH_PAR]
+                     [OUT_CH_PAR]; // Accumulator buffer for each output channel.
 #pragma HLS array_partition variable = s_acc_buff dim = 2
 
-    // Loop through the input height and width.
-    for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH; i_hw++) {
-      // Loop through the output channels, with a step size equal to the number
-      // of channels processed in parallel.
-    STREAMINGGLOBALAVERAGEPOOL_RUN_LOOP:
-      for (size_t i_och = 0; i_och < OUT_CH / OUT_CH_PAR; i_och++) {
+      // Loop through the input height and width.
+      for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH; i_hw++) {
+        // Loop through the output channels, with a step size equal to the number
+        // of channels processed in parallel.
+      STREAMINGGLOBALAVERAGEPOOL_RUN_LOOP:
+        for (size_t i_och = 0; i_och < OUT_CH / OUT_CH_PAR; i_och++) {
 #pragma HLS pipeline II = 1
-        StreamingGlobalAveragePool::pipeline_body(i_data, o_data,
-                                                  s_acc_buff[i_och], i_hw);
+          StreamingGlobalAveragePool::pipeline_body(i_data, o_data,
+                                                    s_acc_buff[i_och], i_hw);
+        }
       }
     }
   }

@@ -100,15 +100,17 @@ public:
     st.init(pipeline_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_data[FH * FW_EXPAND],
            hls::stream<TOutputWord> o_data[W_PAR]) {
 
-    for (size_t i_hw = 0; i_hw < OUT_HEIGHT * OUT_WIDTH / W_PAR; i_hw++) {
-    MAXPOOL_RUN_LOOP:
-      for (size_t i_ch = 0; i_ch < OUT_CH; i_ch += CH_PAR) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_hw = 0; i_hw < OUT_HEIGHT * OUT_WIDTH / W_PAR; i_hw++) {
+      MAXPOOL_RUN_LOOP:
+        for (size_t i_ch = 0; i_ch < OUT_CH; i_ch += CH_PAR) {
 #pragma HLS pipeline II = 1
-        StreamingAveragePool::pipeline_body(i_data, o_data);
+          StreamingAveragePool::pipeline_body(i_data, o_data);
+        }
       }
     }
   }

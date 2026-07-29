@@ -1,3 +1,4 @@
+#include "utils/stream_utils.hpp"
 /*
 * This file was automatically generated using csnake v0.4.0.
 *
@@ -15,2079 +16,2215 @@
 #include "hls_vector.h"
 #include "ap_axi_sdata.h"
 #include "StreamingUpsample.hpp"
-#include "StreamingAveragePool.hpp"
-#include "StreamingDepthwiseConv.hpp"
-#include "StreamingPad.hpp"
+#include "GroupedStreamingAveragePool.hpp"
+#include "GroupedStreamingDepthwiseConv.hpp"
+#include "GroupedStreamingPad.hpp"
 #include "StreamingReshape.hpp"
-#include "StreamingMaxPool.hpp"
-#include "StreamingSoftmax.hpp"
+#include "GroupedStreamingMaxPool.hpp"
 #include "StreamingGlobalAveragePool.hpp"
-#include "StreamingConv.hpp"
+#include "GroupedStreamingConv.hpp"
 #include "StreamingMul.hpp"
 #include "DequantQuant.hpp"
 #include "TensorDuplicator.hpp"
 #include "StreamingConcat.hpp"
-#include "StreamingWindowSelector.hpp"
+#include "GroupedStreamingWindowSelector.hpp"
 #include "StreamingLUT.hpp"
 #include "StreamingSplit.hpp"
 #include "StreamingReLU.hpp"
 #include "StreamToNHWC.hpp"
-#include "StreamingMemory.hpp"
+#include "GroupedStreamingMemory.hpp"
 #include "StreamingAdd.hpp"
 #include "NHWCToStream.hpp"
 #include "BandwidthAdjust.hpp"
-void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu<128, 0, 0, 0>>& global_out)
+void yolov5nu(
+    std::array<std::array<ap_int<8>, 3>, 2> in_data[204800],
+    std::array<std::array<ap_int<8>, 1>, 1> out_data[1209600],
+    ap_int<8> StreamingConv_0_weights[48][1][36],
+    ap_int<16> StreamingConv_0_biases[16][1][1],
+    ap_int<8> StreamingConv_1_weights[256][2][9],
+    ap_int<12> StreamingConv_1_biases[16][2][1],
+    ap_int<8> StreamingConv_2_weights[256][2][1],
+    ap_int<12> StreamingConv_2_biases[16][1][1],
+    ap_int<8> StreamingConv_3_weights[256][2][1],
+    ap_int<12> StreamingConv_3_biases[16][1][1],
+    ap_int<8> StreamingConv_4_weights[256][1][1],
+    ap_int<13> StreamingConv_4_biases[16][1][1],
+    ap_int<8> StreamingConv_5_weights[256][1][9],
+    ap_int<14> StreamingConv_5_biases[16][1][1],
+    ap_int<8> StreamingConv_6_weights[256][4][1],
+    ap_int<14> StreamingConv_6_biases[8][4][1],
+    ap_int<8> StreamingConv_7_weights[1024][2][9],
+    ap_int<15> StreamingConv_7_biases[32][2][1],
+    ap_int<8> StreamingConv_8_weights[1024][2][1],
+    ap_int<13> StreamingConv_8_biases[32][1][1],
+    ap_int<8> StreamingConv_9_weights[1024][2][1],
+    ap_int<14> StreamingConv_9_biases[32][1][1],
+    ap_int<8> StreamingConv_10_weights[1024][1][1],
+    ap_int<13> StreamingConv_10_biases[32][1][1],
+    ap_int<8> StreamingConv_11_weights[1024][1][9],
+    ap_int<15> StreamingConv_11_biases[32][1][1],
+    ap_int<8> StreamingConv_12_weights[1024][1][1],
+    ap_int<14> StreamingConv_12_biases[32][1][1],
+    ap_int<8> StreamingConv_13_weights[1024][1][9],
+    ap_int<16> StreamingConv_13_biases[32][1][1],
+    ap_int<8> StreamingConv_14_weights[1024][4][1],
+    ap_int<15> StreamingConv_14_biases[16][4][1],
+    ap_int<8> StreamingConv_15_weights[4096][2][9],
+    ap_int<15> StreamingConv_15_biases[128][1][1],
+    ap_int<8> StreamingConv_16_weights[4096][2][1],
+    ap_int<14> StreamingConv_16_biases[32][2][1],
+    ap_int<8> StreamingConv_17_weights[4096][2][1],
+    ap_int<15> StreamingConv_17_biases[64][1][1],
+    ap_int<8> StreamingConv_18_weights[4096][1][1],
+    ap_int<14> StreamingConv_18_biases[64][1][1],
+    ap_int<8> StreamingConv_19_weights[4096][1][9],
+    ap_int<16> StreamingConv_19_biases[64][1][1],
+    ap_int<8> StreamingConv_20_weights[4096][1][1],
+    ap_int<14> StreamingConv_20_biases[64][1][1],
+    ap_int<8> StreamingConv_21_weights[4096][1][9],
+    ap_int<14> StreamingConv_21_biases[64][1][1],
+    ap_int<8> StreamingConv_22_weights[4096][1][1],
+    ap_int<14> StreamingConv_22_biases[64][1][1],
+    ap_int<8> StreamingConv_23_weights[4096][1][9],
+    ap_int<15> StreamingConv_23_biases[64][1][1],
+    ap_int<8> StreamingConv_24_weights[4096][4][1],
+    ap_int<14> StreamingConv_24_biases[128][1][1],
+    ap_int<8> StreamingConv_25_weights[16384][2][9],
+    ap_int<16> StreamingConv_25_biases[128][2][1],
+    ap_int<8> StreamingConv_26_weights[16384][2][1],
+    ap_int<15> StreamingConv_26_biases[128][1][1],
+    ap_int<8> StreamingConv_27_weights[16384][2][1],
+    ap_int<13> StreamingConv_27_biases[128][1][1],
+    ap_int<8> StreamingConv_28_weights[16384][1][1],
+    ap_int<15> StreamingConv_28_biases[128][1][1],
+    ap_int<8> StreamingConv_29_weights[16384][1][9],
+    ap_int<15> StreamingConv_29_biases[128][1][1],
+    ap_int<8> StreamingConv_30_weights[16384][4][1],
+    ap_int<13> StreamingConv_30_biases[64][4][1],
+    ap_int<8> StreamingConv_31_weights[16384][2][1],
+    ap_int<15> StreamingConv_31_biases[128][1][1],
+    ap_int<8> StreamingConv_32_weights[8192][16][1],
+    ap_int<17> StreamingConv_32_biases[128][2][1],
+    ap_int<8> StreamingConv_33_weights[8192][4][1],
+    ap_int<15> StreamingConv_33_biases[64][2][1],
+    ap_int<8> StreamingConv_34_weights[4096][4][1],
+    ap_int<14> StreamingConv_34_biases[64][1][1],
+    ap_int<8> StreamingConv_35_weights[4096][4][1],
+    ap_int<15> StreamingConv_35_biases[64][1][1],
+    ap_int<8> StreamingConv_36_weights[4096][1][1],
+    ap_int<14> StreamingConv_36_biases[64][1][1],
+    ap_int<8> StreamingConv_37_weights[4096][1][9],
+    ap_int<16> StreamingConv_37_biases[64][1][1],
+    ap_int<8> StreamingConv_38_weights[4096][4][1],
+    ap_int<14> StreamingConv_38_biases[32][4][1],
+    ap_int<8> StreamingConv_39_weights[4096][2][1],
+    ap_int<15> StreamingConv_39_biases[32][2][1],
+    ap_int<8> StreamingConv_40_weights[1024][4][1],
+    ap_int<16> StreamingConv_40_biases[32][1][1],
+    ap_int<8> StreamingConv_41_weights[1024][4][1],
+    ap_int<15> StreamingConv_41_biases[32][1][1],
+    ap_int<8> StreamingConv_42_weights[1024][1][1],
+    ap_int<13> StreamingConv_42_biases[32][1][1],
+    ap_int<8> StreamingConv_43_weights[1024][1][9],
+    ap_int<15> StreamingConv_43_biases[32][1][1],
+    ap_int<8> StreamingConv_44_weights[1024][4][1],
+    ap_int<15> StreamingConv_44_biases[64][1][1],
+    ap_int<8> StreamingConv_45_weights[1024][5][9],
+    ap_int<15> StreamingConv_45_biases[16][5][1],
+    ap_int<8> StreamingConv_47_weights[1024][4][9],
+    ap_int<14> StreamingConv_47_biases[16][4][1],
+    ap_int<8> StreamingConv_46_weights[4096][1][9],
+    ap_int<15> StreamingConv_46_biases[64][1][1],
+    ap_int<8> StreamingConv_48_weights[1024][4][9],
+    ap_int<14> StreamingConv_48_biases[64][1][1],
+    ap_int<8> StreamingConv_49_weights[800][8][9],
+    ap_int<15> StreamingConv_49_biases[40][2][1],
+    ap_int<8> StreamingConv_51_weights[4096][2][1],
+    ap_int<15> StreamingConv_51_biases[64][1][1],
+    ap_int<8> StreamingConv_52_weights[4096][2][1],
+    ap_int<15> StreamingConv_52_biases[64][1][1],
+    ap_int<8> StreamingConv_50_weights[1024][4][1],
+    ap_int<13> StreamingConv_50_biases[16][4][1],
+    ap_int<8> StreamingConv_53_weights[800][8][1],
+    ap_int<17> StreamingConv_53_biases[20][4][1],
+    ap_int<8> StreamingConv_54_weights[4096][1][1],
+    ap_int<14> StreamingConv_54_biases[64][1][1],
+    ap_int<8> StreamingConv_55_weights[4096][1][9],
+    ap_int<15> StreamingConv_55_biases[64][1][1],
+    ap_int<8> StreamingConv_56_weights[4096][4][1],
+    ap_int<14> StreamingConv_56_biases[64][2][1],
+    ap_int<8> StreamingConv_57_weights[2560][4][9],
+    ap_int<15> StreamingConv_57_biases[40][2][1],
+    ap_int<8> StreamingConv_58_weights[4096][2][9],
+    ap_int<14> StreamingConv_58_biases[64][1][1],
+    ap_int<8> StreamingConv_59_weights[16384][1][9],
+    ap_int<16> StreamingConv_59_biases[128][1][1],
+    ap_int<8> StreamingConv_60_weights[3200][2][9],
+    ap_int<13> StreamingConv_60_biases[80][1][1],
+    ap_int<8> StreamingConv_61_weights[4096][1][9],
+    ap_int<12> StreamingConv_61_biases[64][1][1],
+    ap_int<8> StreamingConv_64_weights[16384][2][1],
+    ap_int<13> StreamingConv_64_biases[128][1][1],
+    ap_int<8> StreamingConv_65_weights[16384][2][1],
+    ap_int<13> StreamingConv_65_biases[128][1][1],
+    ap_int<8> StreamingConv_62_weights[3200][2][1],
+    ap_int<15> StreamingConv_62_biases[40][2][1],
+    ap_int<8> StreamingConv_63_weights[4096][1][1],
+    ap_int<13> StreamingConv_63_biases[64][1][1],
+    ap_int<8> StreamingConv_66_weights[16384][1][1],
+    ap_int<13> StreamingConv_66_biases[128][1][1],
+    ap_int<8> StreamingConv_67_weights[16384][1][9],
+    ap_int<15> StreamingConv_67_biases[128][1][1],
+    ap_int<8> StreamingConv_68_weights[16384][4][1],
+    ap_int<13> StreamingConv_68_biases[256][1][1],
+    ap_int<8> StreamingConv_69_weights[16384][1][9],
+    ap_int<14> StreamingConv_69_biases[64][1][1],
+    ap_int<8> StreamingConv_70_weights[10240][2][9],
+    ap_int<15> StreamingConv_70_biases[80][1][1],
+    ap_int<8> StreamingConv_71_weights[4096][1][9],
+    ap_int<13> StreamingConv_71_biases[64][1][1],
+    ap_int<8> StreamingConv_72_weights[6400][1][9],
+    ap_int<13> StreamingConv_72_biases[80][1][1],
+    ap_int<8> StreamingConv_73_weights[4096][1][1],
+    ap_int<13> StreamingConv_73_biases[64][1][1],
+    ap_int<8> StreamingConv_74_weights[6400][1][1],
+    ap_int<15> StreamingConv_74_biases[80][1][1]
+)
 {
     #pragma HLS TOP
     #pragma HLS DATAFLOW disable_start_propagation
-    #pragma HLS INTERFACE ap_ctrl_none port=return
-    #pragma HLS INTERFACE axis port=global_in
-    #pragma HLS INTERFACE axis port=global_out
     hls::stream<std::array<ap_int<8>, 3>> NHWCToStream_0_out0_stream[2];
-    #pragma HLS STREAM variable=NHWCToStream_0_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=NHWCToStream_0_out0_stream[1] depth=38912
+    #pragma HLS STREAM variable=NHWCToStream_0_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=NHWCToStream_0_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> BandwidthAdjustDecreaseChannels_0_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_0_out0_stream[0] depth=81920
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_0_out0_stream[1] depth=90112
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_0_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_0_out0_stream[1] depth=2
     hls::stream<std::array<std::array<ap_int<8>, 1>, 48>> StreamingLineBuffer_0_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[0] depth=1024
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream[0] depth=10
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_0_out0_stream_prepad[48];
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[0] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[1] depth=114688
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[2] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[3] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[4] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[5] depth=40960
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[6] depth=98304
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[7] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[8] depth=53248
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[9] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[10] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[11] depth=69632
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[12] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[13] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[14] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[15] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[16] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[17] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[18] depth=61440
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[19] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[20] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[21] depth=126976
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[22] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[23] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[24] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[25] depth=57344
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[26] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[27] depth=77824
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[28] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[29] depth=106496
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[30] depth=122880
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[31] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[32] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[33] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[34] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[35] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[36] depth=53248
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[37] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[38] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[39] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[40] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[41] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[42] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[43] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[44] depth=53248
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[45] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[46] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[47] depth=36864
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[0] depth=162
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[1] depth=162
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[2] depth=163
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[3] depth=163
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[4] depth=165
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[5] depth=165
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[6] depth=163
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[7] depth=163
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[8] depth=166
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[9] depth=166
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[10] depth=166
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[11] depth=166
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[12] depth=166
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[13] depth=166
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[14] depth=166
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[15] depth=166
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[16] depth=166
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[17] depth=166
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[18] depth=166
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[19] depth=166
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[20] depth=167
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[21] depth=167
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[22] depth=166
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[23] depth=166
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[24] depth=169
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[25] depth=169
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[26] depth=169
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[27] depth=169
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[28] depth=169
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[29] depth=169
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[30] depth=169
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[31] depth=169
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[32] depth=169
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[33] depth=169
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[34] depth=169
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[35] depth=169
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[36] depth=170
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[37] depth=170
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[38] depth=170
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[39] depth=170
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[40] depth=171
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[41] depth=171
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[42] depth=172
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[43] depth=172
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[44] depth=172
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[45] depth=172
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[46] depth=172
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_out0_stream_prepad[47] depth=172
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_0_buffer_stream[46];
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[0] depth=86016
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[1] depth=253952
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[2] depth=73728
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[3] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[4] depth=311296
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[5] depth=143360
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[6] depth=159744
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[7] depth=233472
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[8] depth=217088
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[9] depth=266240
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[10] depth=73728
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[11] depth=253952
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[12] depth=344064
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[13] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[14] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[15] depth=217088
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[16] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[17] depth=278528
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[18] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[19] depth=53248
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[20] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[21] depth=344064
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[22] depth=131072
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[23] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[24] depth=53248
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[25] depth=294912
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[26] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[27] depth=176128
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[28] depth=114688
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[29] depth=73728
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[30] depth=212992
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[31] depth=335872
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[32] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[33] depth=217088
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[34] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[35] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[36] depth=118784
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[37] depth=335872
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[38] depth=217088
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[39] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[40] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[41] depth=278528
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[42] depth=282624
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[43] depth=159744
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[44] depth=360448
-    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[45] depth=307200
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[1] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[2] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[3] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[4] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[5] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[6] depth=952
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[7] depth=952
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[8] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[9] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[10] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[11] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[12] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[13] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[14] depth=952
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[15] depth=952
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[16] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[17] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[18] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[19] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[20] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[21] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[22] depth=952
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[23] depth=952
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[24] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[25] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[26] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[27] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[28] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[29] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[30] depth=952
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[31] depth=952
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[32] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[33] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[34] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[35] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[36] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[37] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[38] depth=952
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[39] depth=952
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[40] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[41] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[42] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[43] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[44] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_0_buffer_stream[45] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_0_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_0_out0_stream[0] depth=356352
-    #pragma HLS STREAM variable=StreamingConv_0_out0_stream[1] depth=81920
+    #pragma HLS STREAM variable=StreamingConv_0_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_0_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_0_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_0_out0_stream[0] depth=200704
-    #pragma HLS STREAM variable=StreamingSwish_0_out0_stream[1] depth=212992
+    #pragma HLS STREAM variable=StreamingSwish_0_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=StreamingSwish_0_out0_stream[1] depth=2
     hls::stream<std::array<std::array<ap_int<8>, 1>, 15>> StreamingLineBuffer_1_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[0] depth=26624
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_1_out0_stream_prepad[15];
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[0] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[1] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[2] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[3] depth=98304
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[4] depth=151552
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[5] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[6] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[7] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[8] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[9] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[10] depth=49152
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[11] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[12] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[13] depth=90112
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[14] depth=49152
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[0] depth=784
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[1] depth=816
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[2] depth=785
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[3] depth=817
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[4] depth=785
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[5] depth=794
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[6] depth=812
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[7] depth=795
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[8] depth=813
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[9] depth=796
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[10] depth=801
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[11] depth=802
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[12] depth=802
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[13] depth=803
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_out0_stream_prepad[14] depth=803
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_1_buffer_stream[13];
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[0] depth=249856
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[1] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[2] depth=159744
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[3] depth=299008
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[4] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[5] depth=319488
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[6] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[7] depth=49152
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[8] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[9] depth=122880
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[10] depth=217088
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[11] depth=274432
-    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[12] depth=249856
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[0] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[1] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[2] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[3] depth=2545
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[4] depth=2529
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[5] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[6] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[7] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[8] depth=2545
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[9] depth=2529
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[10] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[11] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_1_buffer_stream[12] depth=17
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_1_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_1_out0_stream[0] depth=2048
-    #pragma HLS STREAM variable=StreamingConv_1_out0_stream[1] depth=63488
+    #pragma HLS STREAM variable=StreamingConv_1_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_1_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingSwish_1_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_1_out0_stream[0] depth=86016
-    #pragma HLS STREAM variable=StreamingSwish_1_out0_stream[1] depth=38912
+    #pragma HLS STREAM variable=StreamingSwish_1_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_1_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_0_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_0_out0_stream[0] depth=79872
-    #pragma HLS STREAM variable=TensorDuplicator_0_out0_stream[1] depth=18432
+    #pragma HLS STREAM variable=TensorDuplicator_0_out0_stream[0] depth=13
+    #pragma HLS STREAM variable=TensorDuplicator_0_out0_stream[1] depth=13
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_0_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_0_out1_stream[0] depth=122880
-    #pragma HLS STREAM variable=TensorDuplicator_0_out1_stream[1] depth=90112
+    #pragma HLS STREAM variable=TensorDuplicator_0_out1_stream[0] depth=13
+    #pragma HLS STREAM variable=TensorDuplicator_0_out1_stream[1] depth=13
     hls::stream<std::array<std::array<ap_int<8>, 2>, 2>> StreamingLineBuffer_2_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[0] depth=49152
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_2_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[0] depth=22528
-    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[1] depth=24576
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_2_out0_stream_prepad[1] depth=4
     hls::stream<std::array<std::array<ap_int<8>, 2>, 2>> StreamingLineBuffer_3_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[0] depth=9216
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_3_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[0] depth=30720
-    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[1] depth=83968
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_3_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_2_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_2_out0_stream[0] depth=53248
-    #pragma HLS STREAM variable=StreamingConv_2_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingConv_2_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_2_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_3_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_3_out0_stream[0] depth=57344
-    #pragma HLS STREAM variable=StreamingConv_3_out0_stream[1] depth=45056
+    #pragma HLS STREAM variable=StreamingConv_3_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_3_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_2_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_2_out0_stream[0] depth=40960
-    #pragma HLS STREAM variable=StreamingSwish_2_out0_stream[1] depth=49152
+    #pragma HLS STREAM variable=StreamingSwish_2_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_2_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_3_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_3_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=StreamingSwish_3_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingSwish_3_out0_stream[0] depth=1345
+    #pragma HLS STREAM variable=StreamingSwish_3_out0_stream[1] depth=1345
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_1_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_1_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=TensorDuplicator_1_out0_stream[1] depth=49152
+    #pragma HLS STREAM variable=TensorDuplicator_1_out0_stream[0] depth=13
+    #pragma HLS STREAM variable=TensorDuplicator_1_out0_stream[1] depth=13
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_1_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_1_out1_stream[0] depth=36864
-    #pragma HLS STREAM variable=TensorDuplicator_1_out1_stream[1] depth=86016
+    #pragma HLS STREAM variable=TensorDuplicator_1_out1_stream[0] depth=1347
+    #pragma HLS STREAM variable=TensorDuplicator_1_out1_stream[1] depth=1347
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_4_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[0] depth=22528
+    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream[0] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_4_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream_prepad[0] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream_prepad[1] depth=8192
+    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_4_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_4_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_4_out0_stream[0] depth=40960
-    #pragma HLS STREAM variable=StreamingConv_4_out0_stream[1] depth=86016
+    #pragma HLS STREAM variable=StreamingConv_4_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_4_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_4_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_4_out0_stream[0] depth=81920
-    #pragma HLS STREAM variable=StreamingSwish_4_out0_stream[1] depth=53248
+    #pragma HLS STREAM variable=StreamingSwish_4_out0_stream[0] depth=12
+    #pragma HLS STREAM variable=StreamingSwish_4_out0_stream[1] depth=28
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_5_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[0] depth=9216
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_5_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[0] depth=139264
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[1] depth=122880
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[2] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[3] depth=90112
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[4] depth=90112
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[5] depth=49152
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[6] depth=49152
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[7] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[8] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[9] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[10] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[11] depth=106496
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_5_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[1] depth=40960
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[2] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[3] depth=61440
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[4] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[5] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[6] depth=184320
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[7] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[8] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[9] depth=8192
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[0] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[1] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[2] depth=1265
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[3] depth=1265
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[4] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[5] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[6] depth=1265
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[7] depth=1265
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[8] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_5_buffer_stream[9] depth=17
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_5_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_5_out0_stream[0] depth=45056
-    #pragma HLS STREAM variable=StreamingConv_5_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingConv_5_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_5_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_5_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_5_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingSwish_5_out0_stream[1] depth=77824
+    #pragma HLS STREAM variable=StreamingSwish_5_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_5_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingAdd_0_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingAdd_0_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingAdd_0_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingAdd_0_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingAdd_0_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingConcat_0_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConcat_0_out0_stream[0] depth=36864
-    #pragma HLS STREAM variable=StreamingConcat_0_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingConcat_0_out0_stream[0] depth=25
+    #pragma HLS STREAM variable=StreamingConcat_0_out0_stream[1] depth=25
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_6_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[0] depth=149504
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream[0] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_6_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[0] depth=65536
-    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[1] depth=139264
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_6_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 4>> StreamingConv_6_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_6_out0_stream[0] depth=16384
-    #pragma HLS STREAM variable=StreamingConv_6_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingConv_6_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_6_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 4>> StreamingSwish_6_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_6_out0_stream[0] depth=15360
-    #pragma HLS STREAM variable=StreamingSwish_6_out0_stream[1] depth=72704
+    #pragma HLS STREAM variable=StreamingSwish_6_out0_stream[0] depth=7
+    #pragma HLS STREAM variable=StreamingSwish_6_out0_stream[1] depth=7
     hls::stream<std::array<ap_int<8>, 1>> BandwidthAdjustDecreaseChannels_1_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_1_out0_stream[0] depth=122880
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_1_out0_stream[1] depth=151552
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_1_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_1_out0_stream[1] depth=2
     hls::stream<std::array<std::array<ap_int<8>, 1>, 15>> StreamingLineBuffer_7_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[0] depth=10240
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_7_out0_stream_prepad[15];
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[0] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[1] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[2] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[3] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[4] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[5] depth=69632
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[6] depth=77824
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[7] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[8] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[9] depth=49152
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[10] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[11] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[12] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[13] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[14] depth=24576
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[0] depth=649
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[1] depth=683
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[2] depth=650
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[3] depth=684
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[4] depth=650
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[5] depth=659
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[6] depth=677
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[7] depth=660
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[8] depth=678
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[9] depth=661
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[10] depth=670
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[11] depth=671
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[12] depth=671
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[13] depth=672
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_out0_stream_prepad[14] depth=672
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_7_buffer_stream[13];
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[0] depth=114688
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[1] depth=192512
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[2] depth=40960
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[3] depth=131072
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[4] depth=81920
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[5] depth=229376
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[6] depth=49152
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[7] depth=77824
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[8] depth=163840
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[9] depth=57344
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[10] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[11] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[12] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[0] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[1] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[2] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[3] depth=2529
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[4] depth=2497
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[5] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[6] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[7] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[8] depth=2529
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[9] depth=2497
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[10] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[11] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_7_buffer_stream[12] depth=33
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_7_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_7_out0_stream[0] depth=6144
-    #pragma HLS STREAM variable=StreamingConv_7_out0_stream[1] depth=22528
+    #pragma HLS STREAM variable=StreamingConv_7_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_7_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingSwish_7_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_7_out0_stream[0] depth=6144
-    #pragma HLS STREAM variable=StreamingSwish_7_out0_stream[1] depth=20480
+    #pragma HLS STREAM variable=StreamingSwish_7_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_7_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_2_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_2_out0_stream[0] depth=57344
-    #pragma HLS STREAM variable=TensorDuplicator_2_out0_stream[1] depth=2
+    #pragma HLS STREAM variable=TensorDuplicator_2_out0_stream[0] depth=29
+    #pragma HLS STREAM variable=TensorDuplicator_2_out0_stream[1] depth=29
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_2_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_2_out1_stream[0] depth=24576
-    #pragma HLS STREAM variable=TensorDuplicator_2_out1_stream[1] depth=26624
+    #pragma HLS STREAM variable=TensorDuplicator_2_out1_stream[0] depth=29
+    #pragma HLS STREAM variable=TensorDuplicator_2_out1_stream[1] depth=29
     hls::stream<std::array<std::array<ap_int<8>, 2>, 2>> StreamingLineBuffer_8_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[0] depth=24576
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_8_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[0] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[1] depth=28672
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_8_out0_stream_prepad[1] depth=4
     hls::stream<std::array<std::array<ap_int<8>, 2>, 2>> StreamingLineBuffer_9_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[0] depth=15360
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_9_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream_prepad[0] depth=83968
-    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream_prepad[1] depth=10240
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_9_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_8_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_8_out0_stream[0] depth=16384
-    #pragma HLS STREAM variable=StreamingConv_8_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingConv_8_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_8_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_9_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_9_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingConv_9_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingConv_9_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_9_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_8_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_8_out0_stream[0] depth=20480
-    #pragma HLS STREAM variable=StreamingSwish_8_out0_stream[1] depth=20480
+    #pragma HLS STREAM variable=StreamingSwish_8_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_8_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_9_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_9_out0_stream[0] depth=73728
-    #pragma HLS STREAM variable=StreamingSwish_9_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingSwish_9_out0_stream[0] depth=2785
+    #pragma HLS STREAM variable=StreamingSwish_9_out0_stream[1] depth=2785
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_3_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_3_out0_stream[0] depth=20480
-    #pragma HLS STREAM variable=TensorDuplicator_3_out0_stream[1] depth=53248
+    #pragma HLS STREAM variable=TensorDuplicator_3_out0_stream[0] depth=29
+    #pragma HLS STREAM variable=TensorDuplicator_3_out0_stream[1] depth=29
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_3_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_3_out1_stream[0] depth=20480
-    #pragma HLS STREAM variable=TensorDuplicator_3_out1_stream[1] depth=20480
+    #pragma HLS STREAM variable=TensorDuplicator_3_out1_stream[0] depth=1409
+    #pragma HLS STREAM variable=TensorDuplicator_3_out1_stream[1] depth=1409
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_10_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_10_out0_stream[0] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_10_out0_stream[0] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_10_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_10_out0_stream_prepad[0] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_10_out0_stream_prepad[1] depth=12288
+    #pragma HLS STREAM variable=StreamingLineBuffer_10_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_10_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_10_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_10_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingConv_10_out0_stream[1] depth=65536
+    #pragma HLS STREAM variable=StreamingConv_10_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_10_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_10_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_10_out0_stream[0] depth=28672
-    #pragma HLS STREAM variable=StreamingSwish_10_out0_stream[1] depth=53248
+    #pragma HLS STREAM variable=StreamingSwish_10_out0_stream[0] depth=28
+    #pragma HLS STREAM variable=StreamingSwish_10_out0_stream[1] depth=60
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_11_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream[0] depth=60416
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_11_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[0] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[1] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[2] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[3] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[4] depth=40960
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[5] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[6] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[7] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[8] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[9] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[10] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[11] depth=65536
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_11_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[0] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[1] depth=49152
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[2] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[3] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[4] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[5] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[6] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[7] depth=49152
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[8] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[9] depth=57344
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[0] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[1] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[2] depth=1249
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[3] depth=1249
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[4] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[5] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[6] depth=1249
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[7] depth=1249
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[8] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_11_buffer_stream[9] depth=33
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_11_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_11_out0_stream[0] depth=28672
-    #pragma HLS STREAM variable=StreamingConv_11_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingConv_11_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_11_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_11_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_11_out0_stream[0] depth=20480
-    #pragma HLS STREAM variable=StreamingSwish_11_out0_stream[1] depth=57344
+    #pragma HLS STREAM variable=StreamingSwish_11_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_11_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingAdd_1_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingAdd_1_out0_stream[0] depth=53248
-    #pragma HLS STREAM variable=StreamingAdd_1_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingAdd_1_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingAdd_1_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_4_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_4_out0_stream[0] depth=40960
-    #pragma HLS STREAM variable=TensorDuplicator_4_out0_stream[1] depth=45056
+    #pragma HLS STREAM variable=TensorDuplicator_4_out0_stream[0] depth=29
+    #pragma HLS STREAM variable=TensorDuplicator_4_out0_stream[1] depth=29
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_4_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_4_out1_stream[0] depth=32768
-    #pragma HLS STREAM variable=TensorDuplicator_4_out1_stream[1] depth=12288
+    #pragma HLS STREAM variable=TensorDuplicator_4_out1_stream[0] depth=1409
+    #pragma HLS STREAM variable=TensorDuplicator_4_out1_stream[1] depth=1409
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_12_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_12_out0_stream[0] depth=6144
+    #pragma HLS STREAM variable=StreamingLineBuffer_12_out0_stream[0] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_12_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_12_out0_stream_prepad[0] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_12_out0_stream_prepad[1] depth=45056
+    #pragma HLS STREAM variable=StreamingLineBuffer_12_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_12_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_12_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_12_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingConv_12_out0_stream[1] depth=28672
+    #pragma HLS STREAM variable=StreamingConv_12_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_12_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_12_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_12_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingSwish_12_out0_stream[1] depth=16384
+    #pragma HLS STREAM variable=StreamingSwish_12_out0_stream[0] depth=28
+    #pragma HLS STREAM variable=StreamingSwish_12_out0_stream[1] depth=60
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_13_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream[0] depth=47104
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_13_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[0] depth=61440
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[1] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[2] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[3] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[4] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[5] depth=57344
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[6] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[7] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[8] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[9] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[10] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[11] depth=24576
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_13_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[0] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[1] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[2] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[3] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[4] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[5] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[6] depth=57344
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[7] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[8] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[9] depth=49152
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[0] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[1] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[2] depth=1249
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[3] depth=1249
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[4] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[5] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[6] depth=1249
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[7] depth=1249
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[8] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_13_buffer_stream[9] depth=33
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_13_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_13_out0_stream[0] depth=45056
-    #pragma HLS STREAM variable=StreamingConv_13_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingConv_13_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_13_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_13_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_13_out0_stream[0] depth=28672
-    #pragma HLS STREAM variable=StreamingSwish_13_out0_stream[1] depth=45056
+    #pragma HLS STREAM variable=StreamingSwish_13_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_13_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingAdd_2_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingAdd_2_out0_stream[0] depth=61440
-    #pragma HLS STREAM variable=StreamingAdd_2_out0_stream[1] depth=20480
+    #pragma HLS STREAM variable=StreamingAdd_2_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingAdd_2_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingConcat_1_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConcat_1_out0_stream[0] depth=53248
-    #pragma HLS STREAM variable=StreamingConcat_1_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingConcat_1_out0_stream[0] depth=57
+    #pragma HLS STREAM variable=StreamingConcat_1_out0_stream[1] depth=57
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_14_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_14_out0_stream[0] depth=77824
+    #pragma HLS STREAM variable=StreamingLineBuffer_14_out0_stream[0] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_14_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_14_out0_stream_prepad[0] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_14_out0_stream_prepad[1] depth=139264
+    #pragma HLS STREAM variable=StreamingLineBuffer_14_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_14_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 4>> StreamingConv_14_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_14_out0_stream[0] depth=20480
-    #pragma HLS STREAM variable=StreamingConv_14_out0_stream[1] depth=9216
+    #pragma HLS STREAM variable=StreamingConv_14_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_14_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 4>> StreamingSwish_14_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_14_out0_stream[0] depth=10240
-    #pragma HLS STREAM variable=StreamingSwish_14_out0_stream[1] depth=31744
+    #pragma HLS STREAM variable=StreamingSwish_14_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_14_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 4>> TensorDuplicator_5_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_5_out0_stream[0] depth=2048
-    #pragma HLS STREAM variable=TensorDuplicator_5_out0_stream[1] depth=47104
+    #pragma HLS STREAM variable=TensorDuplicator_5_out0_stream[0] depth=10
+    #pragma HLS STREAM variable=TensorDuplicator_5_out0_stream[1] depth=10
     hls::stream<std::array<ap_int<8>, 4>> TensorDuplicator_5_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_5_out1_stream[0] depth=40960
-    #pragma HLS STREAM variable=TensorDuplicator_5_out1_stream[1] depth=47104
+    #pragma HLS STREAM variable=TensorDuplicator_5_out1_stream[0] depth=30994
+    #pragma HLS STREAM variable=TensorDuplicator_5_out1_stream[1] depth=30994
     hls::stream<std::array<ap_int<8>, 2>> BandwidthAdjustDecreaseChannels_2_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_2_out0_stream[0] depth=6144
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_2_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_2_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_2_out0_stream[1] depth=2
     hls::stream<std::array<std::array<ap_int<8>, 2>, 15>> StreamingLineBuffer_15_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream[0] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream[0] depth=10
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_15_out0_stream_prepad[15];
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[0] depth=2048
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[1] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[2] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[3] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[4] depth=10240
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[5] depth=2048
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[6] depth=6144
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[7] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[8] depth=2048
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[9] depth=10240
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[10] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[11] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[12] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[13] depth=14336
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[14] depth=64
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[0] depth=329
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[1] depth=363
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[2] depth=330
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[3] depth=364
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[4] depth=330
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[5] depth=339
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[6] depth=357
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[7] depth=340
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[8] depth=358
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[9] depth=341
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[10] depth=350
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[11] depth=351
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[12] depth=351
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[13] depth=352
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_out0_stream_prepad[14] depth=352
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_15_buffer_stream[13];
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[0] depth=43008
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[1] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[2] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[3] depth=86016
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[4] depth=59392
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[5] depth=2048
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[6] depth=6144
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[7] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[8] depth=22528
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[9] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[10] depth=47104
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[11] depth=26624
-    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[12] depth=64
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[0] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[1] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[2] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[3] depth=1249
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[4] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[5] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[6] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[7] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[8] depth=1249
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[9] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[10] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[11] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_15_buffer_stream[12] depth=33
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_15_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_15_out0_stream[0] depth=57344
-    #pragma HLS STREAM variable=StreamingConv_15_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingConv_15_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_15_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_15_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_15_out0_stream[0] depth=49152
-    #pragma HLS STREAM variable=StreamingSwish_15_out0_stream[1] depth=40960
+    #pragma HLS STREAM variable=StreamingSwish_15_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_15_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_6_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_6_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=TensorDuplicator_6_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=TensorDuplicator_6_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=TensorDuplicator_6_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_6_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_6_out1_stream[0] depth=53248
-    #pragma HLS STREAM variable=TensorDuplicator_6_out1_stream[1] depth=16384
+    #pragma HLS STREAM variable=TensorDuplicator_6_out1_stream[0] depth=122
+    #pragma HLS STREAM variable=TensorDuplicator_6_out1_stream[1] depth=122
     hls::stream<std::array<ap_int<8>, 2>> BandwidthAdjustIncreaseChannels_0_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_0_out0_stream[0] depth=64
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_0_out0_stream[1] depth=6144
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_0_out0_stream[0] depth=59
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_0_out0_stream[1] depth=59
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_16_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_16_out0_stream[0] depth=49152
+    #pragma HLS STREAM variable=StreamingLineBuffer_16_out0_stream[0] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_16_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_16_out0_stream_prepad[0] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_16_out0_stream_prepad[1] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_16_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_16_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_16_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_16_out0_stream[0] depth=2048
-    #pragma HLS STREAM variable=StreamingConv_16_out0_stream[1] depth=2
+    #pragma HLS STREAM variable=StreamingConv_16_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_16_out0_stream[1] depth=4
     hls::stream<std::array<std::array<ap_int<8>, 2>, 2>> StreamingLineBuffer_17_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_17_out0_stream[0] depth=3072
+    #pragma HLS STREAM variable=StreamingLineBuffer_17_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_17_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_17_out0_stream_prepad[0] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_17_out0_stream_prepad[1] depth=26624
+    #pragma HLS STREAM variable=StreamingLineBuffer_17_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_17_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_17_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_17_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingConv_17_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingConv_17_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_17_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingSwish_16_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_16_out0_stream[0] depth=10240
-    #pragma HLS STREAM variable=StreamingSwish_16_out0_stream[1] depth=6144
+    #pragma HLS STREAM variable=StreamingSwish_16_out0_stream[0] depth=17
+    #pragma HLS STREAM variable=StreamingSwish_16_out0_stream[1] depth=17
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_17_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_17_out0_stream[0] depth=28672
-    #pragma HLS STREAM variable=StreamingSwish_17_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingSwish_17_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_17_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> BandwidthAdjustDecreaseChannels_3_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_3_out0_stream[0] depth=28672
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_3_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_3_out0_stream[0] depth=4482
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_3_out0_stream[1] depth=4482
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_7_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_7_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=TensorDuplicator_7_out0_stream[1] depth=20480
+    #pragma HLS STREAM variable=TensorDuplicator_7_out0_stream[0] depth=61
+    #pragma HLS STREAM variable=TensorDuplicator_7_out0_stream[1] depth=61
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_7_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_7_out1_stream[0] depth=4096
-    #pragma HLS STREAM variable=TensorDuplicator_7_out1_stream[1] depth=16384
+    #pragma HLS STREAM variable=TensorDuplicator_7_out1_stream[0] depth=1506
+    #pragma HLS STREAM variable=TensorDuplicator_7_out1_stream[1] depth=1506
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_18_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_18_out0_stream[0] depth=64
+    #pragma HLS STREAM variable=StreamingLineBuffer_18_out0_stream[0] depth=7
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_18_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_18_out0_stream_prepad[0] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_18_out0_stream_prepad[1] depth=32768
+    #pragma HLS STREAM variable=StreamingLineBuffer_18_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_18_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_18_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_18_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingConv_18_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingConv_18_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_18_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_18_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_18_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingSwish_18_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingSwish_18_out0_stream[0] depth=60
+    #pragma HLS STREAM variable=StreamingSwish_18_out0_stream[1] depth=124
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_19_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream[0] depth=7168
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_19_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[0] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[1] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[2] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[3] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[4] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[5] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[6] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[7] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[8] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[9] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[10] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[11] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_19_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[1] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[2] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[3] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[4] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[5] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[6] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[7] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[8] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[9] depth=24576
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[0] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[1] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[2] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[3] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[4] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[5] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[6] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[7] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[8] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_19_buffer_stream[9] depth=65
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_19_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_19_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingConv_19_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingConv_19_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_19_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_19_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_19_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingSwish_19_out0_stream[1] depth=16384
+    #pragma HLS STREAM variable=StreamingSwish_19_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_19_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingAdd_3_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingAdd_3_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingAdd_3_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingAdd_3_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingAdd_3_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_8_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_8_out0_stream[0] depth=16384
-    #pragma HLS STREAM variable=TensorDuplicator_8_out0_stream[1] depth=32768
+    #pragma HLS STREAM variable=TensorDuplicator_8_out0_stream[0] depth=61
+    #pragma HLS STREAM variable=TensorDuplicator_8_out0_stream[1] depth=61
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_8_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_8_out1_stream[0] depth=28672
-    #pragma HLS STREAM variable=TensorDuplicator_8_out1_stream[1] depth=4096
+    #pragma HLS STREAM variable=TensorDuplicator_8_out1_stream[0] depth=1506
+    #pragma HLS STREAM variable=TensorDuplicator_8_out1_stream[1] depth=1506
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_20_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_20_out0_stream[0] depth=20480
+    #pragma HLS STREAM variable=StreamingLineBuffer_20_out0_stream[0] depth=7
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_20_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_20_out0_stream_prepad[0] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_20_out0_stream_prepad[1] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_20_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_20_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_20_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_20_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingConv_20_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingConv_20_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_20_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_20_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_20_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingSwish_20_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingSwish_20_out0_stream[0] depth=60
+    #pragma HLS STREAM variable=StreamingSwish_20_out0_stream[1] depth=124
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_21_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream[0] depth=10240
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_21_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[0] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[1] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[2] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[3] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[4] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[5] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[7] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[8] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[9] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[10] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[11] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_21_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[1] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[2] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[3] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[4] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[5] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[6] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[7] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[8] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[9] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[0] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[1] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[2] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[3] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[4] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[5] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[6] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[7] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[8] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_21_buffer_stream[9] depth=65
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_21_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_21_out0_stream[0] depth=16384
-    #pragma HLS STREAM variable=StreamingConv_21_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingConv_21_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_21_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_21_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_21_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingSwish_21_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingSwish_21_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_21_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingAdd_4_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingAdd_4_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingAdd_4_out0_stream[1] depth=20480
+    #pragma HLS STREAM variable=StreamingAdd_4_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingAdd_4_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_9_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_9_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=TensorDuplicator_9_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=TensorDuplicator_9_out0_stream[0] depth=61
+    #pragma HLS STREAM variable=TensorDuplicator_9_out0_stream[1] depth=61
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_9_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_9_out1_stream[0] depth=12288
-    #pragma HLS STREAM variable=TensorDuplicator_9_out1_stream[1] depth=4096
+    #pragma HLS STREAM variable=TensorDuplicator_9_out1_stream[0] depth=1506
+    #pragma HLS STREAM variable=TensorDuplicator_9_out1_stream[1] depth=1506
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_22_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_22_out0_stream[0] depth=64
+    #pragma HLS STREAM variable=StreamingLineBuffer_22_out0_stream[0] depth=7
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_22_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_22_out0_stream_prepad[0] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_22_out0_stream_prepad[1] depth=8192
+    #pragma HLS STREAM variable=StreamingLineBuffer_22_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_22_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_22_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_22_out0_stream[0] depth=28672
-    #pragma HLS STREAM variable=StreamingConv_22_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingConv_22_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_22_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_22_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_22_out0_stream[0] depth=28672
-    #pragma HLS STREAM variable=StreamingSwish_22_out0_stream[1] depth=16384
+    #pragma HLS STREAM variable=StreamingSwish_22_out0_stream[0] depth=60
+    #pragma HLS STREAM variable=StreamingSwish_22_out0_stream[1] depth=124
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_23_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream[0] depth=3072
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_23_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[0] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[1] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[2] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[3] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[4] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[5] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[6] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[7] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[8] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[9] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[10] depth=40960
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[11] depth=24576
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_23_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[1] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[2] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[3] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[4] depth=49152
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[5] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[6] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[7] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[8] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[9] depth=20480
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[0] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[1] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[2] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[3] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[4] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[5] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[6] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[7] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[8] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_23_buffer_stream[9] depth=65
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_23_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_23_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=StreamingConv_23_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingConv_23_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_23_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_23_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_23_out0_stream[0] depth=20480
-    #pragma HLS STREAM variable=StreamingSwish_23_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingSwish_23_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_23_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingAdd_5_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingAdd_5_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingAdd_5_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingAdd_5_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingAdd_5_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingConcat_2_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConcat_2_out0_stream[0] depth=16384
-    #pragma HLS STREAM variable=StreamingConcat_2_out0_stream[1] depth=32768
+    #pragma HLS STREAM variable=StreamingConcat_2_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingConcat_2_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 4>> BandwidthAdjustIncreaseChannels_1_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_1_out0_stream[0] depth=5120
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_1_out0_stream[1] depth=32
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_1_out0_stream[0] depth=28
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_1_out0_stream[1] depth=28
     hls::stream<std::array<std::array<ap_int<8>, 4>, 2>> StreamingLineBuffer_24_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_24_out0_stream[0] depth=9216
+    #pragma HLS STREAM variable=StreamingLineBuffer_24_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 4>> StreamingLineBuffer_24_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_24_out0_stream_prepad[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_24_out0_stream_prepad[1] depth=32
+    #pragma HLS STREAM variable=StreamingLineBuffer_24_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_24_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_24_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_24_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingConv_24_out0_stream[1] depth=32768
+    #pragma HLS STREAM variable=StreamingConv_24_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_24_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_24_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_24_out0_stream[0] depth=20480
-    #pragma HLS STREAM variable=StreamingSwish_24_out0_stream[1] depth=36864
+    #pragma HLS STREAM variable=StreamingSwish_24_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_24_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_10_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_10_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=TensorDuplicator_10_out0_stream[1] depth=32768
+    #pragma HLS STREAM variable=TensorDuplicator_10_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_10_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_10_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_10_out1_stream[0] depth=65536
-    #pragma HLS STREAM variable=TensorDuplicator_10_out1_stream[1] depth=65536
+    #pragma HLS STREAM variable=TensorDuplicator_10_out1_stream[0] depth=4
+    #pragma HLS STREAM variable=TensorDuplicator_10_out1_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 4>> BandwidthAdjustIncreaseChannels_2_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_2_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_2_out0_stream[1] depth=1024
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_2_out0_stream[0] depth=11713
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_2_out0_stream[1] depth=11713
     hls::stream<std::array<std::array<ap_int<8>, 1>, 15>> StreamingLineBuffer_25_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream[0] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_25_out0_stream_prepad[15];
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[0] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[2] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[3] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[4] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[5] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[6] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[7] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[8] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[9] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[10] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[11] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[12] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[13] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[14] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[0] depth=696
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[1] depth=827
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[2] depth=697
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[3] depth=828
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[4] depth=698
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[5] depth=731
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[6] depth=797
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[7] depth=732
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[8] depth=798
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[9] depth=733
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[10] depth=766
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[11] depth=767
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[12] depth=767
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[13] depth=768
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_out0_stream_prepad[14] depth=768
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_25_buffer_stream[13];
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[0] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[1] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[2] depth=65536
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[3] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[4] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[5] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[6] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[7] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[8] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[9] depth=65536
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[10] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[11] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[12] depth=57344
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[0] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[1] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[2] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[3] depth=2433
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[4] depth=2305
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[5] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[6] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[7] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[8] depth=2433
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[9] depth=2305
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[10] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[11] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_25_buffer_stream[12] depth=129
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_25_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_25_out0_stream[0] depth=2048
-    #pragma HLS STREAM variable=StreamingConv_25_out0_stream[1] depth=2048
+    #pragma HLS STREAM variable=StreamingConv_25_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_25_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingSwish_25_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_25_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingSwish_25_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingSwish_25_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_25_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_11_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_11_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=TensorDuplicator_11_out0_stream[1] depth=2
+    #pragma HLS STREAM variable=TensorDuplicator_11_out0_stream[0] depth=125
+    #pragma HLS STREAM variable=TensorDuplicator_11_out0_stream[1] depth=125
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_11_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_11_out1_stream[0] depth=64
-    #pragma HLS STREAM variable=TensorDuplicator_11_out1_stream[1] depth=14336
+    #pragma HLS STREAM variable=TensorDuplicator_11_out1_stream[0] depth=125
+    #pragma HLS STREAM variable=TensorDuplicator_11_out1_stream[1] depth=125
     hls::stream<std::array<std::array<ap_int<8>, 2>, 2>> StreamingLineBuffer_26_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_26_out0_stream[0] depth=5120
+    #pragma HLS STREAM variable=StreamingLineBuffer_26_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_26_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_26_out0_stream_prepad[0] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_26_out0_stream_prepad[1] depth=12288
+    #pragma HLS STREAM variable=StreamingLineBuffer_26_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_26_out0_stream_prepad[1] depth=4
     hls::stream<std::array<std::array<ap_int<8>, 2>, 2>> StreamingLineBuffer_27_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_27_out0_stream[0] depth=5120
+    #pragma HLS STREAM variable=StreamingLineBuffer_27_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_27_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_27_out0_stream_prepad[0] depth=6144
-    #pragma HLS STREAM variable=StreamingLineBuffer_27_out0_stream_prepad[1] depth=14336
+    #pragma HLS STREAM variable=StreamingLineBuffer_27_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_27_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_26_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_26_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingConv_26_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingConv_26_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_26_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_27_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_27_out0_stream[0] depth=16384
-    #pragma HLS STREAM variable=StreamingConv_27_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingConv_27_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_27_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_26_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_26_out0_stream[0] depth=24576
-    #pragma HLS STREAM variable=StreamingSwish_26_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingSwish_26_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_26_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_27_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_27_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingSwish_27_out0_stream[1] depth=2
+    #pragma HLS STREAM variable=StreamingSwish_27_out0_stream[0] depth=1793
+    #pragma HLS STREAM variable=StreamingSwish_27_out0_stream[1] depth=1793
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_12_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_12_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=TensorDuplicator_12_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=TensorDuplicator_12_out0_stream[0] depth=125
+    #pragma HLS STREAM variable=TensorDuplicator_12_out0_stream[1] depth=125
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_12_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_12_out1_stream[0] depth=8192
-    #pragma HLS STREAM variable=TensorDuplicator_12_out1_stream[1] depth=4096
+    #pragma HLS STREAM variable=TensorDuplicator_12_out1_stream[0] depth=1698
+    #pragma HLS STREAM variable=TensorDuplicator_12_out1_stream[1] depth=1698
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_28_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_28_out0_stream[0] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_28_out0_stream[0] depth=7
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_28_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_28_out0_stream_prepad[0] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_28_out0_stream_prepad[1] depth=16384
+    #pragma HLS STREAM variable=StreamingLineBuffer_28_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_28_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_28_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_28_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingConv_28_out0_stream[1] depth=16384
+    #pragma HLS STREAM variable=StreamingConv_28_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_28_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_28_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_28_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingSwish_28_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingSwish_28_out0_stream[0] depth=124
+    #pragma HLS STREAM variable=StreamingSwish_28_out0_stream[1] depth=252
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_29_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream[0] depth=11264
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_29_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[0] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[1] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[2] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[3] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[4] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[5] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[6] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[7] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[8] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[9] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[10] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[11] depth=16384
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_29_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[1] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[2] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[3] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[4] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[5] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[6] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[7] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[8] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[9] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[0] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[1] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[2] depth=1153
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[3] depth=1153
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[4] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[5] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[6] depth=1153
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[7] depth=1153
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[8] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_29_buffer_stream[9] depth=129
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_29_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_29_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingConv_29_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingConv_29_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_29_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_29_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_29_out0_stream[0] depth=16384
-    #pragma HLS STREAM variable=StreamingSwish_29_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingSwish_29_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_29_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingAdd_6_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingAdd_6_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=StreamingAdd_6_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingAdd_6_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingAdd_6_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingConcat_3_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConcat_3_out0_stream[0] depth=24576
-    #pragma HLS STREAM variable=StreamingConcat_3_out0_stream[1] depth=2
+    #pragma HLS STREAM variable=StreamingConcat_3_out0_stream[0] depth=249
+    #pragma HLS STREAM variable=StreamingConcat_3_out0_stream[1] depth=249
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_30_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_30_out0_stream[0] depth=26624
+    #pragma HLS STREAM variable=StreamingLineBuffer_30_out0_stream[0] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_30_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_30_out0_stream_prepad[0] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_30_out0_stream_prepad[1] depth=32768
+    #pragma HLS STREAM variable=StreamingLineBuffer_30_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_30_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 4>> StreamingConv_30_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_30_out0_stream[0] depth=10240
-    #pragma HLS STREAM variable=StreamingConv_30_out0_stream[1] depth=3072
+    #pragma HLS STREAM variable=StreamingConv_30_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_30_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 4>> StreamingSwish_30_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_30_out0_stream[0] depth=1024
-    #pragma HLS STREAM variable=StreamingSwish_30_out0_stream[1] depth=32
+    #pragma HLS STREAM variable=StreamingSwish_30_out0_stream[0] depth=33
+    #pragma HLS STREAM variable=StreamingSwish_30_out0_stream[1] depth=33
     hls::stream<std::array<ap_int<8>, 2>> BandwidthAdjustDecreaseChannels_4_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_4_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_4_out0_stream[1] depth=6144
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_4_out0_stream[0] depth=124
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_4_out0_stream[1] depth=124
     hls::stream<std::array<std::array<ap_int<8>, 2>, 2>> StreamingLineBuffer_31_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_31_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_31_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_31_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_31_out0_stream_prepad[0] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_31_out0_stream_prepad[1] depth=8192
+    #pragma HLS STREAM variable=StreamingLineBuffer_31_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_31_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_31_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_31_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingConv_31_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingConv_31_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_31_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_31_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_31_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingSwish_31_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingSwish_31_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_31_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_13_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_13_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=TensorDuplicator_13_out0_stream[1] depth=20480
+    #pragma HLS STREAM variable=TensorDuplicator_13_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=TensorDuplicator_13_out0_stream[1] depth=131
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_13_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_13_out1_stream[0] depth=128
-    #pragma HLS STREAM variable=TensorDuplicator_13_out1_stream[1] depth=128
+    #pragma HLS STREAM variable=TensorDuplicator_13_out1_stream[0] depth=4
+    #pragma HLS STREAM variable=TensorDuplicator_13_out1_stream[1] depth=131
     hls::stream<std::array<ap_int<8>, 1>> BandwidthAdjustDecreaseStreams_0_out0_stream[1];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_0_out0_stream[0] depth=12288
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_0_out0_stream[0] depth=3
     hls::stream<std::array<ap_int<8>, 1>> BandwidthAdjustDecreaseStreams_1_out0_stream[1];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_1_out0_stream[0] depth=24576
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_1_out0_stream[0] depth=5506
     hls::stream<std::array<std::array<ap_int<8>, 1>, 25>> StreamingLineBuffer_32_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream[0] depth=9216
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream[0] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_32_out0_stream_prepad[25];
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[0] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[1] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[2] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[3] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[4] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[6] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[7] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[8] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[9] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[10] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[11] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[12] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[13] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[14] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[15] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[16] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[17] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[18] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[19] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[20] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[21] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[22] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[23] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[24] depth=20480
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[1] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[5] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[6] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[11] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[12] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[13] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[14] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[15] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[16] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[17] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[18] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[19] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[20] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[21] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[22] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[23] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_out0_stream_prepad[24] depth=5
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_32_buffer_stream[24];
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[1] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[2] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[3] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[4] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[6] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[7] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[8] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[9] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[10] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[11] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[12] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[13] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[14] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[15] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[16] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[17] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[18] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[19] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[20] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[21] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[22] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[23] depth=12288
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[0] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[1] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[2] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[3] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[4] depth=2049
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[5] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[6] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[7] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[8] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[9] depth=2049
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[10] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[11] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[12] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[13] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[14] depth=2049
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[15] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[16] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[17] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[18] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[19] depth=2049
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[20] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[21] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[22] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_32_buffer_stream[23] depth=129
     hls::stream<std::array<ap_int<8>, 1>> StreamingMaxPool_0_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingMaxPool_0_out0_stream[0] depth=8192
+    #pragma HLS STREAM variable=StreamingMaxPool_0_out0_stream[0] depth=3
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_14_out0_stream[1];
-    #pragma HLS STREAM variable=TensorDuplicator_14_out0_stream[0] depth=12288
+    #pragma HLS STREAM variable=TensorDuplicator_14_out0_stream[0] depth=3
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_14_out1_stream[1];
-    #pragma HLS STREAM variable=TensorDuplicator_14_out1_stream[0] depth=16384
+    #pragma HLS STREAM variable=TensorDuplicator_14_out1_stream[0] depth=2691
     hls::stream<std::array<ap_int<8>, 1>> StreamingConcat_4_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingConcat_4_out0_stream[0] depth=32768
+    #pragma HLS STREAM variable=StreamingConcat_4_out0_stream[0] depth=26880
     hls::stream<std::array<std::array<ap_int<8>, 1>, 25>> StreamingLineBuffer_33_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream[0] depth=18432
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream[0] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_33_out0_stream_prepad[25];
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[0] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[1] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[2] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[3] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[4] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[6] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[7] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[8] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[9] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[10] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[11] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[12] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[13] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[14] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[15] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[16] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[17] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[18] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[19] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[20] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[21] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[22] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[23] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[24] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[1] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[5] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[6] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[11] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[12] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[13] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[14] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[15] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[16] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[17] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[18] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[19] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[20] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[21] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[22] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[23] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_out0_stream_prepad[24] depth=5
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_33_buffer_stream[24];
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[1] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[2] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[3] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[4] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[5] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[6] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[7] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[8] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[9] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[10] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[11] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[12] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[13] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[14] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[15] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[16] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[17] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[18] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[19] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[20] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[21] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[22] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[23] depth=8192
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[0] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[1] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[2] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[3] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[4] depth=2049
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[5] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[6] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[7] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[8] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[9] depth=2049
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[10] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[11] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[12] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[13] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[14] depth=2049
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[15] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[16] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[17] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[18] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[19] depth=2049
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[20] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[21] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[22] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_33_buffer_stream[23] depth=129
     hls::stream<std::array<ap_int<8>, 1>> StreamingMaxPool_1_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingMaxPool_1_out0_stream[0] depth=4096
+    #pragma HLS STREAM variable=StreamingMaxPool_1_out0_stream[0] depth=3
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_15_out0_stream[1];
-    #pragma HLS STREAM variable=TensorDuplicator_15_out0_stream[0] depth=12288
+    #pragma HLS STREAM variable=TensorDuplicator_15_out0_stream[0] depth=3
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_15_out1_stream[1];
-    #pragma HLS STREAM variable=TensorDuplicator_15_out1_stream[0] depth=24576
+    #pragma HLS STREAM variable=TensorDuplicator_15_out1_stream[0] depth=8065
     hls::stream<std::array<std::array<ap_int<8>, 1>, 25>> StreamingLineBuffer_34_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream[0] depth=18432
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream[0] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_34_out0_stream_prepad[25];
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[1] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[2] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[3] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[4] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[5] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[6] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[7] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[8] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[9] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[10] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[11] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[12] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[13] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[14] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[15] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[16] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[17] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[18] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[19] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[20] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[21] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[22] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[23] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[24] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[1] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[5] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[6] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[11] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[12] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[13] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[14] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[15] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[16] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[17] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[18] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[19] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[20] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[21] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[22] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[23] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_out0_stream_prepad[24] depth=5
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_34_buffer_stream[24];
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[0] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[1] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[2] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[3] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[4] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[5] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[7] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[8] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[9] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[10] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[11] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[12] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[13] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[14] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[15] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[16] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[17] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[18] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[19] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[20] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[21] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[22] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[23] depth=12288
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[0] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[1] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[2] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[3] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[4] depth=2049
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[5] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[6] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[7] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[8] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[9] depth=2049
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[10] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[11] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[12] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[13] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[14] depth=2049
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[15] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[16] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[17] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[18] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[19] depth=2049
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[20] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[21] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[22] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_34_buffer_stream[23] depth=129
     hls::stream<std::array<ap_int<8>, 1>> StreamingMaxPool_2_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingMaxPool_2_out0_stream[0] depth=12288
+    #pragma HLS STREAM variable=StreamingMaxPool_2_out0_stream[0] depth=2690
     hls::stream<std::array<ap_int<8>, 1>> StreamingConcat_5_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingConcat_5_out0_stream[0] depth=32768
+    #pragma HLS STREAM variable=StreamingConcat_5_out0_stream[0] depth=5378
     hls::stream<std::array<ap_int<8>, 1>> StreamingConcat_6_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingConcat_6_out0_stream[0] depth=12288
+    #pragma HLS STREAM variable=StreamingConcat_6_out0_stream[0] depth=2
     hls::stream<std::array<ap_int<8>, 8>> BandwidthAdjustIncreaseChannels_3_out0_stream[1];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_3_out0_stream[0] depth=16
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_3_out0_stream[0] depth=2517
     hls::stream<std::array<std::array<ap_int<8>, 8>, 1>> StreamingLineBuffer_35_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_35_out0_stream[0] depth=12288
+    #pragma HLS STREAM variable=StreamingLineBuffer_35_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 8>> StreamingLineBuffer_35_out0_stream_prepad[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_35_out0_stream_prepad[0] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_35_out0_stream_prepad[0] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_32_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingConv_32_out0_stream[0] depth=22528
+    #pragma HLS STREAM variable=StreamingConv_32_out0_stream[0] depth=2
     hls::stream<std::array<ap_int<8>, 2>> StreamingSwish_32_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingSwish_32_out0_stream[0] depth=6144
+    #pragma HLS STREAM variable=StreamingSwish_32_out0_stream[0] depth=123
     hls::stream<std::array<std::array<ap_int<8>, 2>, 1>> StreamingLineBuffer_36_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_36_out0_stream[0] depth=14336
+    #pragma HLS STREAM variable=StreamingLineBuffer_36_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_36_out0_stream_prepad[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_36_out0_stream_prepad[0] depth=14336
+    #pragma HLS STREAM variable=StreamingLineBuffer_36_out0_stream_prepad[0] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_33_out0_stream[1];
     #pragma HLS STREAM variable=StreamingConv_33_out0_stream[0] depth=2
     hls::stream<std::array<ap_int<8>, 2>> StreamingSwish_33_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingSwish_33_out0_stream[0] depth=18432
+    #pragma HLS STREAM variable=StreamingSwish_33_out0_stream[0] depth=3
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_16_out0_stream[1];
-    #pragma HLS STREAM variable=TensorDuplicator_16_out0_stream[0] depth=10240
+    #pragma HLS STREAM variable=TensorDuplicator_16_out0_stream[0] depth=3
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_16_out1_stream[1];
-    #pragma HLS STREAM variable=TensorDuplicator_16_out1_stream[0] depth=10240
+    #pragma HLS STREAM variable=TensorDuplicator_16_out1_stream[0] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingUpsample_0_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingUpsample_0_out0_stream[0] depth=6144
-    #pragma HLS STREAM variable=StreamingUpsample_0_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingUpsample_0_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingUpsample_0_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 2>> BandwidthAdjustIncreaseStreams_0_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseStreams_0_out0_stream[0] depth=64
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseStreams_0_out0_stream[1] depth=6144
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseStreams_0_out0_stream[0] depth=2114
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseStreams_0_out0_stream[1] depth=2050
     hls::stream<std::array<ap_int<8>, 4>> BandwidthAdjustIncreaseChannels_4_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_4_out0_stream[0] depth=2048
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_4_out0_stream[1] depth=3072
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_4_out0_stream[0] depth=17
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_4_out0_stream[1] depth=17
     hls::stream<std::array<ap_int<8>, 4>> StreamingConcat_7_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConcat_7_out0_stream[0] depth=22528
-    #pragma HLS STREAM variable=StreamingConcat_7_out0_stream[1] depth=2048
+    #pragma HLS STREAM variable=StreamingConcat_7_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingConcat_7_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 4>> TensorDuplicator_17_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_17_out0_stream[0] depth=32
-    #pragma HLS STREAM variable=TensorDuplicator_17_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=TensorDuplicator_17_out0_stream[0] depth=1320
+    #pragma HLS STREAM variable=TensorDuplicator_17_out0_stream[1] depth=1320
     hls::stream<std::array<ap_int<8>, 4>> TensorDuplicator_17_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_17_out1_stream[0] depth=5120
-    #pragma HLS STREAM variable=TensorDuplicator_17_out1_stream[1] depth=3072
+    #pragma HLS STREAM variable=TensorDuplicator_17_out1_stream[0] depth=1320
+    #pragma HLS STREAM variable=TensorDuplicator_17_out1_stream[1] depth=1320
     hls::stream<std::array<std::array<ap_int<8>, 4>, 2>> StreamingLineBuffer_37_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_37_out0_stream[0] depth=47104
+    #pragma HLS STREAM variable=StreamingLineBuffer_37_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 4>> StreamingLineBuffer_37_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_37_out0_stream_prepad[0] depth=7168
-    #pragma HLS STREAM variable=StreamingLineBuffer_37_out0_stream_prepad[1] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_37_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_37_out0_stream_prepad[1] depth=4
     hls::stream<std::array<std::array<ap_int<8>, 4>, 2>> StreamingLineBuffer_38_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_38_out0_stream[0] depth=11264
+    #pragma HLS STREAM variable=StreamingLineBuffer_38_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 4>> StreamingLineBuffer_38_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_38_out0_stream_prepad[0] depth=11264
-    #pragma HLS STREAM variable=StreamingLineBuffer_38_out0_stream_prepad[1] depth=21504
+    #pragma HLS STREAM variable=StreamingLineBuffer_38_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_38_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_34_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_34_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingConv_34_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingConv_34_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_34_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_35_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_35_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=StreamingConv_35_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingConv_35_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_35_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_34_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_34_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingSwish_34_out0_stream[1] depth=2
+    #pragma HLS STREAM variable=StreamingSwish_34_out0_stream[0] depth=60
+    #pragma HLS STREAM variable=StreamingSwish_34_out0_stream[1] depth=60
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_35_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_35_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingSwish_35_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingSwish_35_out0_stream[0] depth=1537
+    #pragma HLS STREAM variable=StreamingSwish_35_out0_stream[1] depth=1537
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_39_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_39_out0_stream[0] depth=14336
+    #pragma HLS STREAM variable=StreamingLineBuffer_39_out0_stream[0] depth=7
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_39_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_39_out0_stream_prepad[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_39_out0_stream_prepad[1] depth=12288
+    #pragma HLS STREAM variable=StreamingLineBuffer_39_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_39_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_36_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_36_out0_stream[0] depth=24576
-    #pragma HLS STREAM variable=StreamingConv_36_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingConv_36_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_36_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_36_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_36_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingSwish_36_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingSwish_36_out0_stream[0] depth=60
+    #pragma HLS STREAM variable=StreamingSwish_36_out0_stream[1] depth=124
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_40_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream[0] depth=11264
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_40_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[0] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[1] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[2] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[3] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[4] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[5] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[6] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[7] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[8] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[9] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[10] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[11] depth=8192
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_40_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[1] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[2] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[3] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[4] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[5] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[6] depth=49152
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[7] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[8] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[9] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[0] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[1] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[2] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[3] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[4] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[5] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[6] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[7] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[8] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_40_buffer_stream[9] depth=65
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_37_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_37_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=StreamingConv_37_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingConv_37_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_37_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_37_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_37_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=StreamingSwish_37_out0_stream[1] depth=20480
+    #pragma HLS STREAM variable=StreamingSwish_37_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=StreamingSwish_37_out0_stream[1] depth=2
     hls::stream<std::array<ap_int<8>, 1>> StreamingConcat_8_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConcat_8_out0_stream[0] depth=32768
-    #pragma HLS STREAM variable=StreamingConcat_8_out0_stream[1] depth=36864
+    #pragma HLS STREAM variable=StreamingConcat_8_out0_stream[0] depth=121
+    #pragma HLS STREAM variable=StreamingConcat_8_out0_stream[1] depth=121
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_41_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_41_out0_stream[0] depth=20480
+    #pragma HLS STREAM variable=StreamingLineBuffer_41_out0_stream[0] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_41_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_41_out0_stream_prepad[0] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_41_out0_stream_prepad[1] depth=8192
+    #pragma HLS STREAM variable=StreamingLineBuffer_41_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_41_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 4>> StreamingConv_38_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_38_out0_stream[0] depth=32
-    #pragma HLS STREAM variable=StreamingConv_38_out0_stream[1] depth=5120
+    #pragma HLS STREAM variable=StreamingConv_38_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_38_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 4>> StreamingSwish_38_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_38_out0_stream[0] depth=10240
-    #pragma HLS STREAM variable=StreamingSwish_38_out0_stream[1] depth=6144
+    #pragma HLS STREAM variable=StreamingSwish_38_out0_stream[0] depth=25
+    #pragma HLS STREAM variable=StreamingSwish_38_out0_stream[1] depth=25
     hls::stream<std::array<ap_int<8>, 1>> BandwidthAdjustDecreaseChannels_5_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_5_out0_stream[0] depth=73728
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_5_out0_stream[1] depth=65536
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_5_out0_stream[0] depth=121
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_5_out0_stream[1] depth=121
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_42_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_42_out0_stream[0] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_42_out0_stream[0] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_42_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_42_out0_stream_prepad[0] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_42_out0_stream_prepad[1] depth=24576
+    #pragma HLS STREAM variable=StreamingLineBuffer_42_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_42_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_39_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_39_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingConv_39_out0_stream[1] depth=6144
+    #pragma HLS STREAM variable=StreamingConv_39_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_39_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingSwish_39_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_39_out0_stream[0] depth=64
-    #pragma HLS STREAM variable=StreamingSwish_39_out0_stream[1] depth=18432
+    #pragma HLS STREAM variable=StreamingSwish_39_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_39_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_18_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_18_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=TensorDuplicator_18_out0_stream[1] depth=6144
+    #pragma HLS STREAM variable=TensorDuplicator_18_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_18_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_18_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_18_out1_stream[0] depth=2048
-    #pragma HLS STREAM variable=TensorDuplicator_18_out1_stream[1] depth=6144
+    #pragma HLS STREAM variable=TensorDuplicator_18_out1_stream[0] depth=1058
+    #pragma HLS STREAM variable=TensorDuplicator_18_out1_stream[1] depth=1058
     hls::stream<std::array<ap_int<8>, 2>> StreamingUpsample_1_out0_stream[4];
-    #pragma HLS STREAM variable=StreamingUpsample_1_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingUpsample_1_out0_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingUpsample_1_out0_stream[2] depth=4096
-    #pragma HLS STREAM variable=StreamingUpsample_1_out0_stream[3] depth=64
+    #pragma HLS STREAM variable=StreamingUpsample_1_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingUpsample_1_out0_stream[1] depth=3
+    #pragma HLS STREAM variable=StreamingUpsample_1_out0_stream[2] depth=3
+    #pragma HLS STREAM variable=StreamingUpsample_1_out0_stream[3] depth=3
     hls::stream<std::array<ap_int<8>, 4>> BandwidthAdjustIncreaseChannels_5_out0_stream[4];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_5_out0_stream[0] depth=5120
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_5_out0_stream[1] depth=14336
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_5_out0_stream[2] depth=4096
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_5_out0_stream[3] depth=7168
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_5_out0_stream[0] depth=10
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_5_out0_stream[1] depth=10
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_5_out0_stream[2] depth=18
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_5_out0_stream[3] depth=18
     hls::stream<std::array<ap_int<8>, 4>> BandwidthAdjustDecreaseStreams_2_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_2_out0_stream[0] depth=5120
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_2_out0_stream[1] depth=24576
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_2_out0_stream[0] depth=338
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_2_out0_stream[1] depth=338
     hls::stream<std::array<ap_int<8>, 4>> StreamingConcat_9_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConcat_9_out0_stream[0] depth=38912
-    #pragma HLS STREAM variable=StreamingConcat_9_out0_stream[1] depth=48128
+    #pragma HLS STREAM variable=StreamingConcat_9_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingConcat_9_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 4>> TensorDuplicator_19_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_19_out0_stream[0] depth=62464
-    #pragma HLS STREAM variable=TensorDuplicator_19_out0_stream[1] depth=38912
+    #pragma HLS STREAM variable=TensorDuplicator_19_out0_stream[0] depth=1299
+    #pragma HLS STREAM variable=TensorDuplicator_19_out0_stream[1] depth=1299
     hls::stream<std::array<ap_int<8>, 4>> TensorDuplicator_19_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_19_out1_stream[0] depth=44032
-    #pragma HLS STREAM variable=TensorDuplicator_19_out1_stream[1] depth=34816
+    #pragma HLS STREAM variable=TensorDuplicator_19_out1_stream[0] depth=1299
+    #pragma HLS STREAM variable=TensorDuplicator_19_out1_stream[1] depth=1299
     hls::stream<std::array<std::array<ap_int<8>, 4>, 2>> StreamingLineBuffer_43_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_43_out0_stream[0] depth=3072
+    #pragma HLS STREAM variable=StreamingLineBuffer_43_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 4>> StreamingLineBuffer_43_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_43_out0_stream_prepad[0] depth=39936
-    #pragma HLS STREAM variable=StreamingLineBuffer_43_out0_stream_prepad[1] depth=12288
+    #pragma HLS STREAM variable=StreamingLineBuffer_43_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_43_out0_stream_prepad[1] depth=4
     hls::stream<std::array<std::array<ap_int<8>, 4>, 2>> StreamingLineBuffer_44_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_44_out0_stream[0] depth=9216
+    #pragma HLS STREAM variable=StreamingLineBuffer_44_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 4>> StreamingLineBuffer_44_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_44_out0_stream_prepad[0] depth=34816
-    #pragma HLS STREAM variable=StreamingLineBuffer_44_out0_stream_prepad[1] depth=37888
+    #pragma HLS STREAM variable=StreamingLineBuffer_44_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_44_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_40_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_40_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingConv_40_out0_stream[1] depth=57344
+    #pragma HLS STREAM variable=StreamingConv_40_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_40_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_41_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_41_out0_stream[0] depth=81920
-    #pragma HLS STREAM variable=StreamingConv_41_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingConv_41_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_41_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_40_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_40_out0_stream[0] depth=40960
-    #pragma HLS STREAM variable=StreamingSwish_40_out0_stream[1] depth=16384
+    #pragma HLS STREAM variable=StreamingSwish_40_out0_stream[0] depth=28
+    #pragma HLS STREAM variable=StreamingSwish_40_out0_stream[1] depth=28
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_41_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_41_out0_stream[0] depth=36864
-    #pragma HLS STREAM variable=StreamingSwish_41_out0_stream[1] depth=49152
+    #pragma HLS STREAM variable=StreamingSwish_41_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_41_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 4>> BandwidthAdjustIncreaseChannels_6_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_6_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_6_out0_stream[1] depth=6144
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_6_out0_stream[0] depth=353
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_6_out0_stream[1] depth=353
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_45_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_45_out0_stream[0] depth=59392
+    #pragma HLS STREAM variable=StreamingLineBuffer_45_out0_stream[0] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_45_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_45_out0_stream_prepad[0] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_45_out0_stream_prepad[1] depth=20480
+    #pragma HLS STREAM variable=StreamingLineBuffer_45_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_45_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_42_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_42_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingConv_42_out0_stream[1] depth=77824
+    #pragma HLS STREAM variable=StreamingConv_42_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_42_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_42_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_42_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingSwish_42_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingSwish_42_out0_stream[0] depth=28
+    #pragma HLS STREAM variable=StreamingSwish_42_out0_stream[1] depth=60
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_46_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream[0] depth=72704
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_46_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[0] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[1] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[2] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[3] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[4] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[5] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[6] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[7] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[9] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[10] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[11] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_46_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[0] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[1] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[2] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[3] depth=61440
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[4] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[5] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[6] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[7] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[8] depth=65536
-    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[9] depth=49152
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[0] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[1] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[2] depth=1249
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[3] depth=1249
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[4] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[5] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[6] depth=1249
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[7] depth=1249
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[8] depth=33
+    #pragma HLS STREAM variable=StreamingLineBuffer_46_buffer_stream[9] depth=33
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_43_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_43_out0_stream[0] depth=53248
-    #pragma HLS STREAM variable=StreamingConv_43_out0_stream[1] depth=28672
+    #pragma HLS STREAM variable=StreamingConv_43_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_43_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_43_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_43_out0_stream[0] depth=28672
-    #pragma HLS STREAM variable=StreamingSwish_43_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingSwish_43_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_43_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 4>> BandwidthAdjustIncreaseChannels_7_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_7_out0_stream[0] depth=7168
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_7_out0_stream[1] depth=5120
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_7_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_7_out0_stream[1] depth=2
     hls::stream<std::array<ap_int<8>, 4>> StreamingConcat_10_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConcat_10_out0_stream[0] depth=7168
-    #pragma HLS STREAM variable=StreamingConcat_10_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingConcat_10_out0_stream[0] depth=12
+    #pragma HLS STREAM variable=StreamingConcat_10_out0_stream[1] depth=12
     hls::stream<std::array<std::array<ap_int<8>, 4>, 2>> StreamingLineBuffer_47_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_47_out0_stream[0] depth=21504
+    #pragma HLS STREAM variable=StreamingLineBuffer_47_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 4>> StreamingLineBuffer_47_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_47_out0_stream_prepad[0] depth=40960
-    #pragma HLS STREAM variable=StreamingLineBuffer_47_out0_stream_prepad[1] depth=9216
+    #pragma HLS STREAM variable=StreamingLineBuffer_47_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_47_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_44_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_44_out0_stream[0] depth=65536
-    #pragma HLS STREAM variable=StreamingConv_44_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingConv_44_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_44_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_44_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_44_out0_stream[0] depth=49152
-    #pragma HLS STREAM variable=StreamingSwish_44_out0_stream[1] depth=24576
+    #pragma HLS STREAM variable=StreamingSwish_44_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_44_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_20_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_20_out0_stream[0] depth=28672
-    #pragma HLS STREAM variable=TensorDuplicator_20_out0_stream[1] depth=73728
+    #pragma HLS STREAM variable=TensorDuplicator_20_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=TensorDuplicator_20_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_20_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_20_out1_stream[0] depth=94208
-    #pragma HLS STREAM variable=TensorDuplicator_20_out1_stream[1] depth=40960
+    #pragma HLS STREAM variable=TensorDuplicator_20_out1_stream[0] depth=58
+    #pragma HLS STREAM variable=TensorDuplicator_20_out1_stream[1] depth=122
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_21_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_21_out0_stream[0] depth=106496
-    #pragma HLS STREAM variable=TensorDuplicator_21_out0_stream[1] depth=40960
+    #pragma HLS STREAM variable=TensorDuplicator_21_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=TensorDuplicator_21_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_21_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_21_out1_stream[0] depth=45056
-    #pragma HLS STREAM variable=TensorDuplicator_21_out1_stream[1] depth=12288
+    #pragma HLS STREAM variable=TensorDuplicator_21_out1_stream[0] depth=58
+    #pragma HLS STREAM variable=TensorDuplicator_21_out1_stream[1] depth=122
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_48_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream[0] depth=53248
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_48_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[0] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[1] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[2] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[3] depth=69632
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[4] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[5] depth=118784
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[6] depth=151552
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[7] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[8] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[9] depth=110592
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[10] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[11] depth=57344
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_48_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[0] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[1] depth=106496
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[2] depth=61440
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[3] depth=122880
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[4] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[5] depth=98304
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[6] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[7] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[8] depth=98304
-    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[9] depth=73728
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[0] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[1] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[2] depth=2497
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[3] depth=2497
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[4] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[5] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[6] depth=2497
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[7] depth=2497
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[8] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_48_buffer_stream[9] depth=65
     hls::stream<std::array<ap_int<8>, 5>> StreamingConv_45_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_45_out0_stream[0] depth=2048
-    #pragma HLS STREAM variable=StreamingConv_45_out0_stream[1] depth=16384
+    #pragma HLS STREAM variable=StreamingConv_45_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_45_out0_stream[1] depth=4
     hls::stream<std::array<std::array<ap_int<8>, 1>, 15>> StreamingLineBuffer_49_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream[0] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_49_out0_stream_prepad[15];
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[0] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[1] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[2] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[3] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[4] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[7] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[8] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[9] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[10] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[11] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[12] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[13] depth=36864
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[14] depth=20480
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[0] depth=664
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[1] depth=731
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[2] depth=665
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[3] depth=732
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[4] depth=666
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[5] depth=683
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[6] depth=717
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[7] depth=684
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[8] depth=718
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[9] depth=685
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[10] depth=702
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[11] depth=703
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[12] depth=703
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[13] depth=704
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_out0_stream_prepad[14] depth=704
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_49_buffer_stream[13];
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[0] depth=159744
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[1] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[2] depth=106496
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[3] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[4] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[5] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[6] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[7] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[8] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[9] depth=81920
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[10] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[11] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[12] depth=12288
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[0] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[1] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[2] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[3] depth=2497
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[4] depth=2433
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[5] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[6] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[7] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[8] depth=2497
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[9] depth=2433
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[10] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[11] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_49_buffer_stream[12] depth=65
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_50_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream[0] depth=27648
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_50_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[0] depth=40960
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[1] depth=126976
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[2] depth=61440
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[3] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[4] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[5] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[6] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[7] depth=143360
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[8] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[9] depth=159744
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[10] depth=53248
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[11] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_50_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[1] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[2] depth=49152
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[3] depth=45056
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[4] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[5] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[6] depth=98304
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[7] depth=135168
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[8] depth=102400
-    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[9] depth=8192
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[0] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[1] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[2] depth=2497
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[3] depth=2497
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[4] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[5] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[6] depth=2497
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[7] depth=2497
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[8] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_50_buffer_stream[9] depth=65
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_46_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_46_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingConv_46_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingConv_46_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_46_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 4>> StreamingConv_47_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_47_out0_stream[0] depth=2048
-    #pragma HLS STREAM variable=StreamingConv_47_out0_stream[1] depth=22528
+    #pragma HLS STREAM variable=StreamingConv_47_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_47_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 5>> StreamingSwish_45_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_45_out0_stream[0] depth=3072
-    #pragma HLS STREAM variable=StreamingSwish_45_out0_stream[1] depth=2048
+    #pragma HLS STREAM variable=StreamingSwish_45_out0_stream[0] depth=14
+    #pragma HLS STREAM variable=StreamingSwish_45_out0_stream[1] depth=14
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_46_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_46_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingSwish_46_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingSwish_46_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_46_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 4>> StreamingSwish_47_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_47_out0_stream[0] depth=3072
-    #pragma HLS STREAM variable=StreamingSwish_47_out0_stream[1] depth=2048
+    #pragma HLS STREAM variable=StreamingSwish_47_out0_stream[0] depth=12
+    #pragma HLS STREAM variable=StreamingSwish_47_out0_stream[1] depth=28
     hls::stream<std::array<ap_int<8>, 1>> BandwidthAdjustDecreaseChannels_6_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_6_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_6_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_6_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_6_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 4>> BandwidthAdjustIncreaseChannels_8_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_8_out0_stream[0] depth=21504
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_8_out0_stream[1] depth=7168
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_8_out0_stream[0] depth=15
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_8_out0_stream[1] depth=35
     hls::stream<std::array<ap_int<8>, 2>> BandwidthAdjustIncreaseChannels_9_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_9_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_9_out0_stream[1] depth=2048
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_9_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_9_out0_stream[1] depth=2
     hls::stream<std::array<std::array<ap_int<8>, 4>, 12>> StreamingLineBuffer_51_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream[0] depth=16384
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream[0] depth=10
     hls::stream<std::array<ap_int<8>, 4>> StreamingLineBuffer_51_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[0] depth=1024
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[1] depth=3072
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[2] depth=9216
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[3] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[4] depth=7168
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[5] depth=2048
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[6] depth=15360
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[7] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[8] depth=15360
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[9] depth=3072
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[10] depth=9216
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[11] depth=25600
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 4>> StreamingLineBuffer_51_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[0] depth=18432
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[2] depth=3072
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[3] depth=3072
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[4] depth=17408
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[5] depth=3072
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[6] depth=11264
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[7] depth=2048
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[8] depth=40960
-    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[9] depth=3072
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[0] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[1] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[2] depth=625
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[3] depth=625
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[4] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[5] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[6] depth=625
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[7] depth=625
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[8] depth=17
+    #pragma HLS STREAM variable=StreamingLineBuffer_51_buffer_stream[9] depth=17
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_48_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_48_out0_stream[0] depth=24576
-    #pragma HLS STREAM variable=StreamingConv_48_out0_stream[1] depth=90112
+    #pragma HLS STREAM variable=StreamingConv_48_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_48_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingConcat_11_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConcat_11_out0_stream[0] depth=22528
-    #pragma HLS STREAM variable=StreamingConcat_11_out0_stream[1] depth=6144
+    #pragma HLS STREAM variable=StreamingConcat_11_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingConcat_11_out0_stream[1] depth=3
     hls::stream<std::array<std::array<ap_int<8>, 4>, 12>> StreamingLineBuffer_52_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream[0] depth=9216
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream[0] depth=10
     hls::stream<std::array<ap_int<8>, 4>> StreamingLineBuffer_52_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[0] depth=3072
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[1] depth=5120
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[2] depth=40960
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[3] depth=37888
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[4] depth=2048
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[5] depth=27648
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[6] depth=10240
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[7] depth=32
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[9] depth=7168
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[10] depth=1024
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[11] depth=3072
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 4>> StreamingLineBuffer_52_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[0] depth=13312
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[1] depth=3072
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[2] depth=40960
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[3] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[4] depth=40960
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[5] depth=7168
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[6] depth=32
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[7] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[8] depth=27648
-    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[9] depth=34816
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[0] depth=21
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[1] depth=21
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[2] depth=781
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[3] depth=781
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[4] depth=21
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[5] depth=21
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[6] depth=781
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[7] depth=781
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[8] depth=21
+    #pragma HLS STREAM variable=StreamingLineBuffer_52_buffer_stream[9] depth=21
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_49_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_49_out0_stream[0] depth=14336
-    #pragma HLS STREAM variable=StreamingConv_49_out0_stream[1] depth=10240
+    #pragma HLS STREAM variable=StreamingConv_49_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_49_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_48_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_48_out0_stream[0] depth=131072
-    #pragma HLS STREAM variable=StreamingSwish_48_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingSwish_48_out0_stream[0] depth=57
+    #pragma HLS STREAM variable=StreamingSwish_48_out0_stream[1] depth=57
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_22_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_22_out0_stream[0] depth=10240
-    #pragma HLS STREAM variable=TensorDuplicator_22_out0_stream[1] depth=16384
+    #pragma HLS STREAM variable=TensorDuplicator_22_out0_stream[0] depth=60
+    #pragma HLS STREAM variable=TensorDuplicator_22_out0_stream[1] depth=60
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_22_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_22_out1_stream[0] depth=2048
-    #pragma HLS STREAM variable=TensorDuplicator_22_out1_stream[1] depth=12288
+    #pragma HLS STREAM variable=TensorDuplicator_22_out1_stream[0] depth=60
+    #pragma HLS STREAM variable=TensorDuplicator_22_out1_stream[1] depth=60
     hls::stream<std::array<ap_int<8>, 2>> StreamingSwish_49_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_49_out0_stream[0] depth=14336
-    #pragma HLS STREAM variable=StreamingSwish_49_out0_stream[1] depth=20480
+    #pragma HLS STREAM variable=StreamingSwish_49_out0_stream[0] depth=35
+    #pragma HLS STREAM variable=StreamingSwish_49_out0_stream[1] depth=35
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_53_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_53_out0_stream[0] depth=30720
+    #pragma HLS STREAM variable=StreamingLineBuffer_53_out0_stream[0] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_53_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_53_out0_stream_prepad[0] depth=106496
-    #pragma HLS STREAM variable=StreamingLineBuffer_53_out0_stream_prepad[1] depth=8192
+    #pragma HLS STREAM variable=StreamingLineBuffer_53_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_53_out0_stream_prepad[1] depth=4
     hls::stream<std::array<std::array<ap_int<8>, 2>, 2>> StreamingLineBuffer_54_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_54_out0_stream[0] depth=37888
+    #pragma HLS STREAM variable=StreamingLineBuffer_54_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_54_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_54_out0_stream_prepad[0] depth=10240
-    #pragma HLS STREAM variable=StreamingLineBuffer_54_out0_stream_prepad[1] depth=14336
+    #pragma HLS STREAM variable=StreamingLineBuffer_54_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_54_out0_stream_prepad[1] depth=4
     hls::stream<std::array<std::array<ap_int<8>, 2>, 2>> StreamingLineBuffer_55_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_55_out0_stream[0] depth=3072
+    #pragma HLS STREAM variable=StreamingLineBuffer_55_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_55_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_55_out0_stream_prepad[0] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_55_out0_stream_prepad[1] depth=2048
+    #pragma HLS STREAM variable=StreamingLineBuffer_55_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_55_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 4>> StreamingConv_50_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_50_out0_stream[0] depth=1024
-    #pragma HLS STREAM variable=StreamingConv_50_out0_stream[1] depth=20480
+    #pragma HLS STREAM variable=StreamingConv_50_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=StreamingConv_50_out0_stream[1] depth=2
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_51_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_51_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingConv_51_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingConv_51_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_51_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_52_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_52_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=StreamingConv_52_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingConv_52_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_52_out0_stream[1] depth=4
     hls::stream<std::array<std::array<ap_int<8>, 2>, 2>> StreamingLineBuffer_56_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_56_out0_stream[0] depth=40960
+    #pragma HLS STREAM variable=StreamingLineBuffer_56_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_56_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_56_out0_stream_prepad[0] depth=26624
-    #pragma HLS STREAM variable=StreamingLineBuffer_56_out0_stream_prepad[1] depth=14336
+    #pragma HLS STREAM variable=StreamingLineBuffer_56_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_56_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 4>> StreamingConv_53_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_53_out0_stream[0] depth=34816
-    #pragma HLS STREAM variable=StreamingConv_53_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingConv_53_out0_stream[0] depth=186
+    #pragma HLS STREAM variable=StreamingConv_53_out0_stream[1] depth=186
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_50_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_50_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=StreamingSwish_50_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingSwish_50_out0_stream[0] depth=60
+    #pragma HLS STREAM variable=StreamingSwish_50_out0_stream[1] depth=60
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_51_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_51_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingSwish_51_out0_stream[1] depth=16384
+    #pragma HLS STREAM variable=StreamingSwish_51_out0_stream[0] depth=1537
+    #pragma HLS STREAM variable=StreamingSwish_51_out0_stream[1] depth=1537
     hls::stream<std::array<ap_int<8>, 4>> StreamingConcat_12_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConcat_12_out0_stream[0] depth=35840
-    #pragma HLS STREAM variable=StreamingConcat_12_out0_stream[1] depth=5120
+    #pragma HLS STREAM variable=StreamingConcat_12_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingConcat_12_out0_stream[1] depth=38
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_57_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_57_out0_stream[0] depth=64
+    #pragma HLS STREAM variable=StreamingLineBuffer_57_out0_stream[0] depth=7
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_57_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_57_out0_stream_prepad[0] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_57_out0_stream_prepad[1] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_57_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_57_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_54_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_54_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingConv_54_out0_stream[1] depth=16384
+    #pragma HLS STREAM variable=StreamingConv_54_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_54_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 4>> BandwidthAdjustDecreaseStreams_3_out0_stream[1];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_3_out0_stream[0] depth=82944
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_3_out0_stream[0] depth=3
     hls::stream<std::array<ap_int<8>, 4>> StreamingReshape_0_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingReshape_0_out0_stream[0] depth=10240
+    #pragma HLS STREAM variable=StreamingReshape_0_out0_stream[0] depth=55
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_52_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_52_out0_stream[0] depth=16384
-    #pragma HLS STREAM variable=StreamingSwish_52_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingSwish_52_out0_stream[0] depth=60
+    #pragma HLS STREAM variable=StreamingSwish_52_out0_stream[1] depth=124
     hls::stream<std::array<ap_int<8>, 1>> BandwidthAdjustDecreaseChannels_7_out0_stream[1];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_7_out0_stream[0] depth=315392
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_7_out0_stream[0] depth=68809
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_58_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream[0] depth=1024
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_58_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[0] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[2] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[3] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[4] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[5] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[6] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[7] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[8] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[9] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[10] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[11] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_58_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[0] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[1] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[2] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[3] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[4] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[5] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[6] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[7] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[8] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[9] depth=36864
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[0] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[1] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[2] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[3] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[4] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[5] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[6] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[7] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[8] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_58_buffer_stream[9] depth=65
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_55_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_55_out0_stream[0] depth=16384
-    #pragma HLS STREAM variable=StreamingConv_55_out0_stream[1] depth=45056
+    #pragma HLS STREAM variable=StreamingConv_55_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_55_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_53_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_53_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingSwish_53_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingSwish_53_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=StreamingSwish_53_out0_stream[1] depth=2
     hls::stream<std::array<ap_int<8>, 1>> StreamingConcat_13_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConcat_13_out0_stream[0] depth=20480
-    #pragma HLS STREAM variable=StreamingConcat_13_out0_stream[1] depth=24576
+    #pragma HLS STREAM variable=StreamingConcat_13_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingConcat_13_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 2>> BandwidthAdjustIncreaseChannels_10_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_10_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_10_out0_stream[1] depth=32768
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_10_out0_stream[0] depth=59
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_10_out0_stream[1] depth=59
     hls::stream<std::array<std::array<ap_int<8>, 2>, 2>> StreamingLineBuffer_59_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_59_out0_stream[0] depth=34816
+    #pragma HLS STREAM variable=StreamingLineBuffer_59_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_59_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_59_out0_stream_prepad[0] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_59_out0_stream_prepad[1] depth=14336
+    #pragma HLS STREAM variable=StreamingLineBuffer_59_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_59_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_56_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_56_out0_stream[0] depth=64
-    #pragma HLS STREAM variable=StreamingConv_56_out0_stream[1] depth=14336
+    #pragma HLS STREAM variable=StreamingConv_56_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_56_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingSwish_54_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_54_out0_stream[0] depth=6144
-    #pragma HLS STREAM variable=StreamingSwish_54_out0_stream[1] depth=10240
+    #pragma HLS STREAM variable=StreamingSwish_54_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_54_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_23_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_23_out0_stream[0] depth=64
-    #pragma HLS STREAM variable=TensorDuplicator_23_out0_stream[1] depth=14336
+    #pragma HLS STREAM variable=TensorDuplicator_23_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=TensorDuplicator_23_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_23_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_23_out1_stream[0] depth=40960
-    #pragma HLS STREAM variable=TensorDuplicator_23_out1_stream[1] depth=12288
+    #pragma HLS STREAM variable=TensorDuplicator_23_out1_stream[0] depth=60
+    #pragma HLS STREAM variable=TensorDuplicator_23_out1_stream[1] depth=124
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_24_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_24_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=TensorDuplicator_24_out0_stream[1] depth=64
+    #pragma HLS STREAM variable=TensorDuplicator_24_out0_stream[0] depth=34
+    #pragma HLS STREAM variable=TensorDuplicator_24_out0_stream[1] depth=34
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_24_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_24_out1_stream[0] depth=24576
-    #pragma HLS STREAM variable=TensorDuplicator_24_out1_stream[1] depth=18432
+    #pragma HLS STREAM variable=TensorDuplicator_24_out1_stream[0] depth=61
+    #pragma HLS STREAM variable=TensorDuplicator_24_out1_stream[1] depth=125
     hls::stream<std::array<std::array<ap_int<8>, 2>, 12>> StreamingLineBuffer_60_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream[0] depth=3072
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream[0] depth=10
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_60_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[0] depth=6144
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[1] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[2] depth=26624
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[3] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[4] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[5] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[6] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[7] depth=14336
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[8] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[9] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[10] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[11] depth=64
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_60_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[0] depth=10240
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[1] depth=18432
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[2] depth=43008
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[3] depth=18432
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[4] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[5] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[6] depth=14336
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[7] depth=2048
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[8] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[9] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[0] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[1] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[2] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[3] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[4] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[5] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[6] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[7] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[8] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_60_buffer_stream[9] depth=65
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_57_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_57_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=StreamingConv_57_out0_stream[1] depth=2
+    #pragma HLS STREAM variable=StreamingConv_57_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_57_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> BandwidthAdjustDecreaseChannels_8_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_8_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_8_out0_stream[1] depth=2
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_8_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_8_out0_stream[1] depth=3
     hls::stream<std::array<std::array<ap_int<8>, 2>, 12>> StreamingLineBuffer_61_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream[0] depth=10240
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream[0] depth=10
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_61_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[0] depth=18432
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[1] depth=14336
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[2] depth=22528
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[3] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[4] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[5] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[6] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[7] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[8] depth=6144
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[9] depth=6144
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[10] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[11] depth=20480
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_61_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[1] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[2] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[3] depth=22528
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[4] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[5] depth=14336
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[6] depth=40960
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[7] depth=10240
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[8] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[9] depth=30720
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[0] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[1] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[2] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[3] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[4] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[5] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[6] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[7] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[8] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_61_buffer_stream[9] depth=65
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_58_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_58_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingConv_58_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingConv_58_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_58_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingSwish_55_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_55_out0_stream[0] depth=2048
-    #pragma HLS STREAM variable=StreamingSwish_55_out0_stream[1] depth=14336
+    #pragma HLS STREAM variable=StreamingSwish_55_out0_stream[0] depth=196
+    #pragma HLS STREAM variable=StreamingSwish_55_out0_stream[1] depth=236
     hls::stream<std::array<std::array<ap_int<8>, 1>, 15>> StreamingLineBuffer_62_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream[0] depth=1024
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_62_out0_stream_prepad[15];
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[0] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[1] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[2] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[3] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[4] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[5] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[6] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[7] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[8] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[9] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[10] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[11] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[12] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[13] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[14] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[0] depth=696
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[1] depth=827
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[2] depth=697
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[3] depth=828
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[4] depth=698
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[5] depth=731
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[6] depth=797
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[7] depth=732
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[8] depth=798
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[9] depth=733
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[10] depth=766
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[11] depth=767
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[12] depth=767
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[13] depth=768
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_out0_stream_prepad[14] depth=768
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_62_buffer_stream[13];
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[0] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[1] depth=32768
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[2] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[3] depth=65536
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[4] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[5] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[6] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[7] depth=65536
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[8] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[9] depth=53248
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[10] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[11] depth=53248
-    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[12] depth=20480
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[0] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[1] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[2] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[3] depth=2433
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[4] depth=2305
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[5] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[6] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[7] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[8] depth=2433
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[9] depth=2305
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[10] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[11] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_62_buffer_stream[12] depth=129
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_59_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_59_out0_stream[0] depth=16384
-    #pragma HLS STREAM variable=StreamingConv_59_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingConv_59_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_59_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_56_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_56_out0_stream[0] depth=36864
-    #pragma HLS STREAM variable=StreamingSwish_56_out0_stream[1] depth=16384
+    #pragma HLS STREAM variable=StreamingSwish_56_out0_stream[0] depth=60
+    #pragma HLS STREAM variable=StreamingSwish_56_out0_stream[1] depth=124
     hls::stream<std::array<std::array<ap_int<8>, 2>, 12>> StreamingLineBuffer_63_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream[0] depth=10
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_63_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[0] depth=18432
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[1] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[2] depth=14336
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[3] depth=6144
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[4] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[5] depth=14336
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[7] depth=10240
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[8] depth=14336
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[9] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[10] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[11] depth=2048
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_63_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[0] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[1] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[2] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[3] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[4] depth=6144
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[5] depth=6144
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[6] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[7] depth=2048
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[9] depth=2048
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[0] depth=41
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[1] depth=41
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[2] depth=761
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[3] depth=761
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[4] depth=41
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[5] depth=41
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[6] depth=761
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[7] depth=761
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[8] depth=41
+    #pragma HLS STREAM variable=StreamingLineBuffer_63_buffer_stream[9] depth=41
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_60_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_60_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingConv_60_out0_stream[1] depth=28672
+    #pragma HLS STREAM variable=StreamingConv_60_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_60_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_57_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_57_out0_stream[0] depth=16384
-    #pragma HLS STREAM variable=StreamingSwish_57_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingSwish_57_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_57_out0_stream[1] depth=3
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_64_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream[0] depth=3072
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_64_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[0] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[1] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[2] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[3] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[4] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[5] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[6] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[7] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[8] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[9] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[10] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[11] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_64_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[1] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[2] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[3] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[4] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[5] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[6] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[7] depth=49152
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[8] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[9] depth=12288
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[0] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[1] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[2] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[3] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[4] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[5] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[6] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[7] depth=1217
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[8] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_64_buffer_stream[9] depth=65
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_61_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_61_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingConv_61_out0_stream[1] depth=28672
+    #pragma HLS STREAM variable=StreamingConv_61_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_61_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_58_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_58_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingSwish_58_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingSwish_58_out0_stream[0] depth=75
+    #pragma HLS STREAM variable=StreamingSwish_58_out0_stream[1] depth=75
     hls::stream<std::array<ap_int<8>, 2>> BandwidthAdjustIncreaseChannels_11_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_11_out0_stream[0] depth=64
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_11_out0_stream[1] depth=2048
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_11_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_11_out0_stream[1] depth=2
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_59_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_59_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingSwish_59_out0_stream[1] depth=20480
+    #pragma HLS STREAM variable=StreamingSwish_59_out0_stream[0] depth=60
+    #pragma HLS STREAM variable=StreamingSwish_59_out0_stream[1] depth=60
     hls::stream<std::array<ap_int<8>, 2>> StreamingConcat_14_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConcat_14_out0_stream[0] depth=6144
-    #pragma HLS STREAM variable=StreamingConcat_14_out0_stream[1] depth=2048
+    #pragma HLS STREAM variable=StreamingConcat_14_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingConcat_14_out0_stream[1] depth=3
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_65_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_65_out0_stream[0] depth=18432
+    #pragma HLS STREAM variable=StreamingLineBuffer_65_out0_stream[0] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_65_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_65_out0_stream_prepad[0] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_65_out0_stream_prepad[1] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_65_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_65_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 2>> StreamingConv_62_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_62_out0_stream[0] depth=16384
-    #pragma HLS STREAM variable=StreamingConv_62_out0_stream[1] depth=2
+    #pragma HLS STREAM variable=StreamingConv_62_out0_stream[0] depth=21
+    #pragma HLS STREAM variable=StreamingConv_62_out0_stream[1] depth=21
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_25_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_25_out0_stream[0] depth=10240
-    #pragma HLS STREAM variable=TensorDuplicator_25_out0_stream[1] depth=2
+    #pragma HLS STREAM variable=TensorDuplicator_25_out0_stream[0] depth=124
+    #pragma HLS STREAM variable=TensorDuplicator_25_out0_stream[1] depth=124
     hls::stream<std::array<ap_int<8>, 2>> TensorDuplicator_25_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_25_out1_stream[0] depth=64
-    #pragma HLS STREAM variable=TensorDuplicator_25_out1_stream[1] depth=4096
+    #pragma HLS STREAM variable=TensorDuplicator_25_out1_stream[0] depth=124
+    #pragma HLS STREAM variable=TensorDuplicator_25_out1_stream[1] depth=124
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_66_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_66_out0_stream[0] depth=22528
+    #pragma HLS STREAM variable=StreamingLineBuffer_66_out0_stream[0] depth=7
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_66_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_66_out0_stream_prepad[0] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_66_out0_stream_prepad[1] depth=12288
+    #pragma HLS STREAM variable=StreamingLineBuffer_66_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_66_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_63_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_63_out0_stream[0] depth=20480
-    #pragma HLS STREAM variable=StreamingConv_63_out0_stream[1] depth=20480
+    #pragma HLS STREAM variable=StreamingConv_63_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=StreamingConv_63_out0_stream[1] depth=2
     hls::stream<std::array<ap_int<8>, 1>> BandwidthAdjustDecreaseChannels_9_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_9_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_9_out0_stream[1] depth=24576
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_9_out0_stream[0] depth=402
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseChannels_9_out0_stream[1] depth=402
     hls::stream<std::array<std::array<ap_int<8>, 2>, 2>> StreamingLineBuffer_67_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_67_out0_stream[0] depth=32
+    #pragma HLS STREAM variable=StreamingLineBuffer_67_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_67_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_67_out0_stream_prepad[0] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_67_out0_stream_prepad[1] depth=2048
+    #pragma HLS STREAM variable=StreamingLineBuffer_67_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_67_out0_stream_prepad[1] depth=4
     hls::stream<std::array<std::array<ap_int<8>, 2>, 2>> StreamingLineBuffer_68_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_68_out0_stream[0] depth=6144
+    #pragma HLS STREAM variable=StreamingLineBuffer_68_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_68_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_68_out0_stream_prepad[0] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_68_out0_stream_prepad[1] depth=2048
+    #pragma HLS STREAM variable=StreamingLineBuffer_68_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_68_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConcat_15_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConcat_15_out0_stream[0] depth=20480
-    #pragma HLS STREAM variable=StreamingConcat_15_out0_stream[1] depth=69632
+    #pragma HLS STREAM variable=StreamingConcat_15_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingConcat_15_out0_stream[1] depth=146
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_64_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_64_out0_stream[0] depth=24576
-    #pragma HLS STREAM variable=StreamingConv_64_out0_stream[1] depth=20480
+    #pragma HLS STREAM variable=StreamingConv_64_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_64_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_65_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_65_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingConv_65_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingConv_65_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_65_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> BandwidthAdjustDecreaseStreams_4_out0_stream[1];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_4_out0_stream[0] depth=16384
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_4_out0_stream[0] depth=3
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_60_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_60_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingSwish_60_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingSwish_60_out0_stream[0] depth=124
+    #pragma HLS STREAM variable=StreamingSwish_60_out0_stream[1] depth=124
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_61_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_61_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingSwish_61_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingSwish_61_out0_stream[0] depth=1793
+    #pragma HLS STREAM variable=StreamingSwish_61_out0_stream[1] depth=1793
     hls::stream<std::array<ap_int<8>, 1>> StreamingReshape_1_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingReshape_1_out0_stream[0] depth=90112
+    #pragma HLS STREAM variable=StreamingReshape_1_out0_stream[0] depth=213121
     hls::stream<std::array<std::array<ap_int<8>, 1>, 2>> StreamingLineBuffer_69_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_69_out0_stream[0] depth=64
+    #pragma HLS STREAM variable=StreamingLineBuffer_69_out0_stream[0] depth=7
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_69_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_69_out0_stream_prepad[0] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_69_out0_stream_prepad[1] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_69_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_69_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_66_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_66_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=StreamingConv_66_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingConv_66_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_66_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConcat_16_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingConcat_16_out0_stream[0] depth=368640
+    #pragma HLS STREAM variable=StreamingConcat_16_out0_stream[0] depth=226369
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_62_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_62_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingSwish_62_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingSwish_62_out0_stream[0] depth=124
+    #pragma HLS STREAM variable=StreamingSwish_62_out0_stream[1] depth=252
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_70_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream[0] depth=5120
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_70_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[0] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[1] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[2] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[3] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[4] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[5] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[6] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[7] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[9] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[10] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[11] depth=8192
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_70_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[1] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[2] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[3] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[4] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[5] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[6] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[7] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[8] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[9] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[0] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[1] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[2] depth=1153
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[3] depth=1153
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[4] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[5] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[6] depth=1153
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[7] depth=1153
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[8] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_70_buffer_stream[9] depth=129
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_67_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_67_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=StreamingConv_67_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingConv_67_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_67_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_63_out0_stream[2];
     #pragma HLS STREAM variable=StreamingSwish_63_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingSwish_63_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingSwish_63_out0_stream[1] depth=2
     hls::stream<std::array<ap_int<8>, 1>> StreamingConcat_17_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConcat_17_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingConcat_17_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingConcat_17_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingConcat_17_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 4>> BandwidthAdjustIncreaseChannels_12_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_12_out0_stream[0] depth=32
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_12_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_12_out0_stream[0] depth=60
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_12_out0_stream[1] depth=60
     hls::stream<std::array<std::array<ap_int<8>, 4>, 2>> StreamingLineBuffer_71_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_71_out0_stream[0] depth=16
+    #pragma HLS STREAM variable=StreamingLineBuffer_71_out0_stream[0] depth=8
     hls::stream<std::array<ap_int<8>, 4>> StreamingLineBuffer_71_out0_stream_prepad[2];
-    #pragma HLS STREAM variable=StreamingLineBuffer_71_out0_stream_prepad[0] depth=32
-    #pragma HLS STREAM variable=StreamingLineBuffer_71_out0_stream_prepad[1] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_71_out0_stream_prepad[0] depth=4
+    #pragma HLS STREAM variable=StreamingLineBuffer_71_out0_stream_prepad[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_68_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_68_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingConv_68_out0_stream[1] depth=12288
+    #pragma HLS STREAM variable=StreamingConv_68_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_68_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_64_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_64_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingSwish_64_out0_stream[1] depth=8192
+    #pragma HLS STREAM variable=StreamingSwish_64_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_64_out0_stream[1] depth=3
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_26_out0_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_26_out0_stream[0] depth=12288
-    #pragma HLS STREAM variable=TensorDuplicator_26_out0_stream[1] depth=16384
+    #pragma HLS STREAM variable=TensorDuplicator_26_out0_stream[0] depth=250
+    #pragma HLS STREAM variable=TensorDuplicator_26_out0_stream[1] depth=506
     hls::stream<std::array<ap_int<8>, 1>> TensorDuplicator_26_out1_stream[2];
-    #pragma HLS STREAM variable=TensorDuplicator_26_out1_stream[0] depth=128
-    #pragma HLS STREAM variable=TensorDuplicator_26_out1_stream[1] depth=8192
+    #pragma HLS STREAM variable=TensorDuplicator_26_out1_stream[0] depth=4
+    #pragma HLS STREAM variable=TensorDuplicator_26_out1_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 2>> BandwidthAdjustIncreaseChannels_13_out0_stream[2];
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_13_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_13_out0_stream[1] depth=64
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_13_out0_stream[0] depth=121
+    #pragma HLS STREAM variable=BandwidthAdjustIncreaseChannels_13_out0_stream[1] depth=249
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_72_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream[0] depth=1024
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_72_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[0] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[1] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[2] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[3] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[4] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[6] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[7] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[8] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[9] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[10] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[11] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_72_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[1] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[2] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[3] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[4] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[6] depth=28672
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[7] depth=24576
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[8] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[9] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[0] depth=257
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[1] depth=257
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[2] depth=2305
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[3] depth=2305
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[4] depth=257
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[5] depth=257
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[6] depth=2305
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[7] depth=2305
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[8] depth=257
+    #pragma HLS STREAM variable=StreamingLineBuffer_72_buffer_stream[9] depth=257
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_69_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_69_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingConv_69_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingConv_69_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_69_out0_stream[1] depth=4
     hls::stream<std::array<std::array<ap_int<8>, 2>, 12>> StreamingLineBuffer_73_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream[0] depth=10240
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream[0] depth=10
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_73_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[0] depth=6144
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[1] depth=6144
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[2] depth=2048
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[3] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[4] depth=2048
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[5] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[6] depth=6144
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[7] depth=10240
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[8] depth=6144
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[9] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[10] depth=6144
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[11] depth=6144
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 2>> StreamingLineBuffer_73_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[0] depth=14336
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[1] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[2] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[3] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[4] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[5] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[6] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[7] depth=64
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[8] depth=16384
-    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[9] depth=6144
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[0] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[1] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[2] depth=1153
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[3] depth=1153
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[4] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[5] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[6] depth=1153
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[7] depth=1153
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[8] depth=129
+    #pragma HLS STREAM variable=StreamingLineBuffer_73_buffer_stream[9] depth=129
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_70_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_70_out0_stream[0] depth=8192
-    #pragma HLS STREAM variable=StreamingConv_70_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingConv_70_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_70_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_65_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_65_out0_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingSwish_65_out0_stream[1] depth=4096
+    #pragma HLS STREAM variable=StreamingSwish_65_out0_stream[0] depth=60
+    #pragma HLS STREAM variable=StreamingSwish_65_out0_stream[1] depth=124
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_66_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_66_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingSwish_66_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingSwish_66_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_66_out0_stream[1] depth=82
     hls::stream<std::array<std::array<ap_int<8>, 1>, 12>> StreamingLineBuffer_74_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream[0] depth=2048
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream[0] depth=9
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_74_out0_stream_prepad[12];
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[1] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[2] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[3] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[4] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[5] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[6] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[7] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[8] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[9] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[10] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[11] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[1] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[4] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[5] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[6] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[8] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[9] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[10] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_out0_stream_prepad[11] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_74_buffer_stream[10];
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[0] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[1] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[2] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[3] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[4] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[6] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[7] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[8] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[9] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[0] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[1] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[2] depth=577
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[3] depth=577
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[4] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[5] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[6] depth=577
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[7] depth=577
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[8] depth=65
+    #pragma HLS STREAM variable=StreamingLineBuffer_74_buffer_stream[9] depth=65
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_71_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingConv_71_out0_stream[0] depth=4096
-    #pragma HLS STREAM variable=StreamingConv_71_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingConv_71_out0_stream[0] depth=4
+    #pragma HLS STREAM variable=StreamingConv_71_out0_stream[1] depth=4
     hls::stream<std::array<ap_int<8>, 1>> BandwidthAdjustDecreaseStreams_5_out0_stream[1];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_5_out0_stream[0] depth=20480
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_5_out0_stream[0] depth=476
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_67_out0_stream[2];
-    #pragma HLS STREAM variable=StreamingSwish_67_out0_stream[0] depth=128
-    #pragma HLS STREAM variable=StreamingSwish_67_out0_stream[1] depth=128
+    #pragma HLS STREAM variable=StreamingSwish_67_out0_stream[0] depth=3
+    #pragma HLS STREAM variable=StreamingSwish_67_out0_stream[1] depth=66
     hls::stream<std::array<std::array<ap_int<8>, 1>, 9>> StreamingLineBuffer_75_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream[0] depth=13312
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream[0] depth=10
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_75_out0_stream_prepad[9];
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[0] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[1] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[2] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[3] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[4] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[5] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[6] depth=12288
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[7] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[8] depth=2
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[0] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[1] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[2] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[3] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[4] depth=5
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[5] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[6] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[7] depth=6
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_out0_stream_prepad[8] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_75_buffer_stream[8];
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[0] depth=20480
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[1] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[2] depth=4096
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[3] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[4] depth=128
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[5] depth=2
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[6] depth=8192
-    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[7] depth=128
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[0] depth=81
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[1] depth=81
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[2] depth=1441
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[3] depth=81
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[4] depth=81
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[5] depth=1441
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[6] depth=81
+    #pragma HLS STREAM variable=StreamingLineBuffer_75_buffer_stream[7] depth=81
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_72_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingConv_72_out0_stream[0] depth=16384
+    #pragma HLS STREAM variable=StreamingConv_72_out0_stream[0] depth=2
     hls::stream<std::array<ap_int<8>, 1>> BandwidthAdjustDecreaseStreams_6_out0_stream[1];
-    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_6_out0_stream[0] depth=4096
+    #pragma HLS STREAM variable=BandwidthAdjustDecreaseStreams_6_out0_stream[0] depth=764
     hls::stream<std::array<ap_int<8>, 1>> StreamingSwish_68_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingSwish_68_out0_stream[0] depth=2
+    #pragma HLS STREAM variable=StreamingSwish_68_out0_stream[0] depth=76
     hls::stream<std::array<std::array<ap_int<8>, 1>, 1>> StreamingLineBuffer_76_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_76_out0_stream[0] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_76_out0_stream[0] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_76_out0_stream_prepad[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_76_out0_stream_prepad[0] depth=8192
+    #pragma HLS STREAM variable=StreamingLineBuffer_76_out0_stream_prepad[0] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_73_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingConv_73_out0_stream[0] depth=8192
+    #pragma HLS STREAM variable=StreamingConv_73_out0_stream[0] depth=321
     hls::stream<std::array<std::array<ap_int<8>, 1>, 1>> StreamingLineBuffer_77_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_77_out0_stream[0] depth=4096
+    #pragma HLS STREAM variable=StreamingLineBuffer_77_out0_stream[0] depth=6
     hls::stream<std::array<ap_int<8>, 1>> StreamingLineBuffer_77_out0_stream_prepad[1];
-    #pragma HLS STREAM variable=StreamingLineBuffer_77_out0_stream_prepad[0] depth=12288
+    #pragma HLS STREAM variable=StreamingLineBuffer_77_out0_stream_prepad[0] depth=4
     hls::stream<std::array<ap_int<8>, 1>> StreamingConv_74_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingConv_74_out0_stream[0] depth=8192
+    #pragma HLS STREAM variable=StreamingConv_74_out0_stream[0] depth=561
     hls::stream<std::array<ap_int<8>, 1>> StreamingConcat_18_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingConcat_18_out0_stream[0] depth=12288
+    #pragma HLS STREAM variable=StreamingConcat_18_out0_stream[0] depth=2
     hls::stream<std::array<ap_int<8>, 1>> StreamingReshape_2_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingReshape_2_out0_stream[0] depth=24576
+    #pragma HLS STREAM variable=StreamingReshape_2_out0_stream[0] depth=47665
     hls::stream<std::array<ap_int<8>, 1>> StreamingConcat_19_out0_stream[1];
-    #pragma HLS STREAM variable=StreamingConcat_19_out0_stream[0] depth=348160
-    NHWCToStream <
-        ap_axiu<128, 0, 0, 0>,  // TInputStruct
-        ap_uint<128>,  // TInput
-        std::array<ap_int<8>, 3>,  // TOutputStruct
-        ap_int<8>,  // TOutput
-        DequantQuantEqual<ap_int<8>>,  // Quantizer
-        16,  // DATA_PER_WORD
-        640,  // HEIGHT
-        640,  // WIDTH
-        3,  // CH
-        2,  // OUT_W_PAR
-        3  // OUT_CH_PAR
-    > NHWCToStream_0;
-    NHWCToStream_0.run<0>(global_in, NHWCToStream_0_out0_stream);
+    #pragma HLS STREAM variable=StreamingConcat_19_out0_stream[0] depth=2
+    mm2s<ap_int<8>, 3, 2, 204800, 3>(in_data, NHWCToStream_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "NHWCToStream_0_out0_stream_0," << NHWCToStream_0_out0_stream[0].size() << std::endl;
     #endif
@@ -2108,7 +2245,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         3,  // IN_CH_PAR
         1  // OUT_CH_PAR
     > BandwidthAdjustDecreaseChannels_0;
-    BandwidthAdjustDecreaseChannels_0.run<1>(NHWCToStream_0_out0_stream, BandwidthAdjustDecreaseChannels_0_out0_stream);
+    BandwidthAdjustDecreaseChannels_0.run<1, 3>(NHWCToStream_0_out0_stream, BandwidthAdjustDecreaseChannels_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseChannels_0_out0_stream_0," << BandwidthAdjustDecreaseChannels_0_out0_stream[0].size() << std::endl;
     #endif
@@ -2135,7 +2272,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_0;
-    StreamingLineBuffer_0_pixel_0.run<2>(BandwidthAdjustDecreaseChannels_0_out0_stream[1], StreamingLineBuffer_0_out0_stream_prepad[47], StreamingLineBuffer_0_buffer_stream[0]);
+    StreamingLineBuffer_0_pixel_0.run<2, 3>(BandwidthAdjustDecreaseChannels_0_out0_stream[1], StreamingLineBuffer_0_out0_stream_prepad[47], StreamingLineBuffer_0_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_47," << StreamingLineBuffer_0_out0_stream_prepad[47].size() << std::endl;
     #endif
@@ -2162,7 +2299,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_1;
-    StreamingLineBuffer_0_pixel_1.run<3>(BandwidthAdjustDecreaseChannels_0_out0_stream[0], StreamingLineBuffer_0_out0_stream_prepad[46], StreamingLineBuffer_0_buffer_stream[1]);
+    StreamingLineBuffer_0_pixel_1.run<3, 3>(BandwidthAdjustDecreaseChannels_0_out0_stream[0], StreamingLineBuffer_0_out0_stream_prepad[46], StreamingLineBuffer_0_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_46," << StreamingLineBuffer_0_out0_stream_prepad[46].size() << std::endl;
     #endif
@@ -2189,7 +2326,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_2;
-    StreamingLineBuffer_0_pixel_2.run<4>(StreamingLineBuffer_0_buffer_stream[0], StreamingLineBuffer_0_out0_stream_prepad[45], StreamingLineBuffer_0_buffer_stream[2]);
+    StreamingLineBuffer_0_pixel_2.run<4, 3>(StreamingLineBuffer_0_buffer_stream[0], StreamingLineBuffer_0_out0_stream_prepad[45], StreamingLineBuffer_0_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_45," << StreamingLineBuffer_0_out0_stream_prepad[45].size() << std::endl;
     #endif
@@ -2216,7 +2353,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_3;
-    StreamingLineBuffer_0_pixel_3.run<5>(StreamingLineBuffer_0_buffer_stream[1], StreamingLineBuffer_0_out0_stream_prepad[44], StreamingLineBuffer_0_buffer_stream[3]);
+    StreamingLineBuffer_0_pixel_3.run<5, 3>(StreamingLineBuffer_0_buffer_stream[1], StreamingLineBuffer_0_out0_stream_prepad[44], StreamingLineBuffer_0_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_44," << StreamingLineBuffer_0_out0_stream_prepad[44].size() << std::endl;
     #endif
@@ -2243,7 +2380,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_4;
-    StreamingLineBuffer_0_pixel_4.run<6>(StreamingLineBuffer_0_buffer_stream[2], StreamingLineBuffer_0_out0_stream_prepad[43], StreamingLineBuffer_0_buffer_stream[4]);
+    StreamingLineBuffer_0_pixel_4.run<6, 3>(StreamingLineBuffer_0_buffer_stream[2], StreamingLineBuffer_0_out0_stream_prepad[43], StreamingLineBuffer_0_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_43," << StreamingLineBuffer_0_out0_stream_prepad[43].size() << std::endl;
     #endif
@@ -2270,7 +2407,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_5;
-    StreamingLineBuffer_0_pixel_5.run<7>(StreamingLineBuffer_0_buffer_stream[3], StreamingLineBuffer_0_out0_stream_prepad[42], StreamingLineBuffer_0_buffer_stream[5]);
+    StreamingLineBuffer_0_pixel_5.run<7, 3>(StreamingLineBuffer_0_buffer_stream[3], StreamingLineBuffer_0_out0_stream_prepad[42], StreamingLineBuffer_0_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_42," << StreamingLineBuffer_0_out0_stream_prepad[42].size() << std::endl;
     #endif
@@ -2297,7 +2434,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_6;
-    StreamingLineBuffer_0_pixel_6.run<8>(StreamingLineBuffer_0_buffer_stream[4], StreamingLineBuffer_0_out0_stream_prepad[41], StreamingLineBuffer_0_buffer_stream[6]);
+    StreamingLineBuffer_0_pixel_6.run<8, 3>(StreamingLineBuffer_0_buffer_stream[4], StreamingLineBuffer_0_out0_stream_prepad[41], StreamingLineBuffer_0_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_41," << StreamingLineBuffer_0_out0_stream_prepad[41].size() << std::endl;
     #endif
@@ -2324,7 +2461,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_7;
-    StreamingLineBuffer_0_pixel_7.run<9>(StreamingLineBuffer_0_buffer_stream[5], StreamingLineBuffer_0_out0_stream_prepad[40], StreamingLineBuffer_0_buffer_stream[7]);
+    StreamingLineBuffer_0_pixel_7.run<9, 3>(StreamingLineBuffer_0_buffer_stream[5], StreamingLineBuffer_0_out0_stream_prepad[40], StreamingLineBuffer_0_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_40," << StreamingLineBuffer_0_out0_stream_prepad[40].size() << std::endl;
     #endif
@@ -2351,7 +2488,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_8;
-    StreamingLineBuffer_0_pixel_8.run<10>(StreamingLineBuffer_0_buffer_stream[6], StreamingLineBuffer_0_out0_stream_prepad[39], StreamingLineBuffer_0_buffer_stream[8]);
+    StreamingLineBuffer_0_pixel_8.run<10, 3>(StreamingLineBuffer_0_buffer_stream[6], StreamingLineBuffer_0_out0_stream_prepad[39], StreamingLineBuffer_0_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_39," << StreamingLineBuffer_0_out0_stream_prepad[39].size() << std::endl;
     #endif
@@ -2378,7 +2515,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_9;
-    StreamingLineBuffer_0_pixel_9.run<11>(StreamingLineBuffer_0_buffer_stream[7], StreamingLineBuffer_0_out0_stream_prepad[38], StreamingLineBuffer_0_buffer_stream[9]);
+    StreamingLineBuffer_0_pixel_9.run<11, 3>(StreamingLineBuffer_0_buffer_stream[7], StreamingLineBuffer_0_out0_stream_prepad[38], StreamingLineBuffer_0_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_38," << StreamingLineBuffer_0_out0_stream_prepad[38].size() << std::endl;
     #endif
@@ -2405,7 +2542,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_10;
-    StreamingLineBuffer_0_pixel_10.run<12>(StreamingLineBuffer_0_buffer_stream[8], StreamingLineBuffer_0_out0_stream_prepad[37], StreamingLineBuffer_0_buffer_stream[10]);
+    StreamingLineBuffer_0_pixel_10.run<12, 3>(StreamingLineBuffer_0_buffer_stream[8], StreamingLineBuffer_0_out0_stream_prepad[37], StreamingLineBuffer_0_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_37," << StreamingLineBuffer_0_out0_stream_prepad[37].size() << std::endl;
     #endif
@@ -2432,7 +2569,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_11;
-    StreamingLineBuffer_0_pixel_11.run<13>(StreamingLineBuffer_0_buffer_stream[9], StreamingLineBuffer_0_out0_stream_prepad[36], StreamingLineBuffer_0_buffer_stream[11]);
+    StreamingLineBuffer_0_pixel_11.run<13, 3>(StreamingLineBuffer_0_buffer_stream[9], StreamingLineBuffer_0_out0_stream_prepad[36], StreamingLineBuffer_0_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_36," << StreamingLineBuffer_0_out0_stream_prepad[36].size() << std::endl;
     #endif
@@ -2459,7 +2596,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_12;
-    StreamingLineBuffer_0_pixel_12.run<14>(StreamingLineBuffer_0_buffer_stream[10], StreamingLineBuffer_0_out0_stream_prepad[35], StreamingLineBuffer_0_buffer_stream[12]);
+    StreamingLineBuffer_0_pixel_12.run<14, 3>(StreamingLineBuffer_0_buffer_stream[10], StreamingLineBuffer_0_out0_stream_prepad[35], StreamingLineBuffer_0_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_35," << StreamingLineBuffer_0_out0_stream_prepad[35].size() << std::endl;
     #endif
@@ -2486,7 +2623,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_13;
-    StreamingLineBuffer_0_pixel_13.run<15>(StreamingLineBuffer_0_buffer_stream[11], StreamingLineBuffer_0_out0_stream_prepad[34], StreamingLineBuffer_0_buffer_stream[13]);
+    StreamingLineBuffer_0_pixel_13.run<15, 3>(StreamingLineBuffer_0_buffer_stream[11], StreamingLineBuffer_0_out0_stream_prepad[34], StreamingLineBuffer_0_buffer_stream[13]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_34," << StreamingLineBuffer_0_out0_stream_prepad[34].size() << std::endl;
     #endif
@@ -2513,7 +2650,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_14;
-    StreamingLineBuffer_0_pixel_14.run<16>(StreamingLineBuffer_0_buffer_stream[12], StreamingLineBuffer_0_out0_stream_prepad[33], StreamingLineBuffer_0_buffer_stream[14]);
+    StreamingLineBuffer_0_pixel_14.run<16, 3>(StreamingLineBuffer_0_buffer_stream[12], StreamingLineBuffer_0_out0_stream_prepad[33], StreamingLineBuffer_0_buffer_stream[14]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_33," << StreamingLineBuffer_0_out0_stream_prepad[33].size() << std::endl;
     #endif
@@ -2540,7 +2677,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_15;
-    StreamingLineBuffer_0_pixel_15.run<17>(StreamingLineBuffer_0_buffer_stream[13], StreamingLineBuffer_0_out0_stream_prepad[32], StreamingLineBuffer_0_buffer_stream[15]);
+    StreamingLineBuffer_0_pixel_15.run<17, 3>(StreamingLineBuffer_0_buffer_stream[13], StreamingLineBuffer_0_out0_stream_prepad[32], StreamingLineBuffer_0_buffer_stream[15]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_32," << StreamingLineBuffer_0_out0_stream_prepad[32].size() << std::endl;
     #endif
@@ -2567,7 +2704,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_16;
-    StreamingLineBuffer_0_pixel_16.run<18>(StreamingLineBuffer_0_buffer_stream[14], StreamingLineBuffer_0_out0_stream_prepad[31], StreamingLineBuffer_0_buffer_stream[16]);
+    StreamingLineBuffer_0_pixel_16.run<18, 3>(StreamingLineBuffer_0_buffer_stream[14], StreamingLineBuffer_0_out0_stream_prepad[31], StreamingLineBuffer_0_buffer_stream[16]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_31," << StreamingLineBuffer_0_out0_stream_prepad[31].size() << std::endl;
     #endif
@@ -2594,7 +2731,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_17;
-    StreamingLineBuffer_0_pixel_17.run<19>(StreamingLineBuffer_0_buffer_stream[15], StreamingLineBuffer_0_out0_stream_prepad[30], StreamingLineBuffer_0_buffer_stream[17]);
+    StreamingLineBuffer_0_pixel_17.run<19, 3>(StreamingLineBuffer_0_buffer_stream[15], StreamingLineBuffer_0_out0_stream_prepad[30], StreamingLineBuffer_0_buffer_stream[17]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_30," << StreamingLineBuffer_0_out0_stream_prepad[30].size() << std::endl;
     #endif
@@ -2621,7 +2758,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_18;
-    StreamingLineBuffer_0_pixel_18.run<20>(StreamingLineBuffer_0_buffer_stream[16], StreamingLineBuffer_0_out0_stream_prepad[29], StreamingLineBuffer_0_buffer_stream[18]);
+    StreamingLineBuffer_0_pixel_18.run<20, 3>(StreamingLineBuffer_0_buffer_stream[16], StreamingLineBuffer_0_out0_stream_prepad[29], StreamingLineBuffer_0_buffer_stream[18]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_29," << StreamingLineBuffer_0_out0_stream_prepad[29].size() << std::endl;
     #endif
@@ -2648,7 +2785,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_19;
-    StreamingLineBuffer_0_pixel_19.run<21>(StreamingLineBuffer_0_buffer_stream[17], StreamingLineBuffer_0_out0_stream_prepad[28], StreamingLineBuffer_0_buffer_stream[19]);
+    StreamingLineBuffer_0_pixel_19.run<21, 3>(StreamingLineBuffer_0_buffer_stream[17], StreamingLineBuffer_0_out0_stream_prepad[28], StreamingLineBuffer_0_buffer_stream[19]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_28," << StreamingLineBuffer_0_out0_stream_prepad[28].size() << std::endl;
     #endif
@@ -2675,7 +2812,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_20;
-    StreamingLineBuffer_0_pixel_20.run<22>(StreamingLineBuffer_0_buffer_stream[18], StreamingLineBuffer_0_out0_stream_prepad[27], StreamingLineBuffer_0_buffer_stream[20]);
+    StreamingLineBuffer_0_pixel_20.run<22, 3>(StreamingLineBuffer_0_buffer_stream[18], StreamingLineBuffer_0_out0_stream_prepad[27], StreamingLineBuffer_0_buffer_stream[20]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_27," << StreamingLineBuffer_0_out0_stream_prepad[27].size() << std::endl;
     #endif
@@ -2702,7 +2839,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_21;
-    StreamingLineBuffer_0_pixel_21.run<23>(StreamingLineBuffer_0_buffer_stream[19], StreamingLineBuffer_0_out0_stream_prepad[26], StreamingLineBuffer_0_buffer_stream[21]);
+    StreamingLineBuffer_0_pixel_21.run<23, 3>(StreamingLineBuffer_0_buffer_stream[19], StreamingLineBuffer_0_out0_stream_prepad[26], StreamingLineBuffer_0_buffer_stream[21]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_26," << StreamingLineBuffer_0_out0_stream_prepad[26].size() << std::endl;
     #endif
@@ -2729,7 +2866,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_22;
-    StreamingLineBuffer_0_pixel_22.run<24>(StreamingLineBuffer_0_buffer_stream[20], StreamingLineBuffer_0_out0_stream_prepad[25], StreamingLineBuffer_0_buffer_stream[22]);
+    StreamingLineBuffer_0_pixel_22.run<24, 3>(StreamingLineBuffer_0_buffer_stream[20], StreamingLineBuffer_0_out0_stream_prepad[25], StreamingLineBuffer_0_buffer_stream[22]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_25," << StreamingLineBuffer_0_out0_stream_prepad[25].size() << std::endl;
     #endif
@@ -2756,7 +2893,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_23;
-    StreamingLineBuffer_0_pixel_23.run<25>(StreamingLineBuffer_0_buffer_stream[21], StreamingLineBuffer_0_out0_stream_prepad[24], StreamingLineBuffer_0_buffer_stream[23]);
+    StreamingLineBuffer_0_pixel_23.run<25, 3>(StreamingLineBuffer_0_buffer_stream[21], StreamingLineBuffer_0_out0_stream_prepad[24], StreamingLineBuffer_0_buffer_stream[23]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_24," << StreamingLineBuffer_0_out0_stream_prepad[24].size() << std::endl;
     #endif
@@ -2783,7 +2920,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_24;
-    StreamingLineBuffer_0_pixel_24.run<26>(StreamingLineBuffer_0_buffer_stream[22], StreamingLineBuffer_0_out0_stream_prepad[23], StreamingLineBuffer_0_buffer_stream[24]);
+    StreamingLineBuffer_0_pixel_24.run<26, 3>(StreamingLineBuffer_0_buffer_stream[22], StreamingLineBuffer_0_out0_stream_prepad[23], StreamingLineBuffer_0_buffer_stream[24]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_23," << StreamingLineBuffer_0_out0_stream_prepad[23].size() << std::endl;
     #endif
@@ -2810,7 +2947,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_25;
-    StreamingLineBuffer_0_pixel_25.run<27>(StreamingLineBuffer_0_buffer_stream[23], StreamingLineBuffer_0_out0_stream_prepad[22], StreamingLineBuffer_0_buffer_stream[25]);
+    StreamingLineBuffer_0_pixel_25.run<27, 3>(StreamingLineBuffer_0_buffer_stream[23], StreamingLineBuffer_0_out0_stream_prepad[22], StreamingLineBuffer_0_buffer_stream[25]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_22," << StreamingLineBuffer_0_out0_stream_prepad[22].size() << std::endl;
     #endif
@@ -2837,7 +2974,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_26;
-    StreamingLineBuffer_0_pixel_26.run<28>(StreamingLineBuffer_0_buffer_stream[24], StreamingLineBuffer_0_out0_stream_prepad[21], StreamingLineBuffer_0_buffer_stream[26]);
+    StreamingLineBuffer_0_pixel_26.run<28, 3>(StreamingLineBuffer_0_buffer_stream[24], StreamingLineBuffer_0_out0_stream_prepad[21], StreamingLineBuffer_0_buffer_stream[26]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_21," << StreamingLineBuffer_0_out0_stream_prepad[21].size() << std::endl;
     #endif
@@ -2864,7 +3001,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_27;
-    StreamingLineBuffer_0_pixel_27.run<29>(StreamingLineBuffer_0_buffer_stream[25], StreamingLineBuffer_0_out0_stream_prepad[20], StreamingLineBuffer_0_buffer_stream[27]);
+    StreamingLineBuffer_0_pixel_27.run<29, 3>(StreamingLineBuffer_0_buffer_stream[25], StreamingLineBuffer_0_out0_stream_prepad[20], StreamingLineBuffer_0_buffer_stream[27]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_20," << StreamingLineBuffer_0_out0_stream_prepad[20].size() << std::endl;
     #endif
@@ -2891,7 +3028,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_28;
-    StreamingLineBuffer_0_pixel_28.run<30>(StreamingLineBuffer_0_buffer_stream[26], StreamingLineBuffer_0_out0_stream_prepad[19], StreamingLineBuffer_0_buffer_stream[28]);
+    StreamingLineBuffer_0_pixel_28.run<30, 3>(StreamingLineBuffer_0_buffer_stream[26], StreamingLineBuffer_0_out0_stream_prepad[19], StreamingLineBuffer_0_buffer_stream[28]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_19," << StreamingLineBuffer_0_out0_stream_prepad[19].size() << std::endl;
     #endif
@@ -2918,7 +3055,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_29;
-    StreamingLineBuffer_0_pixel_29.run<31>(StreamingLineBuffer_0_buffer_stream[27], StreamingLineBuffer_0_out0_stream_prepad[18], StreamingLineBuffer_0_buffer_stream[29]);
+    StreamingLineBuffer_0_pixel_29.run<31, 3>(StreamingLineBuffer_0_buffer_stream[27], StreamingLineBuffer_0_out0_stream_prepad[18], StreamingLineBuffer_0_buffer_stream[29]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_18," << StreamingLineBuffer_0_out0_stream_prepad[18].size() << std::endl;
     #endif
@@ -2945,7 +3082,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_30;
-    StreamingLineBuffer_0_pixel_30.run<32>(StreamingLineBuffer_0_buffer_stream[28], StreamingLineBuffer_0_out0_stream_prepad[17], StreamingLineBuffer_0_buffer_stream[30]);
+    StreamingLineBuffer_0_pixel_30.run<32, 3>(StreamingLineBuffer_0_buffer_stream[28], StreamingLineBuffer_0_out0_stream_prepad[17], StreamingLineBuffer_0_buffer_stream[30]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_17," << StreamingLineBuffer_0_out0_stream_prepad[17].size() << std::endl;
     #endif
@@ -2972,7 +3109,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_31;
-    StreamingLineBuffer_0_pixel_31.run<33>(StreamingLineBuffer_0_buffer_stream[29], StreamingLineBuffer_0_out0_stream_prepad[16], StreamingLineBuffer_0_buffer_stream[31]);
+    StreamingLineBuffer_0_pixel_31.run<33, 3>(StreamingLineBuffer_0_buffer_stream[29], StreamingLineBuffer_0_out0_stream_prepad[16], StreamingLineBuffer_0_buffer_stream[31]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_16," << StreamingLineBuffer_0_out0_stream_prepad[16].size() << std::endl;
     #endif
@@ -2999,7 +3136,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_32;
-    StreamingLineBuffer_0_pixel_32.run<34>(StreamingLineBuffer_0_buffer_stream[30], StreamingLineBuffer_0_out0_stream_prepad[15], StreamingLineBuffer_0_buffer_stream[32]);
+    StreamingLineBuffer_0_pixel_32.run<34, 3>(StreamingLineBuffer_0_buffer_stream[30], StreamingLineBuffer_0_out0_stream_prepad[15], StreamingLineBuffer_0_buffer_stream[32]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_15," << StreamingLineBuffer_0_out0_stream_prepad[15].size() << std::endl;
     #endif
@@ -3026,7 +3163,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_33;
-    StreamingLineBuffer_0_pixel_33.run<35>(StreamingLineBuffer_0_buffer_stream[31], StreamingLineBuffer_0_out0_stream_prepad[14], StreamingLineBuffer_0_buffer_stream[33]);
+    StreamingLineBuffer_0_pixel_33.run<35, 3>(StreamingLineBuffer_0_buffer_stream[31], StreamingLineBuffer_0_out0_stream_prepad[14], StreamingLineBuffer_0_buffer_stream[33]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_14," << StreamingLineBuffer_0_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -3053,7 +3190,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_34;
-    StreamingLineBuffer_0_pixel_34.run<36>(StreamingLineBuffer_0_buffer_stream[32], StreamingLineBuffer_0_out0_stream_prepad[13], StreamingLineBuffer_0_buffer_stream[34]);
+    StreamingLineBuffer_0_pixel_34.run<36, 3>(StreamingLineBuffer_0_buffer_stream[32], StreamingLineBuffer_0_out0_stream_prepad[13], StreamingLineBuffer_0_buffer_stream[34]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_13," << StreamingLineBuffer_0_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -3080,7 +3217,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_35;
-    StreamingLineBuffer_0_pixel_35.run<37>(StreamingLineBuffer_0_buffer_stream[33], StreamingLineBuffer_0_out0_stream_prepad[12], StreamingLineBuffer_0_buffer_stream[35]);
+    StreamingLineBuffer_0_pixel_35.run<37, 3>(StreamingLineBuffer_0_buffer_stream[33], StreamingLineBuffer_0_out0_stream_prepad[12], StreamingLineBuffer_0_buffer_stream[35]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_12," << StreamingLineBuffer_0_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -3107,7 +3244,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_36;
-    StreamingLineBuffer_0_pixel_36.run<38>(StreamingLineBuffer_0_buffer_stream[34], StreamingLineBuffer_0_out0_stream_prepad[11], StreamingLineBuffer_0_buffer_stream[36]);
+    StreamingLineBuffer_0_pixel_36.run<38, 3>(StreamingLineBuffer_0_buffer_stream[34], StreamingLineBuffer_0_out0_stream_prepad[11], StreamingLineBuffer_0_buffer_stream[36]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_11," << StreamingLineBuffer_0_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -3134,7 +3271,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_37;
-    StreamingLineBuffer_0_pixel_37.run<39>(StreamingLineBuffer_0_buffer_stream[35], StreamingLineBuffer_0_out0_stream_prepad[10], StreamingLineBuffer_0_buffer_stream[37]);
+    StreamingLineBuffer_0_pixel_37.run<39, 3>(StreamingLineBuffer_0_buffer_stream[35], StreamingLineBuffer_0_out0_stream_prepad[10], StreamingLineBuffer_0_buffer_stream[37]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_10," << StreamingLineBuffer_0_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -3161,7 +3298,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_38;
-    StreamingLineBuffer_0_pixel_38.run<40>(StreamingLineBuffer_0_buffer_stream[36], StreamingLineBuffer_0_out0_stream_prepad[9], StreamingLineBuffer_0_buffer_stream[38]);
+    StreamingLineBuffer_0_pixel_38.run<40, 3>(StreamingLineBuffer_0_buffer_stream[36], StreamingLineBuffer_0_out0_stream_prepad[9], StreamingLineBuffer_0_buffer_stream[38]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_9," << StreamingLineBuffer_0_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -3188,7 +3325,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_39;
-    StreamingLineBuffer_0_pixel_39.run<41>(StreamingLineBuffer_0_buffer_stream[37], StreamingLineBuffer_0_out0_stream_prepad[8], StreamingLineBuffer_0_buffer_stream[39]);
+    StreamingLineBuffer_0_pixel_39.run<41, 3>(StreamingLineBuffer_0_buffer_stream[37], StreamingLineBuffer_0_out0_stream_prepad[8], StreamingLineBuffer_0_buffer_stream[39]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_8," << StreamingLineBuffer_0_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -3215,7 +3352,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_40;
-    StreamingLineBuffer_0_pixel_40.run<42>(StreamingLineBuffer_0_buffer_stream[38], StreamingLineBuffer_0_out0_stream_prepad[7], StreamingLineBuffer_0_buffer_stream[40]);
+    StreamingLineBuffer_0_pixel_40.run<42, 3>(StreamingLineBuffer_0_buffer_stream[38], StreamingLineBuffer_0_out0_stream_prepad[7], StreamingLineBuffer_0_buffer_stream[40]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_7," << StreamingLineBuffer_0_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -3242,7 +3379,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_41;
-    StreamingLineBuffer_0_pixel_41.run<43>(StreamingLineBuffer_0_buffer_stream[39], StreamingLineBuffer_0_out0_stream_prepad[6], StreamingLineBuffer_0_buffer_stream[41]);
+    StreamingLineBuffer_0_pixel_41.run<43, 3>(StreamingLineBuffer_0_buffer_stream[39], StreamingLineBuffer_0_out0_stream_prepad[6], StreamingLineBuffer_0_buffer_stream[41]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_6," << StreamingLineBuffer_0_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -3269,7 +3406,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_42;
-    StreamingLineBuffer_0_pixel_42.run<44>(StreamingLineBuffer_0_buffer_stream[40], StreamingLineBuffer_0_out0_stream_prepad[5], StreamingLineBuffer_0_buffer_stream[42]);
+    StreamingLineBuffer_0_pixel_42.run<44, 3>(StreamingLineBuffer_0_buffer_stream[40], StreamingLineBuffer_0_out0_stream_prepad[5], StreamingLineBuffer_0_buffer_stream[42]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_5," << StreamingLineBuffer_0_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -3296,7 +3433,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_43;
-    StreamingLineBuffer_0_pixel_43.run<45>(StreamingLineBuffer_0_buffer_stream[41], StreamingLineBuffer_0_out0_stream_prepad[4], StreamingLineBuffer_0_buffer_stream[43]);
+    StreamingLineBuffer_0_pixel_43.run<45, 3>(StreamingLineBuffer_0_buffer_stream[41], StreamingLineBuffer_0_out0_stream_prepad[4], StreamingLineBuffer_0_buffer_stream[43]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_4," << StreamingLineBuffer_0_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -3323,7 +3460,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_44;
-    StreamingLineBuffer_0_pixel_44.run<46>(StreamingLineBuffer_0_buffer_stream[42], StreamingLineBuffer_0_out0_stream_prepad[3], StreamingLineBuffer_0_buffer_stream[44]);
+    StreamingLineBuffer_0_pixel_44.run<46, 3>(StreamingLineBuffer_0_buffer_stream[42], StreamingLineBuffer_0_out0_stream_prepad[3], StreamingLineBuffer_0_buffer_stream[44]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_3," << StreamingLineBuffer_0_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -3350,7 +3487,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_45;
-    StreamingLineBuffer_0_pixel_45.run<47>(StreamingLineBuffer_0_buffer_stream[43], StreamingLineBuffer_0_out0_stream_prepad[2], StreamingLineBuffer_0_buffer_stream[45]);
+    StreamingLineBuffer_0_pixel_45.run<47, 3>(StreamingLineBuffer_0_buffer_stream[43], StreamingLineBuffer_0_out0_stream_prepad[2], StreamingLineBuffer_0_buffer_stream[45]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_2," << StreamingLineBuffer_0_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -3377,7 +3514,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_46;
-    StreamingLineBuffer_0_pixel_46.run<48>(StreamingLineBuffer_0_buffer_stream[44], StreamingLineBuffer_0_out0_stream_prepad[1]);
+    StreamingLineBuffer_0_pixel_46.run<48, 3>(StreamingLineBuffer_0_buffer_stream[44], StreamingLineBuffer_0_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_1," << StreamingLineBuffer_0_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -3401,7 +3538,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_0_pixel_47;
-    StreamingLineBuffer_0_pixel_47.run<49>(StreamingLineBuffer_0_buffer_stream[45], StreamingLineBuffer_0_out0_stream_prepad[0]);
+    StreamingLineBuffer_0_pixel_47.run<49, 3>(StreamingLineBuffer_0_buffer_stream[45], StreamingLineBuffer_0_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_prepad_0," << StreamingLineBuffer_0_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -3426,14 +3563,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_0_pad;
-    StreamingLineBuffer_0_pad.run<50>(StreamingLineBuffer_0_out0_stream_prepad, StreamingLineBuffer_0_out0_stream);
+    StreamingLineBuffer_0_pad.run<50, 3>(StreamingLineBuffer_0_out0_stream_prepad, StreamingLineBuffer_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_0_out0_stream_0," << StreamingLineBuffer_0_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_0_weights[48][1][36];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_0_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_0_weights dim=2 complete
-    ap_int<16> StreamingConv_0_biases[16][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_0_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_0_biases dim=2 complete
     StreamingConv <
@@ -3464,7 +3599,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_0;
-    StreamingConv_0.run<51>(StreamingLineBuffer_0_out0_stream, StreamingConv_0_weights, StreamingConv_0_biases, StreamingConv_0_out0_stream);
+    StreamingConv_0.run<51, 3>(StreamingLineBuffer_0_out0_stream, StreamingConv_0_weights, StreamingConv_0_biases, StreamingConv_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_0_out0_stream_0," << StreamingConv_0_out0_stream[0].size() << std::endl;
     #endif
@@ -3484,7 +3619,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_0;
-    StreamingSwish_0.run<52>(StreamingConv_0_out0_stream, StreamingSwish_0_lut, StreamingSwish_0_out0_stream);
+    StreamingSwish_0.run<52, 3>(StreamingConv_0_out0_stream, StreamingSwish_0_lut, StreamingSwish_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_0_out0_stream_0," << StreamingSwish_0_out0_stream[0].size() << std::endl;
     #endif
@@ -3511,7 +3646,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_0;
-    StreamingLineBuffer_1_pixel_0.run<53>(StreamingSwish_0_out0_stream[1], StreamingLineBuffer_1_out0_stream_prepad[14], StreamingLineBuffer_1_buffer_stream[0]);
+    StreamingLineBuffer_1_pixel_0.run<53, 3>(StreamingSwish_0_out0_stream[1], StreamingLineBuffer_1_out0_stream_prepad[14], StreamingLineBuffer_1_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_14," << StreamingLineBuffer_1_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -3538,7 +3673,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_1;
-    StreamingLineBuffer_1_pixel_1.run<54>(StreamingSwish_0_out0_stream[0], StreamingLineBuffer_1_out0_stream_prepad[13], StreamingLineBuffer_1_buffer_stream[1]);
+    StreamingLineBuffer_1_pixel_1.run<54, 3>(StreamingSwish_0_out0_stream[0], StreamingLineBuffer_1_out0_stream_prepad[13], StreamingLineBuffer_1_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_13," << StreamingLineBuffer_1_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -3565,7 +3700,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_2;
-    StreamingLineBuffer_1_pixel_2.run<55>(StreamingLineBuffer_1_buffer_stream[0], StreamingLineBuffer_1_out0_stream_prepad[12], StreamingLineBuffer_1_buffer_stream[2]);
+    StreamingLineBuffer_1_pixel_2.run<55, 3>(StreamingLineBuffer_1_buffer_stream[0], StreamingLineBuffer_1_out0_stream_prepad[12], StreamingLineBuffer_1_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_12," << StreamingLineBuffer_1_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -3592,7 +3727,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_3;
-    StreamingLineBuffer_1_pixel_3.run<56>(StreamingLineBuffer_1_buffer_stream[1], StreamingLineBuffer_1_out0_stream_prepad[11], StreamingLineBuffer_1_buffer_stream[4]);
+    StreamingLineBuffer_1_pixel_3.run<56, 3>(StreamingLineBuffer_1_buffer_stream[1], StreamingLineBuffer_1_out0_stream_prepad[11], StreamingLineBuffer_1_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_11," << StreamingLineBuffer_1_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -3619,7 +3754,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_4;
-    StreamingLineBuffer_1_pixel_4.run<57>(StreamingLineBuffer_1_buffer_stream[2], StreamingLineBuffer_1_out0_stream_prepad[10], StreamingLineBuffer_1_buffer_stream[3]);
+    StreamingLineBuffer_1_pixel_4.run<57, 3>(StreamingLineBuffer_1_buffer_stream[2], StreamingLineBuffer_1_out0_stream_prepad[10], StreamingLineBuffer_1_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_10," << StreamingLineBuffer_1_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -3646,7 +3781,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_6;
-    StreamingLineBuffer_1_pixel_6.run<59>(StreamingLineBuffer_1_buffer_stream[4], StreamingLineBuffer_1_out0_stream_prepad[8], StreamingLineBuffer_1_buffer_stream[6]);
+    StreamingLineBuffer_1_pixel_6.run<59, 3>(StreamingLineBuffer_1_buffer_stream[4], StreamingLineBuffer_1_out0_stream_prepad[8], StreamingLineBuffer_1_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_8," << StreamingLineBuffer_1_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -3673,7 +3808,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_5;
-    StreamingLineBuffer_1_pixel_5.run<58>(StreamingLineBuffer_1_buffer_stream[3], StreamingLineBuffer_1_out0_stream_prepad[9], StreamingLineBuffer_1_buffer_stream[5]);
+    StreamingLineBuffer_1_pixel_5.run<58, 3>(StreamingLineBuffer_1_buffer_stream[3], StreamingLineBuffer_1_out0_stream_prepad[9], StreamingLineBuffer_1_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_9," << StreamingLineBuffer_1_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -3700,7 +3835,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_8;
-    StreamingLineBuffer_1_pixel_8.run<61>(StreamingLineBuffer_1_buffer_stream[6], StreamingLineBuffer_1_out0_stream_prepad[6], StreamingLineBuffer_1_buffer_stream[9]);
+    StreamingLineBuffer_1_pixel_8.run<61, 3>(StreamingLineBuffer_1_buffer_stream[6], StreamingLineBuffer_1_out0_stream_prepad[6], StreamingLineBuffer_1_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_6," << StreamingLineBuffer_1_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -3727,7 +3862,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_7;
-    StreamingLineBuffer_1_pixel_7.run<60>(StreamingLineBuffer_1_buffer_stream[5], StreamingLineBuffer_1_out0_stream_prepad[7], StreamingLineBuffer_1_buffer_stream[7]);
+    StreamingLineBuffer_1_pixel_7.run<60, 3>(StreamingLineBuffer_1_buffer_stream[5], StreamingLineBuffer_1_out0_stream_prepad[7], StreamingLineBuffer_1_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_7," << StreamingLineBuffer_1_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -3754,7 +3889,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_11;
-    StreamingLineBuffer_1_pixel_11.run<64>(StreamingLineBuffer_1_buffer_stream[9], StreamingLineBuffer_1_out0_stream_prepad[3], StreamingLineBuffer_1_buffer_stream[11]);
+    StreamingLineBuffer_1_pixel_11.run<64, 3>(StreamingLineBuffer_1_buffer_stream[9], StreamingLineBuffer_1_out0_stream_prepad[3], StreamingLineBuffer_1_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_3," << StreamingLineBuffer_1_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -3781,7 +3916,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_9;
-    StreamingLineBuffer_1_pixel_9.run<62>(StreamingLineBuffer_1_buffer_stream[7], StreamingLineBuffer_1_out0_stream_prepad[5], StreamingLineBuffer_1_buffer_stream[8]);
+    StreamingLineBuffer_1_pixel_9.run<62, 3>(StreamingLineBuffer_1_buffer_stream[7], StreamingLineBuffer_1_out0_stream_prepad[5], StreamingLineBuffer_1_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_5," << StreamingLineBuffer_1_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -3808,7 +3943,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_13;
-    StreamingLineBuffer_1_pixel_13.run<66>(StreamingLineBuffer_1_buffer_stream[11], StreamingLineBuffer_1_out0_stream_prepad[1]);
+    StreamingLineBuffer_1_pixel_13.run<66, 3>(StreamingLineBuffer_1_buffer_stream[11], StreamingLineBuffer_1_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_1," << StreamingLineBuffer_1_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -3832,7 +3967,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_10;
-    StreamingLineBuffer_1_pixel_10.run<63>(StreamingLineBuffer_1_buffer_stream[8], StreamingLineBuffer_1_out0_stream_prepad[4], StreamingLineBuffer_1_buffer_stream[10]);
+    StreamingLineBuffer_1_pixel_10.run<63, 3>(StreamingLineBuffer_1_buffer_stream[8], StreamingLineBuffer_1_out0_stream_prepad[4], StreamingLineBuffer_1_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_4," << StreamingLineBuffer_1_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -3859,7 +3994,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_12;
-    StreamingLineBuffer_1_pixel_12.run<65>(StreamingLineBuffer_1_buffer_stream[10], StreamingLineBuffer_1_out0_stream_prepad[2], StreamingLineBuffer_1_buffer_stream[12]);
+    StreamingLineBuffer_1_pixel_12.run<65, 3>(StreamingLineBuffer_1_buffer_stream[10], StreamingLineBuffer_1_out0_stream_prepad[2], StreamingLineBuffer_1_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_2," << StreamingLineBuffer_1_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -3886,7 +4021,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_1_pixel_14;
-    StreamingLineBuffer_1_pixel_14.run<67>(StreamingLineBuffer_1_buffer_stream[12], StreamingLineBuffer_1_out0_stream_prepad[0]);
+    StreamingLineBuffer_1_pixel_14.run<67, 3>(StreamingLineBuffer_1_buffer_stream[12], StreamingLineBuffer_1_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_prepad_0," << StreamingLineBuffer_1_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -3911,14 +4046,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_1_pad;
-    StreamingLineBuffer_1_pad.run<68>(StreamingLineBuffer_1_out0_stream_prepad, StreamingLineBuffer_1_out0_stream);
+    StreamingLineBuffer_1_pad.run<68, 3>(StreamingLineBuffer_1_out0_stream_prepad, StreamingLineBuffer_1_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_1_out0_stream_0," << StreamingLineBuffer_1_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_1_weights[256][2][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_1_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_1_weights dim=2 complete
-    ap_int<12> StreamingConv_1_biases[16][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_1_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_1_biases dim=2 complete
     StreamingConv <
@@ -3949,7 +4082,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_1;
-    StreamingConv_1.run<69>(StreamingLineBuffer_1_out0_stream, StreamingConv_1_weights, StreamingConv_1_biases, StreamingConv_1_out0_stream);
+    StreamingConv_1.run<69, 3>(StreamingLineBuffer_1_out0_stream, StreamingConv_1_weights, StreamingConv_1_biases, StreamingConv_1_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_1_out0_stream_0," << StreamingConv_1_out0_stream[0].size() << std::endl;
     #endif
@@ -3969,7 +4102,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_1;
-    StreamingSwish_1.run<70>(StreamingConv_1_out0_stream, StreamingSwish_1_lut, StreamingSwish_1_out0_stream);
+    StreamingSwish_1.run<70, 3>(StreamingConv_1_out0_stream, StreamingSwish_1_lut, StreamingSwish_1_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_1_out0_stream_0," << StreamingSwish_1_out0_stream[0].size() << std::endl;
     #endif
@@ -3984,7 +4117,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_0;
-    TensorDuplicator_0.run<71>(StreamingSwish_1_out0_stream, TensorDuplicator_0_out0_stream, TensorDuplicator_0_out1_stream);
+    TensorDuplicator_0.run<71, 3>(StreamingSwish_1_out0_stream, TensorDuplicator_0_out0_stream, TensorDuplicator_0_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_0_out0_stream_0," << TensorDuplicator_0_out0_stream[0].size() << std::endl;
     #endif
@@ -4017,7 +4150,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_2_pixel_0;
-    StreamingLineBuffer_2_pixel_0.run<72>(TensorDuplicator_0_out0_stream[1], StreamingLineBuffer_2_out0_stream_prepad[1]);
+    StreamingLineBuffer_2_pixel_0.run<72, 3>(TensorDuplicator_0_out0_stream[1], StreamingLineBuffer_2_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_1," << StreamingLineBuffer_2_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -4041,7 +4174,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_2_pixel_1;
-    StreamingLineBuffer_2_pixel_1.run<73>(TensorDuplicator_0_out0_stream[0], StreamingLineBuffer_2_out0_stream_prepad[0]);
+    StreamingLineBuffer_2_pixel_1.run<73, 3>(TensorDuplicator_0_out0_stream[0], StreamingLineBuffer_2_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_prepad_0," << StreamingLineBuffer_2_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -4065,7 +4198,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_3_pixel_0;
-    StreamingLineBuffer_3_pixel_0.run<75>(TensorDuplicator_0_out1_stream[1], StreamingLineBuffer_3_out0_stream_prepad[1]);
+    StreamingLineBuffer_3_pixel_0.run<75, 3>(TensorDuplicator_0_out1_stream[1], StreamingLineBuffer_3_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_1," << StreamingLineBuffer_3_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -4089,7 +4222,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_3_pixel_1;
-    StreamingLineBuffer_3_pixel_1.run<76>(TensorDuplicator_0_out1_stream[0], StreamingLineBuffer_3_out0_stream_prepad[0]);
+    StreamingLineBuffer_3_pixel_1.run<76, 3>(TensorDuplicator_0_out1_stream[0], StreamingLineBuffer_3_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_prepad_0," << StreamingLineBuffer_3_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -4114,7 +4247,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_2_pad;
-    StreamingLineBuffer_2_pad.run<74>(StreamingLineBuffer_2_out0_stream_prepad, StreamingLineBuffer_2_out0_stream);
+    StreamingLineBuffer_2_pad.run<74, 3>(StreamingLineBuffer_2_out0_stream_prepad, StreamingLineBuffer_2_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_2_out0_stream_0," << StreamingLineBuffer_2_out0_stream[0].size() << std::endl;
     #endif
@@ -4139,14 +4272,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_3_pad;
-    StreamingLineBuffer_3_pad.run<77>(StreamingLineBuffer_3_out0_stream_prepad, StreamingLineBuffer_3_out0_stream);
+    StreamingLineBuffer_3_pad.run<77, 3>(StreamingLineBuffer_3_out0_stream_prepad, StreamingLineBuffer_3_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_3_out0_stream_0," << StreamingLineBuffer_3_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_2_weights[256][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_2_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_2_weights dim=2 complete
-    ap_int<12> StreamingConv_2_biases[16][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_2_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_2_biases dim=2 complete
     StreamingConv <
@@ -4177,17 +4308,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_2;
-    StreamingConv_2.run<78>(StreamingLineBuffer_2_out0_stream, StreamingConv_2_weights, StreamingConv_2_biases, StreamingConv_2_out0_stream);
+    StreamingConv_2.run<78, 3>(StreamingLineBuffer_2_out0_stream, StreamingConv_2_weights, StreamingConv_2_biases, StreamingConv_2_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_2_out0_stream_0," << StreamingConv_2_out0_stream[0].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_2_out0_stream_1," << StreamingConv_2_out0_stream[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_3_weights[256][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_3_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_3_weights dim=2 complete
-    ap_int<12> StreamingConv_3_biases[16][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_3_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_3_biases dim=2 complete
     StreamingConv <
@@ -4218,7 +4347,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_3;
-    StreamingConv_3.run<79>(StreamingLineBuffer_3_out0_stream, StreamingConv_3_weights, StreamingConv_3_biases, StreamingConv_3_out0_stream);
+    StreamingConv_3.run<79, 3>(StreamingLineBuffer_3_out0_stream, StreamingConv_3_weights, StreamingConv_3_biases, StreamingConv_3_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_3_out0_stream_0," << StreamingConv_3_out0_stream[0].size() << std::endl;
     #endif
@@ -4238,7 +4367,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_2;
-    StreamingSwish_2.run<80>(StreamingConv_2_out0_stream, StreamingSwish_2_lut, StreamingSwish_2_out0_stream);
+    StreamingSwish_2.run<80, 3>(StreamingConv_2_out0_stream, StreamingSwish_2_lut, StreamingSwish_2_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_2_out0_stream_0," << StreamingSwish_2_out0_stream[0].size() << std::endl;
     #endif
@@ -4258,7 +4387,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_3;
-    StreamingSwish_3.run<81>(StreamingConv_3_out0_stream, StreamingSwish_3_lut, StreamingSwish_3_out0_stream);
+    StreamingSwish_3.run<81, 3>(StreamingConv_3_out0_stream, StreamingSwish_3_lut, StreamingSwish_3_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_3_out0_stream_0," << StreamingSwish_3_out0_stream[0].size() << std::endl;
     #endif
@@ -4273,7 +4402,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_1;
-    TensorDuplicator_1.run<82>(StreamingSwish_2_out0_stream, TensorDuplicator_1_out0_stream, TensorDuplicator_1_out1_stream);
+    TensorDuplicator_1.run<82, 3>(StreamingSwish_2_out0_stream, TensorDuplicator_1_out0_stream, TensorDuplicator_1_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_1_out0_stream_0," << TensorDuplicator_1_out0_stream[0].size() << std::endl;
     #endif
@@ -4306,7 +4435,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_0;
-    StreamingLineBuffer_4_pixel_0.run<83>(TensorDuplicator_1_out0_stream[1], StreamingLineBuffer_4_out0_stream_prepad[1]);
+    StreamingLineBuffer_4_pixel_0.run<83, 3>(TensorDuplicator_1_out0_stream[1], StreamingLineBuffer_4_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_4_out0_stream_prepad_1," << StreamingLineBuffer_4_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -4330,7 +4459,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_4_pixel_1;
-    StreamingLineBuffer_4_pixel_1.run<84>(TensorDuplicator_1_out0_stream[0], StreamingLineBuffer_4_out0_stream_prepad[0]);
+    StreamingLineBuffer_4_pixel_1.run<84, 3>(TensorDuplicator_1_out0_stream[0], StreamingLineBuffer_4_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_4_out0_stream_prepad_0," << StreamingLineBuffer_4_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -4355,14 +4484,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_4_pad;
-    StreamingLineBuffer_4_pad.run<85>(StreamingLineBuffer_4_out0_stream_prepad, StreamingLineBuffer_4_out0_stream);
+    StreamingLineBuffer_4_pad.run<85, 3>(StreamingLineBuffer_4_out0_stream_prepad, StreamingLineBuffer_4_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_4_out0_stream_0," << StreamingLineBuffer_4_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_4_weights[256][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_4_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_4_weights dim=2 complete
-    ap_int<13> StreamingConv_4_biases[16][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_4_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_4_biases dim=2 complete
     StreamingConv <
@@ -4393,7 +4520,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_4;
-    StreamingConv_4.run<86>(StreamingLineBuffer_4_out0_stream, StreamingConv_4_weights, StreamingConv_4_biases, StreamingConv_4_out0_stream);
+    StreamingConv_4.run<86, 3>(StreamingLineBuffer_4_out0_stream, StreamingConv_4_weights, StreamingConv_4_biases, StreamingConv_4_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_4_out0_stream_0," << StreamingConv_4_out0_stream[0].size() << std::endl;
     #endif
@@ -4413,7 +4540,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_4;
-    StreamingSwish_4.run<87>(StreamingConv_4_out0_stream, StreamingSwish_4_lut, StreamingSwish_4_out0_stream);
+    StreamingSwish_4.run<87, 3>(StreamingConv_4_out0_stream, StreamingSwish_4_lut, StreamingSwish_4_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_4_out0_stream_0," << StreamingSwish_4_out0_stream[0].size() << std::endl;
     #endif
@@ -4440,7 +4567,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_5_pixel_0;
-    StreamingLineBuffer_5_pixel_0.run<88>(StreamingSwish_4_out0_stream[0], StreamingLineBuffer_5_out0_stream_prepad[11], StreamingLineBuffer_5_buffer_stream[0]);
+    StreamingLineBuffer_5_pixel_0.run<88, 3>(StreamingSwish_4_out0_stream[0], StreamingLineBuffer_5_out0_stream_prepad[11], StreamingLineBuffer_5_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_11," << StreamingLineBuffer_5_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -4467,7 +4594,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_5_pixel_1;
-    StreamingLineBuffer_5_pixel_1.run<89>(StreamingSwish_4_out0_stream[1], StreamingLineBuffer_5_out0_stream_prepad[10], StreamingLineBuffer_5_buffer_stream[1]);
+    StreamingLineBuffer_5_pixel_1.run<89, 3>(StreamingSwish_4_out0_stream[1], StreamingLineBuffer_5_out0_stream_prepad[10], StreamingLineBuffer_5_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_10," << StreamingLineBuffer_5_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -4494,7 +4621,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_5_pixel_2;
-    StreamingLineBuffer_5_pixel_2.run<90>(StreamingLineBuffer_5_buffer_stream[0], StreamingLineBuffer_5_out0_stream_prepad[9], StreamingLineBuffer_5_buffer_stream[2]);
+    StreamingLineBuffer_5_pixel_2.run<90, 3>(StreamingLineBuffer_5_buffer_stream[0], StreamingLineBuffer_5_out0_stream_prepad[9], StreamingLineBuffer_5_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_9," << StreamingLineBuffer_5_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -4521,7 +4648,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_5_pixel_3;
-    StreamingLineBuffer_5_pixel_3.run<91>(StreamingLineBuffer_5_buffer_stream[1], StreamingLineBuffer_5_out0_stream_prepad[8], StreamingLineBuffer_5_buffer_stream[3]);
+    StreamingLineBuffer_5_pixel_3.run<91, 3>(StreamingLineBuffer_5_buffer_stream[1], StreamingLineBuffer_5_out0_stream_prepad[8], StreamingLineBuffer_5_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_8," << StreamingLineBuffer_5_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -4548,7 +4675,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_5_pixel_4;
-    StreamingLineBuffer_5_pixel_4.run<92>(StreamingLineBuffer_5_buffer_stream[2], StreamingLineBuffer_5_out0_stream_prepad[7], StreamingLineBuffer_5_buffer_stream[4]);
+    StreamingLineBuffer_5_pixel_4.run<92, 3>(StreamingLineBuffer_5_buffer_stream[2], StreamingLineBuffer_5_out0_stream_prepad[7], StreamingLineBuffer_5_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_7," << StreamingLineBuffer_5_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -4575,7 +4702,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_5_pixel_5;
-    StreamingLineBuffer_5_pixel_5.run<93>(StreamingLineBuffer_5_buffer_stream[3], StreamingLineBuffer_5_out0_stream_prepad[6], StreamingLineBuffer_5_buffer_stream[5]);
+    StreamingLineBuffer_5_pixel_5.run<93, 3>(StreamingLineBuffer_5_buffer_stream[3], StreamingLineBuffer_5_out0_stream_prepad[6], StreamingLineBuffer_5_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_6," << StreamingLineBuffer_5_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -4602,7 +4729,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_5_pixel_6;
-    StreamingLineBuffer_5_pixel_6.run<94>(StreamingLineBuffer_5_buffer_stream[4], StreamingLineBuffer_5_out0_stream_prepad[5], StreamingLineBuffer_5_buffer_stream[6]);
+    StreamingLineBuffer_5_pixel_6.run<94, 3>(StreamingLineBuffer_5_buffer_stream[4], StreamingLineBuffer_5_out0_stream_prepad[5], StreamingLineBuffer_5_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_5," << StreamingLineBuffer_5_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -4629,7 +4756,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_5_pixel_7;
-    StreamingLineBuffer_5_pixel_7.run<95>(StreamingLineBuffer_5_buffer_stream[5], StreamingLineBuffer_5_out0_stream_prepad[4], StreamingLineBuffer_5_buffer_stream[7]);
+    StreamingLineBuffer_5_pixel_7.run<95, 3>(StreamingLineBuffer_5_buffer_stream[5], StreamingLineBuffer_5_out0_stream_prepad[4], StreamingLineBuffer_5_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_4," << StreamingLineBuffer_5_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -4656,7 +4783,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_5_pixel_8;
-    StreamingLineBuffer_5_pixel_8.run<96>(StreamingLineBuffer_5_buffer_stream[6], StreamingLineBuffer_5_out0_stream_prepad[3], StreamingLineBuffer_5_buffer_stream[8]);
+    StreamingLineBuffer_5_pixel_8.run<96, 3>(StreamingLineBuffer_5_buffer_stream[6], StreamingLineBuffer_5_out0_stream_prepad[3], StreamingLineBuffer_5_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_3," << StreamingLineBuffer_5_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -4683,7 +4810,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_5_pixel_9;
-    StreamingLineBuffer_5_pixel_9.run<97>(StreamingLineBuffer_5_buffer_stream[7], StreamingLineBuffer_5_out0_stream_prepad[2], StreamingLineBuffer_5_buffer_stream[9]);
+    StreamingLineBuffer_5_pixel_9.run<97, 3>(StreamingLineBuffer_5_buffer_stream[7], StreamingLineBuffer_5_out0_stream_prepad[2], StreamingLineBuffer_5_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_2," << StreamingLineBuffer_5_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -4710,7 +4837,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_5_pixel_10;
-    StreamingLineBuffer_5_pixel_10.run<98>(StreamingLineBuffer_5_buffer_stream[8], StreamingLineBuffer_5_out0_stream_prepad[1]);
+    StreamingLineBuffer_5_pixel_10.run<98, 3>(StreamingLineBuffer_5_buffer_stream[8], StreamingLineBuffer_5_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_1," << StreamingLineBuffer_5_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -4734,7 +4861,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_5_pixel_11;
-    StreamingLineBuffer_5_pixel_11.run<99>(StreamingLineBuffer_5_buffer_stream[9], StreamingLineBuffer_5_out0_stream_prepad[0]);
+    StreamingLineBuffer_5_pixel_11.run<99, 3>(StreamingLineBuffer_5_buffer_stream[9], StreamingLineBuffer_5_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_prepad_0," << StreamingLineBuffer_5_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -4759,14 +4886,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_5_pad;
-    StreamingLineBuffer_5_pad.run<100>(StreamingLineBuffer_5_out0_stream_prepad, StreamingLineBuffer_5_out0_stream);
+    StreamingLineBuffer_5_pad.run<100, 3>(StreamingLineBuffer_5_out0_stream_prepad, StreamingLineBuffer_5_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_5_out0_stream_0," << StreamingLineBuffer_5_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_5_weights[256][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_5_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_5_weights dim=2 complete
-    ap_int<14> StreamingConv_5_biases[16][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_5_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_5_biases dim=2 complete
     StreamingConv <
@@ -4797,7 +4922,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_5;
-    StreamingConv_5.run<101>(StreamingLineBuffer_5_out0_stream, StreamingConv_5_weights, StreamingConv_5_biases, StreamingConv_5_out0_stream);
+    StreamingConv_5.run<101, 3>(StreamingLineBuffer_5_out0_stream, StreamingConv_5_weights, StreamingConv_5_biases, StreamingConv_5_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_5_out0_stream_0," << StreamingConv_5_out0_stream[0].size() << std::endl;
     #endif
@@ -4817,7 +4942,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_5;
-    StreamingSwish_5.run<102>(StreamingConv_5_out0_stream, StreamingSwish_5_lut, StreamingSwish_5_out0_stream);
+    StreamingSwish_5.run<102, 3>(StreamingConv_5_out0_stream, StreamingSwish_5_lut, StreamingSwish_5_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_5_out0_stream_0," << StreamingSwish_5_out0_stream[0].size() << std::endl;
     #endif
@@ -4842,7 +4967,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingAdd_0;
-    StreamingAdd_0.run<103>(TensorDuplicator_1_out1_stream, StreamingSwish_5_out0_stream, StreamingAdd_0_out0_stream);
+    StreamingAdd_0.run<103, 3>(TensorDuplicator_1_out1_stream, StreamingSwish_5_out0_stream, StreamingAdd_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingAdd_0_out0_stream_0," << StreamingAdd_0_out0_stream[0].size() << std::endl;
     #endif
@@ -4862,7 +4987,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingConcat_0;
-    StreamingConcat_0.run<104>(StreamingAdd_0_out0_stream, StreamingSwish_3_out0_stream, StreamingConcat_0_out0_stream);
+    StreamingConcat_0.run<104, 3>(StreamingAdd_0_out0_stream, StreamingSwish_3_out0_stream, StreamingConcat_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_0_out0_stream_0," << StreamingConcat_0_out0_stream[0].size() << std::endl;
     #endif
@@ -4889,7 +5014,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_6_pixel_0;
-    StreamingLineBuffer_6_pixel_0.run<105>(StreamingConcat_0_out0_stream[1], StreamingLineBuffer_6_out0_stream_prepad[1]);
+    StreamingLineBuffer_6_pixel_0.run<105, 3>(StreamingConcat_0_out0_stream[1], StreamingLineBuffer_6_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_1," << StreamingLineBuffer_6_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -4913,7 +5038,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_6_pixel_1;
-    StreamingLineBuffer_6_pixel_1.run<106>(StreamingConcat_0_out0_stream[0], StreamingLineBuffer_6_out0_stream_prepad[0]);
+    StreamingLineBuffer_6_pixel_1.run<106, 3>(StreamingConcat_0_out0_stream[0], StreamingLineBuffer_6_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_prepad_0," << StreamingLineBuffer_6_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -4938,14 +5063,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_6_pad;
-    StreamingLineBuffer_6_pad.run<107>(StreamingLineBuffer_6_out0_stream_prepad, StreamingLineBuffer_6_out0_stream);
+    StreamingLineBuffer_6_pad.run<107, 3>(StreamingLineBuffer_6_out0_stream_prepad, StreamingLineBuffer_6_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_6_out0_stream_0," << StreamingLineBuffer_6_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_6_weights[256][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_6_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_6_weights dim=2 complete
-    ap_int<14> StreamingConv_6_biases[8][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_6_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_6_biases dim=2 complete
     StreamingConv <
@@ -4976,7 +5099,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_6;
-    StreamingConv_6.run<108>(StreamingLineBuffer_6_out0_stream, StreamingConv_6_weights, StreamingConv_6_biases, StreamingConv_6_out0_stream);
+    StreamingConv_6.run<108, 3>(StreamingLineBuffer_6_out0_stream, StreamingConv_6_weights, StreamingConv_6_biases, StreamingConv_6_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_6_out0_stream_0," << StreamingConv_6_out0_stream[0].size() << std::endl;
     #endif
@@ -4996,7 +5119,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_6;
-    StreamingSwish_6.run<109>(StreamingConv_6_out0_stream, StreamingSwish_6_lut, StreamingSwish_6_out0_stream);
+    StreamingSwish_6.run<109, 3>(StreamingConv_6_out0_stream, StreamingSwish_6_lut, StreamingSwish_6_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_6_out0_stream_0," << StreamingSwish_6_out0_stream[0].size() << std::endl;
     #endif
@@ -5017,7 +5140,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // IN_CH_PAR
         1  // OUT_CH_PAR
     > BandwidthAdjustDecreaseChannels_1;
-    BandwidthAdjustDecreaseChannels_1.run<110>(StreamingSwish_6_out0_stream, BandwidthAdjustDecreaseChannels_1_out0_stream);
+    BandwidthAdjustDecreaseChannels_1.run<110, 3>(StreamingSwish_6_out0_stream, BandwidthAdjustDecreaseChannels_1_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseChannels_1_out0_stream_0," << BandwidthAdjustDecreaseChannels_1_out0_stream[0].size() << std::endl;
     #endif
@@ -5044,7 +5167,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_0;
-    StreamingLineBuffer_7_pixel_0.run<111>(BandwidthAdjustDecreaseChannels_1_out0_stream[1], StreamingLineBuffer_7_out0_stream_prepad[14], StreamingLineBuffer_7_buffer_stream[0]);
+    StreamingLineBuffer_7_pixel_0.run<111, 3>(BandwidthAdjustDecreaseChannels_1_out0_stream[1], StreamingLineBuffer_7_out0_stream_prepad[14], StreamingLineBuffer_7_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_14," << StreamingLineBuffer_7_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -5071,7 +5194,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_1;
-    StreamingLineBuffer_7_pixel_1.run<112>(BandwidthAdjustDecreaseChannels_1_out0_stream[0], StreamingLineBuffer_7_out0_stream_prepad[13], StreamingLineBuffer_7_buffer_stream[1]);
+    StreamingLineBuffer_7_pixel_1.run<112, 3>(BandwidthAdjustDecreaseChannels_1_out0_stream[0], StreamingLineBuffer_7_out0_stream_prepad[13], StreamingLineBuffer_7_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_13," << StreamingLineBuffer_7_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -5098,7 +5221,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_2;
-    StreamingLineBuffer_7_pixel_2.run<113>(StreamingLineBuffer_7_buffer_stream[0], StreamingLineBuffer_7_out0_stream_prepad[12], StreamingLineBuffer_7_buffer_stream[2]);
+    StreamingLineBuffer_7_pixel_2.run<113, 3>(StreamingLineBuffer_7_buffer_stream[0], StreamingLineBuffer_7_out0_stream_prepad[12], StreamingLineBuffer_7_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_12," << StreamingLineBuffer_7_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -5125,7 +5248,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_3;
-    StreamingLineBuffer_7_pixel_3.run<114>(StreamingLineBuffer_7_buffer_stream[1], StreamingLineBuffer_7_out0_stream_prepad[11], StreamingLineBuffer_7_buffer_stream[4]);
+    StreamingLineBuffer_7_pixel_3.run<114, 3>(StreamingLineBuffer_7_buffer_stream[1], StreamingLineBuffer_7_out0_stream_prepad[11], StreamingLineBuffer_7_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_11," << StreamingLineBuffer_7_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -5152,7 +5275,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_4;
-    StreamingLineBuffer_7_pixel_4.run<115>(StreamingLineBuffer_7_buffer_stream[2], StreamingLineBuffer_7_out0_stream_prepad[10], StreamingLineBuffer_7_buffer_stream[3]);
+    StreamingLineBuffer_7_pixel_4.run<115, 3>(StreamingLineBuffer_7_buffer_stream[2], StreamingLineBuffer_7_out0_stream_prepad[10], StreamingLineBuffer_7_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_10," << StreamingLineBuffer_7_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -5179,7 +5302,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_6;
-    StreamingLineBuffer_7_pixel_6.run<117>(StreamingLineBuffer_7_buffer_stream[4], StreamingLineBuffer_7_out0_stream_prepad[8], StreamingLineBuffer_7_buffer_stream[6]);
+    StreamingLineBuffer_7_pixel_6.run<117, 3>(StreamingLineBuffer_7_buffer_stream[4], StreamingLineBuffer_7_out0_stream_prepad[8], StreamingLineBuffer_7_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_8," << StreamingLineBuffer_7_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -5206,7 +5329,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_5;
-    StreamingLineBuffer_7_pixel_5.run<116>(StreamingLineBuffer_7_buffer_stream[3], StreamingLineBuffer_7_out0_stream_prepad[9], StreamingLineBuffer_7_buffer_stream[5]);
+    StreamingLineBuffer_7_pixel_5.run<116, 3>(StreamingLineBuffer_7_buffer_stream[3], StreamingLineBuffer_7_out0_stream_prepad[9], StreamingLineBuffer_7_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_9," << StreamingLineBuffer_7_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -5233,7 +5356,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_8;
-    StreamingLineBuffer_7_pixel_8.run<119>(StreamingLineBuffer_7_buffer_stream[6], StreamingLineBuffer_7_out0_stream_prepad[6], StreamingLineBuffer_7_buffer_stream[9]);
+    StreamingLineBuffer_7_pixel_8.run<119, 3>(StreamingLineBuffer_7_buffer_stream[6], StreamingLineBuffer_7_out0_stream_prepad[6], StreamingLineBuffer_7_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_6," << StreamingLineBuffer_7_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -5260,7 +5383,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_7;
-    StreamingLineBuffer_7_pixel_7.run<118>(StreamingLineBuffer_7_buffer_stream[5], StreamingLineBuffer_7_out0_stream_prepad[7], StreamingLineBuffer_7_buffer_stream[7]);
+    StreamingLineBuffer_7_pixel_7.run<118, 3>(StreamingLineBuffer_7_buffer_stream[5], StreamingLineBuffer_7_out0_stream_prepad[7], StreamingLineBuffer_7_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_7," << StreamingLineBuffer_7_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -5287,7 +5410,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_11;
-    StreamingLineBuffer_7_pixel_11.run<122>(StreamingLineBuffer_7_buffer_stream[9], StreamingLineBuffer_7_out0_stream_prepad[3], StreamingLineBuffer_7_buffer_stream[11]);
+    StreamingLineBuffer_7_pixel_11.run<122, 3>(StreamingLineBuffer_7_buffer_stream[9], StreamingLineBuffer_7_out0_stream_prepad[3], StreamingLineBuffer_7_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_3," << StreamingLineBuffer_7_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -5314,7 +5437,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_9;
-    StreamingLineBuffer_7_pixel_9.run<120>(StreamingLineBuffer_7_buffer_stream[7], StreamingLineBuffer_7_out0_stream_prepad[5], StreamingLineBuffer_7_buffer_stream[8]);
+    StreamingLineBuffer_7_pixel_9.run<120, 3>(StreamingLineBuffer_7_buffer_stream[7], StreamingLineBuffer_7_out0_stream_prepad[5], StreamingLineBuffer_7_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_5," << StreamingLineBuffer_7_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -5341,7 +5464,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_13;
-    StreamingLineBuffer_7_pixel_13.run<124>(StreamingLineBuffer_7_buffer_stream[11], StreamingLineBuffer_7_out0_stream_prepad[1]);
+    StreamingLineBuffer_7_pixel_13.run<124, 3>(StreamingLineBuffer_7_buffer_stream[11], StreamingLineBuffer_7_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_1," << StreamingLineBuffer_7_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -5365,7 +5488,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_10;
-    StreamingLineBuffer_7_pixel_10.run<121>(StreamingLineBuffer_7_buffer_stream[8], StreamingLineBuffer_7_out0_stream_prepad[4], StreamingLineBuffer_7_buffer_stream[10]);
+    StreamingLineBuffer_7_pixel_10.run<121, 3>(StreamingLineBuffer_7_buffer_stream[8], StreamingLineBuffer_7_out0_stream_prepad[4], StreamingLineBuffer_7_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_4," << StreamingLineBuffer_7_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -5392,7 +5515,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_12;
-    StreamingLineBuffer_7_pixel_12.run<123>(StreamingLineBuffer_7_buffer_stream[10], StreamingLineBuffer_7_out0_stream_prepad[2], StreamingLineBuffer_7_buffer_stream[12]);
+    StreamingLineBuffer_7_pixel_12.run<123, 3>(StreamingLineBuffer_7_buffer_stream[10], StreamingLineBuffer_7_out0_stream_prepad[2], StreamingLineBuffer_7_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_2," << StreamingLineBuffer_7_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -5419,7 +5542,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_7_pixel_14;
-    StreamingLineBuffer_7_pixel_14.run<125>(StreamingLineBuffer_7_buffer_stream[12], StreamingLineBuffer_7_out0_stream_prepad[0]);
+    StreamingLineBuffer_7_pixel_14.run<125, 3>(StreamingLineBuffer_7_buffer_stream[12], StreamingLineBuffer_7_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_prepad_0," << StreamingLineBuffer_7_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -5444,14 +5567,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_7_pad;
-    StreamingLineBuffer_7_pad.run<126>(StreamingLineBuffer_7_out0_stream_prepad, StreamingLineBuffer_7_out0_stream);
+    StreamingLineBuffer_7_pad.run<126, 3>(StreamingLineBuffer_7_out0_stream_prepad, StreamingLineBuffer_7_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_7_out0_stream_0," << StreamingLineBuffer_7_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_7_weights[1024][2][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_7_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_7_weights dim=2 complete
-    ap_int<15> StreamingConv_7_biases[32][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_7_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_7_biases dim=2 complete
     StreamingConv <
@@ -5482,7 +5603,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_7;
-    StreamingConv_7.run<127>(StreamingLineBuffer_7_out0_stream, StreamingConv_7_weights, StreamingConv_7_biases, StreamingConv_7_out0_stream);
+    StreamingConv_7.run<127, 3>(StreamingLineBuffer_7_out0_stream, StreamingConv_7_weights, StreamingConv_7_biases, StreamingConv_7_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_7_out0_stream_0," << StreamingConv_7_out0_stream[0].size() << std::endl;
     #endif
@@ -5502,7 +5623,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_7;
-    StreamingSwish_7.run<128>(StreamingConv_7_out0_stream, StreamingSwish_7_lut, StreamingSwish_7_out0_stream);
+    StreamingSwish_7.run<128, 3>(StreamingConv_7_out0_stream, StreamingSwish_7_lut, StreamingSwish_7_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_7_out0_stream_0," << StreamingSwish_7_out0_stream[0].size() << std::endl;
     #endif
@@ -5517,7 +5638,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_2;
-    TensorDuplicator_2.run<129>(StreamingSwish_7_out0_stream, TensorDuplicator_2_out0_stream, TensorDuplicator_2_out1_stream);
+    TensorDuplicator_2.run<129, 3>(StreamingSwish_7_out0_stream, TensorDuplicator_2_out0_stream, TensorDuplicator_2_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_2_out0_stream_0," << TensorDuplicator_2_out0_stream[0].size() << std::endl;
     #endif
@@ -5550,7 +5671,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_0;
-    StreamingLineBuffer_8_pixel_0.run<130>(TensorDuplicator_2_out0_stream[1], StreamingLineBuffer_8_out0_stream_prepad[1]);
+    StreamingLineBuffer_8_pixel_0.run<130, 3>(TensorDuplicator_2_out0_stream[1], StreamingLineBuffer_8_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_1," << StreamingLineBuffer_8_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -5574,7 +5695,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_8_pixel_1;
-    StreamingLineBuffer_8_pixel_1.run<131>(TensorDuplicator_2_out0_stream[0], StreamingLineBuffer_8_out0_stream_prepad[0]);
+    StreamingLineBuffer_8_pixel_1.run<131, 3>(TensorDuplicator_2_out0_stream[0], StreamingLineBuffer_8_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_prepad_0," << StreamingLineBuffer_8_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -5598,7 +5719,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_0;
-    StreamingLineBuffer_9_pixel_0.run<133>(TensorDuplicator_2_out1_stream[1], StreamingLineBuffer_9_out0_stream_prepad[1]);
+    StreamingLineBuffer_9_pixel_0.run<133, 3>(TensorDuplicator_2_out1_stream[1], StreamingLineBuffer_9_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_prepad_1," << StreamingLineBuffer_9_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -5622,7 +5743,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_9_pixel_1;
-    StreamingLineBuffer_9_pixel_1.run<134>(TensorDuplicator_2_out1_stream[0], StreamingLineBuffer_9_out0_stream_prepad[0]);
+    StreamingLineBuffer_9_pixel_1.run<134, 3>(TensorDuplicator_2_out1_stream[0], StreamingLineBuffer_9_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_prepad_0," << StreamingLineBuffer_9_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -5647,7 +5768,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_8_pad;
-    StreamingLineBuffer_8_pad.run<132>(StreamingLineBuffer_8_out0_stream_prepad, StreamingLineBuffer_8_out0_stream);
+    StreamingLineBuffer_8_pad.run<132, 3>(StreamingLineBuffer_8_out0_stream_prepad, StreamingLineBuffer_8_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_8_out0_stream_0," << StreamingLineBuffer_8_out0_stream[0].size() << std::endl;
     #endif
@@ -5672,14 +5793,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_9_pad;
-    StreamingLineBuffer_9_pad.run<135>(StreamingLineBuffer_9_out0_stream_prepad, StreamingLineBuffer_9_out0_stream);
+    StreamingLineBuffer_9_pad.run<135, 3>(StreamingLineBuffer_9_out0_stream_prepad, StreamingLineBuffer_9_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_9_out0_stream_0," << StreamingLineBuffer_9_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_8_weights[1024][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_8_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_8_weights dim=2 complete
-    ap_int<13> StreamingConv_8_biases[32][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_8_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_8_biases dim=2 complete
     StreamingConv <
@@ -5710,17 +5829,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_8;
-    StreamingConv_8.run<136>(StreamingLineBuffer_8_out0_stream, StreamingConv_8_weights, StreamingConv_8_biases, StreamingConv_8_out0_stream);
+    StreamingConv_8.run<136, 3>(StreamingLineBuffer_8_out0_stream, StreamingConv_8_weights, StreamingConv_8_biases, StreamingConv_8_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_8_out0_stream_0," << StreamingConv_8_out0_stream[0].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_8_out0_stream_1," << StreamingConv_8_out0_stream[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_9_weights[1024][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_9_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_9_weights dim=2 complete
-    ap_int<14> StreamingConv_9_biases[32][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_9_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_9_biases dim=2 complete
     StreamingConv <
@@ -5751,7 +5868,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_9;
-    StreamingConv_9.run<137>(StreamingLineBuffer_9_out0_stream, StreamingConv_9_weights, StreamingConv_9_biases, StreamingConv_9_out0_stream);
+    StreamingConv_9.run<137, 3>(StreamingLineBuffer_9_out0_stream, StreamingConv_9_weights, StreamingConv_9_biases, StreamingConv_9_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_9_out0_stream_0," << StreamingConv_9_out0_stream[0].size() << std::endl;
     #endif
@@ -5771,7 +5888,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_8;
-    StreamingSwish_8.run<138>(StreamingConv_8_out0_stream, StreamingSwish_8_lut, StreamingSwish_8_out0_stream);
+    StreamingSwish_8.run<138, 3>(StreamingConv_8_out0_stream, StreamingSwish_8_lut, StreamingSwish_8_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_8_out0_stream_0," << StreamingSwish_8_out0_stream[0].size() << std::endl;
     #endif
@@ -5791,7 +5908,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_9;
-    StreamingSwish_9.run<139>(StreamingConv_9_out0_stream, StreamingSwish_9_lut, StreamingSwish_9_out0_stream);
+    StreamingSwish_9.run<139, 3>(StreamingConv_9_out0_stream, StreamingSwish_9_lut, StreamingSwish_9_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_9_out0_stream_0," << StreamingSwish_9_out0_stream[0].size() << std::endl;
     #endif
@@ -5806,7 +5923,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_3;
-    TensorDuplicator_3.run<140>(StreamingSwish_8_out0_stream, TensorDuplicator_3_out0_stream, TensorDuplicator_3_out1_stream);
+    TensorDuplicator_3.run<140, 3>(StreamingSwish_8_out0_stream, TensorDuplicator_3_out0_stream, TensorDuplicator_3_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_3_out0_stream_0," << TensorDuplicator_3_out0_stream[0].size() << std::endl;
     #endif
@@ -5839,7 +5956,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_10_pixel_0;
-    StreamingLineBuffer_10_pixel_0.run<141>(TensorDuplicator_3_out0_stream[1], StreamingLineBuffer_10_out0_stream_prepad[1]);
+    StreamingLineBuffer_10_pixel_0.run<141, 3>(TensorDuplicator_3_out0_stream[1], StreamingLineBuffer_10_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_10_out0_stream_prepad_1," << StreamingLineBuffer_10_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -5863,7 +5980,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_10_pixel_1;
-    StreamingLineBuffer_10_pixel_1.run<142>(TensorDuplicator_3_out0_stream[0], StreamingLineBuffer_10_out0_stream_prepad[0]);
+    StreamingLineBuffer_10_pixel_1.run<142, 3>(TensorDuplicator_3_out0_stream[0], StreamingLineBuffer_10_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_10_out0_stream_prepad_0," << StreamingLineBuffer_10_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -5888,14 +6005,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_10_pad;
-    StreamingLineBuffer_10_pad.run<143>(StreamingLineBuffer_10_out0_stream_prepad, StreamingLineBuffer_10_out0_stream);
+    StreamingLineBuffer_10_pad.run<143, 3>(StreamingLineBuffer_10_out0_stream_prepad, StreamingLineBuffer_10_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_10_out0_stream_0," << StreamingLineBuffer_10_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_10_weights[1024][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_10_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_10_weights dim=2 complete
-    ap_int<13> StreamingConv_10_biases[32][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_10_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_10_biases dim=2 complete
     StreamingConv <
@@ -5926,7 +6041,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_10;
-    StreamingConv_10.run<144>(StreamingLineBuffer_10_out0_stream, StreamingConv_10_weights, StreamingConv_10_biases, StreamingConv_10_out0_stream);
+    StreamingConv_10.run<144, 3>(StreamingLineBuffer_10_out0_stream, StreamingConv_10_weights, StreamingConv_10_biases, StreamingConv_10_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_10_out0_stream_0," << StreamingConv_10_out0_stream[0].size() << std::endl;
     #endif
@@ -5946,7 +6061,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_10;
-    StreamingSwish_10.run<145>(StreamingConv_10_out0_stream, StreamingSwish_10_lut, StreamingSwish_10_out0_stream);
+    StreamingSwish_10.run<145, 3>(StreamingConv_10_out0_stream, StreamingSwish_10_lut, StreamingSwish_10_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_10_out0_stream_0," << StreamingSwish_10_out0_stream[0].size() << std::endl;
     #endif
@@ -5973,7 +6088,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_11_pixel_0;
-    StreamingLineBuffer_11_pixel_0.run<146>(StreamingSwish_10_out0_stream[0], StreamingLineBuffer_11_out0_stream_prepad[11], StreamingLineBuffer_11_buffer_stream[0]);
+    StreamingLineBuffer_11_pixel_0.run<146, 3>(StreamingSwish_10_out0_stream[0], StreamingLineBuffer_11_out0_stream_prepad[11], StreamingLineBuffer_11_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_11_out0_stream_prepad_11," << StreamingLineBuffer_11_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -6000,7 +6115,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_11_pixel_1;
-    StreamingLineBuffer_11_pixel_1.run<147>(StreamingSwish_10_out0_stream[1], StreamingLineBuffer_11_out0_stream_prepad[10], StreamingLineBuffer_11_buffer_stream[1]);
+    StreamingLineBuffer_11_pixel_1.run<147, 3>(StreamingSwish_10_out0_stream[1], StreamingLineBuffer_11_out0_stream_prepad[10], StreamingLineBuffer_11_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_11_out0_stream_prepad_10," << StreamingLineBuffer_11_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -6027,7 +6142,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_11_pixel_2;
-    StreamingLineBuffer_11_pixel_2.run<148>(StreamingLineBuffer_11_buffer_stream[0], StreamingLineBuffer_11_out0_stream_prepad[9], StreamingLineBuffer_11_buffer_stream[2]);
+    StreamingLineBuffer_11_pixel_2.run<148, 3>(StreamingLineBuffer_11_buffer_stream[0], StreamingLineBuffer_11_out0_stream_prepad[9], StreamingLineBuffer_11_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_11_out0_stream_prepad_9," << StreamingLineBuffer_11_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -6054,7 +6169,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_11_pixel_3;
-    StreamingLineBuffer_11_pixel_3.run<149>(StreamingLineBuffer_11_buffer_stream[1], StreamingLineBuffer_11_out0_stream_prepad[8], StreamingLineBuffer_11_buffer_stream[3]);
+    StreamingLineBuffer_11_pixel_3.run<149, 3>(StreamingLineBuffer_11_buffer_stream[1], StreamingLineBuffer_11_out0_stream_prepad[8], StreamingLineBuffer_11_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_11_out0_stream_prepad_8," << StreamingLineBuffer_11_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -6081,7 +6196,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_11_pixel_4;
-    StreamingLineBuffer_11_pixel_4.run<150>(StreamingLineBuffer_11_buffer_stream[2], StreamingLineBuffer_11_out0_stream_prepad[7], StreamingLineBuffer_11_buffer_stream[4]);
+    StreamingLineBuffer_11_pixel_4.run<150, 3>(StreamingLineBuffer_11_buffer_stream[2], StreamingLineBuffer_11_out0_stream_prepad[7], StreamingLineBuffer_11_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_11_out0_stream_prepad_7," << StreamingLineBuffer_11_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -6108,7 +6223,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_11_pixel_5;
-    StreamingLineBuffer_11_pixel_5.run<151>(StreamingLineBuffer_11_buffer_stream[3], StreamingLineBuffer_11_out0_stream_prepad[6], StreamingLineBuffer_11_buffer_stream[5]);
+    StreamingLineBuffer_11_pixel_5.run<151, 3>(StreamingLineBuffer_11_buffer_stream[3], StreamingLineBuffer_11_out0_stream_prepad[6], StreamingLineBuffer_11_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_11_out0_stream_prepad_6," << StreamingLineBuffer_11_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -6135,7 +6250,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_11_pixel_6;
-    StreamingLineBuffer_11_pixel_6.run<152>(StreamingLineBuffer_11_buffer_stream[4], StreamingLineBuffer_11_out0_stream_prepad[5], StreamingLineBuffer_11_buffer_stream[6]);
+    StreamingLineBuffer_11_pixel_6.run<152, 3>(StreamingLineBuffer_11_buffer_stream[4], StreamingLineBuffer_11_out0_stream_prepad[5], StreamingLineBuffer_11_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_11_out0_stream_prepad_5," << StreamingLineBuffer_11_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -6162,7 +6277,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_11_pixel_7;
-    StreamingLineBuffer_11_pixel_7.run<153>(StreamingLineBuffer_11_buffer_stream[5], StreamingLineBuffer_11_out0_stream_prepad[4], StreamingLineBuffer_11_buffer_stream[7]);
+    StreamingLineBuffer_11_pixel_7.run<153, 3>(StreamingLineBuffer_11_buffer_stream[5], StreamingLineBuffer_11_out0_stream_prepad[4], StreamingLineBuffer_11_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_11_out0_stream_prepad_4," << StreamingLineBuffer_11_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -6189,7 +6304,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_11_pixel_8;
-    StreamingLineBuffer_11_pixel_8.run<154>(StreamingLineBuffer_11_buffer_stream[6], StreamingLineBuffer_11_out0_stream_prepad[3], StreamingLineBuffer_11_buffer_stream[8]);
+    StreamingLineBuffer_11_pixel_8.run<154, 3>(StreamingLineBuffer_11_buffer_stream[6], StreamingLineBuffer_11_out0_stream_prepad[3], StreamingLineBuffer_11_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_11_out0_stream_prepad_3," << StreamingLineBuffer_11_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -6216,7 +6331,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_11_pixel_9;
-    StreamingLineBuffer_11_pixel_9.run<155>(StreamingLineBuffer_11_buffer_stream[7], StreamingLineBuffer_11_out0_stream_prepad[2], StreamingLineBuffer_11_buffer_stream[9]);
+    StreamingLineBuffer_11_pixel_9.run<155, 3>(StreamingLineBuffer_11_buffer_stream[7], StreamingLineBuffer_11_out0_stream_prepad[2], StreamingLineBuffer_11_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_11_out0_stream_prepad_2," << StreamingLineBuffer_11_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -6243,7 +6358,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_11_pixel_10;
-    StreamingLineBuffer_11_pixel_10.run<156>(StreamingLineBuffer_11_buffer_stream[8], StreamingLineBuffer_11_out0_stream_prepad[1]);
+    StreamingLineBuffer_11_pixel_10.run<156, 3>(StreamingLineBuffer_11_buffer_stream[8], StreamingLineBuffer_11_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_11_out0_stream_prepad_1," << StreamingLineBuffer_11_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -6267,7 +6382,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_11_pixel_11;
-    StreamingLineBuffer_11_pixel_11.run<157>(StreamingLineBuffer_11_buffer_stream[9], StreamingLineBuffer_11_out0_stream_prepad[0]);
+    StreamingLineBuffer_11_pixel_11.run<157, 3>(StreamingLineBuffer_11_buffer_stream[9], StreamingLineBuffer_11_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_11_out0_stream_prepad_0," << StreamingLineBuffer_11_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -6292,14 +6407,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_11_pad;
-    StreamingLineBuffer_11_pad.run<158>(StreamingLineBuffer_11_out0_stream_prepad, StreamingLineBuffer_11_out0_stream);
+    StreamingLineBuffer_11_pad.run<158, 3>(StreamingLineBuffer_11_out0_stream_prepad, StreamingLineBuffer_11_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_11_out0_stream_0," << StreamingLineBuffer_11_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_11_weights[1024][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_11_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_11_weights dim=2 complete
-    ap_int<15> StreamingConv_11_biases[32][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_11_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_11_biases dim=2 complete
     StreamingConv <
@@ -6330,7 +6443,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_11;
-    StreamingConv_11.run<159>(StreamingLineBuffer_11_out0_stream, StreamingConv_11_weights, StreamingConv_11_biases, StreamingConv_11_out0_stream);
+    StreamingConv_11.run<159, 3>(StreamingLineBuffer_11_out0_stream, StreamingConv_11_weights, StreamingConv_11_biases, StreamingConv_11_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_11_out0_stream_0," << StreamingConv_11_out0_stream[0].size() << std::endl;
     #endif
@@ -6350,7 +6463,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_11;
-    StreamingSwish_11.run<160>(StreamingConv_11_out0_stream, StreamingSwish_11_lut, StreamingSwish_11_out0_stream);
+    StreamingSwish_11.run<160, 3>(StreamingConv_11_out0_stream, StreamingSwish_11_lut, StreamingSwish_11_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_11_out0_stream_0," << StreamingSwish_11_out0_stream[0].size() << std::endl;
     #endif
@@ -6375,7 +6488,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingAdd_1;
-    StreamingAdd_1.run<161>(TensorDuplicator_3_out1_stream, StreamingSwish_11_out0_stream, StreamingAdd_1_out0_stream);
+    StreamingAdd_1.run<161, 3>(TensorDuplicator_3_out1_stream, StreamingSwish_11_out0_stream, StreamingAdd_1_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingAdd_1_out0_stream_0," << StreamingAdd_1_out0_stream[0].size() << std::endl;
     #endif
@@ -6390,7 +6503,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_4;
-    TensorDuplicator_4.run<162>(StreamingAdd_1_out0_stream, TensorDuplicator_4_out0_stream, TensorDuplicator_4_out1_stream);
+    TensorDuplicator_4.run<162, 3>(StreamingAdd_1_out0_stream, TensorDuplicator_4_out0_stream, TensorDuplicator_4_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_4_out0_stream_0," << TensorDuplicator_4_out0_stream[0].size() << std::endl;
     #endif
@@ -6423,7 +6536,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_12_pixel_0;
-    StreamingLineBuffer_12_pixel_0.run<163>(TensorDuplicator_4_out0_stream[1], StreamingLineBuffer_12_out0_stream_prepad[1]);
+    StreamingLineBuffer_12_pixel_0.run<163, 3>(TensorDuplicator_4_out0_stream[1], StreamingLineBuffer_12_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_12_out0_stream_prepad_1," << StreamingLineBuffer_12_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -6447,7 +6560,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_12_pixel_1;
-    StreamingLineBuffer_12_pixel_1.run<164>(TensorDuplicator_4_out0_stream[0], StreamingLineBuffer_12_out0_stream_prepad[0]);
+    StreamingLineBuffer_12_pixel_1.run<164, 3>(TensorDuplicator_4_out0_stream[0], StreamingLineBuffer_12_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_12_out0_stream_prepad_0," << StreamingLineBuffer_12_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -6472,14 +6585,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_12_pad;
-    StreamingLineBuffer_12_pad.run<165>(StreamingLineBuffer_12_out0_stream_prepad, StreamingLineBuffer_12_out0_stream);
+    StreamingLineBuffer_12_pad.run<165, 3>(StreamingLineBuffer_12_out0_stream_prepad, StreamingLineBuffer_12_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_12_out0_stream_0," << StreamingLineBuffer_12_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_12_weights[1024][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_12_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_12_weights dim=2 complete
-    ap_int<14> StreamingConv_12_biases[32][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_12_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_12_biases dim=2 complete
     StreamingConv <
@@ -6510,7 +6621,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_12;
-    StreamingConv_12.run<166>(StreamingLineBuffer_12_out0_stream, StreamingConv_12_weights, StreamingConv_12_biases, StreamingConv_12_out0_stream);
+    StreamingConv_12.run<166, 3>(StreamingLineBuffer_12_out0_stream, StreamingConv_12_weights, StreamingConv_12_biases, StreamingConv_12_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_12_out0_stream_0," << StreamingConv_12_out0_stream[0].size() << std::endl;
     #endif
@@ -6530,7 +6641,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_12;
-    StreamingSwish_12.run<167>(StreamingConv_12_out0_stream, StreamingSwish_12_lut, StreamingSwish_12_out0_stream);
+    StreamingSwish_12.run<167, 3>(StreamingConv_12_out0_stream, StreamingSwish_12_lut, StreamingSwish_12_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_12_out0_stream_0," << StreamingSwish_12_out0_stream[0].size() << std::endl;
     #endif
@@ -6557,7 +6668,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_13_pixel_0;
-    StreamingLineBuffer_13_pixel_0.run<168>(StreamingSwish_12_out0_stream[0], StreamingLineBuffer_13_out0_stream_prepad[11], StreamingLineBuffer_13_buffer_stream[0]);
+    StreamingLineBuffer_13_pixel_0.run<168, 3>(StreamingSwish_12_out0_stream[0], StreamingLineBuffer_13_out0_stream_prepad[11], StreamingLineBuffer_13_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_13_out0_stream_prepad_11," << StreamingLineBuffer_13_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -6584,7 +6695,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_13_pixel_1;
-    StreamingLineBuffer_13_pixel_1.run<169>(StreamingSwish_12_out0_stream[1], StreamingLineBuffer_13_out0_stream_prepad[10], StreamingLineBuffer_13_buffer_stream[1]);
+    StreamingLineBuffer_13_pixel_1.run<169, 3>(StreamingSwish_12_out0_stream[1], StreamingLineBuffer_13_out0_stream_prepad[10], StreamingLineBuffer_13_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_13_out0_stream_prepad_10," << StreamingLineBuffer_13_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -6611,7 +6722,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_13_pixel_2;
-    StreamingLineBuffer_13_pixel_2.run<170>(StreamingLineBuffer_13_buffer_stream[0], StreamingLineBuffer_13_out0_stream_prepad[9], StreamingLineBuffer_13_buffer_stream[2]);
+    StreamingLineBuffer_13_pixel_2.run<170, 3>(StreamingLineBuffer_13_buffer_stream[0], StreamingLineBuffer_13_out0_stream_prepad[9], StreamingLineBuffer_13_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_13_out0_stream_prepad_9," << StreamingLineBuffer_13_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -6638,7 +6749,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_13_pixel_3;
-    StreamingLineBuffer_13_pixel_3.run<171>(StreamingLineBuffer_13_buffer_stream[1], StreamingLineBuffer_13_out0_stream_prepad[8], StreamingLineBuffer_13_buffer_stream[3]);
+    StreamingLineBuffer_13_pixel_3.run<171, 3>(StreamingLineBuffer_13_buffer_stream[1], StreamingLineBuffer_13_out0_stream_prepad[8], StreamingLineBuffer_13_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_13_out0_stream_prepad_8," << StreamingLineBuffer_13_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -6665,7 +6776,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_13_pixel_4;
-    StreamingLineBuffer_13_pixel_4.run<172>(StreamingLineBuffer_13_buffer_stream[2], StreamingLineBuffer_13_out0_stream_prepad[7], StreamingLineBuffer_13_buffer_stream[4]);
+    StreamingLineBuffer_13_pixel_4.run<172, 3>(StreamingLineBuffer_13_buffer_stream[2], StreamingLineBuffer_13_out0_stream_prepad[7], StreamingLineBuffer_13_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_13_out0_stream_prepad_7," << StreamingLineBuffer_13_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -6692,7 +6803,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_13_pixel_5;
-    StreamingLineBuffer_13_pixel_5.run<173>(StreamingLineBuffer_13_buffer_stream[3], StreamingLineBuffer_13_out0_stream_prepad[6], StreamingLineBuffer_13_buffer_stream[5]);
+    StreamingLineBuffer_13_pixel_5.run<173, 3>(StreamingLineBuffer_13_buffer_stream[3], StreamingLineBuffer_13_out0_stream_prepad[6], StreamingLineBuffer_13_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_13_out0_stream_prepad_6," << StreamingLineBuffer_13_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -6719,7 +6830,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_13_pixel_6;
-    StreamingLineBuffer_13_pixel_6.run<174>(StreamingLineBuffer_13_buffer_stream[4], StreamingLineBuffer_13_out0_stream_prepad[5], StreamingLineBuffer_13_buffer_stream[6]);
+    StreamingLineBuffer_13_pixel_6.run<174, 3>(StreamingLineBuffer_13_buffer_stream[4], StreamingLineBuffer_13_out0_stream_prepad[5], StreamingLineBuffer_13_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_13_out0_stream_prepad_5," << StreamingLineBuffer_13_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -6746,7 +6857,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_13_pixel_7;
-    StreamingLineBuffer_13_pixel_7.run<175>(StreamingLineBuffer_13_buffer_stream[5], StreamingLineBuffer_13_out0_stream_prepad[4], StreamingLineBuffer_13_buffer_stream[7]);
+    StreamingLineBuffer_13_pixel_7.run<175, 3>(StreamingLineBuffer_13_buffer_stream[5], StreamingLineBuffer_13_out0_stream_prepad[4], StreamingLineBuffer_13_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_13_out0_stream_prepad_4," << StreamingLineBuffer_13_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -6773,7 +6884,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_13_pixel_8;
-    StreamingLineBuffer_13_pixel_8.run<176>(StreamingLineBuffer_13_buffer_stream[6], StreamingLineBuffer_13_out0_stream_prepad[3], StreamingLineBuffer_13_buffer_stream[8]);
+    StreamingLineBuffer_13_pixel_8.run<176, 3>(StreamingLineBuffer_13_buffer_stream[6], StreamingLineBuffer_13_out0_stream_prepad[3], StreamingLineBuffer_13_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_13_out0_stream_prepad_3," << StreamingLineBuffer_13_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -6800,7 +6911,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_13_pixel_9;
-    StreamingLineBuffer_13_pixel_9.run<177>(StreamingLineBuffer_13_buffer_stream[7], StreamingLineBuffer_13_out0_stream_prepad[2], StreamingLineBuffer_13_buffer_stream[9]);
+    StreamingLineBuffer_13_pixel_9.run<177, 3>(StreamingLineBuffer_13_buffer_stream[7], StreamingLineBuffer_13_out0_stream_prepad[2], StreamingLineBuffer_13_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_13_out0_stream_prepad_2," << StreamingLineBuffer_13_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -6827,7 +6938,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_13_pixel_10;
-    StreamingLineBuffer_13_pixel_10.run<178>(StreamingLineBuffer_13_buffer_stream[8], StreamingLineBuffer_13_out0_stream_prepad[1]);
+    StreamingLineBuffer_13_pixel_10.run<178, 3>(StreamingLineBuffer_13_buffer_stream[8], StreamingLineBuffer_13_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_13_out0_stream_prepad_1," << StreamingLineBuffer_13_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -6851,7 +6962,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_13_pixel_11;
-    StreamingLineBuffer_13_pixel_11.run<179>(StreamingLineBuffer_13_buffer_stream[9], StreamingLineBuffer_13_out0_stream_prepad[0]);
+    StreamingLineBuffer_13_pixel_11.run<179, 3>(StreamingLineBuffer_13_buffer_stream[9], StreamingLineBuffer_13_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_13_out0_stream_prepad_0," << StreamingLineBuffer_13_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -6876,14 +6987,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_13_pad;
-    StreamingLineBuffer_13_pad.run<180>(StreamingLineBuffer_13_out0_stream_prepad, StreamingLineBuffer_13_out0_stream);
+    StreamingLineBuffer_13_pad.run<180, 3>(StreamingLineBuffer_13_out0_stream_prepad, StreamingLineBuffer_13_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_13_out0_stream_0," << StreamingLineBuffer_13_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_13_weights[1024][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_13_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_13_weights dim=2 complete
-    ap_int<16> StreamingConv_13_biases[32][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_13_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_13_biases dim=2 complete
     StreamingConv <
@@ -6914,7 +7023,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_13;
-    StreamingConv_13.run<181>(StreamingLineBuffer_13_out0_stream, StreamingConv_13_weights, StreamingConv_13_biases, StreamingConv_13_out0_stream);
+    StreamingConv_13.run<181, 3>(StreamingLineBuffer_13_out0_stream, StreamingConv_13_weights, StreamingConv_13_biases, StreamingConv_13_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_13_out0_stream_0," << StreamingConv_13_out0_stream[0].size() << std::endl;
     #endif
@@ -6934,7 +7043,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_13;
-    StreamingSwish_13.run<182>(StreamingConv_13_out0_stream, StreamingSwish_13_lut, StreamingSwish_13_out0_stream);
+    StreamingSwish_13.run<182, 3>(StreamingConv_13_out0_stream, StreamingSwish_13_lut, StreamingSwish_13_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_13_out0_stream_0," << StreamingSwish_13_out0_stream[0].size() << std::endl;
     #endif
@@ -6959,7 +7068,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingAdd_2;
-    StreamingAdd_2.run<183>(TensorDuplicator_4_out1_stream, StreamingSwish_13_out0_stream, StreamingAdd_2_out0_stream);
+    StreamingAdd_2.run<183, 3>(TensorDuplicator_4_out1_stream, StreamingSwish_13_out0_stream, StreamingAdd_2_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingAdd_2_out0_stream_0," << StreamingAdd_2_out0_stream[0].size() << std::endl;
     #endif
@@ -6979,7 +7088,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingConcat_1;
-    StreamingConcat_1.run<184>(StreamingAdd_2_out0_stream, StreamingSwish_9_out0_stream, StreamingConcat_1_out0_stream);
+    StreamingConcat_1.run<184, 3>(StreamingAdd_2_out0_stream, StreamingSwish_9_out0_stream, StreamingConcat_1_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_1_out0_stream_0," << StreamingConcat_1_out0_stream[0].size() << std::endl;
     #endif
@@ -7006,7 +7115,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_14_pixel_0;
-    StreamingLineBuffer_14_pixel_0.run<185>(StreamingConcat_1_out0_stream[1], StreamingLineBuffer_14_out0_stream_prepad[1]);
+    StreamingLineBuffer_14_pixel_0.run<185, 3>(StreamingConcat_1_out0_stream[1], StreamingLineBuffer_14_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_14_out0_stream_prepad_1," << StreamingLineBuffer_14_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -7030,7 +7139,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_14_pixel_1;
-    StreamingLineBuffer_14_pixel_1.run<186>(StreamingConcat_1_out0_stream[0], StreamingLineBuffer_14_out0_stream_prepad[0]);
+    StreamingLineBuffer_14_pixel_1.run<186, 3>(StreamingConcat_1_out0_stream[0], StreamingLineBuffer_14_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_14_out0_stream_prepad_0," << StreamingLineBuffer_14_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -7055,14 +7164,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_14_pad;
-    StreamingLineBuffer_14_pad.run<187>(StreamingLineBuffer_14_out0_stream_prepad, StreamingLineBuffer_14_out0_stream);
+    StreamingLineBuffer_14_pad.run<187, 3>(StreamingLineBuffer_14_out0_stream_prepad, StreamingLineBuffer_14_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_14_out0_stream_0," << StreamingLineBuffer_14_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_14_weights[1024][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_14_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_14_weights dim=2 complete
-    ap_int<15> StreamingConv_14_biases[16][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_14_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_14_biases dim=2 complete
     StreamingConv <
@@ -7093,7 +7200,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_14;
-    StreamingConv_14.run<188>(StreamingLineBuffer_14_out0_stream, StreamingConv_14_weights, StreamingConv_14_biases, StreamingConv_14_out0_stream);
+    StreamingConv_14.run<188, 3>(StreamingLineBuffer_14_out0_stream, StreamingConv_14_weights, StreamingConv_14_biases, StreamingConv_14_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_14_out0_stream_0," << StreamingConv_14_out0_stream[0].size() << std::endl;
     #endif
@@ -7113,7 +7220,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_14;
-    StreamingSwish_14.run<189>(StreamingConv_14_out0_stream, StreamingSwish_14_lut, StreamingSwish_14_out0_stream);
+    StreamingSwish_14.run<189, 3>(StreamingConv_14_out0_stream, StreamingSwish_14_lut, StreamingSwish_14_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_14_out0_stream_0," << StreamingSwish_14_out0_stream[0].size() << std::endl;
     #endif
@@ -7128,7 +7235,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_5;
-    TensorDuplicator_5.run<190>(StreamingSwish_14_out0_stream, TensorDuplicator_5_out0_stream, TensorDuplicator_5_out1_stream);
+    TensorDuplicator_5.run<190, 3>(StreamingSwish_14_out0_stream, TensorDuplicator_5_out0_stream, TensorDuplicator_5_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_5_out0_stream_0," << TensorDuplicator_5_out0_stream[0].size() << std::endl;
     #endif
@@ -7155,7 +7262,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // IN_CH_PAR
         2  // OUT_CH_PAR
     > BandwidthAdjustDecreaseChannels_2;
-    BandwidthAdjustDecreaseChannels_2.run<191>(TensorDuplicator_5_out0_stream, BandwidthAdjustDecreaseChannels_2_out0_stream);
+    BandwidthAdjustDecreaseChannels_2.run<191, 3>(TensorDuplicator_5_out0_stream, BandwidthAdjustDecreaseChannels_2_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseChannels_2_out0_stream_0," << BandwidthAdjustDecreaseChannels_2_out0_stream[0].size() << std::endl;
     #endif
@@ -7182,7 +7289,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_0;
-    StreamingLineBuffer_15_pixel_0.run<192>(BandwidthAdjustDecreaseChannels_2_out0_stream[1], StreamingLineBuffer_15_out0_stream_prepad[14], StreamingLineBuffer_15_buffer_stream[0]);
+    StreamingLineBuffer_15_pixel_0.run<192, 3>(BandwidthAdjustDecreaseChannels_2_out0_stream[1], StreamingLineBuffer_15_out0_stream_prepad[14], StreamingLineBuffer_15_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_14," << StreamingLineBuffer_15_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -7209,7 +7316,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_1;
-    StreamingLineBuffer_15_pixel_1.run<193>(BandwidthAdjustDecreaseChannels_2_out0_stream[0], StreamingLineBuffer_15_out0_stream_prepad[13], StreamingLineBuffer_15_buffer_stream[1]);
+    StreamingLineBuffer_15_pixel_1.run<193, 3>(BandwidthAdjustDecreaseChannels_2_out0_stream[0], StreamingLineBuffer_15_out0_stream_prepad[13], StreamingLineBuffer_15_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_13," << StreamingLineBuffer_15_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -7236,7 +7343,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_2;
-    StreamingLineBuffer_15_pixel_2.run<194>(StreamingLineBuffer_15_buffer_stream[0], StreamingLineBuffer_15_out0_stream_prepad[12], StreamingLineBuffer_15_buffer_stream[2]);
+    StreamingLineBuffer_15_pixel_2.run<194, 3>(StreamingLineBuffer_15_buffer_stream[0], StreamingLineBuffer_15_out0_stream_prepad[12], StreamingLineBuffer_15_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_12," << StreamingLineBuffer_15_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -7263,7 +7370,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_3;
-    StreamingLineBuffer_15_pixel_3.run<195>(StreamingLineBuffer_15_buffer_stream[1], StreamingLineBuffer_15_out0_stream_prepad[11], StreamingLineBuffer_15_buffer_stream[4]);
+    StreamingLineBuffer_15_pixel_3.run<195, 3>(StreamingLineBuffer_15_buffer_stream[1], StreamingLineBuffer_15_out0_stream_prepad[11], StreamingLineBuffer_15_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_11," << StreamingLineBuffer_15_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -7290,7 +7397,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_4;
-    StreamingLineBuffer_15_pixel_4.run<196>(StreamingLineBuffer_15_buffer_stream[2], StreamingLineBuffer_15_out0_stream_prepad[10], StreamingLineBuffer_15_buffer_stream[3]);
+    StreamingLineBuffer_15_pixel_4.run<196, 3>(StreamingLineBuffer_15_buffer_stream[2], StreamingLineBuffer_15_out0_stream_prepad[10], StreamingLineBuffer_15_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_10," << StreamingLineBuffer_15_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -7317,7 +7424,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_6;
-    StreamingLineBuffer_15_pixel_6.run<198>(StreamingLineBuffer_15_buffer_stream[4], StreamingLineBuffer_15_out0_stream_prepad[8], StreamingLineBuffer_15_buffer_stream[6]);
+    StreamingLineBuffer_15_pixel_6.run<198, 3>(StreamingLineBuffer_15_buffer_stream[4], StreamingLineBuffer_15_out0_stream_prepad[8], StreamingLineBuffer_15_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_8," << StreamingLineBuffer_15_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -7344,7 +7451,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_5;
-    StreamingLineBuffer_15_pixel_5.run<197>(StreamingLineBuffer_15_buffer_stream[3], StreamingLineBuffer_15_out0_stream_prepad[9], StreamingLineBuffer_15_buffer_stream[5]);
+    StreamingLineBuffer_15_pixel_5.run<197, 3>(StreamingLineBuffer_15_buffer_stream[3], StreamingLineBuffer_15_out0_stream_prepad[9], StreamingLineBuffer_15_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_9," << StreamingLineBuffer_15_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -7371,7 +7478,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_8;
-    StreamingLineBuffer_15_pixel_8.run<200>(StreamingLineBuffer_15_buffer_stream[6], StreamingLineBuffer_15_out0_stream_prepad[6], StreamingLineBuffer_15_buffer_stream[9]);
+    StreamingLineBuffer_15_pixel_8.run<200, 3>(StreamingLineBuffer_15_buffer_stream[6], StreamingLineBuffer_15_out0_stream_prepad[6], StreamingLineBuffer_15_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_6," << StreamingLineBuffer_15_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -7398,7 +7505,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_7;
-    StreamingLineBuffer_15_pixel_7.run<199>(StreamingLineBuffer_15_buffer_stream[5], StreamingLineBuffer_15_out0_stream_prepad[7], StreamingLineBuffer_15_buffer_stream[7]);
+    StreamingLineBuffer_15_pixel_7.run<199, 3>(StreamingLineBuffer_15_buffer_stream[5], StreamingLineBuffer_15_out0_stream_prepad[7], StreamingLineBuffer_15_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_7," << StreamingLineBuffer_15_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -7425,7 +7532,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_11;
-    StreamingLineBuffer_15_pixel_11.run<203>(StreamingLineBuffer_15_buffer_stream[9], StreamingLineBuffer_15_out0_stream_prepad[3], StreamingLineBuffer_15_buffer_stream[11]);
+    StreamingLineBuffer_15_pixel_11.run<203, 3>(StreamingLineBuffer_15_buffer_stream[9], StreamingLineBuffer_15_out0_stream_prepad[3], StreamingLineBuffer_15_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_3," << StreamingLineBuffer_15_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -7452,7 +7559,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_9;
-    StreamingLineBuffer_15_pixel_9.run<201>(StreamingLineBuffer_15_buffer_stream[7], StreamingLineBuffer_15_out0_stream_prepad[5], StreamingLineBuffer_15_buffer_stream[8]);
+    StreamingLineBuffer_15_pixel_9.run<201, 3>(StreamingLineBuffer_15_buffer_stream[7], StreamingLineBuffer_15_out0_stream_prepad[5], StreamingLineBuffer_15_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_5," << StreamingLineBuffer_15_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -7479,7 +7586,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_13;
-    StreamingLineBuffer_15_pixel_13.run<205>(StreamingLineBuffer_15_buffer_stream[11], StreamingLineBuffer_15_out0_stream_prepad[1]);
+    StreamingLineBuffer_15_pixel_13.run<205, 3>(StreamingLineBuffer_15_buffer_stream[11], StreamingLineBuffer_15_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_1," << StreamingLineBuffer_15_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -7503,7 +7610,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_10;
-    StreamingLineBuffer_15_pixel_10.run<202>(StreamingLineBuffer_15_buffer_stream[8], StreamingLineBuffer_15_out0_stream_prepad[4], StreamingLineBuffer_15_buffer_stream[10]);
+    StreamingLineBuffer_15_pixel_10.run<202, 3>(StreamingLineBuffer_15_buffer_stream[8], StreamingLineBuffer_15_out0_stream_prepad[4], StreamingLineBuffer_15_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_4," << StreamingLineBuffer_15_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -7530,7 +7637,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_12;
-    StreamingLineBuffer_15_pixel_12.run<204>(StreamingLineBuffer_15_buffer_stream[10], StreamingLineBuffer_15_out0_stream_prepad[2], StreamingLineBuffer_15_buffer_stream[12]);
+    StreamingLineBuffer_15_pixel_12.run<204, 3>(StreamingLineBuffer_15_buffer_stream[10], StreamingLineBuffer_15_out0_stream_prepad[2], StreamingLineBuffer_15_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_2," << StreamingLineBuffer_15_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -7557,7 +7664,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_15_pixel_14;
-    StreamingLineBuffer_15_pixel_14.run<206>(StreamingLineBuffer_15_buffer_stream[12], StreamingLineBuffer_15_out0_stream_prepad[0]);
+    StreamingLineBuffer_15_pixel_14.run<206, 3>(StreamingLineBuffer_15_buffer_stream[12], StreamingLineBuffer_15_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_prepad_0," << StreamingLineBuffer_15_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -7582,14 +7689,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_15_pad;
-    StreamingLineBuffer_15_pad.run<207>(StreamingLineBuffer_15_out0_stream_prepad, StreamingLineBuffer_15_out0_stream);
+    StreamingLineBuffer_15_pad.run<207, 3>(StreamingLineBuffer_15_out0_stream_prepad, StreamingLineBuffer_15_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_15_out0_stream_0," << StreamingLineBuffer_15_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_15_weights[4096][2][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_15_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_15_weights dim=2 complete
-    ap_int<15> StreamingConv_15_biases[128][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_15_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_15_biases dim=2 complete
     StreamingConv <
@@ -7620,7 +7725,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_15;
-    StreamingConv_15.run<208>(StreamingLineBuffer_15_out0_stream, StreamingConv_15_weights, StreamingConv_15_biases, StreamingConv_15_out0_stream);
+    StreamingConv_15.run<208, 3>(StreamingLineBuffer_15_out0_stream, StreamingConv_15_weights, StreamingConv_15_biases, StreamingConv_15_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_15_out0_stream_0," << StreamingConv_15_out0_stream[0].size() << std::endl;
     #endif
@@ -7640,7 +7745,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_15;
-    StreamingSwish_15.run<209>(StreamingConv_15_out0_stream, StreamingSwish_15_lut, StreamingSwish_15_out0_stream);
+    StreamingSwish_15.run<209, 3>(StreamingConv_15_out0_stream, StreamingSwish_15_lut, StreamingSwish_15_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_15_out0_stream_0," << StreamingSwish_15_out0_stream[0].size() << std::endl;
     #endif
@@ -7655,7 +7760,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_6;
-    TensorDuplicator_6.run<210>(StreamingSwish_15_out0_stream, TensorDuplicator_6_out0_stream, TensorDuplicator_6_out1_stream);
+    TensorDuplicator_6.run<210, 3>(StreamingSwish_15_out0_stream, TensorDuplicator_6_out0_stream, TensorDuplicator_6_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_6_out0_stream_0," << TensorDuplicator_6_out0_stream[0].size() << std::endl;
     #endif
@@ -7682,7 +7787,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         2  // OUT_CH_PAR
     > BandwidthAdjustIncreaseChannels_0;
-    BandwidthAdjustIncreaseChannels_0.run<211>(TensorDuplicator_6_out0_stream, BandwidthAdjustIncreaseChannels_0_out0_stream);
+    BandwidthAdjustIncreaseChannels_0.run<211, 3>(TensorDuplicator_6_out0_stream, BandwidthAdjustIncreaseChannels_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseChannels_0_out0_stream_0," << BandwidthAdjustIncreaseChannels_0_out0_stream[0].size() << std::endl;
     #endif
@@ -7709,7 +7814,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_16_pixel_0;
-    StreamingLineBuffer_16_pixel_0.run<212>(TensorDuplicator_6_out1_stream[1], StreamingLineBuffer_16_out0_stream_prepad[1]);
+    StreamingLineBuffer_16_pixel_0.run<212, 3>(TensorDuplicator_6_out1_stream[1], StreamingLineBuffer_16_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_16_out0_stream_prepad_1," << StreamingLineBuffer_16_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -7733,7 +7838,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_16_pixel_1;
-    StreamingLineBuffer_16_pixel_1.run<213>(TensorDuplicator_6_out1_stream[0], StreamingLineBuffer_16_out0_stream_prepad[0]);
+    StreamingLineBuffer_16_pixel_1.run<213, 3>(TensorDuplicator_6_out1_stream[0], StreamingLineBuffer_16_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_16_out0_stream_prepad_0," << StreamingLineBuffer_16_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -7758,7 +7863,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_16_pad;
-    StreamingLineBuffer_16_pad.run<214>(StreamingLineBuffer_16_out0_stream_prepad, StreamingLineBuffer_16_out0_stream);
+    StreamingLineBuffer_16_pad.run<214, 3>(StreamingLineBuffer_16_out0_stream_prepad, StreamingLineBuffer_16_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_16_out0_stream_0," << StreamingLineBuffer_16_out0_stream[0].size() << std::endl;
     #endif
@@ -7782,7 +7887,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_17_pixel_0;
-    StreamingLineBuffer_17_pixel_0.run<216>(BandwidthAdjustIncreaseChannels_0_out0_stream[1], StreamingLineBuffer_17_out0_stream_prepad[1]);
+    StreamingLineBuffer_17_pixel_0.run<216, 3>(BandwidthAdjustIncreaseChannels_0_out0_stream[1], StreamingLineBuffer_17_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_17_out0_stream_prepad_1," << StreamingLineBuffer_17_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -7806,14 +7911,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_17_pixel_1;
-    StreamingLineBuffer_17_pixel_1.run<217>(BandwidthAdjustIncreaseChannels_0_out0_stream[0], StreamingLineBuffer_17_out0_stream_prepad[0]);
+    StreamingLineBuffer_17_pixel_1.run<217, 3>(BandwidthAdjustIncreaseChannels_0_out0_stream[0], StreamingLineBuffer_17_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_17_out0_stream_prepad_0," << StreamingLineBuffer_17_out0_stream_prepad[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_16_weights[4096][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_16_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_16_weights dim=2 complete
-    ap_int<14> StreamingConv_16_biases[32][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_16_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_16_biases dim=2 complete
     StreamingConv <
@@ -7844,7 +7947,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_16;
-    StreamingConv_16.run<215>(StreamingLineBuffer_16_out0_stream, StreamingConv_16_weights, StreamingConv_16_biases, StreamingConv_16_out0_stream);
+    StreamingConv_16.run<215, 3>(StreamingLineBuffer_16_out0_stream, StreamingConv_16_weights, StreamingConv_16_biases, StreamingConv_16_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_16_out0_stream_0," << StreamingConv_16_out0_stream[0].size() << std::endl;
     #endif
@@ -7872,14 +7975,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_17_pad;
-    StreamingLineBuffer_17_pad.run<218>(StreamingLineBuffer_17_out0_stream_prepad, StreamingLineBuffer_17_out0_stream);
+    StreamingLineBuffer_17_pad.run<218, 3>(StreamingLineBuffer_17_out0_stream_prepad, StreamingLineBuffer_17_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_17_out0_stream_0," << StreamingLineBuffer_17_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_17_weights[4096][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_17_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_17_weights dim=2 complete
-    ap_int<15> StreamingConv_17_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_17_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_17_biases dim=2 complete
     StreamingConv <
@@ -7910,7 +8011,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_17;
-    StreamingConv_17.run<219>(StreamingLineBuffer_17_out0_stream, StreamingConv_17_weights, StreamingConv_17_biases, StreamingConv_17_out0_stream);
+    StreamingConv_17.run<219, 3>(StreamingLineBuffer_17_out0_stream, StreamingConv_17_weights, StreamingConv_17_biases, StreamingConv_17_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_17_out0_stream_0," << StreamingConv_17_out0_stream[0].size() << std::endl;
     #endif
@@ -7930,7 +8031,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_16;
-    StreamingSwish_16.run<220>(StreamingConv_16_out0_stream, StreamingSwish_16_lut, StreamingSwish_16_out0_stream);
+    StreamingSwish_16.run<220, 3>(StreamingConv_16_out0_stream, StreamingSwish_16_lut, StreamingSwish_16_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_16_out0_stream_0," << StreamingSwish_16_out0_stream[0].size() << std::endl;
     #endif
@@ -7950,7 +8051,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_17;
-    StreamingSwish_17.run<221>(StreamingConv_17_out0_stream, StreamingSwish_17_lut, StreamingSwish_17_out0_stream);
+    StreamingSwish_17.run<221, 3>(StreamingConv_17_out0_stream, StreamingSwish_17_lut, StreamingSwish_17_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_17_out0_stream_0," << StreamingSwish_17_out0_stream[0].size() << std::endl;
     #endif
@@ -7971,7 +8072,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // IN_CH_PAR
         1  // OUT_CH_PAR
     > BandwidthAdjustDecreaseChannels_3;
-    BandwidthAdjustDecreaseChannels_3.run<222>(StreamingSwish_16_out0_stream, BandwidthAdjustDecreaseChannels_3_out0_stream);
+    BandwidthAdjustDecreaseChannels_3.run<222, 3>(StreamingSwish_16_out0_stream, BandwidthAdjustDecreaseChannels_3_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseChannels_3_out0_stream_0," << BandwidthAdjustDecreaseChannels_3_out0_stream[0].size() << std::endl;
     #endif
@@ -7986,7 +8087,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_7;
-    TensorDuplicator_7.run<223>(StreamingSwish_17_out0_stream, TensorDuplicator_7_out0_stream, TensorDuplicator_7_out1_stream);
+    TensorDuplicator_7.run<223, 3>(StreamingSwish_17_out0_stream, TensorDuplicator_7_out0_stream, TensorDuplicator_7_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_7_out0_stream_0," << TensorDuplicator_7_out0_stream[0].size() << std::endl;
     #endif
@@ -8019,7 +8120,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_18_pixel_0;
-    StreamingLineBuffer_18_pixel_0.run<224>(TensorDuplicator_7_out0_stream[1], StreamingLineBuffer_18_out0_stream_prepad[1]);
+    StreamingLineBuffer_18_pixel_0.run<224, 3>(TensorDuplicator_7_out0_stream[1], StreamingLineBuffer_18_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_18_out0_stream_prepad_1," << StreamingLineBuffer_18_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -8043,7 +8144,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_18_pixel_1;
-    StreamingLineBuffer_18_pixel_1.run<225>(TensorDuplicator_7_out0_stream[0], StreamingLineBuffer_18_out0_stream_prepad[0]);
+    StreamingLineBuffer_18_pixel_1.run<225, 3>(TensorDuplicator_7_out0_stream[0], StreamingLineBuffer_18_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_18_out0_stream_prepad_0," << StreamingLineBuffer_18_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -8068,14 +8169,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_18_pad;
-    StreamingLineBuffer_18_pad.run<226>(StreamingLineBuffer_18_out0_stream_prepad, StreamingLineBuffer_18_out0_stream);
+    StreamingLineBuffer_18_pad.run<226, 3>(StreamingLineBuffer_18_out0_stream_prepad, StreamingLineBuffer_18_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_18_out0_stream_0," << StreamingLineBuffer_18_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_18_weights[4096][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_18_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_18_weights dim=2 complete
-    ap_int<14> StreamingConv_18_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_18_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_18_biases dim=2 complete
     StreamingConv <
@@ -8106,7 +8205,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_18;
-    StreamingConv_18.run<227>(StreamingLineBuffer_18_out0_stream, StreamingConv_18_weights, StreamingConv_18_biases, StreamingConv_18_out0_stream);
+    StreamingConv_18.run<227, 3>(StreamingLineBuffer_18_out0_stream, StreamingConv_18_weights, StreamingConv_18_biases, StreamingConv_18_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_18_out0_stream_0," << StreamingConv_18_out0_stream[0].size() << std::endl;
     #endif
@@ -8126,7 +8225,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_18;
-    StreamingSwish_18.run<228>(StreamingConv_18_out0_stream, StreamingSwish_18_lut, StreamingSwish_18_out0_stream);
+    StreamingSwish_18.run<228, 3>(StreamingConv_18_out0_stream, StreamingSwish_18_lut, StreamingSwish_18_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_18_out0_stream_0," << StreamingSwish_18_out0_stream[0].size() << std::endl;
     #endif
@@ -8153,7 +8252,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_19_pixel_0;
-    StreamingLineBuffer_19_pixel_0.run<229>(StreamingSwish_18_out0_stream[0], StreamingLineBuffer_19_out0_stream_prepad[11], StreamingLineBuffer_19_buffer_stream[0]);
+    StreamingLineBuffer_19_pixel_0.run<229, 3>(StreamingSwish_18_out0_stream[0], StreamingLineBuffer_19_out0_stream_prepad[11], StreamingLineBuffer_19_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_19_out0_stream_prepad_11," << StreamingLineBuffer_19_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -8180,7 +8279,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_19_pixel_1;
-    StreamingLineBuffer_19_pixel_1.run<230>(StreamingSwish_18_out0_stream[1], StreamingLineBuffer_19_out0_stream_prepad[10], StreamingLineBuffer_19_buffer_stream[1]);
+    StreamingLineBuffer_19_pixel_1.run<230, 3>(StreamingSwish_18_out0_stream[1], StreamingLineBuffer_19_out0_stream_prepad[10], StreamingLineBuffer_19_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_19_out0_stream_prepad_10," << StreamingLineBuffer_19_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -8207,7 +8306,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_19_pixel_2;
-    StreamingLineBuffer_19_pixel_2.run<231>(StreamingLineBuffer_19_buffer_stream[0], StreamingLineBuffer_19_out0_stream_prepad[9], StreamingLineBuffer_19_buffer_stream[2]);
+    StreamingLineBuffer_19_pixel_2.run<231, 3>(StreamingLineBuffer_19_buffer_stream[0], StreamingLineBuffer_19_out0_stream_prepad[9], StreamingLineBuffer_19_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_19_out0_stream_prepad_9," << StreamingLineBuffer_19_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -8234,7 +8333,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_19_pixel_3;
-    StreamingLineBuffer_19_pixel_3.run<232>(StreamingLineBuffer_19_buffer_stream[1], StreamingLineBuffer_19_out0_stream_prepad[8], StreamingLineBuffer_19_buffer_stream[3]);
+    StreamingLineBuffer_19_pixel_3.run<232, 3>(StreamingLineBuffer_19_buffer_stream[1], StreamingLineBuffer_19_out0_stream_prepad[8], StreamingLineBuffer_19_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_19_out0_stream_prepad_8," << StreamingLineBuffer_19_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -8261,7 +8360,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_19_pixel_4;
-    StreamingLineBuffer_19_pixel_4.run<233>(StreamingLineBuffer_19_buffer_stream[2], StreamingLineBuffer_19_out0_stream_prepad[7], StreamingLineBuffer_19_buffer_stream[4]);
+    StreamingLineBuffer_19_pixel_4.run<233, 3>(StreamingLineBuffer_19_buffer_stream[2], StreamingLineBuffer_19_out0_stream_prepad[7], StreamingLineBuffer_19_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_19_out0_stream_prepad_7," << StreamingLineBuffer_19_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -8288,7 +8387,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_19_pixel_5;
-    StreamingLineBuffer_19_pixel_5.run<234>(StreamingLineBuffer_19_buffer_stream[3], StreamingLineBuffer_19_out0_stream_prepad[6], StreamingLineBuffer_19_buffer_stream[5]);
+    StreamingLineBuffer_19_pixel_5.run<234, 3>(StreamingLineBuffer_19_buffer_stream[3], StreamingLineBuffer_19_out0_stream_prepad[6], StreamingLineBuffer_19_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_19_out0_stream_prepad_6," << StreamingLineBuffer_19_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -8315,7 +8414,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_19_pixel_6;
-    StreamingLineBuffer_19_pixel_6.run<235>(StreamingLineBuffer_19_buffer_stream[4], StreamingLineBuffer_19_out0_stream_prepad[5], StreamingLineBuffer_19_buffer_stream[6]);
+    StreamingLineBuffer_19_pixel_6.run<235, 3>(StreamingLineBuffer_19_buffer_stream[4], StreamingLineBuffer_19_out0_stream_prepad[5], StreamingLineBuffer_19_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_19_out0_stream_prepad_5," << StreamingLineBuffer_19_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -8342,7 +8441,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_19_pixel_7;
-    StreamingLineBuffer_19_pixel_7.run<236>(StreamingLineBuffer_19_buffer_stream[5], StreamingLineBuffer_19_out0_stream_prepad[4], StreamingLineBuffer_19_buffer_stream[7]);
+    StreamingLineBuffer_19_pixel_7.run<236, 3>(StreamingLineBuffer_19_buffer_stream[5], StreamingLineBuffer_19_out0_stream_prepad[4], StreamingLineBuffer_19_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_19_out0_stream_prepad_4," << StreamingLineBuffer_19_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -8369,7 +8468,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_19_pixel_8;
-    StreamingLineBuffer_19_pixel_8.run<237>(StreamingLineBuffer_19_buffer_stream[6], StreamingLineBuffer_19_out0_stream_prepad[3], StreamingLineBuffer_19_buffer_stream[8]);
+    StreamingLineBuffer_19_pixel_8.run<237, 3>(StreamingLineBuffer_19_buffer_stream[6], StreamingLineBuffer_19_out0_stream_prepad[3], StreamingLineBuffer_19_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_19_out0_stream_prepad_3," << StreamingLineBuffer_19_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -8396,7 +8495,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_19_pixel_9;
-    StreamingLineBuffer_19_pixel_9.run<238>(StreamingLineBuffer_19_buffer_stream[7], StreamingLineBuffer_19_out0_stream_prepad[2], StreamingLineBuffer_19_buffer_stream[9]);
+    StreamingLineBuffer_19_pixel_9.run<238, 3>(StreamingLineBuffer_19_buffer_stream[7], StreamingLineBuffer_19_out0_stream_prepad[2], StreamingLineBuffer_19_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_19_out0_stream_prepad_2," << StreamingLineBuffer_19_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -8423,7 +8522,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_19_pixel_10;
-    StreamingLineBuffer_19_pixel_10.run<239>(StreamingLineBuffer_19_buffer_stream[8], StreamingLineBuffer_19_out0_stream_prepad[1]);
+    StreamingLineBuffer_19_pixel_10.run<239, 3>(StreamingLineBuffer_19_buffer_stream[8], StreamingLineBuffer_19_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_19_out0_stream_prepad_1," << StreamingLineBuffer_19_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -8447,7 +8546,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_19_pixel_11;
-    StreamingLineBuffer_19_pixel_11.run<240>(StreamingLineBuffer_19_buffer_stream[9], StreamingLineBuffer_19_out0_stream_prepad[0]);
+    StreamingLineBuffer_19_pixel_11.run<240, 3>(StreamingLineBuffer_19_buffer_stream[9], StreamingLineBuffer_19_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_19_out0_stream_prepad_0," << StreamingLineBuffer_19_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -8472,14 +8571,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_19_pad;
-    StreamingLineBuffer_19_pad.run<241>(StreamingLineBuffer_19_out0_stream_prepad, StreamingLineBuffer_19_out0_stream);
+    StreamingLineBuffer_19_pad.run<241, 3>(StreamingLineBuffer_19_out0_stream_prepad, StreamingLineBuffer_19_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_19_out0_stream_0," << StreamingLineBuffer_19_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_19_weights[4096][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_19_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_19_weights dim=2 complete
-    ap_int<16> StreamingConv_19_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_19_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_19_biases dim=2 complete
     StreamingConv <
@@ -8510,7 +8607,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_19;
-    StreamingConv_19.run<242>(StreamingLineBuffer_19_out0_stream, StreamingConv_19_weights, StreamingConv_19_biases, StreamingConv_19_out0_stream);
+    StreamingConv_19.run<242, 3>(StreamingLineBuffer_19_out0_stream, StreamingConv_19_weights, StreamingConv_19_biases, StreamingConv_19_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_19_out0_stream_0," << StreamingConv_19_out0_stream[0].size() << std::endl;
     #endif
@@ -8530,7 +8627,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_19;
-    StreamingSwish_19.run<243>(StreamingConv_19_out0_stream, StreamingSwish_19_lut, StreamingSwish_19_out0_stream);
+    StreamingSwish_19.run<243, 3>(StreamingConv_19_out0_stream, StreamingSwish_19_lut, StreamingSwish_19_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_19_out0_stream_0," << StreamingSwish_19_out0_stream[0].size() << std::endl;
     #endif
@@ -8555,7 +8652,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingAdd_3;
-    StreamingAdd_3.run<244>(TensorDuplicator_7_out1_stream, StreamingSwish_19_out0_stream, StreamingAdd_3_out0_stream);
+    StreamingAdd_3.run<244, 3>(TensorDuplicator_7_out1_stream, StreamingSwish_19_out0_stream, StreamingAdd_3_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingAdd_3_out0_stream_0," << StreamingAdd_3_out0_stream[0].size() << std::endl;
     #endif
@@ -8570,7 +8667,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_8;
-    TensorDuplicator_8.run<245>(StreamingAdd_3_out0_stream, TensorDuplicator_8_out0_stream, TensorDuplicator_8_out1_stream);
+    TensorDuplicator_8.run<245, 3>(StreamingAdd_3_out0_stream, TensorDuplicator_8_out0_stream, TensorDuplicator_8_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_8_out0_stream_0," << TensorDuplicator_8_out0_stream[0].size() << std::endl;
     #endif
@@ -8603,7 +8700,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_20_pixel_0;
-    StreamingLineBuffer_20_pixel_0.run<246>(TensorDuplicator_8_out0_stream[1], StreamingLineBuffer_20_out0_stream_prepad[1]);
+    StreamingLineBuffer_20_pixel_0.run<246, 3>(TensorDuplicator_8_out0_stream[1], StreamingLineBuffer_20_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_20_out0_stream_prepad_1," << StreamingLineBuffer_20_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -8627,7 +8724,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_20_pixel_1;
-    StreamingLineBuffer_20_pixel_1.run<247>(TensorDuplicator_8_out0_stream[0], StreamingLineBuffer_20_out0_stream_prepad[0]);
+    StreamingLineBuffer_20_pixel_1.run<247, 3>(TensorDuplicator_8_out0_stream[0], StreamingLineBuffer_20_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_20_out0_stream_prepad_0," << StreamingLineBuffer_20_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -8652,14 +8749,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_20_pad;
-    StreamingLineBuffer_20_pad.run<248>(StreamingLineBuffer_20_out0_stream_prepad, StreamingLineBuffer_20_out0_stream);
+    StreamingLineBuffer_20_pad.run<248, 3>(StreamingLineBuffer_20_out0_stream_prepad, StreamingLineBuffer_20_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_20_out0_stream_0," << StreamingLineBuffer_20_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_20_weights[4096][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_20_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_20_weights dim=2 complete
-    ap_int<14> StreamingConv_20_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_20_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_20_biases dim=2 complete
     StreamingConv <
@@ -8690,7 +8785,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_20;
-    StreamingConv_20.run<249>(StreamingLineBuffer_20_out0_stream, StreamingConv_20_weights, StreamingConv_20_biases, StreamingConv_20_out0_stream);
+    StreamingConv_20.run<249, 3>(StreamingLineBuffer_20_out0_stream, StreamingConv_20_weights, StreamingConv_20_biases, StreamingConv_20_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_20_out0_stream_0," << StreamingConv_20_out0_stream[0].size() << std::endl;
     #endif
@@ -8710,7 +8805,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_20;
-    StreamingSwish_20.run<250>(StreamingConv_20_out0_stream, StreamingSwish_20_lut, StreamingSwish_20_out0_stream);
+    StreamingSwish_20.run<250, 3>(StreamingConv_20_out0_stream, StreamingSwish_20_lut, StreamingSwish_20_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_20_out0_stream_0," << StreamingSwish_20_out0_stream[0].size() << std::endl;
     #endif
@@ -8737,7 +8832,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_21_pixel_0;
-    StreamingLineBuffer_21_pixel_0.run<251>(StreamingSwish_20_out0_stream[0], StreamingLineBuffer_21_out0_stream_prepad[11], StreamingLineBuffer_21_buffer_stream[0]);
+    StreamingLineBuffer_21_pixel_0.run<251, 3>(StreamingSwish_20_out0_stream[0], StreamingLineBuffer_21_out0_stream_prepad[11], StreamingLineBuffer_21_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_21_out0_stream_prepad_11," << StreamingLineBuffer_21_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -8764,7 +8859,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_21_pixel_1;
-    StreamingLineBuffer_21_pixel_1.run<252>(StreamingSwish_20_out0_stream[1], StreamingLineBuffer_21_out0_stream_prepad[10], StreamingLineBuffer_21_buffer_stream[1]);
+    StreamingLineBuffer_21_pixel_1.run<252, 3>(StreamingSwish_20_out0_stream[1], StreamingLineBuffer_21_out0_stream_prepad[10], StreamingLineBuffer_21_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_21_out0_stream_prepad_10," << StreamingLineBuffer_21_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -8791,7 +8886,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_21_pixel_2;
-    StreamingLineBuffer_21_pixel_2.run<253>(StreamingLineBuffer_21_buffer_stream[0], StreamingLineBuffer_21_out0_stream_prepad[9], StreamingLineBuffer_21_buffer_stream[2]);
+    StreamingLineBuffer_21_pixel_2.run<253, 3>(StreamingLineBuffer_21_buffer_stream[0], StreamingLineBuffer_21_out0_stream_prepad[9], StreamingLineBuffer_21_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_21_out0_stream_prepad_9," << StreamingLineBuffer_21_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -8818,7 +8913,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_21_pixel_3;
-    StreamingLineBuffer_21_pixel_3.run<254>(StreamingLineBuffer_21_buffer_stream[1], StreamingLineBuffer_21_out0_stream_prepad[8], StreamingLineBuffer_21_buffer_stream[3]);
+    StreamingLineBuffer_21_pixel_3.run<254, 3>(StreamingLineBuffer_21_buffer_stream[1], StreamingLineBuffer_21_out0_stream_prepad[8], StreamingLineBuffer_21_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_21_out0_stream_prepad_8," << StreamingLineBuffer_21_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -8845,7 +8940,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_21_pixel_4;
-    StreamingLineBuffer_21_pixel_4.run<255>(StreamingLineBuffer_21_buffer_stream[2], StreamingLineBuffer_21_out0_stream_prepad[7], StreamingLineBuffer_21_buffer_stream[4]);
+    StreamingLineBuffer_21_pixel_4.run<255, 3>(StreamingLineBuffer_21_buffer_stream[2], StreamingLineBuffer_21_out0_stream_prepad[7], StreamingLineBuffer_21_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_21_out0_stream_prepad_7," << StreamingLineBuffer_21_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -8872,7 +8967,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_21_pixel_5;
-    StreamingLineBuffer_21_pixel_5.run<256>(StreamingLineBuffer_21_buffer_stream[3], StreamingLineBuffer_21_out0_stream_prepad[6], StreamingLineBuffer_21_buffer_stream[5]);
+    StreamingLineBuffer_21_pixel_5.run<256, 3>(StreamingLineBuffer_21_buffer_stream[3], StreamingLineBuffer_21_out0_stream_prepad[6], StreamingLineBuffer_21_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_21_out0_stream_prepad_6," << StreamingLineBuffer_21_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -8899,7 +8994,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_21_pixel_6;
-    StreamingLineBuffer_21_pixel_6.run<257>(StreamingLineBuffer_21_buffer_stream[4], StreamingLineBuffer_21_out0_stream_prepad[5], StreamingLineBuffer_21_buffer_stream[6]);
+    StreamingLineBuffer_21_pixel_6.run<257, 3>(StreamingLineBuffer_21_buffer_stream[4], StreamingLineBuffer_21_out0_stream_prepad[5], StreamingLineBuffer_21_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_21_out0_stream_prepad_5," << StreamingLineBuffer_21_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -8926,7 +9021,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_21_pixel_7;
-    StreamingLineBuffer_21_pixel_7.run<258>(StreamingLineBuffer_21_buffer_stream[5], StreamingLineBuffer_21_out0_stream_prepad[4], StreamingLineBuffer_21_buffer_stream[7]);
+    StreamingLineBuffer_21_pixel_7.run<258, 3>(StreamingLineBuffer_21_buffer_stream[5], StreamingLineBuffer_21_out0_stream_prepad[4], StreamingLineBuffer_21_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_21_out0_stream_prepad_4," << StreamingLineBuffer_21_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -8953,7 +9048,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_21_pixel_8;
-    StreamingLineBuffer_21_pixel_8.run<259>(StreamingLineBuffer_21_buffer_stream[6], StreamingLineBuffer_21_out0_stream_prepad[3], StreamingLineBuffer_21_buffer_stream[8]);
+    StreamingLineBuffer_21_pixel_8.run<259, 3>(StreamingLineBuffer_21_buffer_stream[6], StreamingLineBuffer_21_out0_stream_prepad[3], StreamingLineBuffer_21_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_21_out0_stream_prepad_3," << StreamingLineBuffer_21_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -8980,7 +9075,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_21_pixel_9;
-    StreamingLineBuffer_21_pixel_9.run<260>(StreamingLineBuffer_21_buffer_stream[7], StreamingLineBuffer_21_out0_stream_prepad[2], StreamingLineBuffer_21_buffer_stream[9]);
+    StreamingLineBuffer_21_pixel_9.run<260, 3>(StreamingLineBuffer_21_buffer_stream[7], StreamingLineBuffer_21_out0_stream_prepad[2], StreamingLineBuffer_21_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_21_out0_stream_prepad_2," << StreamingLineBuffer_21_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -9007,7 +9102,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_21_pixel_10;
-    StreamingLineBuffer_21_pixel_10.run<261>(StreamingLineBuffer_21_buffer_stream[8], StreamingLineBuffer_21_out0_stream_prepad[1]);
+    StreamingLineBuffer_21_pixel_10.run<261, 3>(StreamingLineBuffer_21_buffer_stream[8], StreamingLineBuffer_21_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_21_out0_stream_prepad_1," << StreamingLineBuffer_21_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -9031,7 +9126,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_21_pixel_11;
-    StreamingLineBuffer_21_pixel_11.run<262>(StreamingLineBuffer_21_buffer_stream[9], StreamingLineBuffer_21_out0_stream_prepad[0]);
+    StreamingLineBuffer_21_pixel_11.run<262, 3>(StreamingLineBuffer_21_buffer_stream[9], StreamingLineBuffer_21_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_21_out0_stream_prepad_0," << StreamingLineBuffer_21_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -9056,14 +9151,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_21_pad;
-    StreamingLineBuffer_21_pad.run<263>(StreamingLineBuffer_21_out0_stream_prepad, StreamingLineBuffer_21_out0_stream);
+    StreamingLineBuffer_21_pad.run<263, 3>(StreamingLineBuffer_21_out0_stream_prepad, StreamingLineBuffer_21_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_21_out0_stream_0," << StreamingLineBuffer_21_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_21_weights[4096][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_21_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_21_weights dim=2 complete
-    ap_int<14> StreamingConv_21_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_21_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_21_biases dim=2 complete
     StreamingConv <
@@ -9094,7 +9187,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_21;
-    StreamingConv_21.run<264>(StreamingLineBuffer_21_out0_stream, StreamingConv_21_weights, StreamingConv_21_biases, StreamingConv_21_out0_stream);
+    StreamingConv_21.run<264, 3>(StreamingLineBuffer_21_out0_stream, StreamingConv_21_weights, StreamingConv_21_biases, StreamingConv_21_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_21_out0_stream_0," << StreamingConv_21_out0_stream[0].size() << std::endl;
     #endif
@@ -9114,7 +9207,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_21;
-    StreamingSwish_21.run<265>(StreamingConv_21_out0_stream, StreamingSwish_21_lut, StreamingSwish_21_out0_stream);
+    StreamingSwish_21.run<265, 3>(StreamingConv_21_out0_stream, StreamingSwish_21_lut, StreamingSwish_21_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_21_out0_stream_0," << StreamingSwish_21_out0_stream[0].size() << std::endl;
     #endif
@@ -9139,7 +9232,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingAdd_4;
-    StreamingAdd_4.run<266>(TensorDuplicator_8_out1_stream, StreamingSwish_21_out0_stream, StreamingAdd_4_out0_stream);
+    StreamingAdd_4.run<266, 3>(TensorDuplicator_8_out1_stream, StreamingSwish_21_out0_stream, StreamingAdd_4_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingAdd_4_out0_stream_0," << StreamingAdd_4_out0_stream[0].size() << std::endl;
     #endif
@@ -9154,7 +9247,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_9;
-    TensorDuplicator_9.run<267>(StreamingAdd_4_out0_stream, TensorDuplicator_9_out0_stream, TensorDuplicator_9_out1_stream);
+    TensorDuplicator_9.run<267, 3>(StreamingAdd_4_out0_stream, TensorDuplicator_9_out0_stream, TensorDuplicator_9_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_9_out0_stream_0," << TensorDuplicator_9_out0_stream[0].size() << std::endl;
     #endif
@@ -9187,7 +9280,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_22_pixel_0;
-    StreamingLineBuffer_22_pixel_0.run<268>(TensorDuplicator_9_out0_stream[1], StreamingLineBuffer_22_out0_stream_prepad[1]);
+    StreamingLineBuffer_22_pixel_0.run<268, 3>(TensorDuplicator_9_out0_stream[1], StreamingLineBuffer_22_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_22_out0_stream_prepad_1," << StreamingLineBuffer_22_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -9211,7 +9304,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_22_pixel_1;
-    StreamingLineBuffer_22_pixel_1.run<269>(TensorDuplicator_9_out0_stream[0], StreamingLineBuffer_22_out0_stream_prepad[0]);
+    StreamingLineBuffer_22_pixel_1.run<269, 3>(TensorDuplicator_9_out0_stream[0], StreamingLineBuffer_22_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_22_out0_stream_prepad_0," << StreamingLineBuffer_22_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -9236,14 +9329,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_22_pad;
-    StreamingLineBuffer_22_pad.run<270>(StreamingLineBuffer_22_out0_stream_prepad, StreamingLineBuffer_22_out0_stream);
+    StreamingLineBuffer_22_pad.run<270, 3>(StreamingLineBuffer_22_out0_stream_prepad, StreamingLineBuffer_22_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_22_out0_stream_0," << StreamingLineBuffer_22_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_22_weights[4096][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_22_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_22_weights dim=2 complete
-    ap_int<14> StreamingConv_22_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_22_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_22_biases dim=2 complete
     StreamingConv <
@@ -9274,7 +9365,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_22;
-    StreamingConv_22.run<271>(StreamingLineBuffer_22_out0_stream, StreamingConv_22_weights, StreamingConv_22_biases, StreamingConv_22_out0_stream);
+    StreamingConv_22.run<271, 3>(StreamingLineBuffer_22_out0_stream, StreamingConv_22_weights, StreamingConv_22_biases, StreamingConv_22_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_22_out0_stream_0," << StreamingConv_22_out0_stream[0].size() << std::endl;
     #endif
@@ -9294,7 +9385,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_22;
-    StreamingSwish_22.run<272>(StreamingConv_22_out0_stream, StreamingSwish_22_lut, StreamingSwish_22_out0_stream);
+    StreamingSwish_22.run<272, 3>(StreamingConv_22_out0_stream, StreamingSwish_22_lut, StreamingSwish_22_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_22_out0_stream_0," << StreamingSwish_22_out0_stream[0].size() << std::endl;
     #endif
@@ -9321,7 +9412,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_23_pixel_0;
-    StreamingLineBuffer_23_pixel_0.run<273>(StreamingSwish_22_out0_stream[0], StreamingLineBuffer_23_out0_stream_prepad[11], StreamingLineBuffer_23_buffer_stream[0]);
+    StreamingLineBuffer_23_pixel_0.run<273, 3>(StreamingSwish_22_out0_stream[0], StreamingLineBuffer_23_out0_stream_prepad[11], StreamingLineBuffer_23_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_23_out0_stream_prepad_11," << StreamingLineBuffer_23_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -9348,7 +9439,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_23_pixel_1;
-    StreamingLineBuffer_23_pixel_1.run<274>(StreamingSwish_22_out0_stream[1], StreamingLineBuffer_23_out0_stream_prepad[10], StreamingLineBuffer_23_buffer_stream[1]);
+    StreamingLineBuffer_23_pixel_1.run<274, 3>(StreamingSwish_22_out0_stream[1], StreamingLineBuffer_23_out0_stream_prepad[10], StreamingLineBuffer_23_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_23_out0_stream_prepad_10," << StreamingLineBuffer_23_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -9375,7 +9466,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_23_pixel_2;
-    StreamingLineBuffer_23_pixel_2.run<275>(StreamingLineBuffer_23_buffer_stream[0], StreamingLineBuffer_23_out0_stream_prepad[9], StreamingLineBuffer_23_buffer_stream[2]);
+    StreamingLineBuffer_23_pixel_2.run<275, 3>(StreamingLineBuffer_23_buffer_stream[0], StreamingLineBuffer_23_out0_stream_prepad[9], StreamingLineBuffer_23_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_23_out0_stream_prepad_9," << StreamingLineBuffer_23_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -9402,7 +9493,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_23_pixel_3;
-    StreamingLineBuffer_23_pixel_3.run<276>(StreamingLineBuffer_23_buffer_stream[1], StreamingLineBuffer_23_out0_stream_prepad[8], StreamingLineBuffer_23_buffer_stream[3]);
+    StreamingLineBuffer_23_pixel_3.run<276, 3>(StreamingLineBuffer_23_buffer_stream[1], StreamingLineBuffer_23_out0_stream_prepad[8], StreamingLineBuffer_23_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_23_out0_stream_prepad_8," << StreamingLineBuffer_23_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -9429,7 +9520,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_23_pixel_4;
-    StreamingLineBuffer_23_pixel_4.run<277>(StreamingLineBuffer_23_buffer_stream[2], StreamingLineBuffer_23_out0_stream_prepad[7], StreamingLineBuffer_23_buffer_stream[4]);
+    StreamingLineBuffer_23_pixel_4.run<277, 3>(StreamingLineBuffer_23_buffer_stream[2], StreamingLineBuffer_23_out0_stream_prepad[7], StreamingLineBuffer_23_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_23_out0_stream_prepad_7," << StreamingLineBuffer_23_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -9456,7 +9547,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_23_pixel_5;
-    StreamingLineBuffer_23_pixel_5.run<278>(StreamingLineBuffer_23_buffer_stream[3], StreamingLineBuffer_23_out0_stream_prepad[6], StreamingLineBuffer_23_buffer_stream[5]);
+    StreamingLineBuffer_23_pixel_5.run<278, 3>(StreamingLineBuffer_23_buffer_stream[3], StreamingLineBuffer_23_out0_stream_prepad[6], StreamingLineBuffer_23_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_23_out0_stream_prepad_6," << StreamingLineBuffer_23_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -9483,7 +9574,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_23_pixel_6;
-    StreamingLineBuffer_23_pixel_6.run<279>(StreamingLineBuffer_23_buffer_stream[4], StreamingLineBuffer_23_out0_stream_prepad[5], StreamingLineBuffer_23_buffer_stream[6]);
+    StreamingLineBuffer_23_pixel_6.run<279, 3>(StreamingLineBuffer_23_buffer_stream[4], StreamingLineBuffer_23_out0_stream_prepad[5], StreamingLineBuffer_23_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_23_out0_stream_prepad_5," << StreamingLineBuffer_23_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -9510,7 +9601,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_23_pixel_7;
-    StreamingLineBuffer_23_pixel_7.run<280>(StreamingLineBuffer_23_buffer_stream[5], StreamingLineBuffer_23_out0_stream_prepad[4], StreamingLineBuffer_23_buffer_stream[7]);
+    StreamingLineBuffer_23_pixel_7.run<280, 3>(StreamingLineBuffer_23_buffer_stream[5], StreamingLineBuffer_23_out0_stream_prepad[4], StreamingLineBuffer_23_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_23_out0_stream_prepad_4," << StreamingLineBuffer_23_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -9537,7 +9628,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_23_pixel_8;
-    StreamingLineBuffer_23_pixel_8.run<281>(StreamingLineBuffer_23_buffer_stream[6], StreamingLineBuffer_23_out0_stream_prepad[3], StreamingLineBuffer_23_buffer_stream[8]);
+    StreamingLineBuffer_23_pixel_8.run<281, 3>(StreamingLineBuffer_23_buffer_stream[6], StreamingLineBuffer_23_out0_stream_prepad[3], StreamingLineBuffer_23_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_23_out0_stream_prepad_3," << StreamingLineBuffer_23_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -9564,7 +9655,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_23_pixel_9;
-    StreamingLineBuffer_23_pixel_9.run<282>(StreamingLineBuffer_23_buffer_stream[7], StreamingLineBuffer_23_out0_stream_prepad[2], StreamingLineBuffer_23_buffer_stream[9]);
+    StreamingLineBuffer_23_pixel_9.run<282, 3>(StreamingLineBuffer_23_buffer_stream[7], StreamingLineBuffer_23_out0_stream_prepad[2], StreamingLineBuffer_23_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_23_out0_stream_prepad_2," << StreamingLineBuffer_23_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -9591,7 +9682,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_23_pixel_10;
-    StreamingLineBuffer_23_pixel_10.run<283>(StreamingLineBuffer_23_buffer_stream[8], StreamingLineBuffer_23_out0_stream_prepad[1]);
+    StreamingLineBuffer_23_pixel_10.run<283, 3>(StreamingLineBuffer_23_buffer_stream[8], StreamingLineBuffer_23_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_23_out0_stream_prepad_1," << StreamingLineBuffer_23_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -9615,7 +9706,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_23_pixel_11;
-    StreamingLineBuffer_23_pixel_11.run<284>(StreamingLineBuffer_23_buffer_stream[9], StreamingLineBuffer_23_out0_stream_prepad[0]);
+    StreamingLineBuffer_23_pixel_11.run<284, 3>(StreamingLineBuffer_23_buffer_stream[9], StreamingLineBuffer_23_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_23_out0_stream_prepad_0," << StreamingLineBuffer_23_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -9640,14 +9731,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_23_pad;
-    StreamingLineBuffer_23_pad.run<285>(StreamingLineBuffer_23_out0_stream_prepad, StreamingLineBuffer_23_out0_stream);
+    StreamingLineBuffer_23_pad.run<285, 3>(StreamingLineBuffer_23_out0_stream_prepad, StreamingLineBuffer_23_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_23_out0_stream_0," << StreamingLineBuffer_23_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_23_weights[4096][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_23_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_23_weights dim=2 complete
-    ap_int<15> StreamingConv_23_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_23_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_23_biases dim=2 complete
     StreamingConv <
@@ -9678,7 +9767,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_23;
-    StreamingConv_23.run<286>(StreamingLineBuffer_23_out0_stream, StreamingConv_23_weights, StreamingConv_23_biases, StreamingConv_23_out0_stream);
+    StreamingConv_23.run<286, 3>(StreamingLineBuffer_23_out0_stream, StreamingConv_23_weights, StreamingConv_23_biases, StreamingConv_23_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_23_out0_stream_0," << StreamingConv_23_out0_stream[0].size() << std::endl;
     #endif
@@ -9698,7 +9787,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_23;
-    StreamingSwish_23.run<287>(StreamingConv_23_out0_stream, StreamingSwish_23_lut, StreamingSwish_23_out0_stream);
+    StreamingSwish_23.run<287, 3>(StreamingConv_23_out0_stream, StreamingSwish_23_lut, StreamingSwish_23_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_23_out0_stream_0," << StreamingSwish_23_out0_stream[0].size() << std::endl;
     #endif
@@ -9723,7 +9812,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingAdd_5;
-    StreamingAdd_5.run<288>(TensorDuplicator_9_out1_stream, StreamingSwish_23_out0_stream, StreamingAdd_5_out0_stream);
+    StreamingAdd_5.run<288, 3>(TensorDuplicator_9_out1_stream, StreamingSwish_23_out0_stream, StreamingAdd_5_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingAdd_5_out0_stream_0," << StreamingAdd_5_out0_stream[0].size() << std::endl;
     #endif
@@ -9743,7 +9832,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingConcat_2;
-    StreamingConcat_2.run<289>(StreamingAdd_5_out0_stream, BandwidthAdjustDecreaseChannels_3_out0_stream, StreamingConcat_2_out0_stream);
+    StreamingConcat_2.run<289, 3>(StreamingAdd_5_out0_stream, BandwidthAdjustDecreaseChannels_3_out0_stream, StreamingConcat_2_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_2_out0_stream_0," << StreamingConcat_2_out0_stream[0].size() << std::endl;
     #endif
@@ -9764,7 +9853,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         4  // OUT_CH_PAR
     > BandwidthAdjustIncreaseChannels_1;
-    BandwidthAdjustIncreaseChannels_1.run<290>(StreamingConcat_2_out0_stream, BandwidthAdjustIncreaseChannels_1_out0_stream);
+    BandwidthAdjustIncreaseChannels_1.run<290, 3>(StreamingConcat_2_out0_stream, BandwidthAdjustIncreaseChannels_1_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseChannels_1_out0_stream_0," << BandwidthAdjustIncreaseChannels_1_out0_stream[0].size() << std::endl;
     #endif
@@ -9791,7 +9880,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_24_pixel_0;
-    StreamingLineBuffer_24_pixel_0.run<291>(BandwidthAdjustIncreaseChannels_1_out0_stream[1], StreamingLineBuffer_24_out0_stream_prepad[1]);
+    StreamingLineBuffer_24_pixel_0.run<291, 3>(BandwidthAdjustIncreaseChannels_1_out0_stream[1], StreamingLineBuffer_24_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_24_out0_stream_prepad_1," << StreamingLineBuffer_24_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -9815,7 +9904,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_24_pixel_1;
-    StreamingLineBuffer_24_pixel_1.run<292>(BandwidthAdjustIncreaseChannels_1_out0_stream[0], StreamingLineBuffer_24_out0_stream_prepad[0]);
+    StreamingLineBuffer_24_pixel_1.run<292, 3>(BandwidthAdjustIncreaseChannels_1_out0_stream[0], StreamingLineBuffer_24_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_24_out0_stream_prepad_0," << StreamingLineBuffer_24_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -9840,14 +9929,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_24_pad;
-    StreamingLineBuffer_24_pad.run<293>(StreamingLineBuffer_24_out0_stream_prepad, StreamingLineBuffer_24_out0_stream);
+    StreamingLineBuffer_24_pad.run<293, 3>(StreamingLineBuffer_24_out0_stream_prepad, StreamingLineBuffer_24_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_24_out0_stream_0," << StreamingLineBuffer_24_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_24_weights[4096][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_24_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_24_weights dim=2 complete
-    ap_int<14> StreamingConv_24_biases[128][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_24_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_24_biases dim=2 complete
     StreamingConv <
@@ -9878,7 +9965,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_24;
-    StreamingConv_24.run<294>(StreamingLineBuffer_24_out0_stream, StreamingConv_24_weights, StreamingConv_24_biases, StreamingConv_24_out0_stream);
+    StreamingConv_24.run<294, 3>(StreamingLineBuffer_24_out0_stream, StreamingConv_24_weights, StreamingConv_24_biases, StreamingConv_24_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_24_out0_stream_0," << StreamingConv_24_out0_stream[0].size() << std::endl;
     #endif
@@ -9898,7 +9985,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_24;
-    StreamingSwish_24.run<295>(StreamingConv_24_out0_stream, StreamingSwish_24_lut, StreamingSwish_24_out0_stream);
+    StreamingSwish_24.run<295, 3>(StreamingConv_24_out0_stream, StreamingSwish_24_lut, StreamingSwish_24_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_24_out0_stream_0," << StreamingSwish_24_out0_stream[0].size() << std::endl;
     #endif
@@ -9913,7 +10000,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_10;
-    TensorDuplicator_10.run<296>(StreamingSwish_24_out0_stream, TensorDuplicator_10_out0_stream, TensorDuplicator_10_out1_stream);
+    TensorDuplicator_10.run<296, 3>(StreamingSwish_24_out0_stream, TensorDuplicator_10_out0_stream, TensorDuplicator_10_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_10_out0_stream_0," << TensorDuplicator_10_out0_stream[0].size() << std::endl;
     #endif
@@ -9940,7 +10027,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         4  // OUT_CH_PAR
     > BandwidthAdjustIncreaseChannels_2;
-    BandwidthAdjustIncreaseChannels_2.run<297>(TensorDuplicator_10_out1_stream, BandwidthAdjustIncreaseChannels_2_out0_stream);
+    BandwidthAdjustIncreaseChannels_2.run<297, 3>(TensorDuplicator_10_out1_stream, BandwidthAdjustIncreaseChannels_2_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseChannels_2_out0_stream_0," << BandwidthAdjustIncreaseChannels_2_out0_stream[0].size() << std::endl;
     #endif
@@ -9967,7 +10054,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_0;
-    StreamingLineBuffer_25_pixel_0.run<298>(TensorDuplicator_10_out0_stream[1], StreamingLineBuffer_25_out0_stream_prepad[14], StreamingLineBuffer_25_buffer_stream[0]);
+    StreamingLineBuffer_25_pixel_0.run<298, 3>(TensorDuplicator_10_out0_stream[1], StreamingLineBuffer_25_out0_stream_prepad[14], StreamingLineBuffer_25_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_14," << StreamingLineBuffer_25_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -9994,7 +10081,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_1;
-    StreamingLineBuffer_25_pixel_1.run<299>(TensorDuplicator_10_out0_stream[0], StreamingLineBuffer_25_out0_stream_prepad[13], StreamingLineBuffer_25_buffer_stream[1]);
+    StreamingLineBuffer_25_pixel_1.run<299, 3>(TensorDuplicator_10_out0_stream[0], StreamingLineBuffer_25_out0_stream_prepad[13], StreamingLineBuffer_25_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_13," << StreamingLineBuffer_25_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -10021,7 +10108,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_2;
-    StreamingLineBuffer_25_pixel_2.run<300>(StreamingLineBuffer_25_buffer_stream[0], StreamingLineBuffer_25_out0_stream_prepad[12], StreamingLineBuffer_25_buffer_stream[2]);
+    StreamingLineBuffer_25_pixel_2.run<300, 3>(StreamingLineBuffer_25_buffer_stream[0], StreamingLineBuffer_25_out0_stream_prepad[12], StreamingLineBuffer_25_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_12," << StreamingLineBuffer_25_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -10048,7 +10135,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_3;
-    StreamingLineBuffer_25_pixel_3.run<301>(StreamingLineBuffer_25_buffer_stream[1], StreamingLineBuffer_25_out0_stream_prepad[11], StreamingLineBuffer_25_buffer_stream[4]);
+    StreamingLineBuffer_25_pixel_3.run<301, 3>(StreamingLineBuffer_25_buffer_stream[1], StreamingLineBuffer_25_out0_stream_prepad[11], StreamingLineBuffer_25_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_11," << StreamingLineBuffer_25_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -10075,7 +10162,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_4;
-    StreamingLineBuffer_25_pixel_4.run<302>(StreamingLineBuffer_25_buffer_stream[2], StreamingLineBuffer_25_out0_stream_prepad[10], StreamingLineBuffer_25_buffer_stream[3]);
+    StreamingLineBuffer_25_pixel_4.run<302, 3>(StreamingLineBuffer_25_buffer_stream[2], StreamingLineBuffer_25_out0_stream_prepad[10], StreamingLineBuffer_25_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_10," << StreamingLineBuffer_25_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -10102,7 +10189,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_6;
-    StreamingLineBuffer_25_pixel_6.run<304>(StreamingLineBuffer_25_buffer_stream[4], StreamingLineBuffer_25_out0_stream_prepad[8], StreamingLineBuffer_25_buffer_stream[6]);
+    StreamingLineBuffer_25_pixel_6.run<304, 3>(StreamingLineBuffer_25_buffer_stream[4], StreamingLineBuffer_25_out0_stream_prepad[8], StreamingLineBuffer_25_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_8," << StreamingLineBuffer_25_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -10129,7 +10216,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_5;
-    StreamingLineBuffer_25_pixel_5.run<303>(StreamingLineBuffer_25_buffer_stream[3], StreamingLineBuffer_25_out0_stream_prepad[9], StreamingLineBuffer_25_buffer_stream[5]);
+    StreamingLineBuffer_25_pixel_5.run<303, 3>(StreamingLineBuffer_25_buffer_stream[3], StreamingLineBuffer_25_out0_stream_prepad[9], StreamingLineBuffer_25_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_9," << StreamingLineBuffer_25_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -10156,7 +10243,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_8;
-    StreamingLineBuffer_25_pixel_8.run<306>(StreamingLineBuffer_25_buffer_stream[6], StreamingLineBuffer_25_out0_stream_prepad[6], StreamingLineBuffer_25_buffer_stream[9]);
+    StreamingLineBuffer_25_pixel_8.run<306, 3>(StreamingLineBuffer_25_buffer_stream[6], StreamingLineBuffer_25_out0_stream_prepad[6], StreamingLineBuffer_25_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_6," << StreamingLineBuffer_25_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -10183,7 +10270,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_7;
-    StreamingLineBuffer_25_pixel_7.run<305>(StreamingLineBuffer_25_buffer_stream[5], StreamingLineBuffer_25_out0_stream_prepad[7], StreamingLineBuffer_25_buffer_stream[7]);
+    StreamingLineBuffer_25_pixel_7.run<305, 3>(StreamingLineBuffer_25_buffer_stream[5], StreamingLineBuffer_25_out0_stream_prepad[7], StreamingLineBuffer_25_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_7," << StreamingLineBuffer_25_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -10210,7 +10297,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_11;
-    StreamingLineBuffer_25_pixel_11.run<309>(StreamingLineBuffer_25_buffer_stream[9], StreamingLineBuffer_25_out0_stream_prepad[3], StreamingLineBuffer_25_buffer_stream[11]);
+    StreamingLineBuffer_25_pixel_11.run<309, 3>(StreamingLineBuffer_25_buffer_stream[9], StreamingLineBuffer_25_out0_stream_prepad[3], StreamingLineBuffer_25_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_3," << StreamingLineBuffer_25_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -10237,7 +10324,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_9;
-    StreamingLineBuffer_25_pixel_9.run<307>(StreamingLineBuffer_25_buffer_stream[7], StreamingLineBuffer_25_out0_stream_prepad[5], StreamingLineBuffer_25_buffer_stream[8]);
+    StreamingLineBuffer_25_pixel_9.run<307, 3>(StreamingLineBuffer_25_buffer_stream[7], StreamingLineBuffer_25_out0_stream_prepad[5], StreamingLineBuffer_25_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_5," << StreamingLineBuffer_25_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -10264,7 +10351,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_13;
-    StreamingLineBuffer_25_pixel_13.run<311>(StreamingLineBuffer_25_buffer_stream[11], StreamingLineBuffer_25_out0_stream_prepad[1]);
+    StreamingLineBuffer_25_pixel_13.run<311, 3>(StreamingLineBuffer_25_buffer_stream[11], StreamingLineBuffer_25_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_1," << StreamingLineBuffer_25_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -10288,7 +10375,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_10;
-    StreamingLineBuffer_25_pixel_10.run<308>(StreamingLineBuffer_25_buffer_stream[8], StreamingLineBuffer_25_out0_stream_prepad[4], StreamingLineBuffer_25_buffer_stream[10]);
+    StreamingLineBuffer_25_pixel_10.run<308, 3>(StreamingLineBuffer_25_buffer_stream[8], StreamingLineBuffer_25_out0_stream_prepad[4], StreamingLineBuffer_25_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_4," << StreamingLineBuffer_25_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -10315,7 +10402,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_12;
-    StreamingLineBuffer_25_pixel_12.run<310>(StreamingLineBuffer_25_buffer_stream[10], StreamingLineBuffer_25_out0_stream_prepad[2], StreamingLineBuffer_25_buffer_stream[12]);
+    StreamingLineBuffer_25_pixel_12.run<310, 3>(StreamingLineBuffer_25_buffer_stream[10], StreamingLineBuffer_25_out0_stream_prepad[2], StreamingLineBuffer_25_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_2," << StreamingLineBuffer_25_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -10342,7 +10429,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_25_pixel_14;
-    StreamingLineBuffer_25_pixel_14.run<312>(StreamingLineBuffer_25_buffer_stream[12], StreamingLineBuffer_25_out0_stream_prepad[0]);
+    StreamingLineBuffer_25_pixel_14.run<312, 3>(StreamingLineBuffer_25_buffer_stream[12], StreamingLineBuffer_25_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_prepad_0," << StreamingLineBuffer_25_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -10367,14 +10454,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_25_pad;
-    StreamingLineBuffer_25_pad.run<313>(StreamingLineBuffer_25_out0_stream_prepad, StreamingLineBuffer_25_out0_stream);
+    StreamingLineBuffer_25_pad.run<313, 3>(StreamingLineBuffer_25_out0_stream_prepad, StreamingLineBuffer_25_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_25_out0_stream_0," << StreamingLineBuffer_25_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_25_weights[16384][2][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_25_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_25_weights dim=2 complete
-    ap_int<16> StreamingConv_25_biases[128][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_25_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_25_biases dim=2 complete
     StreamingConv <
@@ -10405,7 +10490,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_25;
-    StreamingConv_25.run<314>(StreamingLineBuffer_25_out0_stream, StreamingConv_25_weights, StreamingConv_25_biases, StreamingConv_25_out0_stream);
+    StreamingConv_25.run<314, 3>(StreamingLineBuffer_25_out0_stream, StreamingConv_25_weights, StreamingConv_25_biases, StreamingConv_25_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_25_out0_stream_0," << StreamingConv_25_out0_stream[0].size() << std::endl;
     #endif
@@ -10425,7 +10510,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_25;
-    StreamingSwish_25.run<315>(StreamingConv_25_out0_stream, StreamingSwish_25_lut, StreamingSwish_25_out0_stream);
+    StreamingSwish_25.run<315, 3>(StreamingConv_25_out0_stream, StreamingSwish_25_lut, StreamingSwish_25_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_25_out0_stream_0," << StreamingSwish_25_out0_stream[0].size() << std::endl;
     #endif
@@ -10440,7 +10525,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_11;
-    TensorDuplicator_11.run<316>(StreamingSwish_25_out0_stream, TensorDuplicator_11_out0_stream, TensorDuplicator_11_out1_stream);
+    TensorDuplicator_11.run<316, 3>(StreamingSwish_25_out0_stream, TensorDuplicator_11_out0_stream, TensorDuplicator_11_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_11_out0_stream_0," << TensorDuplicator_11_out0_stream[0].size() << std::endl;
     #endif
@@ -10473,7 +10558,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_26_pixel_0;
-    StreamingLineBuffer_26_pixel_0.run<317>(TensorDuplicator_11_out0_stream[1], StreamingLineBuffer_26_out0_stream_prepad[1]);
+    StreamingLineBuffer_26_pixel_0.run<317, 3>(TensorDuplicator_11_out0_stream[1], StreamingLineBuffer_26_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_26_out0_stream_prepad_1," << StreamingLineBuffer_26_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -10497,7 +10582,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_26_pixel_1;
-    StreamingLineBuffer_26_pixel_1.run<318>(TensorDuplicator_11_out0_stream[0], StreamingLineBuffer_26_out0_stream_prepad[0]);
+    StreamingLineBuffer_26_pixel_1.run<318, 3>(TensorDuplicator_11_out0_stream[0], StreamingLineBuffer_26_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_26_out0_stream_prepad_0," << StreamingLineBuffer_26_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -10521,7 +10606,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_27_pixel_0;
-    StreamingLineBuffer_27_pixel_0.run<320>(TensorDuplicator_11_out1_stream[1], StreamingLineBuffer_27_out0_stream_prepad[1]);
+    StreamingLineBuffer_27_pixel_0.run<320, 3>(TensorDuplicator_11_out1_stream[1], StreamingLineBuffer_27_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_27_out0_stream_prepad_1," << StreamingLineBuffer_27_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -10545,7 +10630,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_27_pixel_1;
-    StreamingLineBuffer_27_pixel_1.run<321>(TensorDuplicator_11_out1_stream[0], StreamingLineBuffer_27_out0_stream_prepad[0]);
+    StreamingLineBuffer_27_pixel_1.run<321, 3>(TensorDuplicator_11_out1_stream[0], StreamingLineBuffer_27_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_27_out0_stream_prepad_0," << StreamingLineBuffer_27_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -10570,7 +10655,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_26_pad;
-    StreamingLineBuffer_26_pad.run<319>(StreamingLineBuffer_26_out0_stream_prepad, StreamingLineBuffer_26_out0_stream);
+    StreamingLineBuffer_26_pad.run<319, 3>(StreamingLineBuffer_26_out0_stream_prepad, StreamingLineBuffer_26_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_26_out0_stream_0," << StreamingLineBuffer_26_out0_stream[0].size() << std::endl;
     #endif
@@ -10595,14 +10680,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_27_pad;
-    StreamingLineBuffer_27_pad.run<322>(StreamingLineBuffer_27_out0_stream_prepad, StreamingLineBuffer_27_out0_stream);
+    StreamingLineBuffer_27_pad.run<322, 3>(StreamingLineBuffer_27_out0_stream_prepad, StreamingLineBuffer_27_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_27_out0_stream_0," << StreamingLineBuffer_27_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_26_weights[16384][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_26_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_26_weights dim=2 complete
-    ap_int<15> StreamingConv_26_biases[128][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_26_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_26_biases dim=2 complete
     StreamingConv <
@@ -10633,17 +10716,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_26;
-    StreamingConv_26.run<323>(StreamingLineBuffer_26_out0_stream, StreamingConv_26_weights, StreamingConv_26_biases, StreamingConv_26_out0_stream);
+    StreamingConv_26.run<323, 3>(StreamingLineBuffer_26_out0_stream, StreamingConv_26_weights, StreamingConv_26_biases, StreamingConv_26_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_26_out0_stream_0," << StreamingConv_26_out0_stream[0].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_26_out0_stream_1," << StreamingConv_26_out0_stream[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_27_weights[16384][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_27_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_27_weights dim=2 complete
-    ap_int<13> StreamingConv_27_biases[128][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_27_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_27_biases dim=2 complete
     StreamingConv <
@@ -10674,7 +10755,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_27;
-    StreamingConv_27.run<324>(StreamingLineBuffer_27_out0_stream, StreamingConv_27_weights, StreamingConv_27_biases, StreamingConv_27_out0_stream);
+    StreamingConv_27.run<324, 3>(StreamingLineBuffer_27_out0_stream, StreamingConv_27_weights, StreamingConv_27_biases, StreamingConv_27_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_27_out0_stream_0," << StreamingConv_27_out0_stream[0].size() << std::endl;
     #endif
@@ -10694,7 +10775,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_26;
-    StreamingSwish_26.run<325>(StreamingConv_26_out0_stream, StreamingSwish_26_lut, StreamingSwish_26_out0_stream);
+    StreamingSwish_26.run<325, 3>(StreamingConv_26_out0_stream, StreamingSwish_26_lut, StreamingSwish_26_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_26_out0_stream_0," << StreamingSwish_26_out0_stream[0].size() << std::endl;
     #endif
@@ -10714,7 +10795,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_27;
-    StreamingSwish_27.run<326>(StreamingConv_27_out0_stream, StreamingSwish_27_lut, StreamingSwish_27_out0_stream);
+    StreamingSwish_27.run<326, 3>(StreamingConv_27_out0_stream, StreamingSwish_27_lut, StreamingSwish_27_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_27_out0_stream_0," << StreamingSwish_27_out0_stream[0].size() << std::endl;
     #endif
@@ -10729,7 +10810,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_12;
-    TensorDuplicator_12.run<327>(StreamingSwish_26_out0_stream, TensorDuplicator_12_out0_stream, TensorDuplicator_12_out1_stream);
+    TensorDuplicator_12.run<327, 3>(StreamingSwish_26_out0_stream, TensorDuplicator_12_out0_stream, TensorDuplicator_12_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_12_out0_stream_0," << TensorDuplicator_12_out0_stream[0].size() << std::endl;
     #endif
@@ -10762,7 +10843,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_28_pixel_0;
-    StreamingLineBuffer_28_pixel_0.run<328>(TensorDuplicator_12_out0_stream[1], StreamingLineBuffer_28_out0_stream_prepad[1]);
+    StreamingLineBuffer_28_pixel_0.run<328, 3>(TensorDuplicator_12_out0_stream[1], StreamingLineBuffer_28_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_28_out0_stream_prepad_1," << StreamingLineBuffer_28_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -10786,7 +10867,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_28_pixel_1;
-    StreamingLineBuffer_28_pixel_1.run<329>(TensorDuplicator_12_out0_stream[0], StreamingLineBuffer_28_out0_stream_prepad[0]);
+    StreamingLineBuffer_28_pixel_1.run<329, 3>(TensorDuplicator_12_out0_stream[0], StreamingLineBuffer_28_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_28_out0_stream_prepad_0," << StreamingLineBuffer_28_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -10811,14 +10892,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_28_pad;
-    StreamingLineBuffer_28_pad.run<330>(StreamingLineBuffer_28_out0_stream_prepad, StreamingLineBuffer_28_out0_stream);
+    StreamingLineBuffer_28_pad.run<330, 3>(StreamingLineBuffer_28_out0_stream_prepad, StreamingLineBuffer_28_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_28_out0_stream_0," << StreamingLineBuffer_28_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_28_weights[16384][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_28_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_28_weights dim=2 complete
-    ap_int<15> StreamingConv_28_biases[128][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_28_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_28_biases dim=2 complete
     StreamingConv <
@@ -10849,7 +10928,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_28;
-    StreamingConv_28.run<331>(StreamingLineBuffer_28_out0_stream, StreamingConv_28_weights, StreamingConv_28_biases, StreamingConv_28_out0_stream);
+    StreamingConv_28.run<331, 3>(StreamingLineBuffer_28_out0_stream, StreamingConv_28_weights, StreamingConv_28_biases, StreamingConv_28_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_28_out0_stream_0," << StreamingConv_28_out0_stream[0].size() << std::endl;
     #endif
@@ -10869,7 +10948,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_28;
-    StreamingSwish_28.run<332>(StreamingConv_28_out0_stream, StreamingSwish_28_lut, StreamingSwish_28_out0_stream);
+    StreamingSwish_28.run<332, 3>(StreamingConv_28_out0_stream, StreamingSwish_28_lut, StreamingSwish_28_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_28_out0_stream_0," << StreamingSwish_28_out0_stream[0].size() << std::endl;
     #endif
@@ -10896,7 +10975,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_29_pixel_0;
-    StreamingLineBuffer_29_pixel_0.run<333>(StreamingSwish_28_out0_stream[0], StreamingLineBuffer_29_out0_stream_prepad[11], StreamingLineBuffer_29_buffer_stream[0]);
+    StreamingLineBuffer_29_pixel_0.run<333, 3>(StreamingSwish_28_out0_stream[0], StreamingLineBuffer_29_out0_stream_prepad[11], StreamingLineBuffer_29_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_29_out0_stream_prepad_11," << StreamingLineBuffer_29_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -10923,7 +11002,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_29_pixel_1;
-    StreamingLineBuffer_29_pixel_1.run<334>(StreamingSwish_28_out0_stream[1], StreamingLineBuffer_29_out0_stream_prepad[10], StreamingLineBuffer_29_buffer_stream[1]);
+    StreamingLineBuffer_29_pixel_1.run<334, 3>(StreamingSwish_28_out0_stream[1], StreamingLineBuffer_29_out0_stream_prepad[10], StreamingLineBuffer_29_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_29_out0_stream_prepad_10," << StreamingLineBuffer_29_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -10950,7 +11029,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_29_pixel_2;
-    StreamingLineBuffer_29_pixel_2.run<335>(StreamingLineBuffer_29_buffer_stream[0], StreamingLineBuffer_29_out0_stream_prepad[9], StreamingLineBuffer_29_buffer_stream[2]);
+    StreamingLineBuffer_29_pixel_2.run<335, 3>(StreamingLineBuffer_29_buffer_stream[0], StreamingLineBuffer_29_out0_stream_prepad[9], StreamingLineBuffer_29_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_29_out0_stream_prepad_9," << StreamingLineBuffer_29_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -10977,7 +11056,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_29_pixel_3;
-    StreamingLineBuffer_29_pixel_3.run<336>(StreamingLineBuffer_29_buffer_stream[1], StreamingLineBuffer_29_out0_stream_prepad[8], StreamingLineBuffer_29_buffer_stream[3]);
+    StreamingLineBuffer_29_pixel_3.run<336, 3>(StreamingLineBuffer_29_buffer_stream[1], StreamingLineBuffer_29_out0_stream_prepad[8], StreamingLineBuffer_29_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_29_out0_stream_prepad_8," << StreamingLineBuffer_29_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -11004,7 +11083,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_29_pixel_4;
-    StreamingLineBuffer_29_pixel_4.run<337>(StreamingLineBuffer_29_buffer_stream[2], StreamingLineBuffer_29_out0_stream_prepad[7], StreamingLineBuffer_29_buffer_stream[4]);
+    StreamingLineBuffer_29_pixel_4.run<337, 3>(StreamingLineBuffer_29_buffer_stream[2], StreamingLineBuffer_29_out0_stream_prepad[7], StreamingLineBuffer_29_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_29_out0_stream_prepad_7," << StreamingLineBuffer_29_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -11031,7 +11110,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_29_pixel_5;
-    StreamingLineBuffer_29_pixel_5.run<338>(StreamingLineBuffer_29_buffer_stream[3], StreamingLineBuffer_29_out0_stream_prepad[6], StreamingLineBuffer_29_buffer_stream[5]);
+    StreamingLineBuffer_29_pixel_5.run<338, 3>(StreamingLineBuffer_29_buffer_stream[3], StreamingLineBuffer_29_out0_stream_prepad[6], StreamingLineBuffer_29_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_29_out0_stream_prepad_6," << StreamingLineBuffer_29_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -11058,7 +11137,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_29_pixel_6;
-    StreamingLineBuffer_29_pixel_6.run<339>(StreamingLineBuffer_29_buffer_stream[4], StreamingLineBuffer_29_out0_stream_prepad[5], StreamingLineBuffer_29_buffer_stream[6]);
+    StreamingLineBuffer_29_pixel_6.run<339, 3>(StreamingLineBuffer_29_buffer_stream[4], StreamingLineBuffer_29_out0_stream_prepad[5], StreamingLineBuffer_29_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_29_out0_stream_prepad_5," << StreamingLineBuffer_29_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -11085,7 +11164,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_29_pixel_7;
-    StreamingLineBuffer_29_pixel_7.run<340>(StreamingLineBuffer_29_buffer_stream[5], StreamingLineBuffer_29_out0_stream_prepad[4], StreamingLineBuffer_29_buffer_stream[7]);
+    StreamingLineBuffer_29_pixel_7.run<340, 3>(StreamingLineBuffer_29_buffer_stream[5], StreamingLineBuffer_29_out0_stream_prepad[4], StreamingLineBuffer_29_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_29_out0_stream_prepad_4," << StreamingLineBuffer_29_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -11112,7 +11191,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_29_pixel_8;
-    StreamingLineBuffer_29_pixel_8.run<341>(StreamingLineBuffer_29_buffer_stream[6], StreamingLineBuffer_29_out0_stream_prepad[3], StreamingLineBuffer_29_buffer_stream[8]);
+    StreamingLineBuffer_29_pixel_8.run<341, 3>(StreamingLineBuffer_29_buffer_stream[6], StreamingLineBuffer_29_out0_stream_prepad[3], StreamingLineBuffer_29_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_29_out0_stream_prepad_3," << StreamingLineBuffer_29_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -11139,7 +11218,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_29_pixel_9;
-    StreamingLineBuffer_29_pixel_9.run<342>(StreamingLineBuffer_29_buffer_stream[7], StreamingLineBuffer_29_out0_stream_prepad[2], StreamingLineBuffer_29_buffer_stream[9]);
+    StreamingLineBuffer_29_pixel_9.run<342, 3>(StreamingLineBuffer_29_buffer_stream[7], StreamingLineBuffer_29_out0_stream_prepad[2], StreamingLineBuffer_29_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_29_out0_stream_prepad_2," << StreamingLineBuffer_29_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -11166,7 +11245,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_29_pixel_10;
-    StreamingLineBuffer_29_pixel_10.run<343>(StreamingLineBuffer_29_buffer_stream[8], StreamingLineBuffer_29_out0_stream_prepad[1]);
+    StreamingLineBuffer_29_pixel_10.run<343, 3>(StreamingLineBuffer_29_buffer_stream[8], StreamingLineBuffer_29_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_29_out0_stream_prepad_1," << StreamingLineBuffer_29_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -11190,7 +11269,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_29_pixel_11;
-    StreamingLineBuffer_29_pixel_11.run<344>(StreamingLineBuffer_29_buffer_stream[9], StreamingLineBuffer_29_out0_stream_prepad[0]);
+    StreamingLineBuffer_29_pixel_11.run<344, 3>(StreamingLineBuffer_29_buffer_stream[9], StreamingLineBuffer_29_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_29_out0_stream_prepad_0," << StreamingLineBuffer_29_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -11215,14 +11294,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_29_pad;
-    StreamingLineBuffer_29_pad.run<345>(StreamingLineBuffer_29_out0_stream_prepad, StreamingLineBuffer_29_out0_stream);
+    StreamingLineBuffer_29_pad.run<345, 3>(StreamingLineBuffer_29_out0_stream_prepad, StreamingLineBuffer_29_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_29_out0_stream_0," << StreamingLineBuffer_29_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_29_weights[16384][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_29_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_29_weights dim=2 complete
-    ap_int<15> StreamingConv_29_biases[128][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_29_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_29_biases dim=2 complete
     StreamingConv <
@@ -11253,7 +11330,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_29;
-    StreamingConv_29.run<346>(StreamingLineBuffer_29_out0_stream, StreamingConv_29_weights, StreamingConv_29_biases, StreamingConv_29_out0_stream);
+    StreamingConv_29.run<346, 3>(StreamingLineBuffer_29_out0_stream, StreamingConv_29_weights, StreamingConv_29_biases, StreamingConv_29_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_29_out0_stream_0," << StreamingConv_29_out0_stream[0].size() << std::endl;
     #endif
@@ -11273,7 +11350,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_29;
-    StreamingSwish_29.run<347>(StreamingConv_29_out0_stream, StreamingSwish_29_lut, StreamingSwish_29_out0_stream);
+    StreamingSwish_29.run<347, 3>(StreamingConv_29_out0_stream, StreamingSwish_29_lut, StreamingSwish_29_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_29_out0_stream_0," << StreamingSwish_29_out0_stream[0].size() << std::endl;
     #endif
@@ -11298,7 +11375,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingAdd_6;
-    StreamingAdd_6.run<348>(TensorDuplicator_12_out1_stream, StreamingSwish_29_out0_stream, StreamingAdd_6_out0_stream);
+    StreamingAdd_6.run<348, 3>(TensorDuplicator_12_out1_stream, StreamingSwish_29_out0_stream, StreamingAdd_6_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingAdd_6_out0_stream_0," << StreamingAdd_6_out0_stream[0].size() << std::endl;
     #endif
@@ -11318,7 +11395,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingConcat_3;
-    StreamingConcat_3.run<349>(StreamingAdd_6_out0_stream, StreamingSwish_27_out0_stream, StreamingConcat_3_out0_stream);
+    StreamingConcat_3.run<349, 3>(StreamingAdd_6_out0_stream, StreamingSwish_27_out0_stream, StreamingConcat_3_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_3_out0_stream_0," << StreamingConcat_3_out0_stream[0].size() << std::endl;
     #endif
@@ -11345,7 +11422,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_30_pixel_0;
-    StreamingLineBuffer_30_pixel_0.run<350>(StreamingConcat_3_out0_stream[1], StreamingLineBuffer_30_out0_stream_prepad[1]);
+    StreamingLineBuffer_30_pixel_0.run<350, 3>(StreamingConcat_3_out0_stream[1], StreamingLineBuffer_30_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_30_out0_stream_prepad_1," << StreamingLineBuffer_30_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -11369,7 +11446,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_30_pixel_1;
-    StreamingLineBuffer_30_pixel_1.run<351>(StreamingConcat_3_out0_stream[0], StreamingLineBuffer_30_out0_stream_prepad[0]);
+    StreamingLineBuffer_30_pixel_1.run<351, 3>(StreamingConcat_3_out0_stream[0], StreamingLineBuffer_30_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_30_out0_stream_prepad_0," << StreamingLineBuffer_30_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -11394,14 +11471,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_30_pad;
-    StreamingLineBuffer_30_pad.run<352>(StreamingLineBuffer_30_out0_stream_prepad, StreamingLineBuffer_30_out0_stream);
+    StreamingLineBuffer_30_pad.run<352, 3>(StreamingLineBuffer_30_out0_stream_prepad, StreamingLineBuffer_30_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_30_out0_stream_0," << StreamingLineBuffer_30_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_30_weights[16384][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_30_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_30_weights dim=2 complete
-    ap_int<13> StreamingConv_30_biases[64][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_30_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_30_biases dim=2 complete
     StreamingConv <
@@ -11432,7 +11507,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_30;
-    StreamingConv_30.run<353>(StreamingLineBuffer_30_out0_stream, StreamingConv_30_weights, StreamingConv_30_biases, StreamingConv_30_out0_stream);
+    StreamingConv_30.run<353, 3>(StreamingLineBuffer_30_out0_stream, StreamingConv_30_weights, StreamingConv_30_biases, StreamingConv_30_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_30_out0_stream_0," << StreamingConv_30_out0_stream[0].size() << std::endl;
     #endif
@@ -11452,7 +11527,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_30;
-    StreamingSwish_30.run<354>(StreamingConv_30_out0_stream, StreamingSwish_30_lut, StreamingSwish_30_out0_stream);
+    StreamingSwish_30.run<354, 3>(StreamingConv_30_out0_stream, StreamingSwish_30_lut, StreamingSwish_30_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_30_out0_stream_0," << StreamingSwish_30_out0_stream[0].size() << std::endl;
     #endif
@@ -11473,7 +11548,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // IN_CH_PAR
         2  // OUT_CH_PAR
     > BandwidthAdjustDecreaseChannels_4;
-    BandwidthAdjustDecreaseChannels_4.run<355>(StreamingSwish_30_out0_stream, BandwidthAdjustDecreaseChannels_4_out0_stream);
+    BandwidthAdjustDecreaseChannels_4.run<355, 3>(StreamingSwish_30_out0_stream, BandwidthAdjustDecreaseChannels_4_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseChannels_4_out0_stream_0," << BandwidthAdjustDecreaseChannels_4_out0_stream[0].size() << std::endl;
     #endif
@@ -11500,7 +11575,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_31_pixel_0;
-    StreamingLineBuffer_31_pixel_0.run<356>(BandwidthAdjustDecreaseChannels_4_out0_stream[1], StreamingLineBuffer_31_out0_stream_prepad[1]);
+    StreamingLineBuffer_31_pixel_0.run<356, 3>(BandwidthAdjustDecreaseChannels_4_out0_stream[1], StreamingLineBuffer_31_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_31_out0_stream_prepad_1," << StreamingLineBuffer_31_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -11524,7 +11599,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_31_pixel_1;
-    StreamingLineBuffer_31_pixel_1.run<357>(BandwidthAdjustDecreaseChannels_4_out0_stream[0], StreamingLineBuffer_31_out0_stream_prepad[0]);
+    StreamingLineBuffer_31_pixel_1.run<357, 3>(BandwidthAdjustDecreaseChannels_4_out0_stream[0], StreamingLineBuffer_31_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_31_out0_stream_prepad_0," << StreamingLineBuffer_31_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -11549,14 +11624,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_31_pad;
-    StreamingLineBuffer_31_pad.run<358>(StreamingLineBuffer_31_out0_stream_prepad, StreamingLineBuffer_31_out0_stream);
+    StreamingLineBuffer_31_pad.run<358, 3>(StreamingLineBuffer_31_out0_stream_prepad, StreamingLineBuffer_31_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_31_out0_stream_0," << StreamingLineBuffer_31_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_31_weights[16384][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_31_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_31_weights dim=2 complete
-    ap_int<15> StreamingConv_31_biases[128][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_31_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_31_biases dim=2 complete
     StreamingConv <
@@ -11587,7 +11660,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_31;
-    StreamingConv_31.run<359>(StreamingLineBuffer_31_out0_stream, StreamingConv_31_weights, StreamingConv_31_biases, StreamingConv_31_out0_stream);
+    StreamingConv_31.run<359, 3>(StreamingLineBuffer_31_out0_stream, StreamingConv_31_weights, StreamingConv_31_biases, StreamingConv_31_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_31_out0_stream_0," << StreamingConv_31_out0_stream[0].size() << std::endl;
     #endif
@@ -11607,7 +11680,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_31;
-    StreamingSwish_31.run<360>(StreamingConv_31_out0_stream, StreamingSwish_31_lut, StreamingSwish_31_out0_stream);
+    StreamingSwish_31.run<360, 3>(StreamingConv_31_out0_stream, StreamingSwish_31_lut, StreamingSwish_31_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_31_out0_stream_0," << StreamingSwish_31_out0_stream[0].size() << std::endl;
     #endif
@@ -11622,7 +11695,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_13;
-    TensorDuplicator_13.run<361>(StreamingSwish_31_out0_stream, TensorDuplicator_13_out0_stream, TensorDuplicator_13_out1_stream);
+    TensorDuplicator_13.run<361, 3>(StreamingSwish_31_out0_stream, TensorDuplicator_13_out0_stream, TensorDuplicator_13_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_13_out0_stream_0," << TensorDuplicator_13_out0_stream[0].size() << std::endl;
     #endif
@@ -11649,7 +11722,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         1  // OUT_CH_PAR
     > BandwidthAdjustDecreaseStreams_0;
-    BandwidthAdjustDecreaseStreams_0.run<362>(TensorDuplicator_13_out0_stream, BandwidthAdjustDecreaseStreams_0_out0_stream);
+    BandwidthAdjustDecreaseStreams_0.run<362, 3>(TensorDuplicator_13_out0_stream, BandwidthAdjustDecreaseStreams_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseStreams_0_out0_stream_0," << BandwidthAdjustDecreaseStreams_0_out0_stream[0].size() << std::endl;
     #endif
@@ -11667,7 +11740,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         1  // OUT_CH_PAR
     > BandwidthAdjustDecreaseStreams_1;
-    BandwidthAdjustDecreaseStreams_1.run<363>(TensorDuplicator_13_out1_stream, BandwidthAdjustDecreaseStreams_1_out0_stream);
+    BandwidthAdjustDecreaseStreams_1.run<363, 3>(TensorDuplicator_13_out1_stream, BandwidthAdjustDecreaseStreams_1_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseStreams_1_out0_stream_0," << BandwidthAdjustDecreaseStreams_1_out0_stream[0].size() << std::endl;
     #endif
@@ -11691,7 +11764,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_0;
-    StreamingLineBuffer_32_pixel_0.run<364>(BandwidthAdjustDecreaseStreams_0_out0_stream[0], StreamingLineBuffer_32_out0_stream_prepad[24], StreamingLineBuffer_32_buffer_stream[0]);
+    StreamingLineBuffer_32_pixel_0.run<364, 3>(BandwidthAdjustDecreaseStreams_0_out0_stream[0], StreamingLineBuffer_32_out0_stream_prepad[24], StreamingLineBuffer_32_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_24," << StreamingLineBuffer_32_out0_stream_prepad[24].size() << std::endl;
     #endif
@@ -11718,7 +11791,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_1;
-    StreamingLineBuffer_32_pixel_1.run<365>(StreamingLineBuffer_32_buffer_stream[0], StreamingLineBuffer_32_out0_stream_prepad[23], StreamingLineBuffer_32_buffer_stream[1]);
+    StreamingLineBuffer_32_pixel_1.run<365, 3>(StreamingLineBuffer_32_buffer_stream[0], StreamingLineBuffer_32_out0_stream_prepad[23], StreamingLineBuffer_32_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_23," << StreamingLineBuffer_32_out0_stream_prepad[23].size() << std::endl;
     #endif
@@ -11745,7 +11818,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_2;
-    StreamingLineBuffer_32_pixel_2.run<366>(StreamingLineBuffer_32_buffer_stream[1], StreamingLineBuffer_32_out0_stream_prepad[22], StreamingLineBuffer_32_buffer_stream[2]);
+    StreamingLineBuffer_32_pixel_2.run<366, 3>(StreamingLineBuffer_32_buffer_stream[1], StreamingLineBuffer_32_out0_stream_prepad[22], StreamingLineBuffer_32_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_22," << StreamingLineBuffer_32_out0_stream_prepad[22].size() << std::endl;
     #endif
@@ -11772,7 +11845,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_3;
-    StreamingLineBuffer_32_pixel_3.run<367>(StreamingLineBuffer_32_buffer_stream[2], StreamingLineBuffer_32_out0_stream_prepad[21], StreamingLineBuffer_32_buffer_stream[3]);
+    StreamingLineBuffer_32_pixel_3.run<367, 3>(StreamingLineBuffer_32_buffer_stream[2], StreamingLineBuffer_32_out0_stream_prepad[21], StreamingLineBuffer_32_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_21," << StreamingLineBuffer_32_out0_stream_prepad[21].size() << std::endl;
     #endif
@@ -11799,7 +11872,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_4;
-    StreamingLineBuffer_32_pixel_4.run<368>(StreamingLineBuffer_32_buffer_stream[3], StreamingLineBuffer_32_out0_stream_prepad[20], StreamingLineBuffer_32_buffer_stream[4]);
+    StreamingLineBuffer_32_pixel_4.run<368, 3>(StreamingLineBuffer_32_buffer_stream[3], StreamingLineBuffer_32_out0_stream_prepad[20], StreamingLineBuffer_32_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_20," << StreamingLineBuffer_32_out0_stream_prepad[20].size() << std::endl;
     #endif
@@ -11826,7 +11899,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_5;
-    StreamingLineBuffer_32_pixel_5.run<369>(StreamingLineBuffer_32_buffer_stream[4], StreamingLineBuffer_32_out0_stream_prepad[19], StreamingLineBuffer_32_buffer_stream[5]);
+    StreamingLineBuffer_32_pixel_5.run<369, 3>(StreamingLineBuffer_32_buffer_stream[4], StreamingLineBuffer_32_out0_stream_prepad[19], StreamingLineBuffer_32_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_19," << StreamingLineBuffer_32_out0_stream_prepad[19].size() << std::endl;
     #endif
@@ -11853,7 +11926,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_6;
-    StreamingLineBuffer_32_pixel_6.run<370>(StreamingLineBuffer_32_buffer_stream[5], StreamingLineBuffer_32_out0_stream_prepad[18], StreamingLineBuffer_32_buffer_stream[6]);
+    StreamingLineBuffer_32_pixel_6.run<370, 3>(StreamingLineBuffer_32_buffer_stream[5], StreamingLineBuffer_32_out0_stream_prepad[18], StreamingLineBuffer_32_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_18," << StreamingLineBuffer_32_out0_stream_prepad[18].size() << std::endl;
     #endif
@@ -11880,7 +11953,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_7;
-    StreamingLineBuffer_32_pixel_7.run<371>(StreamingLineBuffer_32_buffer_stream[6], StreamingLineBuffer_32_out0_stream_prepad[17], StreamingLineBuffer_32_buffer_stream[7]);
+    StreamingLineBuffer_32_pixel_7.run<371, 3>(StreamingLineBuffer_32_buffer_stream[6], StreamingLineBuffer_32_out0_stream_prepad[17], StreamingLineBuffer_32_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_17," << StreamingLineBuffer_32_out0_stream_prepad[17].size() << std::endl;
     #endif
@@ -11907,7 +11980,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_8;
-    StreamingLineBuffer_32_pixel_8.run<372>(StreamingLineBuffer_32_buffer_stream[7], StreamingLineBuffer_32_out0_stream_prepad[16], StreamingLineBuffer_32_buffer_stream[8]);
+    StreamingLineBuffer_32_pixel_8.run<372, 3>(StreamingLineBuffer_32_buffer_stream[7], StreamingLineBuffer_32_out0_stream_prepad[16], StreamingLineBuffer_32_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_16," << StreamingLineBuffer_32_out0_stream_prepad[16].size() << std::endl;
     #endif
@@ -11934,7 +12007,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_9;
-    StreamingLineBuffer_32_pixel_9.run<373>(StreamingLineBuffer_32_buffer_stream[8], StreamingLineBuffer_32_out0_stream_prepad[15], StreamingLineBuffer_32_buffer_stream[9]);
+    StreamingLineBuffer_32_pixel_9.run<373, 3>(StreamingLineBuffer_32_buffer_stream[8], StreamingLineBuffer_32_out0_stream_prepad[15], StreamingLineBuffer_32_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_15," << StreamingLineBuffer_32_out0_stream_prepad[15].size() << std::endl;
     #endif
@@ -11961,7 +12034,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_10;
-    StreamingLineBuffer_32_pixel_10.run<374>(StreamingLineBuffer_32_buffer_stream[9], StreamingLineBuffer_32_out0_stream_prepad[14], StreamingLineBuffer_32_buffer_stream[10]);
+    StreamingLineBuffer_32_pixel_10.run<374, 3>(StreamingLineBuffer_32_buffer_stream[9], StreamingLineBuffer_32_out0_stream_prepad[14], StreamingLineBuffer_32_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_14," << StreamingLineBuffer_32_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -11988,7 +12061,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_11;
-    StreamingLineBuffer_32_pixel_11.run<375>(StreamingLineBuffer_32_buffer_stream[10], StreamingLineBuffer_32_out0_stream_prepad[13], StreamingLineBuffer_32_buffer_stream[11]);
+    StreamingLineBuffer_32_pixel_11.run<375, 3>(StreamingLineBuffer_32_buffer_stream[10], StreamingLineBuffer_32_out0_stream_prepad[13], StreamingLineBuffer_32_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_13," << StreamingLineBuffer_32_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -12015,7 +12088,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_12;
-    StreamingLineBuffer_32_pixel_12.run<376>(StreamingLineBuffer_32_buffer_stream[11], StreamingLineBuffer_32_out0_stream_prepad[12], StreamingLineBuffer_32_buffer_stream[12]);
+    StreamingLineBuffer_32_pixel_12.run<376, 3>(StreamingLineBuffer_32_buffer_stream[11], StreamingLineBuffer_32_out0_stream_prepad[12], StreamingLineBuffer_32_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_12," << StreamingLineBuffer_32_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -12042,7 +12115,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_13;
-    StreamingLineBuffer_32_pixel_13.run<377>(StreamingLineBuffer_32_buffer_stream[12], StreamingLineBuffer_32_out0_stream_prepad[11], StreamingLineBuffer_32_buffer_stream[13]);
+    StreamingLineBuffer_32_pixel_13.run<377, 3>(StreamingLineBuffer_32_buffer_stream[12], StreamingLineBuffer_32_out0_stream_prepad[11], StreamingLineBuffer_32_buffer_stream[13]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_11," << StreamingLineBuffer_32_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -12069,7 +12142,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_14;
-    StreamingLineBuffer_32_pixel_14.run<378>(StreamingLineBuffer_32_buffer_stream[13], StreamingLineBuffer_32_out0_stream_prepad[10], StreamingLineBuffer_32_buffer_stream[14]);
+    StreamingLineBuffer_32_pixel_14.run<378, 3>(StreamingLineBuffer_32_buffer_stream[13], StreamingLineBuffer_32_out0_stream_prepad[10], StreamingLineBuffer_32_buffer_stream[14]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_10," << StreamingLineBuffer_32_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -12096,7 +12169,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_15;
-    StreamingLineBuffer_32_pixel_15.run<379>(StreamingLineBuffer_32_buffer_stream[14], StreamingLineBuffer_32_out0_stream_prepad[9], StreamingLineBuffer_32_buffer_stream[15]);
+    StreamingLineBuffer_32_pixel_15.run<379, 3>(StreamingLineBuffer_32_buffer_stream[14], StreamingLineBuffer_32_out0_stream_prepad[9], StreamingLineBuffer_32_buffer_stream[15]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_9," << StreamingLineBuffer_32_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -12123,7 +12196,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_16;
-    StreamingLineBuffer_32_pixel_16.run<380>(StreamingLineBuffer_32_buffer_stream[15], StreamingLineBuffer_32_out0_stream_prepad[8], StreamingLineBuffer_32_buffer_stream[16]);
+    StreamingLineBuffer_32_pixel_16.run<380, 3>(StreamingLineBuffer_32_buffer_stream[15], StreamingLineBuffer_32_out0_stream_prepad[8], StreamingLineBuffer_32_buffer_stream[16]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_8," << StreamingLineBuffer_32_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -12150,7 +12223,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_17;
-    StreamingLineBuffer_32_pixel_17.run<381>(StreamingLineBuffer_32_buffer_stream[16], StreamingLineBuffer_32_out0_stream_prepad[7], StreamingLineBuffer_32_buffer_stream[17]);
+    StreamingLineBuffer_32_pixel_17.run<381, 3>(StreamingLineBuffer_32_buffer_stream[16], StreamingLineBuffer_32_out0_stream_prepad[7], StreamingLineBuffer_32_buffer_stream[17]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_7," << StreamingLineBuffer_32_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -12177,7 +12250,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_18;
-    StreamingLineBuffer_32_pixel_18.run<382>(StreamingLineBuffer_32_buffer_stream[17], StreamingLineBuffer_32_out0_stream_prepad[6], StreamingLineBuffer_32_buffer_stream[18]);
+    StreamingLineBuffer_32_pixel_18.run<382, 3>(StreamingLineBuffer_32_buffer_stream[17], StreamingLineBuffer_32_out0_stream_prepad[6], StreamingLineBuffer_32_buffer_stream[18]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_6," << StreamingLineBuffer_32_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -12204,7 +12277,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_19;
-    StreamingLineBuffer_32_pixel_19.run<383>(StreamingLineBuffer_32_buffer_stream[18], StreamingLineBuffer_32_out0_stream_prepad[5], StreamingLineBuffer_32_buffer_stream[19]);
+    StreamingLineBuffer_32_pixel_19.run<383, 3>(StreamingLineBuffer_32_buffer_stream[18], StreamingLineBuffer_32_out0_stream_prepad[5], StreamingLineBuffer_32_buffer_stream[19]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_5," << StreamingLineBuffer_32_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -12231,7 +12304,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_20;
-    StreamingLineBuffer_32_pixel_20.run<384>(StreamingLineBuffer_32_buffer_stream[19], StreamingLineBuffer_32_out0_stream_prepad[4], StreamingLineBuffer_32_buffer_stream[20]);
+    StreamingLineBuffer_32_pixel_20.run<384, 3>(StreamingLineBuffer_32_buffer_stream[19], StreamingLineBuffer_32_out0_stream_prepad[4], StreamingLineBuffer_32_buffer_stream[20]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_4," << StreamingLineBuffer_32_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -12258,7 +12331,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_21;
-    StreamingLineBuffer_32_pixel_21.run<385>(StreamingLineBuffer_32_buffer_stream[20], StreamingLineBuffer_32_out0_stream_prepad[3], StreamingLineBuffer_32_buffer_stream[21]);
+    StreamingLineBuffer_32_pixel_21.run<385, 3>(StreamingLineBuffer_32_buffer_stream[20], StreamingLineBuffer_32_out0_stream_prepad[3], StreamingLineBuffer_32_buffer_stream[21]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_3," << StreamingLineBuffer_32_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -12285,7 +12358,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_22;
-    StreamingLineBuffer_32_pixel_22.run<386>(StreamingLineBuffer_32_buffer_stream[21], StreamingLineBuffer_32_out0_stream_prepad[2], StreamingLineBuffer_32_buffer_stream[22]);
+    StreamingLineBuffer_32_pixel_22.run<386, 3>(StreamingLineBuffer_32_buffer_stream[21], StreamingLineBuffer_32_out0_stream_prepad[2], StreamingLineBuffer_32_buffer_stream[22]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_2," << StreamingLineBuffer_32_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -12312,7 +12385,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_23;
-    StreamingLineBuffer_32_pixel_23.run<387>(StreamingLineBuffer_32_buffer_stream[22], StreamingLineBuffer_32_out0_stream_prepad[1], StreamingLineBuffer_32_buffer_stream[23]);
+    StreamingLineBuffer_32_pixel_23.run<387, 3>(StreamingLineBuffer_32_buffer_stream[22], StreamingLineBuffer_32_out0_stream_prepad[1], StreamingLineBuffer_32_buffer_stream[23]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_1," << StreamingLineBuffer_32_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -12339,7 +12412,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_32_pixel_24;
-    StreamingLineBuffer_32_pixel_24.run<388>(StreamingLineBuffer_32_buffer_stream[23], StreamingLineBuffer_32_out0_stream_prepad[0]);
+    StreamingLineBuffer_32_pixel_24.run<388, 3>(StreamingLineBuffer_32_buffer_stream[23], StreamingLineBuffer_32_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_prepad_0," << StreamingLineBuffer_32_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -12364,7 +12437,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         -128  // PAD_VALUE
     > StreamingLineBuffer_32_pad;
-    StreamingLineBuffer_32_pad.run<389>(StreamingLineBuffer_32_out0_stream_prepad, StreamingLineBuffer_32_out0_stream);
+    StreamingLineBuffer_32_pad.run<389, 3>(StreamingLineBuffer_32_out0_stream_prepad, StreamingLineBuffer_32_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_32_out0_stream_0," << StreamingLineBuffer_32_out0_stream[0].size() << std::endl;
     #endif
@@ -12385,7 +12458,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         1  // W_PAR
     > StreamingMaxPool_0;
-    StreamingMaxPool_0.run<390>(StreamingLineBuffer_32_out0_stream, StreamingMaxPool_0_out0_stream);
+    StreamingMaxPool_0.run<390, 3>(StreamingLineBuffer_32_out0_stream, StreamingMaxPool_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingMaxPool_0_out0_stream_0," << StreamingMaxPool_0_out0_stream[0].size() << std::endl;
     #endif
@@ -12397,7 +12470,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         1  // W_PAR
     > TensorDuplicator_14;
-    TensorDuplicator_14.run<391>(StreamingMaxPool_0_out0_stream, TensorDuplicator_14_out0_stream, TensorDuplicator_14_out1_stream);
+    TensorDuplicator_14.run<391, 3>(StreamingMaxPool_0_out0_stream, TensorDuplicator_14_out0_stream, TensorDuplicator_14_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_14_out0_stream_0," << TensorDuplicator_14_out0_stream[0].size() << std::endl;
     #endif
@@ -12417,7 +12490,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingConcat_4;
-    StreamingConcat_4.run<392>(BandwidthAdjustDecreaseStreams_1_out0_stream, TensorDuplicator_14_out1_stream, StreamingConcat_4_out0_stream);
+    StreamingConcat_4.run<392, 3>(BandwidthAdjustDecreaseStreams_1_out0_stream, TensorDuplicator_14_out1_stream, StreamingConcat_4_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_4_out0_stream_0," << StreamingConcat_4_out0_stream[0].size() << std::endl;
     #endif
@@ -12441,7 +12514,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_0;
-    StreamingLineBuffer_33_pixel_0.run<393>(TensorDuplicator_14_out0_stream[0], StreamingLineBuffer_33_out0_stream_prepad[24], StreamingLineBuffer_33_buffer_stream[0]);
+    StreamingLineBuffer_33_pixel_0.run<393, 3>(TensorDuplicator_14_out0_stream[0], StreamingLineBuffer_33_out0_stream_prepad[24], StreamingLineBuffer_33_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_24," << StreamingLineBuffer_33_out0_stream_prepad[24].size() << std::endl;
     #endif
@@ -12468,7 +12541,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_1;
-    StreamingLineBuffer_33_pixel_1.run<394>(StreamingLineBuffer_33_buffer_stream[0], StreamingLineBuffer_33_out0_stream_prepad[23], StreamingLineBuffer_33_buffer_stream[1]);
+    StreamingLineBuffer_33_pixel_1.run<394, 3>(StreamingLineBuffer_33_buffer_stream[0], StreamingLineBuffer_33_out0_stream_prepad[23], StreamingLineBuffer_33_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_23," << StreamingLineBuffer_33_out0_stream_prepad[23].size() << std::endl;
     #endif
@@ -12495,7 +12568,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_2;
-    StreamingLineBuffer_33_pixel_2.run<395>(StreamingLineBuffer_33_buffer_stream[1], StreamingLineBuffer_33_out0_stream_prepad[22], StreamingLineBuffer_33_buffer_stream[2]);
+    StreamingLineBuffer_33_pixel_2.run<395, 3>(StreamingLineBuffer_33_buffer_stream[1], StreamingLineBuffer_33_out0_stream_prepad[22], StreamingLineBuffer_33_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_22," << StreamingLineBuffer_33_out0_stream_prepad[22].size() << std::endl;
     #endif
@@ -12522,7 +12595,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_3;
-    StreamingLineBuffer_33_pixel_3.run<396>(StreamingLineBuffer_33_buffer_stream[2], StreamingLineBuffer_33_out0_stream_prepad[21], StreamingLineBuffer_33_buffer_stream[3]);
+    StreamingLineBuffer_33_pixel_3.run<396, 3>(StreamingLineBuffer_33_buffer_stream[2], StreamingLineBuffer_33_out0_stream_prepad[21], StreamingLineBuffer_33_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_21," << StreamingLineBuffer_33_out0_stream_prepad[21].size() << std::endl;
     #endif
@@ -12549,7 +12622,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_4;
-    StreamingLineBuffer_33_pixel_4.run<397>(StreamingLineBuffer_33_buffer_stream[3], StreamingLineBuffer_33_out0_stream_prepad[20], StreamingLineBuffer_33_buffer_stream[4]);
+    StreamingLineBuffer_33_pixel_4.run<397, 3>(StreamingLineBuffer_33_buffer_stream[3], StreamingLineBuffer_33_out0_stream_prepad[20], StreamingLineBuffer_33_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_20," << StreamingLineBuffer_33_out0_stream_prepad[20].size() << std::endl;
     #endif
@@ -12576,7 +12649,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_5;
-    StreamingLineBuffer_33_pixel_5.run<398>(StreamingLineBuffer_33_buffer_stream[4], StreamingLineBuffer_33_out0_stream_prepad[19], StreamingLineBuffer_33_buffer_stream[5]);
+    StreamingLineBuffer_33_pixel_5.run<398, 3>(StreamingLineBuffer_33_buffer_stream[4], StreamingLineBuffer_33_out0_stream_prepad[19], StreamingLineBuffer_33_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_19," << StreamingLineBuffer_33_out0_stream_prepad[19].size() << std::endl;
     #endif
@@ -12603,7 +12676,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_6;
-    StreamingLineBuffer_33_pixel_6.run<399>(StreamingLineBuffer_33_buffer_stream[5], StreamingLineBuffer_33_out0_stream_prepad[18], StreamingLineBuffer_33_buffer_stream[6]);
+    StreamingLineBuffer_33_pixel_6.run<399, 3>(StreamingLineBuffer_33_buffer_stream[5], StreamingLineBuffer_33_out0_stream_prepad[18], StreamingLineBuffer_33_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_18," << StreamingLineBuffer_33_out0_stream_prepad[18].size() << std::endl;
     #endif
@@ -12630,7 +12703,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_7;
-    StreamingLineBuffer_33_pixel_7.run<400>(StreamingLineBuffer_33_buffer_stream[6], StreamingLineBuffer_33_out0_stream_prepad[17], StreamingLineBuffer_33_buffer_stream[7]);
+    StreamingLineBuffer_33_pixel_7.run<400, 3>(StreamingLineBuffer_33_buffer_stream[6], StreamingLineBuffer_33_out0_stream_prepad[17], StreamingLineBuffer_33_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_17," << StreamingLineBuffer_33_out0_stream_prepad[17].size() << std::endl;
     #endif
@@ -12657,7 +12730,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_8;
-    StreamingLineBuffer_33_pixel_8.run<401>(StreamingLineBuffer_33_buffer_stream[7], StreamingLineBuffer_33_out0_stream_prepad[16], StreamingLineBuffer_33_buffer_stream[8]);
+    StreamingLineBuffer_33_pixel_8.run<401, 3>(StreamingLineBuffer_33_buffer_stream[7], StreamingLineBuffer_33_out0_stream_prepad[16], StreamingLineBuffer_33_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_16," << StreamingLineBuffer_33_out0_stream_prepad[16].size() << std::endl;
     #endif
@@ -12684,7 +12757,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_9;
-    StreamingLineBuffer_33_pixel_9.run<402>(StreamingLineBuffer_33_buffer_stream[8], StreamingLineBuffer_33_out0_stream_prepad[15], StreamingLineBuffer_33_buffer_stream[9]);
+    StreamingLineBuffer_33_pixel_9.run<402, 3>(StreamingLineBuffer_33_buffer_stream[8], StreamingLineBuffer_33_out0_stream_prepad[15], StreamingLineBuffer_33_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_15," << StreamingLineBuffer_33_out0_stream_prepad[15].size() << std::endl;
     #endif
@@ -12711,7 +12784,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_10;
-    StreamingLineBuffer_33_pixel_10.run<403>(StreamingLineBuffer_33_buffer_stream[9], StreamingLineBuffer_33_out0_stream_prepad[14], StreamingLineBuffer_33_buffer_stream[10]);
+    StreamingLineBuffer_33_pixel_10.run<403, 3>(StreamingLineBuffer_33_buffer_stream[9], StreamingLineBuffer_33_out0_stream_prepad[14], StreamingLineBuffer_33_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_14," << StreamingLineBuffer_33_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -12738,7 +12811,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_11;
-    StreamingLineBuffer_33_pixel_11.run<404>(StreamingLineBuffer_33_buffer_stream[10], StreamingLineBuffer_33_out0_stream_prepad[13], StreamingLineBuffer_33_buffer_stream[11]);
+    StreamingLineBuffer_33_pixel_11.run<404, 3>(StreamingLineBuffer_33_buffer_stream[10], StreamingLineBuffer_33_out0_stream_prepad[13], StreamingLineBuffer_33_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_13," << StreamingLineBuffer_33_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -12765,7 +12838,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_12;
-    StreamingLineBuffer_33_pixel_12.run<405>(StreamingLineBuffer_33_buffer_stream[11], StreamingLineBuffer_33_out0_stream_prepad[12], StreamingLineBuffer_33_buffer_stream[12]);
+    StreamingLineBuffer_33_pixel_12.run<405, 3>(StreamingLineBuffer_33_buffer_stream[11], StreamingLineBuffer_33_out0_stream_prepad[12], StreamingLineBuffer_33_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_12," << StreamingLineBuffer_33_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -12792,7 +12865,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_13;
-    StreamingLineBuffer_33_pixel_13.run<406>(StreamingLineBuffer_33_buffer_stream[12], StreamingLineBuffer_33_out0_stream_prepad[11], StreamingLineBuffer_33_buffer_stream[13]);
+    StreamingLineBuffer_33_pixel_13.run<406, 3>(StreamingLineBuffer_33_buffer_stream[12], StreamingLineBuffer_33_out0_stream_prepad[11], StreamingLineBuffer_33_buffer_stream[13]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_11," << StreamingLineBuffer_33_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -12819,7 +12892,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_14;
-    StreamingLineBuffer_33_pixel_14.run<407>(StreamingLineBuffer_33_buffer_stream[13], StreamingLineBuffer_33_out0_stream_prepad[10], StreamingLineBuffer_33_buffer_stream[14]);
+    StreamingLineBuffer_33_pixel_14.run<407, 3>(StreamingLineBuffer_33_buffer_stream[13], StreamingLineBuffer_33_out0_stream_prepad[10], StreamingLineBuffer_33_buffer_stream[14]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_10," << StreamingLineBuffer_33_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -12846,7 +12919,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_15;
-    StreamingLineBuffer_33_pixel_15.run<408>(StreamingLineBuffer_33_buffer_stream[14], StreamingLineBuffer_33_out0_stream_prepad[9], StreamingLineBuffer_33_buffer_stream[15]);
+    StreamingLineBuffer_33_pixel_15.run<408, 3>(StreamingLineBuffer_33_buffer_stream[14], StreamingLineBuffer_33_out0_stream_prepad[9], StreamingLineBuffer_33_buffer_stream[15]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_9," << StreamingLineBuffer_33_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -12873,7 +12946,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_16;
-    StreamingLineBuffer_33_pixel_16.run<409>(StreamingLineBuffer_33_buffer_stream[15], StreamingLineBuffer_33_out0_stream_prepad[8], StreamingLineBuffer_33_buffer_stream[16]);
+    StreamingLineBuffer_33_pixel_16.run<409, 3>(StreamingLineBuffer_33_buffer_stream[15], StreamingLineBuffer_33_out0_stream_prepad[8], StreamingLineBuffer_33_buffer_stream[16]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_8," << StreamingLineBuffer_33_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -12900,7 +12973,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_17;
-    StreamingLineBuffer_33_pixel_17.run<410>(StreamingLineBuffer_33_buffer_stream[16], StreamingLineBuffer_33_out0_stream_prepad[7], StreamingLineBuffer_33_buffer_stream[17]);
+    StreamingLineBuffer_33_pixel_17.run<410, 3>(StreamingLineBuffer_33_buffer_stream[16], StreamingLineBuffer_33_out0_stream_prepad[7], StreamingLineBuffer_33_buffer_stream[17]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_7," << StreamingLineBuffer_33_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -12927,7 +13000,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_18;
-    StreamingLineBuffer_33_pixel_18.run<411>(StreamingLineBuffer_33_buffer_stream[17], StreamingLineBuffer_33_out0_stream_prepad[6], StreamingLineBuffer_33_buffer_stream[18]);
+    StreamingLineBuffer_33_pixel_18.run<411, 3>(StreamingLineBuffer_33_buffer_stream[17], StreamingLineBuffer_33_out0_stream_prepad[6], StreamingLineBuffer_33_buffer_stream[18]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_6," << StreamingLineBuffer_33_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -12954,7 +13027,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_19;
-    StreamingLineBuffer_33_pixel_19.run<412>(StreamingLineBuffer_33_buffer_stream[18], StreamingLineBuffer_33_out0_stream_prepad[5], StreamingLineBuffer_33_buffer_stream[19]);
+    StreamingLineBuffer_33_pixel_19.run<412, 3>(StreamingLineBuffer_33_buffer_stream[18], StreamingLineBuffer_33_out0_stream_prepad[5], StreamingLineBuffer_33_buffer_stream[19]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_5," << StreamingLineBuffer_33_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -12981,7 +13054,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_20;
-    StreamingLineBuffer_33_pixel_20.run<413>(StreamingLineBuffer_33_buffer_stream[19], StreamingLineBuffer_33_out0_stream_prepad[4], StreamingLineBuffer_33_buffer_stream[20]);
+    StreamingLineBuffer_33_pixel_20.run<413, 3>(StreamingLineBuffer_33_buffer_stream[19], StreamingLineBuffer_33_out0_stream_prepad[4], StreamingLineBuffer_33_buffer_stream[20]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_4," << StreamingLineBuffer_33_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -13008,7 +13081,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_21;
-    StreamingLineBuffer_33_pixel_21.run<414>(StreamingLineBuffer_33_buffer_stream[20], StreamingLineBuffer_33_out0_stream_prepad[3], StreamingLineBuffer_33_buffer_stream[21]);
+    StreamingLineBuffer_33_pixel_21.run<414, 3>(StreamingLineBuffer_33_buffer_stream[20], StreamingLineBuffer_33_out0_stream_prepad[3], StreamingLineBuffer_33_buffer_stream[21]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_3," << StreamingLineBuffer_33_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -13035,7 +13108,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_22;
-    StreamingLineBuffer_33_pixel_22.run<415>(StreamingLineBuffer_33_buffer_stream[21], StreamingLineBuffer_33_out0_stream_prepad[2], StreamingLineBuffer_33_buffer_stream[22]);
+    StreamingLineBuffer_33_pixel_22.run<415, 3>(StreamingLineBuffer_33_buffer_stream[21], StreamingLineBuffer_33_out0_stream_prepad[2], StreamingLineBuffer_33_buffer_stream[22]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_2," << StreamingLineBuffer_33_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -13062,7 +13135,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_23;
-    StreamingLineBuffer_33_pixel_23.run<416>(StreamingLineBuffer_33_buffer_stream[22], StreamingLineBuffer_33_out0_stream_prepad[1], StreamingLineBuffer_33_buffer_stream[23]);
+    StreamingLineBuffer_33_pixel_23.run<416, 3>(StreamingLineBuffer_33_buffer_stream[22], StreamingLineBuffer_33_out0_stream_prepad[1], StreamingLineBuffer_33_buffer_stream[23]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_1," << StreamingLineBuffer_33_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -13089,7 +13162,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_33_pixel_24;
-    StreamingLineBuffer_33_pixel_24.run<417>(StreamingLineBuffer_33_buffer_stream[23], StreamingLineBuffer_33_out0_stream_prepad[0]);
+    StreamingLineBuffer_33_pixel_24.run<417, 3>(StreamingLineBuffer_33_buffer_stream[23], StreamingLineBuffer_33_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_prepad_0," << StreamingLineBuffer_33_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -13114,7 +13187,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         -128  // PAD_VALUE
     > StreamingLineBuffer_33_pad;
-    StreamingLineBuffer_33_pad.run<418>(StreamingLineBuffer_33_out0_stream_prepad, StreamingLineBuffer_33_out0_stream);
+    StreamingLineBuffer_33_pad.run<418, 3>(StreamingLineBuffer_33_out0_stream_prepad, StreamingLineBuffer_33_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_33_out0_stream_0," << StreamingLineBuffer_33_out0_stream[0].size() << std::endl;
     #endif
@@ -13135,7 +13208,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         1  // W_PAR
     > StreamingMaxPool_1;
-    StreamingMaxPool_1.run<419>(StreamingLineBuffer_33_out0_stream, StreamingMaxPool_1_out0_stream);
+    StreamingMaxPool_1.run<419, 3>(StreamingLineBuffer_33_out0_stream, StreamingMaxPool_1_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingMaxPool_1_out0_stream_0," << StreamingMaxPool_1_out0_stream[0].size() << std::endl;
     #endif
@@ -13147,7 +13220,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         1  // W_PAR
     > TensorDuplicator_15;
-    TensorDuplicator_15.run<420>(StreamingMaxPool_1_out0_stream, TensorDuplicator_15_out0_stream, TensorDuplicator_15_out1_stream);
+    TensorDuplicator_15.run<420, 3>(StreamingMaxPool_1_out0_stream, TensorDuplicator_15_out0_stream, TensorDuplicator_15_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_15_out0_stream_0," << TensorDuplicator_15_out0_stream[0].size() << std::endl;
     #endif
@@ -13174,7 +13247,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_0;
-    StreamingLineBuffer_34_pixel_0.run<421>(TensorDuplicator_15_out0_stream[0], StreamingLineBuffer_34_out0_stream_prepad[24], StreamingLineBuffer_34_buffer_stream[0]);
+    StreamingLineBuffer_34_pixel_0.run<421, 3>(TensorDuplicator_15_out0_stream[0], StreamingLineBuffer_34_out0_stream_prepad[24], StreamingLineBuffer_34_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_24," << StreamingLineBuffer_34_out0_stream_prepad[24].size() << std::endl;
     #endif
@@ -13201,7 +13274,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_1;
-    StreamingLineBuffer_34_pixel_1.run<422>(StreamingLineBuffer_34_buffer_stream[0], StreamingLineBuffer_34_out0_stream_prepad[23], StreamingLineBuffer_34_buffer_stream[1]);
+    StreamingLineBuffer_34_pixel_1.run<422, 3>(StreamingLineBuffer_34_buffer_stream[0], StreamingLineBuffer_34_out0_stream_prepad[23], StreamingLineBuffer_34_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_23," << StreamingLineBuffer_34_out0_stream_prepad[23].size() << std::endl;
     #endif
@@ -13228,7 +13301,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_2;
-    StreamingLineBuffer_34_pixel_2.run<423>(StreamingLineBuffer_34_buffer_stream[1], StreamingLineBuffer_34_out0_stream_prepad[22], StreamingLineBuffer_34_buffer_stream[2]);
+    StreamingLineBuffer_34_pixel_2.run<423, 3>(StreamingLineBuffer_34_buffer_stream[1], StreamingLineBuffer_34_out0_stream_prepad[22], StreamingLineBuffer_34_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_22," << StreamingLineBuffer_34_out0_stream_prepad[22].size() << std::endl;
     #endif
@@ -13255,7 +13328,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_3;
-    StreamingLineBuffer_34_pixel_3.run<424>(StreamingLineBuffer_34_buffer_stream[2], StreamingLineBuffer_34_out0_stream_prepad[21], StreamingLineBuffer_34_buffer_stream[3]);
+    StreamingLineBuffer_34_pixel_3.run<424, 3>(StreamingLineBuffer_34_buffer_stream[2], StreamingLineBuffer_34_out0_stream_prepad[21], StreamingLineBuffer_34_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_21," << StreamingLineBuffer_34_out0_stream_prepad[21].size() << std::endl;
     #endif
@@ -13282,7 +13355,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_4;
-    StreamingLineBuffer_34_pixel_4.run<425>(StreamingLineBuffer_34_buffer_stream[3], StreamingLineBuffer_34_out0_stream_prepad[20], StreamingLineBuffer_34_buffer_stream[4]);
+    StreamingLineBuffer_34_pixel_4.run<425, 3>(StreamingLineBuffer_34_buffer_stream[3], StreamingLineBuffer_34_out0_stream_prepad[20], StreamingLineBuffer_34_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_20," << StreamingLineBuffer_34_out0_stream_prepad[20].size() << std::endl;
     #endif
@@ -13309,7 +13382,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_5;
-    StreamingLineBuffer_34_pixel_5.run<426>(StreamingLineBuffer_34_buffer_stream[4], StreamingLineBuffer_34_out0_stream_prepad[19], StreamingLineBuffer_34_buffer_stream[5]);
+    StreamingLineBuffer_34_pixel_5.run<426, 3>(StreamingLineBuffer_34_buffer_stream[4], StreamingLineBuffer_34_out0_stream_prepad[19], StreamingLineBuffer_34_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_19," << StreamingLineBuffer_34_out0_stream_prepad[19].size() << std::endl;
     #endif
@@ -13336,7 +13409,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_6;
-    StreamingLineBuffer_34_pixel_6.run<427>(StreamingLineBuffer_34_buffer_stream[5], StreamingLineBuffer_34_out0_stream_prepad[18], StreamingLineBuffer_34_buffer_stream[6]);
+    StreamingLineBuffer_34_pixel_6.run<427, 3>(StreamingLineBuffer_34_buffer_stream[5], StreamingLineBuffer_34_out0_stream_prepad[18], StreamingLineBuffer_34_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_18," << StreamingLineBuffer_34_out0_stream_prepad[18].size() << std::endl;
     #endif
@@ -13363,7 +13436,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_7;
-    StreamingLineBuffer_34_pixel_7.run<428>(StreamingLineBuffer_34_buffer_stream[6], StreamingLineBuffer_34_out0_stream_prepad[17], StreamingLineBuffer_34_buffer_stream[7]);
+    StreamingLineBuffer_34_pixel_7.run<428, 3>(StreamingLineBuffer_34_buffer_stream[6], StreamingLineBuffer_34_out0_stream_prepad[17], StreamingLineBuffer_34_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_17," << StreamingLineBuffer_34_out0_stream_prepad[17].size() << std::endl;
     #endif
@@ -13390,7 +13463,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_8;
-    StreamingLineBuffer_34_pixel_8.run<429>(StreamingLineBuffer_34_buffer_stream[7], StreamingLineBuffer_34_out0_stream_prepad[16], StreamingLineBuffer_34_buffer_stream[8]);
+    StreamingLineBuffer_34_pixel_8.run<429, 3>(StreamingLineBuffer_34_buffer_stream[7], StreamingLineBuffer_34_out0_stream_prepad[16], StreamingLineBuffer_34_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_16," << StreamingLineBuffer_34_out0_stream_prepad[16].size() << std::endl;
     #endif
@@ -13417,7 +13490,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_9;
-    StreamingLineBuffer_34_pixel_9.run<430>(StreamingLineBuffer_34_buffer_stream[8], StreamingLineBuffer_34_out0_stream_prepad[15], StreamingLineBuffer_34_buffer_stream[9]);
+    StreamingLineBuffer_34_pixel_9.run<430, 3>(StreamingLineBuffer_34_buffer_stream[8], StreamingLineBuffer_34_out0_stream_prepad[15], StreamingLineBuffer_34_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_15," << StreamingLineBuffer_34_out0_stream_prepad[15].size() << std::endl;
     #endif
@@ -13444,7 +13517,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_10;
-    StreamingLineBuffer_34_pixel_10.run<431>(StreamingLineBuffer_34_buffer_stream[9], StreamingLineBuffer_34_out0_stream_prepad[14], StreamingLineBuffer_34_buffer_stream[10]);
+    StreamingLineBuffer_34_pixel_10.run<431, 3>(StreamingLineBuffer_34_buffer_stream[9], StreamingLineBuffer_34_out0_stream_prepad[14], StreamingLineBuffer_34_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_14," << StreamingLineBuffer_34_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -13471,7 +13544,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_11;
-    StreamingLineBuffer_34_pixel_11.run<432>(StreamingLineBuffer_34_buffer_stream[10], StreamingLineBuffer_34_out0_stream_prepad[13], StreamingLineBuffer_34_buffer_stream[11]);
+    StreamingLineBuffer_34_pixel_11.run<432, 3>(StreamingLineBuffer_34_buffer_stream[10], StreamingLineBuffer_34_out0_stream_prepad[13], StreamingLineBuffer_34_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_13," << StreamingLineBuffer_34_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -13498,7 +13571,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_12;
-    StreamingLineBuffer_34_pixel_12.run<433>(StreamingLineBuffer_34_buffer_stream[11], StreamingLineBuffer_34_out0_stream_prepad[12], StreamingLineBuffer_34_buffer_stream[12]);
+    StreamingLineBuffer_34_pixel_12.run<433, 3>(StreamingLineBuffer_34_buffer_stream[11], StreamingLineBuffer_34_out0_stream_prepad[12], StreamingLineBuffer_34_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_12," << StreamingLineBuffer_34_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -13525,7 +13598,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_13;
-    StreamingLineBuffer_34_pixel_13.run<434>(StreamingLineBuffer_34_buffer_stream[12], StreamingLineBuffer_34_out0_stream_prepad[11], StreamingLineBuffer_34_buffer_stream[13]);
+    StreamingLineBuffer_34_pixel_13.run<434, 3>(StreamingLineBuffer_34_buffer_stream[12], StreamingLineBuffer_34_out0_stream_prepad[11], StreamingLineBuffer_34_buffer_stream[13]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_11," << StreamingLineBuffer_34_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -13552,7 +13625,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_14;
-    StreamingLineBuffer_34_pixel_14.run<435>(StreamingLineBuffer_34_buffer_stream[13], StreamingLineBuffer_34_out0_stream_prepad[10], StreamingLineBuffer_34_buffer_stream[14]);
+    StreamingLineBuffer_34_pixel_14.run<435, 3>(StreamingLineBuffer_34_buffer_stream[13], StreamingLineBuffer_34_out0_stream_prepad[10], StreamingLineBuffer_34_buffer_stream[14]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_10," << StreamingLineBuffer_34_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -13579,7 +13652,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_15;
-    StreamingLineBuffer_34_pixel_15.run<436>(StreamingLineBuffer_34_buffer_stream[14], StreamingLineBuffer_34_out0_stream_prepad[9], StreamingLineBuffer_34_buffer_stream[15]);
+    StreamingLineBuffer_34_pixel_15.run<436, 3>(StreamingLineBuffer_34_buffer_stream[14], StreamingLineBuffer_34_out0_stream_prepad[9], StreamingLineBuffer_34_buffer_stream[15]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_9," << StreamingLineBuffer_34_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -13606,7 +13679,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_16;
-    StreamingLineBuffer_34_pixel_16.run<437>(StreamingLineBuffer_34_buffer_stream[15], StreamingLineBuffer_34_out0_stream_prepad[8], StreamingLineBuffer_34_buffer_stream[16]);
+    StreamingLineBuffer_34_pixel_16.run<437, 3>(StreamingLineBuffer_34_buffer_stream[15], StreamingLineBuffer_34_out0_stream_prepad[8], StreamingLineBuffer_34_buffer_stream[16]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_8," << StreamingLineBuffer_34_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -13633,7 +13706,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_17;
-    StreamingLineBuffer_34_pixel_17.run<438>(StreamingLineBuffer_34_buffer_stream[16], StreamingLineBuffer_34_out0_stream_prepad[7], StreamingLineBuffer_34_buffer_stream[17]);
+    StreamingLineBuffer_34_pixel_17.run<438, 3>(StreamingLineBuffer_34_buffer_stream[16], StreamingLineBuffer_34_out0_stream_prepad[7], StreamingLineBuffer_34_buffer_stream[17]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_7," << StreamingLineBuffer_34_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -13660,7 +13733,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_18;
-    StreamingLineBuffer_34_pixel_18.run<439>(StreamingLineBuffer_34_buffer_stream[17], StreamingLineBuffer_34_out0_stream_prepad[6], StreamingLineBuffer_34_buffer_stream[18]);
+    StreamingLineBuffer_34_pixel_18.run<439, 3>(StreamingLineBuffer_34_buffer_stream[17], StreamingLineBuffer_34_out0_stream_prepad[6], StreamingLineBuffer_34_buffer_stream[18]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_6," << StreamingLineBuffer_34_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -13687,7 +13760,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_19;
-    StreamingLineBuffer_34_pixel_19.run<440>(StreamingLineBuffer_34_buffer_stream[18], StreamingLineBuffer_34_out0_stream_prepad[5], StreamingLineBuffer_34_buffer_stream[19]);
+    StreamingLineBuffer_34_pixel_19.run<440, 3>(StreamingLineBuffer_34_buffer_stream[18], StreamingLineBuffer_34_out0_stream_prepad[5], StreamingLineBuffer_34_buffer_stream[19]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_5," << StreamingLineBuffer_34_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -13714,7 +13787,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_20;
-    StreamingLineBuffer_34_pixel_20.run<441>(StreamingLineBuffer_34_buffer_stream[19], StreamingLineBuffer_34_out0_stream_prepad[4], StreamingLineBuffer_34_buffer_stream[20]);
+    StreamingLineBuffer_34_pixel_20.run<441, 3>(StreamingLineBuffer_34_buffer_stream[19], StreamingLineBuffer_34_out0_stream_prepad[4], StreamingLineBuffer_34_buffer_stream[20]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_4," << StreamingLineBuffer_34_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -13741,7 +13814,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_21;
-    StreamingLineBuffer_34_pixel_21.run<442>(StreamingLineBuffer_34_buffer_stream[20], StreamingLineBuffer_34_out0_stream_prepad[3], StreamingLineBuffer_34_buffer_stream[21]);
+    StreamingLineBuffer_34_pixel_21.run<442, 3>(StreamingLineBuffer_34_buffer_stream[20], StreamingLineBuffer_34_out0_stream_prepad[3], StreamingLineBuffer_34_buffer_stream[21]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_3," << StreamingLineBuffer_34_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -13768,7 +13841,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_22;
-    StreamingLineBuffer_34_pixel_22.run<443>(StreamingLineBuffer_34_buffer_stream[21], StreamingLineBuffer_34_out0_stream_prepad[2], StreamingLineBuffer_34_buffer_stream[22]);
+    StreamingLineBuffer_34_pixel_22.run<443, 3>(StreamingLineBuffer_34_buffer_stream[21], StreamingLineBuffer_34_out0_stream_prepad[2], StreamingLineBuffer_34_buffer_stream[22]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_2," << StreamingLineBuffer_34_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -13795,7 +13868,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_23;
-    StreamingLineBuffer_34_pixel_23.run<444>(StreamingLineBuffer_34_buffer_stream[22], StreamingLineBuffer_34_out0_stream_prepad[1], StreamingLineBuffer_34_buffer_stream[23]);
+    StreamingLineBuffer_34_pixel_23.run<444, 3>(StreamingLineBuffer_34_buffer_stream[22], StreamingLineBuffer_34_out0_stream_prepad[1], StreamingLineBuffer_34_buffer_stream[23]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_1," << StreamingLineBuffer_34_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -13822,7 +13895,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_34_pixel_24;
-    StreamingLineBuffer_34_pixel_24.run<445>(StreamingLineBuffer_34_buffer_stream[23], StreamingLineBuffer_34_out0_stream_prepad[0]);
+    StreamingLineBuffer_34_pixel_24.run<445, 3>(StreamingLineBuffer_34_buffer_stream[23], StreamingLineBuffer_34_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_prepad_0," << StreamingLineBuffer_34_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -13847,7 +13920,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         -128  // PAD_VALUE
     > StreamingLineBuffer_34_pad;
-    StreamingLineBuffer_34_pad.run<446>(StreamingLineBuffer_34_out0_stream_prepad, StreamingLineBuffer_34_out0_stream);
+    StreamingLineBuffer_34_pad.run<446, 3>(StreamingLineBuffer_34_out0_stream_prepad, StreamingLineBuffer_34_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_34_out0_stream_0," << StreamingLineBuffer_34_out0_stream[0].size() << std::endl;
     #endif
@@ -13868,7 +13941,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         1  // W_PAR
     > StreamingMaxPool_2;
-    StreamingMaxPool_2.run<447>(StreamingLineBuffer_34_out0_stream, StreamingMaxPool_2_out0_stream);
+    StreamingMaxPool_2.run<447, 3>(StreamingLineBuffer_34_out0_stream, StreamingMaxPool_2_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingMaxPool_2_out0_stream_0," << StreamingMaxPool_2_out0_stream[0].size() << std::endl;
     #endif
@@ -13885,7 +13958,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingConcat_5;
-    StreamingConcat_5.run<448>(TensorDuplicator_15_out1_stream, StreamingMaxPool_2_out0_stream, StreamingConcat_5_out0_stream);
+    StreamingConcat_5.run<448, 3>(TensorDuplicator_15_out1_stream, StreamingMaxPool_2_out0_stream, StreamingConcat_5_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_5_out0_stream_0," << StreamingConcat_5_out0_stream[0].size() << std::endl;
     #endif
@@ -13902,7 +13975,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingConcat_6;
-    StreamingConcat_6.run<449>(StreamingConcat_4_out0_stream, StreamingConcat_5_out0_stream, StreamingConcat_6_out0_stream);
+    StreamingConcat_6.run<449, 3>(StreamingConcat_4_out0_stream, StreamingConcat_5_out0_stream, StreamingConcat_6_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_6_out0_stream_0," << StreamingConcat_6_out0_stream[0].size() << std::endl;
     #endif
@@ -13920,7 +13993,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         8  // OUT_CH_PAR
     > BandwidthAdjustIncreaseChannels_3;
-    BandwidthAdjustIncreaseChannels_3.run<450>(StreamingConcat_6_out0_stream, BandwidthAdjustIncreaseChannels_3_out0_stream);
+    BandwidthAdjustIncreaseChannels_3.run<450, 3>(StreamingConcat_6_out0_stream, BandwidthAdjustIncreaseChannels_3_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseChannels_3_out0_stream_0," << BandwidthAdjustIncreaseChannels_3_out0_stream[0].size() << std::endl;
     #endif
@@ -13944,7 +14017,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         8  // CH_PAR
     > StreamingLineBuffer_35_pixel_0;
-    StreamingLineBuffer_35_pixel_0.run<451>(BandwidthAdjustIncreaseChannels_3_out0_stream[0], StreamingLineBuffer_35_out0_stream_prepad[0]);
+    StreamingLineBuffer_35_pixel_0.run<451, 3>(BandwidthAdjustIncreaseChannels_3_out0_stream[0], StreamingLineBuffer_35_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_35_out0_stream_prepad_0," << StreamingLineBuffer_35_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -13969,14 +14042,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         8,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_35_pad;
-    StreamingLineBuffer_35_pad.run<452>(StreamingLineBuffer_35_out0_stream_prepad, StreamingLineBuffer_35_out0_stream);
+    StreamingLineBuffer_35_pad.run<452, 3>(StreamingLineBuffer_35_out0_stream_prepad, StreamingLineBuffer_35_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_35_out0_stream_0," << StreamingLineBuffer_35_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_32_weights[8192][16][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_32_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_32_weights dim=2 complete
-    ap_int<17> StreamingConv_32_biases[128][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_32_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_32_biases dim=2 complete
     StreamingConv <
@@ -14007,7 +14078,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // OUT_CH_PAR
         1  // W_PAR
     > StreamingConv_32;
-    StreamingConv_32.run<453>(StreamingLineBuffer_35_out0_stream, StreamingConv_32_weights, StreamingConv_32_biases, StreamingConv_32_out0_stream);
+    StreamingConv_32.run<453, 3>(StreamingLineBuffer_35_out0_stream, StreamingConv_32_weights, StreamingConv_32_biases, StreamingConv_32_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_32_out0_stream_0," << StreamingConv_32_out0_stream[0].size() << std::endl;
     #endif
@@ -14024,7 +14095,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         1  // W_PAR
     > StreamingSwish_32;
-    StreamingSwish_32.run<454>(StreamingConv_32_out0_stream, StreamingSwish_32_lut, StreamingSwish_32_out0_stream);
+    StreamingSwish_32.run<454, 3>(StreamingConv_32_out0_stream, StreamingSwish_32_lut, StreamingSwish_32_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_32_out0_stream_0," << StreamingSwish_32_out0_stream[0].size() << std::endl;
     #endif
@@ -14048,7 +14119,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_36_pixel_0;
-    StreamingLineBuffer_36_pixel_0.run<455>(StreamingSwish_32_out0_stream[0], StreamingLineBuffer_36_out0_stream_prepad[0]);
+    StreamingLineBuffer_36_pixel_0.run<455, 3>(StreamingSwish_32_out0_stream[0], StreamingLineBuffer_36_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_36_out0_stream_prepad_0," << StreamingLineBuffer_36_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -14073,14 +14144,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_36_pad;
-    StreamingLineBuffer_36_pad.run<456>(StreamingLineBuffer_36_out0_stream_prepad, StreamingLineBuffer_36_out0_stream);
+    StreamingLineBuffer_36_pad.run<456, 3>(StreamingLineBuffer_36_out0_stream_prepad, StreamingLineBuffer_36_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_36_out0_stream_0," << StreamingLineBuffer_36_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_33_weights[8192][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_33_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_33_weights dim=2 complete
-    ap_int<15> StreamingConv_33_biases[64][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_33_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_33_biases dim=2 complete
     StreamingConv <
@@ -14111,7 +14180,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // OUT_CH_PAR
         1  // W_PAR
     > StreamingConv_33;
-    StreamingConv_33.run<457>(StreamingLineBuffer_36_out0_stream, StreamingConv_33_weights, StreamingConv_33_biases, StreamingConv_33_out0_stream);
+    StreamingConv_33.run<457, 3>(StreamingLineBuffer_36_out0_stream, StreamingConv_33_weights, StreamingConv_33_biases, StreamingConv_33_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_33_out0_stream_0," << StreamingConv_33_out0_stream[0].size() << std::endl;
     #endif
@@ -14128,7 +14197,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         1  // W_PAR
     > StreamingSwish_33;
-    StreamingSwish_33.run<458>(StreamingConv_33_out0_stream, StreamingSwish_33_lut, StreamingSwish_33_out0_stream);
+    StreamingSwish_33.run<458, 3>(StreamingConv_33_out0_stream, StreamingSwish_33_lut, StreamingSwish_33_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_33_out0_stream_0," << StreamingSwish_33_out0_stream[0].size() << std::endl;
     #endif
@@ -14140,7 +14209,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         1  // W_PAR
     > TensorDuplicator_16;
-    TensorDuplicator_16.run<459>(StreamingSwish_33_out0_stream, TensorDuplicator_16_out0_stream, TensorDuplicator_16_out1_stream);
+    TensorDuplicator_16.run<459, 3>(StreamingSwish_33_out0_stream, TensorDuplicator_16_out0_stream, TensorDuplicator_16_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_16_out0_stream_0," << TensorDuplicator_16_out0_stream[0].size() << std::endl;
     #endif
@@ -14161,7 +14230,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_W_PAR
         2  // OUT_W_PAR
     > StreamingUpsample_0;
-    StreamingUpsample_0.run<460>(TensorDuplicator_16_out0_stream, StreamingUpsample_0_out0_stream);
+    StreamingUpsample_0.run<460, 3>(TensorDuplicator_16_out0_stream, StreamingUpsample_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingUpsample_0_out0_stream_0," << StreamingUpsample_0_out0_stream[0].size() << std::endl;
     #endif
@@ -14182,7 +14251,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // IN_CH_PAR
         2  // OUT_CH_PAR
     > BandwidthAdjustIncreaseStreams_0;
-    BandwidthAdjustIncreaseStreams_0.run<461>(TensorDuplicator_16_out1_stream, BandwidthAdjustIncreaseStreams_0_out0_stream);
+    BandwidthAdjustIncreaseStreams_0.run<461, 3>(TensorDuplicator_16_out1_stream, BandwidthAdjustIncreaseStreams_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseStreams_0_out0_stream_0," << BandwidthAdjustIncreaseStreams_0_out0_stream[0].size() << std::endl;
     #endif
@@ -14203,7 +14272,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // IN_CH_PAR
         4  // OUT_CH_PAR
     > BandwidthAdjustIncreaseChannels_4;
-    BandwidthAdjustIncreaseChannels_4.run<462>(StreamingUpsample_0_out0_stream, BandwidthAdjustIncreaseChannels_4_out0_stream);
+    BandwidthAdjustIncreaseChannels_4.run<462, 3>(StreamingUpsample_0_out0_stream, BandwidthAdjustIncreaseChannels_4_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseChannels_4_out0_stream_0," << BandwidthAdjustIncreaseChannels_4_out0_stream[0].size() << std::endl;
     #endif
@@ -14223,7 +14292,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingConcat_7;
-    StreamingConcat_7.run<463>(BandwidthAdjustIncreaseChannels_4_out0_stream, BandwidthAdjustIncreaseChannels_2_out0_stream, StreamingConcat_7_out0_stream);
+    StreamingConcat_7.run<463, 3>(BandwidthAdjustIncreaseChannels_4_out0_stream, BandwidthAdjustIncreaseChannels_2_out0_stream, StreamingConcat_7_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_7_out0_stream_0," << StreamingConcat_7_out0_stream[0].size() << std::endl;
     #endif
@@ -14238,7 +14307,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_17;
-    TensorDuplicator_17.run<464>(StreamingConcat_7_out0_stream, TensorDuplicator_17_out0_stream, TensorDuplicator_17_out1_stream);
+    TensorDuplicator_17.run<464, 3>(StreamingConcat_7_out0_stream, TensorDuplicator_17_out0_stream, TensorDuplicator_17_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_17_out0_stream_0," << TensorDuplicator_17_out0_stream[0].size() << std::endl;
     #endif
@@ -14271,7 +14340,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_37_pixel_0;
-    StreamingLineBuffer_37_pixel_0.run<465>(TensorDuplicator_17_out0_stream[1], StreamingLineBuffer_37_out0_stream_prepad[1]);
+    StreamingLineBuffer_37_pixel_0.run<465, 3>(TensorDuplicator_17_out0_stream[1], StreamingLineBuffer_37_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_37_out0_stream_prepad_1," << StreamingLineBuffer_37_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -14295,7 +14364,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_37_pixel_1;
-    StreamingLineBuffer_37_pixel_1.run<466>(TensorDuplicator_17_out0_stream[0], StreamingLineBuffer_37_out0_stream_prepad[0]);
+    StreamingLineBuffer_37_pixel_1.run<466, 3>(TensorDuplicator_17_out0_stream[0], StreamingLineBuffer_37_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_37_out0_stream_prepad_0," << StreamingLineBuffer_37_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -14319,7 +14388,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_38_pixel_0;
-    StreamingLineBuffer_38_pixel_0.run<468>(TensorDuplicator_17_out1_stream[1], StreamingLineBuffer_38_out0_stream_prepad[1]);
+    StreamingLineBuffer_38_pixel_0.run<468, 3>(TensorDuplicator_17_out1_stream[1], StreamingLineBuffer_38_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_38_out0_stream_prepad_1," << StreamingLineBuffer_38_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -14343,7 +14412,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_38_pixel_1;
-    StreamingLineBuffer_38_pixel_1.run<469>(TensorDuplicator_17_out1_stream[0], StreamingLineBuffer_38_out0_stream_prepad[0]);
+    StreamingLineBuffer_38_pixel_1.run<469, 3>(TensorDuplicator_17_out1_stream[0], StreamingLineBuffer_38_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_38_out0_stream_prepad_0," << StreamingLineBuffer_38_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -14368,7 +14437,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_37_pad;
-    StreamingLineBuffer_37_pad.run<467>(StreamingLineBuffer_37_out0_stream_prepad, StreamingLineBuffer_37_out0_stream);
+    StreamingLineBuffer_37_pad.run<467, 3>(StreamingLineBuffer_37_out0_stream_prepad, StreamingLineBuffer_37_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_37_out0_stream_0," << StreamingLineBuffer_37_out0_stream[0].size() << std::endl;
     #endif
@@ -14393,14 +14462,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_38_pad;
-    StreamingLineBuffer_38_pad.run<470>(StreamingLineBuffer_38_out0_stream_prepad, StreamingLineBuffer_38_out0_stream);
+    StreamingLineBuffer_38_pad.run<470, 3>(StreamingLineBuffer_38_out0_stream_prepad, StreamingLineBuffer_38_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_38_out0_stream_0," << StreamingLineBuffer_38_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_34_weights[4096][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_34_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_34_weights dim=2 complete
-    ap_int<14> StreamingConv_34_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_34_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_34_biases dim=2 complete
     StreamingConv <
@@ -14431,17 +14498,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_34;
-    StreamingConv_34.run<471>(StreamingLineBuffer_37_out0_stream, StreamingConv_34_weights, StreamingConv_34_biases, StreamingConv_34_out0_stream);
+    StreamingConv_34.run<471, 3>(StreamingLineBuffer_37_out0_stream, StreamingConv_34_weights, StreamingConv_34_biases, StreamingConv_34_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_34_out0_stream_0," << StreamingConv_34_out0_stream[0].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_34_out0_stream_1," << StreamingConv_34_out0_stream[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_35_weights[4096][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_35_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_35_weights dim=2 complete
-    ap_int<15> StreamingConv_35_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_35_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_35_biases dim=2 complete
     StreamingConv <
@@ -14472,7 +14537,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_35;
-    StreamingConv_35.run<472>(StreamingLineBuffer_38_out0_stream, StreamingConv_35_weights, StreamingConv_35_biases, StreamingConv_35_out0_stream);
+    StreamingConv_35.run<472, 3>(StreamingLineBuffer_38_out0_stream, StreamingConv_35_weights, StreamingConv_35_biases, StreamingConv_35_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_35_out0_stream_0," << StreamingConv_35_out0_stream[0].size() << std::endl;
     #endif
@@ -14492,7 +14557,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_34;
-    StreamingSwish_34.run<473>(StreamingConv_34_out0_stream, StreamingSwish_34_lut, StreamingSwish_34_out0_stream);
+    StreamingSwish_34.run<473, 3>(StreamingConv_34_out0_stream, StreamingSwish_34_lut, StreamingSwish_34_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_34_out0_stream_0," << StreamingSwish_34_out0_stream[0].size() << std::endl;
     #endif
@@ -14512,7 +14577,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_35;
-    StreamingSwish_35.run<474>(StreamingConv_35_out0_stream, StreamingSwish_35_lut, StreamingSwish_35_out0_stream);
+    StreamingSwish_35.run<474, 3>(StreamingConv_35_out0_stream, StreamingSwish_35_lut, StreamingSwish_35_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_35_out0_stream_0," << StreamingSwish_35_out0_stream[0].size() << std::endl;
     #endif
@@ -14539,7 +14604,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_39_pixel_0;
-    StreamingLineBuffer_39_pixel_0.run<475>(StreamingSwish_34_out0_stream[1], StreamingLineBuffer_39_out0_stream_prepad[1]);
+    StreamingLineBuffer_39_pixel_0.run<475, 3>(StreamingSwish_34_out0_stream[1], StreamingLineBuffer_39_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_39_out0_stream_prepad_1," << StreamingLineBuffer_39_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -14563,7 +14628,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_39_pixel_1;
-    StreamingLineBuffer_39_pixel_1.run<476>(StreamingSwish_34_out0_stream[0], StreamingLineBuffer_39_out0_stream_prepad[0]);
+    StreamingLineBuffer_39_pixel_1.run<476, 3>(StreamingSwish_34_out0_stream[0], StreamingLineBuffer_39_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_39_out0_stream_prepad_0," << StreamingLineBuffer_39_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -14588,14 +14653,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_39_pad;
-    StreamingLineBuffer_39_pad.run<477>(StreamingLineBuffer_39_out0_stream_prepad, StreamingLineBuffer_39_out0_stream);
+    StreamingLineBuffer_39_pad.run<477, 3>(StreamingLineBuffer_39_out0_stream_prepad, StreamingLineBuffer_39_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_39_out0_stream_0," << StreamingLineBuffer_39_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_36_weights[4096][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_36_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_36_weights dim=2 complete
-    ap_int<14> StreamingConv_36_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_36_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_36_biases dim=2 complete
     StreamingConv <
@@ -14626,7 +14689,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_36;
-    StreamingConv_36.run<478>(StreamingLineBuffer_39_out0_stream, StreamingConv_36_weights, StreamingConv_36_biases, StreamingConv_36_out0_stream);
+    StreamingConv_36.run<478, 3>(StreamingLineBuffer_39_out0_stream, StreamingConv_36_weights, StreamingConv_36_biases, StreamingConv_36_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_36_out0_stream_0," << StreamingConv_36_out0_stream[0].size() << std::endl;
     #endif
@@ -14646,7 +14709,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_36;
-    StreamingSwish_36.run<479>(StreamingConv_36_out0_stream, StreamingSwish_36_lut, StreamingSwish_36_out0_stream);
+    StreamingSwish_36.run<479, 3>(StreamingConv_36_out0_stream, StreamingSwish_36_lut, StreamingSwish_36_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_36_out0_stream_0," << StreamingSwish_36_out0_stream[0].size() << std::endl;
     #endif
@@ -14673,7 +14736,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_40_pixel_0;
-    StreamingLineBuffer_40_pixel_0.run<480>(StreamingSwish_36_out0_stream[0], StreamingLineBuffer_40_out0_stream_prepad[11], StreamingLineBuffer_40_buffer_stream[0]);
+    StreamingLineBuffer_40_pixel_0.run<480, 3>(StreamingSwish_36_out0_stream[0], StreamingLineBuffer_40_out0_stream_prepad[11], StreamingLineBuffer_40_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_40_out0_stream_prepad_11," << StreamingLineBuffer_40_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -14700,7 +14763,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_40_pixel_1;
-    StreamingLineBuffer_40_pixel_1.run<481>(StreamingSwish_36_out0_stream[1], StreamingLineBuffer_40_out0_stream_prepad[10], StreamingLineBuffer_40_buffer_stream[1]);
+    StreamingLineBuffer_40_pixel_1.run<481, 3>(StreamingSwish_36_out0_stream[1], StreamingLineBuffer_40_out0_stream_prepad[10], StreamingLineBuffer_40_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_40_out0_stream_prepad_10," << StreamingLineBuffer_40_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -14727,7 +14790,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_40_pixel_2;
-    StreamingLineBuffer_40_pixel_2.run<482>(StreamingLineBuffer_40_buffer_stream[0], StreamingLineBuffer_40_out0_stream_prepad[9], StreamingLineBuffer_40_buffer_stream[2]);
+    StreamingLineBuffer_40_pixel_2.run<482, 3>(StreamingLineBuffer_40_buffer_stream[0], StreamingLineBuffer_40_out0_stream_prepad[9], StreamingLineBuffer_40_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_40_out0_stream_prepad_9," << StreamingLineBuffer_40_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -14754,7 +14817,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_40_pixel_3;
-    StreamingLineBuffer_40_pixel_3.run<483>(StreamingLineBuffer_40_buffer_stream[1], StreamingLineBuffer_40_out0_stream_prepad[8], StreamingLineBuffer_40_buffer_stream[3]);
+    StreamingLineBuffer_40_pixel_3.run<483, 3>(StreamingLineBuffer_40_buffer_stream[1], StreamingLineBuffer_40_out0_stream_prepad[8], StreamingLineBuffer_40_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_40_out0_stream_prepad_8," << StreamingLineBuffer_40_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -14781,7 +14844,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_40_pixel_4;
-    StreamingLineBuffer_40_pixel_4.run<484>(StreamingLineBuffer_40_buffer_stream[2], StreamingLineBuffer_40_out0_stream_prepad[7], StreamingLineBuffer_40_buffer_stream[4]);
+    StreamingLineBuffer_40_pixel_4.run<484, 3>(StreamingLineBuffer_40_buffer_stream[2], StreamingLineBuffer_40_out0_stream_prepad[7], StreamingLineBuffer_40_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_40_out0_stream_prepad_7," << StreamingLineBuffer_40_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -14808,7 +14871,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_40_pixel_5;
-    StreamingLineBuffer_40_pixel_5.run<485>(StreamingLineBuffer_40_buffer_stream[3], StreamingLineBuffer_40_out0_stream_prepad[6], StreamingLineBuffer_40_buffer_stream[5]);
+    StreamingLineBuffer_40_pixel_5.run<485, 3>(StreamingLineBuffer_40_buffer_stream[3], StreamingLineBuffer_40_out0_stream_prepad[6], StreamingLineBuffer_40_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_40_out0_stream_prepad_6," << StreamingLineBuffer_40_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -14835,7 +14898,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_40_pixel_6;
-    StreamingLineBuffer_40_pixel_6.run<486>(StreamingLineBuffer_40_buffer_stream[4], StreamingLineBuffer_40_out0_stream_prepad[5], StreamingLineBuffer_40_buffer_stream[6]);
+    StreamingLineBuffer_40_pixel_6.run<486, 3>(StreamingLineBuffer_40_buffer_stream[4], StreamingLineBuffer_40_out0_stream_prepad[5], StreamingLineBuffer_40_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_40_out0_stream_prepad_5," << StreamingLineBuffer_40_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -14862,7 +14925,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_40_pixel_7;
-    StreamingLineBuffer_40_pixel_7.run<487>(StreamingLineBuffer_40_buffer_stream[5], StreamingLineBuffer_40_out0_stream_prepad[4], StreamingLineBuffer_40_buffer_stream[7]);
+    StreamingLineBuffer_40_pixel_7.run<487, 3>(StreamingLineBuffer_40_buffer_stream[5], StreamingLineBuffer_40_out0_stream_prepad[4], StreamingLineBuffer_40_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_40_out0_stream_prepad_4," << StreamingLineBuffer_40_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -14889,7 +14952,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_40_pixel_8;
-    StreamingLineBuffer_40_pixel_8.run<488>(StreamingLineBuffer_40_buffer_stream[6], StreamingLineBuffer_40_out0_stream_prepad[3], StreamingLineBuffer_40_buffer_stream[8]);
+    StreamingLineBuffer_40_pixel_8.run<488, 3>(StreamingLineBuffer_40_buffer_stream[6], StreamingLineBuffer_40_out0_stream_prepad[3], StreamingLineBuffer_40_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_40_out0_stream_prepad_3," << StreamingLineBuffer_40_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -14916,7 +14979,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_40_pixel_9;
-    StreamingLineBuffer_40_pixel_9.run<489>(StreamingLineBuffer_40_buffer_stream[7], StreamingLineBuffer_40_out0_stream_prepad[2], StreamingLineBuffer_40_buffer_stream[9]);
+    StreamingLineBuffer_40_pixel_9.run<489, 3>(StreamingLineBuffer_40_buffer_stream[7], StreamingLineBuffer_40_out0_stream_prepad[2], StreamingLineBuffer_40_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_40_out0_stream_prepad_2," << StreamingLineBuffer_40_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -14943,7 +15006,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_40_pixel_10;
-    StreamingLineBuffer_40_pixel_10.run<490>(StreamingLineBuffer_40_buffer_stream[8], StreamingLineBuffer_40_out0_stream_prepad[1]);
+    StreamingLineBuffer_40_pixel_10.run<490, 3>(StreamingLineBuffer_40_buffer_stream[8], StreamingLineBuffer_40_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_40_out0_stream_prepad_1," << StreamingLineBuffer_40_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -14967,7 +15030,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_40_pixel_11;
-    StreamingLineBuffer_40_pixel_11.run<491>(StreamingLineBuffer_40_buffer_stream[9], StreamingLineBuffer_40_out0_stream_prepad[0]);
+    StreamingLineBuffer_40_pixel_11.run<491, 3>(StreamingLineBuffer_40_buffer_stream[9], StreamingLineBuffer_40_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_40_out0_stream_prepad_0," << StreamingLineBuffer_40_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -14992,14 +15055,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_40_pad;
-    StreamingLineBuffer_40_pad.run<492>(StreamingLineBuffer_40_out0_stream_prepad, StreamingLineBuffer_40_out0_stream);
+    StreamingLineBuffer_40_pad.run<492, 3>(StreamingLineBuffer_40_out0_stream_prepad, StreamingLineBuffer_40_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_40_out0_stream_0," << StreamingLineBuffer_40_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_37_weights[4096][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_37_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_37_weights dim=2 complete
-    ap_int<16> StreamingConv_37_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_37_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_37_biases dim=2 complete
     StreamingConv <
@@ -15030,7 +15091,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_37;
-    StreamingConv_37.run<493>(StreamingLineBuffer_40_out0_stream, StreamingConv_37_weights, StreamingConv_37_biases, StreamingConv_37_out0_stream);
+    StreamingConv_37.run<493, 3>(StreamingLineBuffer_40_out0_stream, StreamingConv_37_weights, StreamingConv_37_biases, StreamingConv_37_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_37_out0_stream_0," << StreamingConv_37_out0_stream[0].size() << std::endl;
     #endif
@@ -15050,7 +15111,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_37;
-    StreamingSwish_37.run<494>(StreamingConv_37_out0_stream, StreamingSwish_37_lut, StreamingSwish_37_out0_stream);
+    StreamingSwish_37.run<494, 3>(StreamingConv_37_out0_stream, StreamingSwish_37_lut, StreamingSwish_37_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_37_out0_stream_0," << StreamingSwish_37_out0_stream[0].size() << std::endl;
     #endif
@@ -15070,7 +15131,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingConcat_8;
-    StreamingConcat_8.run<495>(StreamingSwish_37_out0_stream, StreamingSwish_35_out0_stream, StreamingConcat_8_out0_stream);
+    StreamingConcat_8.run<495, 3>(StreamingSwish_37_out0_stream, StreamingSwish_35_out0_stream, StreamingConcat_8_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_8_out0_stream_0," << StreamingConcat_8_out0_stream[0].size() << std::endl;
     #endif
@@ -15097,7 +15158,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_41_pixel_0;
-    StreamingLineBuffer_41_pixel_0.run<496>(StreamingConcat_8_out0_stream[1], StreamingLineBuffer_41_out0_stream_prepad[1]);
+    StreamingLineBuffer_41_pixel_0.run<496, 3>(StreamingConcat_8_out0_stream[1], StreamingLineBuffer_41_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_41_out0_stream_prepad_1," << StreamingLineBuffer_41_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -15121,7 +15182,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_41_pixel_1;
-    StreamingLineBuffer_41_pixel_1.run<497>(StreamingConcat_8_out0_stream[0], StreamingLineBuffer_41_out0_stream_prepad[0]);
+    StreamingLineBuffer_41_pixel_1.run<497, 3>(StreamingConcat_8_out0_stream[0], StreamingLineBuffer_41_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_41_out0_stream_prepad_0," << StreamingLineBuffer_41_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -15146,14 +15207,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_41_pad;
-    StreamingLineBuffer_41_pad.run<498>(StreamingLineBuffer_41_out0_stream_prepad, StreamingLineBuffer_41_out0_stream);
+    StreamingLineBuffer_41_pad.run<498, 3>(StreamingLineBuffer_41_out0_stream_prepad, StreamingLineBuffer_41_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_41_out0_stream_0," << StreamingLineBuffer_41_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_38_weights[4096][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_38_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_38_weights dim=2 complete
-    ap_int<14> StreamingConv_38_biases[32][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_38_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_38_biases dim=2 complete
     StreamingConv <
@@ -15184,7 +15243,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_38;
-    StreamingConv_38.run<499>(StreamingLineBuffer_41_out0_stream, StreamingConv_38_weights, StreamingConv_38_biases, StreamingConv_38_out0_stream);
+    StreamingConv_38.run<499, 3>(StreamingLineBuffer_41_out0_stream, StreamingConv_38_weights, StreamingConv_38_biases, StreamingConv_38_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_38_out0_stream_0," << StreamingConv_38_out0_stream[0].size() << std::endl;
     #endif
@@ -15204,7 +15263,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_38;
-    StreamingSwish_38.run<500>(StreamingConv_38_out0_stream, StreamingSwish_38_lut, StreamingSwish_38_out0_stream);
+    StreamingSwish_38.run<500, 3>(StreamingConv_38_out0_stream, StreamingSwish_38_lut, StreamingSwish_38_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_38_out0_stream_0," << StreamingSwish_38_out0_stream[0].size() << std::endl;
     #endif
@@ -15225,7 +15284,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // IN_CH_PAR
         1  // OUT_CH_PAR
     > BandwidthAdjustDecreaseChannels_5;
-    BandwidthAdjustDecreaseChannels_5.run<501>(StreamingSwish_38_out0_stream, BandwidthAdjustDecreaseChannels_5_out0_stream);
+    BandwidthAdjustDecreaseChannels_5.run<501, 3>(StreamingSwish_38_out0_stream, BandwidthAdjustDecreaseChannels_5_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseChannels_5_out0_stream_0," << BandwidthAdjustDecreaseChannels_5_out0_stream[0].size() << std::endl;
     #endif
@@ -15252,7 +15311,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_42_pixel_0;
-    StreamingLineBuffer_42_pixel_0.run<502>(BandwidthAdjustDecreaseChannels_5_out0_stream[1], StreamingLineBuffer_42_out0_stream_prepad[1]);
+    StreamingLineBuffer_42_pixel_0.run<502, 3>(BandwidthAdjustDecreaseChannels_5_out0_stream[1], StreamingLineBuffer_42_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_42_out0_stream_prepad_1," << StreamingLineBuffer_42_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -15276,7 +15335,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_42_pixel_1;
-    StreamingLineBuffer_42_pixel_1.run<503>(BandwidthAdjustDecreaseChannels_5_out0_stream[0], StreamingLineBuffer_42_out0_stream_prepad[0]);
+    StreamingLineBuffer_42_pixel_1.run<503, 3>(BandwidthAdjustDecreaseChannels_5_out0_stream[0], StreamingLineBuffer_42_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_42_out0_stream_prepad_0," << StreamingLineBuffer_42_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -15301,14 +15360,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_42_pad;
-    StreamingLineBuffer_42_pad.run<504>(StreamingLineBuffer_42_out0_stream_prepad, StreamingLineBuffer_42_out0_stream);
+    StreamingLineBuffer_42_pad.run<504, 3>(StreamingLineBuffer_42_out0_stream_prepad, StreamingLineBuffer_42_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_42_out0_stream_0," << StreamingLineBuffer_42_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_39_weights[4096][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_39_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_39_weights dim=2 complete
-    ap_int<15> StreamingConv_39_biases[32][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_39_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_39_biases dim=2 complete
     StreamingConv <
@@ -15339,7 +15396,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_39;
-    StreamingConv_39.run<505>(StreamingLineBuffer_42_out0_stream, StreamingConv_39_weights, StreamingConv_39_biases, StreamingConv_39_out0_stream);
+    StreamingConv_39.run<505, 3>(StreamingLineBuffer_42_out0_stream, StreamingConv_39_weights, StreamingConv_39_biases, StreamingConv_39_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_39_out0_stream_0," << StreamingConv_39_out0_stream[0].size() << std::endl;
     #endif
@@ -15359,7 +15416,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_39;
-    StreamingSwish_39.run<506>(StreamingConv_39_out0_stream, StreamingSwish_39_lut, StreamingSwish_39_out0_stream);
+    StreamingSwish_39.run<506, 3>(StreamingConv_39_out0_stream, StreamingSwish_39_lut, StreamingSwish_39_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_39_out0_stream_0," << StreamingSwish_39_out0_stream[0].size() << std::endl;
     #endif
@@ -15374,7 +15431,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_18;
-    TensorDuplicator_18.run<507>(StreamingSwish_39_out0_stream, TensorDuplicator_18_out0_stream, TensorDuplicator_18_out1_stream);
+    TensorDuplicator_18.run<507, 3>(StreamingSwish_39_out0_stream, TensorDuplicator_18_out0_stream, TensorDuplicator_18_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_18_out0_stream_0," << TensorDuplicator_18_out0_stream[0].size() << std::endl;
     #endif
@@ -15401,7 +15458,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // IN_W_PAR
         4  // OUT_W_PAR
     > StreamingUpsample_1;
-    StreamingUpsample_1.run<508>(TensorDuplicator_18_out0_stream, StreamingUpsample_1_out0_stream);
+    StreamingUpsample_1.run<508, 3>(TensorDuplicator_18_out0_stream, StreamingUpsample_1_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingUpsample_1_out0_stream_0," << StreamingUpsample_1_out0_stream[0].size() << std::endl;
     #endif
@@ -15428,7 +15485,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // IN_CH_PAR
         4  // OUT_CH_PAR
     > BandwidthAdjustIncreaseChannels_5;
-    BandwidthAdjustIncreaseChannels_5.run<509>(StreamingUpsample_1_out0_stream, BandwidthAdjustIncreaseChannels_5_out0_stream);
+    BandwidthAdjustIncreaseChannels_5.run<509, 3>(StreamingUpsample_1_out0_stream, BandwidthAdjustIncreaseChannels_5_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseChannels_5_out0_stream_0," << BandwidthAdjustIncreaseChannels_5_out0_stream[0].size() << std::endl;
     #endif
@@ -15455,7 +15512,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // IN_CH_PAR
         4  // OUT_CH_PAR
     > BandwidthAdjustDecreaseStreams_2;
-    BandwidthAdjustDecreaseStreams_2.run<510>(BandwidthAdjustIncreaseChannels_5_out0_stream, BandwidthAdjustDecreaseStreams_2_out0_stream);
+    BandwidthAdjustDecreaseStreams_2.run<510, 3>(BandwidthAdjustIncreaseChannels_5_out0_stream, BandwidthAdjustDecreaseStreams_2_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseStreams_2_out0_stream_0," << BandwidthAdjustDecreaseStreams_2_out0_stream[0].size() << std::endl;
     #endif
@@ -15475,7 +15532,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingConcat_9;
-    StreamingConcat_9.run<511>(BandwidthAdjustDecreaseStreams_2_out0_stream, TensorDuplicator_5_out1_stream, StreamingConcat_9_out0_stream);
+    StreamingConcat_9.run<511, 3>(BandwidthAdjustDecreaseStreams_2_out0_stream, TensorDuplicator_5_out1_stream, StreamingConcat_9_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_9_out0_stream_0," << StreamingConcat_9_out0_stream[0].size() << std::endl;
     #endif
@@ -15490,7 +15547,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_19;
-    TensorDuplicator_19.run<512>(StreamingConcat_9_out0_stream, TensorDuplicator_19_out0_stream, TensorDuplicator_19_out1_stream);
+    TensorDuplicator_19.run<512, 3>(StreamingConcat_9_out0_stream, TensorDuplicator_19_out0_stream, TensorDuplicator_19_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_19_out0_stream_0," << TensorDuplicator_19_out0_stream[0].size() << std::endl;
     #endif
@@ -15523,7 +15580,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_43_pixel_0;
-    StreamingLineBuffer_43_pixel_0.run<513>(TensorDuplicator_19_out0_stream[1], StreamingLineBuffer_43_out0_stream_prepad[1]);
+    StreamingLineBuffer_43_pixel_0.run<513, 3>(TensorDuplicator_19_out0_stream[1], StreamingLineBuffer_43_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_43_out0_stream_prepad_1," << StreamingLineBuffer_43_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -15547,7 +15604,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_43_pixel_1;
-    StreamingLineBuffer_43_pixel_1.run<514>(TensorDuplicator_19_out0_stream[0], StreamingLineBuffer_43_out0_stream_prepad[0]);
+    StreamingLineBuffer_43_pixel_1.run<514, 3>(TensorDuplicator_19_out0_stream[0], StreamingLineBuffer_43_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_43_out0_stream_prepad_0," << StreamingLineBuffer_43_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -15571,7 +15628,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_44_pixel_0;
-    StreamingLineBuffer_44_pixel_0.run<516>(TensorDuplicator_19_out1_stream[1], StreamingLineBuffer_44_out0_stream_prepad[1]);
+    StreamingLineBuffer_44_pixel_0.run<516, 3>(TensorDuplicator_19_out1_stream[1], StreamingLineBuffer_44_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_44_out0_stream_prepad_1," << StreamingLineBuffer_44_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -15595,7 +15652,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_44_pixel_1;
-    StreamingLineBuffer_44_pixel_1.run<517>(TensorDuplicator_19_out1_stream[0], StreamingLineBuffer_44_out0_stream_prepad[0]);
+    StreamingLineBuffer_44_pixel_1.run<517, 3>(TensorDuplicator_19_out1_stream[0], StreamingLineBuffer_44_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_44_out0_stream_prepad_0," << StreamingLineBuffer_44_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -15620,7 +15677,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_43_pad;
-    StreamingLineBuffer_43_pad.run<515>(StreamingLineBuffer_43_out0_stream_prepad, StreamingLineBuffer_43_out0_stream);
+    StreamingLineBuffer_43_pad.run<515, 3>(StreamingLineBuffer_43_out0_stream_prepad, StreamingLineBuffer_43_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_43_out0_stream_0," << StreamingLineBuffer_43_out0_stream[0].size() << std::endl;
     #endif
@@ -15645,14 +15702,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_44_pad;
-    StreamingLineBuffer_44_pad.run<518>(StreamingLineBuffer_44_out0_stream_prepad, StreamingLineBuffer_44_out0_stream);
+    StreamingLineBuffer_44_pad.run<518, 3>(StreamingLineBuffer_44_out0_stream_prepad, StreamingLineBuffer_44_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_44_out0_stream_0," << StreamingLineBuffer_44_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_40_weights[1024][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_40_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_40_weights dim=2 complete
-    ap_int<16> StreamingConv_40_biases[32][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_40_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_40_biases dim=2 complete
     StreamingConv <
@@ -15683,17 +15738,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_40;
-    StreamingConv_40.run<519>(StreamingLineBuffer_43_out0_stream, StreamingConv_40_weights, StreamingConv_40_biases, StreamingConv_40_out0_stream);
+    StreamingConv_40.run<519, 3>(StreamingLineBuffer_43_out0_stream, StreamingConv_40_weights, StreamingConv_40_biases, StreamingConv_40_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_40_out0_stream_0," << StreamingConv_40_out0_stream[0].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_40_out0_stream_1," << StreamingConv_40_out0_stream[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_41_weights[1024][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_41_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_41_weights dim=2 complete
-    ap_int<15> StreamingConv_41_biases[32][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_41_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_41_biases dim=2 complete
     StreamingConv <
@@ -15724,7 +15777,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_41;
-    StreamingConv_41.run<520>(StreamingLineBuffer_44_out0_stream, StreamingConv_41_weights, StreamingConv_41_biases, StreamingConv_41_out0_stream);
+    StreamingConv_41.run<520, 3>(StreamingLineBuffer_44_out0_stream, StreamingConv_41_weights, StreamingConv_41_biases, StreamingConv_41_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_41_out0_stream_0," << StreamingConv_41_out0_stream[0].size() << std::endl;
     #endif
@@ -15744,7 +15797,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_40;
-    StreamingSwish_40.run<521>(StreamingConv_40_out0_stream, StreamingSwish_40_lut, StreamingSwish_40_out0_stream);
+    StreamingSwish_40.run<521, 3>(StreamingConv_40_out0_stream, StreamingSwish_40_lut, StreamingSwish_40_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_40_out0_stream_0," << StreamingSwish_40_out0_stream[0].size() << std::endl;
     #endif
@@ -15764,7 +15817,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_41;
-    StreamingSwish_41.run<522>(StreamingConv_41_out0_stream, StreamingSwish_41_lut, StreamingSwish_41_out0_stream);
+    StreamingSwish_41.run<522, 3>(StreamingConv_41_out0_stream, StreamingSwish_41_lut, StreamingSwish_41_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_41_out0_stream_0," << StreamingSwish_41_out0_stream[0].size() << std::endl;
     #endif
@@ -15785,7 +15838,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         4  // OUT_CH_PAR
     > BandwidthAdjustIncreaseChannels_6;
-    BandwidthAdjustIncreaseChannels_6.run<523>(StreamingSwish_41_out0_stream, BandwidthAdjustIncreaseChannels_6_out0_stream);
+    BandwidthAdjustIncreaseChannels_6.run<523, 3>(StreamingSwish_41_out0_stream, BandwidthAdjustIncreaseChannels_6_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseChannels_6_out0_stream_0," << BandwidthAdjustIncreaseChannels_6_out0_stream[0].size() << std::endl;
     #endif
@@ -15812,7 +15865,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_45_pixel_0;
-    StreamingLineBuffer_45_pixel_0.run<524>(StreamingSwish_40_out0_stream[1], StreamingLineBuffer_45_out0_stream_prepad[1]);
+    StreamingLineBuffer_45_pixel_0.run<524, 3>(StreamingSwish_40_out0_stream[1], StreamingLineBuffer_45_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_45_out0_stream_prepad_1," << StreamingLineBuffer_45_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -15836,7 +15889,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_45_pixel_1;
-    StreamingLineBuffer_45_pixel_1.run<525>(StreamingSwish_40_out0_stream[0], StreamingLineBuffer_45_out0_stream_prepad[0]);
+    StreamingLineBuffer_45_pixel_1.run<525, 3>(StreamingSwish_40_out0_stream[0], StreamingLineBuffer_45_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_45_out0_stream_prepad_0," << StreamingLineBuffer_45_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -15861,14 +15914,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_45_pad;
-    StreamingLineBuffer_45_pad.run<526>(StreamingLineBuffer_45_out0_stream_prepad, StreamingLineBuffer_45_out0_stream);
+    StreamingLineBuffer_45_pad.run<526, 3>(StreamingLineBuffer_45_out0_stream_prepad, StreamingLineBuffer_45_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_45_out0_stream_0," << StreamingLineBuffer_45_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_42_weights[1024][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_42_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_42_weights dim=2 complete
-    ap_int<13> StreamingConv_42_biases[32][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_42_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_42_biases dim=2 complete
     StreamingConv <
@@ -15899,7 +15950,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_42;
-    StreamingConv_42.run<527>(StreamingLineBuffer_45_out0_stream, StreamingConv_42_weights, StreamingConv_42_biases, StreamingConv_42_out0_stream);
+    StreamingConv_42.run<527, 3>(StreamingLineBuffer_45_out0_stream, StreamingConv_42_weights, StreamingConv_42_biases, StreamingConv_42_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_42_out0_stream_0," << StreamingConv_42_out0_stream[0].size() << std::endl;
     #endif
@@ -15919,7 +15970,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_42;
-    StreamingSwish_42.run<528>(StreamingConv_42_out0_stream, StreamingSwish_42_lut, StreamingSwish_42_out0_stream);
+    StreamingSwish_42.run<528, 3>(StreamingConv_42_out0_stream, StreamingSwish_42_lut, StreamingSwish_42_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_42_out0_stream_0," << StreamingSwish_42_out0_stream[0].size() << std::endl;
     #endif
@@ -15946,7 +15997,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_46_pixel_0;
-    StreamingLineBuffer_46_pixel_0.run<529>(StreamingSwish_42_out0_stream[0], StreamingLineBuffer_46_out0_stream_prepad[11], StreamingLineBuffer_46_buffer_stream[0]);
+    StreamingLineBuffer_46_pixel_0.run<529, 3>(StreamingSwish_42_out0_stream[0], StreamingLineBuffer_46_out0_stream_prepad[11], StreamingLineBuffer_46_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_46_out0_stream_prepad_11," << StreamingLineBuffer_46_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -15973,7 +16024,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_46_pixel_1;
-    StreamingLineBuffer_46_pixel_1.run<530>(StreamingSwish_42_out0_stream[1], StreamingLineBuffer_46_out0_stream_prepad[10], StreamingLineBuffer_46_buffer_stream[1]);
+    StreamingLineBuffer_46_pixel_1.run<530, 3>(StreamingSwish_42_out0_stream[1], StreamingLineBuffer_46_out0_stream_prepad[10], StreamingLineBuffer_46_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_46_out0_stream_prepad_10," << StreamingLineBuffer_46_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -16000,7 +16051,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_46_pixel_2;
-    StreamingLineBuffer_46_pixel_2.run<531>(StreamingLineBuffer_46_buffer_stream[0], StreamingLineBuffer_46_out0_stream_prepad[9], StreamingLineBuffer_46_buffer_stream[2]);
+    StreamingLineBuffer_46_pixel_2.run<531, 3>(StreamingLineBuffer_46_buffer_stream[0], StreamingLineBuffer_46_out0_stream_prepad[9], StreamingLineBuffer_46_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_46_out0_stream_prepad_9," << StreamingLineBuffer_46_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -16027,7 +16078,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_46_pixel_3;
-    StreamingLineBuffer_46_pixel_3.run<532>(StreamingLineBuffer_46_buffer_stream[1], StreamingLineBuffer_46_out0_stream_prepad[8], StreamingLineBuffer_46_buffer_stream[3]);
+    StreamingLineBuffer_46_pixel_3.run<532, 3>(StreamingLineBuffer_46_buffer_stream[1], StreamingLineBuffer_46_out0_stream_prepad[8], StreamingLineBuffer_46_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_46_out0_stream_prepad_8," << StreamingLineBuffer_46_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -16054,7 +16105,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_46_pixel_4;
-    StreamingLineBuffer_46_pixel_4.run<533>(StreamingLineBuffer_46_buffer_stream[2], StreamingLineBuffer_46_out0_stream_prepad[7], StreamingLineBuffer_46_buffer_stream[4]);
+    StreamingLineBuffer_46_pixel_4.run<533, 3>(StreamingLineBuffer_46_buffer_stream[2], StreamingLineBuffer_46_out0_stream_prepad[7], StreamingLineBuffer_46_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_46_out0_stream_prepad_7," << StreamingLineBuffer_46_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -16081,7 +16132,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_46_pixel_5;
-    StreamingLineBuffer_46_pixel_5.run<534>(StreamingLineBuffer_46_buffer_stream[3], StreamingLineBuffer_46_out0_stream_prepad[6], StreamingLineBuffer_46_buffer_stream[5]);
+    StreamingLineBuffer_46_pixel_5.run<534, 3>(StreamingLineBuffer_46_buffer_stream[3], StreamingLineBuffer_46_out0_stream_prepad[6], StreamingLineBuffer_46_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_46_out0_stream_prepad_6," << StreamingLineBuffer_46_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -16108,7 +16159,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_46_pixel_6;
-    StreamingLineBuffer_46_pixel_6.run<535>(StreamingLineBuffer_46_buffer_stream[4], StreamingLineBuffer_46_out0_stream_prepad[5], StreamingLineBuffer_46_buffer_stream[6]);
+    StreamingLineBuffer_46_pixel_6.run<535, 3>(StreamingLineBuffer_46_buffer_stream[4], StreamingLineBuffer_46_out0_stream_prepad[5], StreamingLineBuffer_46_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_46_out0_stream_prepad_5," << StreamingLineBuffer_46_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -16135,7 +16186,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_46_pixel_7;
-    StreamingLineBuffer_46_pixel_7.run<536>(StreamingLineBuffer_46_buffer_stream[5], StreamingLineBuffer_46_out0_stream_prepad[4], StreamingLineBuffer_46_buffer_stream[7]);
+    StreamingLineBuffer_46_pixel_7.run<536, 3>(StreamingLineBuffer_46_buffer_stream[5], StreamingLineBuffer_46_out0_stream_prepad[4], StreamingLineBuffer_46_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_46_out0_stream_prepad_4," << StreamingLineBuffer_46_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -16162,7 +16213,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_46_pixel_8;
-    StreamingLineBuffer_46_pixel_8.run<537>(StreamingLineBuffer_46_buffer_stream[6], StreamingLineBuffer_46_out0_stream_prepad[3], StreamingLineBuffer_46_buffer_stream[8]);
+    StreamingLineBuffer_46_pixel_8.run<537, 3>(StreamingLineBuffer_46_buffer_stream[6], StreamingLineBuffer_46_out0_stream_prepad[3], StreamingLineBuffer_46_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_46_out0_stream_prepad_3," << StreamingLineBuffer_46_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -16189,7 +16240,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_46_pixel_9;
-    StreamingLineBuffer_46_pixel_9.run<538>(StreamingLineBuffer_46_buffer_stream[7], StreamingLineBuffer_46_out0_stream_prepad[2], StreamingLineBuffer_46_buffer_stream[9]);
+    StreamingLineBuffer_46_pixel_9.run<538, 3>(StreamingLineBuffer_46_buffer_stream[7], StreamingLineBuffer_46_out0_stream_prepad[2], StreamingLineBuffer_46_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_46_out0_stream_prepad_2," << StreamingLineBuffer_46_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -16216,7 +16267,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_46_pixel_10;
-    StreamingLineBuffer_46_pixel_10.run<539>(StreamingLineBuffer_46_buffer_stream[8], StreamingLineBuffer_46_out0_stream_prepad[1]);
+    StreamingLineBuffer_46_pixel_10.run<539, 3>(StreamingLineBuffer_46_buffer_stream[8], StreamingLineBuffer_46_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_46_out0_stream_prepad_1," << StreamingLineBuffer_46_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -16240,7 +16291,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_46_pixel_11;
-    StreamingLineBuffer_46_pixel_11.run<540>(StreamingLineBuffer_46_buffer_stream[9], StreamingLineBuffer_46_out0_stream_prepad[0]);
+    StreamingLineBuffer_46_pixel_11.run<540, 3>(StreamingLineBuffer_46_buffer_stream[9], StreamingLineBuffer_46_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_46_out0_stream_prepad_0," << StreamingLineBuffer_46_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -16265,14 +16316,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_46_pad;
-    StreamingLineBuffer_46_pad.run<541>(StreamingLineBuffer_46_out0_stream_prepad, StreamingLineBuffer_46_out0_stream);
+    StreamingLineBuffer_46_pad.run<541, 3>(StreamingLineBuffer_46_out0_stream_prepad, StreamingLineBuffer_46_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_46_out0_stream_0," << StreamingLineBuffer_46_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_43_weights[1024][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_43_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_43_weights dim=2 complete
-    ap_int<15> StreamingConv_43_biases[32][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_43_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_43_biases dim=2 complete
     StreamingConv <
@@ -16303,7 +16352,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_43;
-    StreamingConv_43.run<542>(StreamingLineBuffer_46_out0_stream, StreamingConv_43_weights, StreamingConv_43_biases, StreamingConv_43_out0_stream);
+    StreamingConv_43.run<542, 3>(StreamingLineBuffer_46_out0_stream, StreamingConv_43_weights, StreamingConv_43_biases, StreamingConv_43_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_43_out0_stream_0," << StreamingConv_43_out0_stream[0].size() << std::endl;
     #endif
@@ -16323,7 +16372,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_43;
-    StreamingSwish_43.run<543>(StreamingConv_43_out0_stream, StreamingSwish_43_lut, StreamingSwish_43_out0_stream);
+    StreamingSwish_43.run<543, 3>(StreamingConv_43_out0_stream, StreamingSwish_43_lut, StreamingSwish_43_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_43_out0_stream_0," << StreamingSwish_43_out0_stream[0].size() << std::endl;
     #endif
@@ -16344,7 +16393,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         4  // OUT_CH_PAR
     > BandwidthAdjustIncreaseChannels_7;
-    BandwidthAdjustIncreaseChannels_7.run<544>(StreamingSwish_43_out0_stream, BandwidthAdjustIncreaseChannels_7_out0_stream);
+    BandwidthAdjustIncreaseChannels_7.run<544, 3>(StreamingSwish_43_out0_stream, BandwidthAdjustIncreaseChannels_7_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseChannels_7_out0_stream_0," << BandwidthAdjustIncreaseChannels_7_out0_stream[0].size() << std::endl;
     #endif
@@ -16364,7 +16413,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingConcat_10;
-    StreamingConcat_10.run<545>(BandwidthAdjustIncreaseChannels_7_out0_stream, BandwidthAdjustIncreaseChannels_6_out0_stream, StreamingConcat_10_out0_stream);
+    StreamingConcat_10.run<545, 3>(BandwidthAdjustIncreaseChannels_7_out0_stream, BandwidthAdjustIncreaseChannels_6_out0_stream, StreamingConcat_10_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_10_out0_stream_0," << StreamingConcat_10_out0_stream[0].size() << std::endl;
     #endif
@@ -16391,7 +16440,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_47_pixel_0;
-    StreamingLineBuffer_47_pixel_0.run<546>(StreamingConcat_10_out0_stream[1], StreamingLineBuffer_47_out0_stream_prepad[1]);
+    StreamingLineBuffer_47_pixel_0.run<546, 3>(StreamingConcat_10_out0_stream[1], StreamingLineBuffer_47_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_47_out0_stream_prepad_1," << StreamingLineBuffer_47_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -16415,7 +16464,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_47_pixel_1;
-    StreamingLineBuffer_47_pixel_1.run<547>(StreamingConcat_10_out0_stream[0], StreamingLineBuffer_47_out0_stream_prepad[0]);
+    StreamingLineBuffer_47_pixel_1.run<547, 3>(StreamingConcat_10_out0_stream[0], StreamingLineBuffer_47_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_47_out0_stream_prepad_0," << StreamingLineBuffer_47_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -16440,14 +16489,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_47_pad;
-    StreamingLineBuffer_47_pad.run<548>(StreamingLineBuffer_47_out0_stream_prepad, StreamingLineBuffer_47_out0_stream);
+    StreamingLineBuffer_47_pad.run<548, 3>(StreamingLineBuffer_47_out0_stream_prepad, StreamingLineBuffer_47_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_47_out0_stream_0," << StreamingLineBuffer_47_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_44_weights[1024][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_44_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_44_weights dim=2 complete
-    ap_int<15> StreamingConv_44_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_44_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_44_biases dim=2 complete
     StreamingConv <
@@ -16478,7 +16525,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_44;
-    StreamingConv_44.run<549>(StreamingLineBuffer_47_out0_stream, StreamingConv_44_weights, StreamingConv_44_biases, StreamingConv_44_out0_stream);
+    StreamingConv_44.run<549, 3>(StreamingLineBuffer_47_out0_stream, StreamingConv_44_weights, StreamingConv_44_biases, StreamingConv_44_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_44_out0_stream_0," << StreamingConv_44_out0_stream[0].size() << std::endl;
     #endif
@@ -16498,7 +16545,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_44;
-    StreamingSwish_44.run<550>(StreamingConv_44_out0_stream, StreamingSwish_44_lut, StreamingSwish_44_out0_stream);
+    StreamingSwish_44.run<550, 3>(StreamingConv_44_out0_stream, StreamingSwish_44_lut, StreamingSwish_44_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_44_out0_stream_0," << StreamingSwish_44_out0_stream[0].size() << std::endl;
     #endif
@@ -16513,7 +16560,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_20;
-    TensorDuplicator_20.run<551>(StreamingSwish_44_out0_stream, TensorDuplicator_20_out0_stream, TensorDuplicator_20_out1_stream);
+    TensorDuplicator_20.run<551, 3>(StreamingSwish_44_out0_stream, TensorDuplicator_20_out0_stream, TensorDuplicator_20_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_20_out0_stream_0," << TensorDuplicator_20_out0_stream[0].size() << std::endl;
     #endif
@@ -16534,7 +16581,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_21;
-    TensorDuplicator_21.run<552>(TensorDuplicator_20_out0_stream, TensorDuplicator_21_out0_stream, TensorDuplicator_21_out1_stream);
+    TensorDuplicator_21.run<552, 3>(TensorDuplicator_20_out0_stream, TensorDuplicator_21_out0_stream, TensorDuplicator_21_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_21_out0_stream_0," << TensorDuplicator_21_out0_stream[0].size() << std::endl;
     #endif
@@ -16567,7 +16614,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_48_pixel_0;
-    StreamingLineBuffer_48_pixel_0.run<553>(TensorDuplicator_20_out1_stream[0], StreamingLineBuffer_48_out0_stream_prepad[11], StreamingLineBuffer_48_buffer_stream[0]);
+    StreamingLineBuffer_48_pixel_0.run<553, 3>(TensorDuplicator_20_out1_stream[0], StreamingLineBuffer_48_out0_stream_prepad[11], StreamingLineBuffer_48_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_48_out0_stream_prepad_11," << StreamingLineBuffer_48_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -16594,7 +16641,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_48_pixel_1;
-    StreamingLineBuffer_48_pixel_1.run<554>(TensorDuplicator_20_out1_stream[1], StreamingLineBuffer_48_out0_stream_prepad[10], StreamingLineBuffer_48_buffer_stream[1]);
+    StreamingLineBuffer_48_pixel_1.run<554, 3>(TensorDuplicator_20_out1_stream[1], StreamingLineBuffer_48_out0_stream_prepad[10], StreamingLineBuffer_48_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_48_out0_stream_prepad_10," << StreamingLineBuffer_48_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -16621,7 +16668,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_48_pixel_2;
-    StreamingLineBuffer_48_pixel_2.run<555>(StreamingLineBuffer_48_buffer_stream[0], StreamingLineBuffer_48_out0_stream_prepad[9], StreamingLineBuffer_48_buffer_stream[2]);
+    StreamingLineBuffer_48_pixel_2.run<555, 3>(StreamingLineBuffer_48_buffer_stream[0], StreamingLineBuffer_48_out0_stream_prepad[9], StreamingLineBuffer_48_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_48_out0_stream_prepad_9," << StreamingLineBuffer_48_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -16648,7 +16695,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_48_pixel_3;
-    StreamingLineBuffer_48_pixel_3.run<556>(StreamingLineBuffer_48_buffer_stream[1], StreamingLineBuffer_48_out0_stream_prepad[8], StreamingLineBuffer_48_buffer_stream[3]);
+    StreamingLineBuffer_48_pixel_3.run<556, 3>(StreamingLineBuffer_48_buffer_stream[1], StreamingLineBuffer_48_out0_stream_prepad[8], StreamingLineBuffer_48_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_48_out0_stream_prepad_8," << StreamingLineBuffer_48_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -16675,7 +16722,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_0;
-    StreamingLineBuffer_49_pixel_0.run<567>(TensorDuplicator_21_out0_stream[1], StreamingLineBuffer_49_out0_stream_prepad[14], StreamingLineBuffer_49_buffer_stream[0]);
+    StreamingLineBuffer_49_pixel_0.run<567, 3>(TensorDuplicator_21_out0_stream[1], StreamingLineBuffer_49_out0_stream_prepad[14], StreamingLineBuffer_49_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_14," << StreamingLineBuffer_49_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -16702,7 +16749,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_1;
-    StreamingLineBuffer_49_pixel_1.run<568>(TensorDuplicator_21_out0_stream[0], StreamingLineBuffer_49_out0_stream_prepad[13], StreamingLineBuffer_49_buffer_stream[1]);
+    StreamingLineBuffer_49_pixel_1.run<568, 3>(TensorDuplicator_21_out0_stream[0], StreamingLineBuffer_49_out0_stream_prepad[13], StreamingLineBuffer_49_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_13," << StreamingLineBuffer_49_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -16729,7 +16776,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_50_pixel_0;
-    StreamingLineBuffer_50_pixel_0.run<583>(TensorDuplicator_21_out1_stream[0], StreamingLineBuffer_50_out0_stream_prepad[11], StreamingLineBuffer_50_buffer_stream[0]);
+    StreamingLineBuffer_50_pixel_0.run<583, 3>(TensorDuplicator_21_out1_stream[0], StreamingLineBuffer_50_out0_stream_prepad[11], StreamingLineBuffer_50_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_50_out0_stream_prepad_11," << StreamingLineBuffer_50_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -16756,7 +16803,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_50_pixel_1;
-    StreamingLineBuffer_50_pixel_1.run<584>(TensorDuplicator_21_out1_stream[1], StreamingLineBuffer_50_out0_stream_prepad[10], StreamingLineBuffer_50_buffer_stream[1]);
+    StreamingLineBuffer_50_pixel_1.run<584, 3>(TensorDuplicator_21_out1_stream[1], StreamingLineBuffer_50_out0_stream_prepad[10], StreamingLineBuffer_50_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_50_out0_stream_prepad_10," << StreamingLineBuffer_50_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -16783,7 +16830,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_48_pixel_4;
-    StreamingLineBuffer_48_pixel_4.run<557>(StreamingLineBuffer_48_buffer_stream[2], StreamingLineBuffer_48_out0_stream_prepad[7], StreamingLineBuffer_48_buffer_stream[4]);
+    StreamingLineBuffer_48_pixel_4.run<557, 3>(StreamingLineBuffer_48_buffer_stream[2], StreamingLineBuffer_48_out0_stream_prepad[7], StreamingLineBuffer_48_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_48_out0_stream_prepad_7," << StreamingLineBuffer_48_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -16810,7 +16857,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_48_pixel_5;
-    StreamingLineBuffer_48_pixel_5.run<558>(StreamingLineBuffer_48_buffer_stream[3], StreamingLineBuffer_48_out0_stream_prepad[6], StreamingLineBuffer_48_buffer_stream[5]);
+    StreamingLineBuffer_48_pixel_5.run<558, 3>(StreamingLineBuffer_48_buffer_stream[3], StreamingLineBuffer_48_out0_stream_prepad[6], StreamingLineBuffer_48_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_48_out0_stream_prepad_6," << StreamingLineBuffer_48_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -16837,7 +16884,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_2;
-    StreamingLineBuffer_49_pixel_2.run<569>(StreamingLineBuffer_49_buffer_stream[0], StreamingLineBuffer_49_out0_stream_prepad[12], StreamingLineBuffer_49_buffer_stream[2]);
+    StreamingLineBuffer_49_pixel_2.run<569, 3>(StreamingLineBuffer_49_buffer_stream[0], StreamingLineBuffer_49_out0_stream_prepad[12], StreamingLineBuffer_49_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_12," << StreamingLineBuffer_49_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -16864,7 +16911,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_3;
-    StreamingLineBuffer_49_pixel_3.run<570>(StreamingLineBuffer_49_buffer_stream[1], StreamingLineBuffer_49_out0_stream_prepad[11], StreamingLineBuffer_49_buffer_stream[4]);
+    StreamingLineBuffer_49_pixel_3.run<570, 3>(StreamingLineBuffer_49_buffer_stream[1], StreamingLineBuffer_49_out0_stream_prepad[11], StreamingLineBuffer_49_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_11," << StreamingLineBuffer_49_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -16891,7 +16938,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_50_pixel_2;
-    StreamingLineBuffer_50_pixel_2.run<585>(StreamingLineBuffer_50_buffer_stream[0], StreamingLineBuffer_50_out0_stream_prepad[9], StreamingLineBuffer_50_buffer_stream[2]);
+    StreamingLineBuffer_50_pixel_2.run<585, 3>(StreamingLineBuffer_50_buffer_stream[0], StreamingLineBuffer_50_out0_stream_prepad[9], StreamingLineBuffer_50_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_50_out0_stream_prepad_9," << StreamingLineBuffer_50_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -16918,7 +16965,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_50_pixel_3;
-    StreamingLineBuffer_50_pixel_3.run<586>(StreamingLineBuffer_50_buffer_stream[1], StreamingLineBuffer_50_out0_stream_prepad[8], StreamingLineBuffer_50_buffer_stream[3]);
+    StreamingLineBuffer_50_pixel_3.run<586, 3>(StreamingLineBuffer_50_buffer_stream[1], StreamingLineBuffer_50_out0_stream_prepad[8], StreamingLineBuffer_50_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_50_out0_stream_prepad_8," << StreamingLineBuffer_50_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -16945,7 +16992,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_48_pixel_6;
-    StreamingLineBuffer_48_pixel_6.run<559>(StreamingLineBuffer_48_buffer_stream[4], StreamingLineBuffer_48_out0_stream_prepad[5], StreamingLineBuffer_48_buffer_stream[6]);
+    StreamingLineBuffer_48_pixel_6.run<559, 3>(StreamingLineBuffer_48_buffer_stream[4], StreamingLineBuffer_48_out0_stream_prepad[5], StreamingLineBuffer_48_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_48_out0_stream_prepad_5," << StreamingLineBuffer_48_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -16972,7 +17019,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_48_pixel_7;
-    StreamingLineBuffer_48_pixel_7.run<560>(StreamingLineBuffer_48_buffer_stream[5], StreamingLineBuffer_48_out0_stream_prepad[4], StreamingLineBuffer_48_buffer_stream[7]);
+    StreamingLineBuffer_48_pixel_7.run<560, 3>(StreamingLineBuffer_48_buffer_stream[5], StreamingLineBuffer_48_out0_stream_prepad[4], StreamingLineBuffer_48_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_48_out0_stream_prepad_4," << StreamingLineBuffer_48_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -16999,7 +17046,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_4;
-    StreamingLineBuffer_49_pixel_4.run<571>(StreamingLineBuffer_49_buffer_stream[2], StreamingLineBuffer_49_out0_stream_prepad[10], StreamingLineBuffer_49_buffer_stream[3]);
+    StreamingLineBuffer_49_pixel_4.run<571, 3>(StreamingLineBuffer_49_buffer_stream[2], StreamingLineBuffer_49_out0_stream_prepad[10], StreamingLineBuffer_49_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_10," << StreamingLineBuffer_49_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -17026,7 +17073,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_6;
-    StreamingLineBuffer_49_pixel_6.run<573>(StreamingLineBuffer_49_buffer_stream[4], StreamingLineBuffer_49_out0_stream_prepad[8], StreamingLineBuffer_49_buffer_stream[6]);
+    StreamingLineBuffer_49_pixel_6.run<573, 3>(StreamingLineBuffer_49_buffer_stream[4], StreamingLineBuffer_49_out0_stream_prepad[8], StreamingLineBuffer_49_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_8," << StreamingLineBuffer_49_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -17053,7 +17100,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_50_pixel_4;
-    StreamingLineBuffer_50_pixel_4.run<587>(StreamingLineBuffer_50_buffer_stream[2], StreamingLineBuffer_50_out0_stream_prepad[7], StreamingLineBuffer_50_buffer_stream[4]);
+    StreamingLineBuffer_50_pixel_4.run<587, 3>(StreamingLineBuffer_50_buffer_stream[2], StreamingLineBuffer_50_out0_stream_prepad[7], StreamingLineBuffer_50_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_50_out0_stream_prepad_7," << StreamingLineBuffer_50_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -17080,7 +17127,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_50_pixel_5;
-    StreamingLineBuffer_50_pixel_5.run<588>(StreamingLineBuffer_50_buffer_stream[3], StreamingLineBuffer_50_out0_stream_prepad[6], StreamingLineBuffer_50_buffer_stream[5]);
+    StreamingLineBuffer_50_pixel_5.run<588, 3>(StreamingLineBuffer_50_buffer_stream[3], StreamingLineBuffer_50_out0_stream_prepad[6], StreamingLineBuffer_50_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_50_out0_stream_prepad_6," << StreamingLineBuffer_50_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -17107,7 +17154,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_48_pixel_8;
-    StreamingLineBuffer_48_pixel_8.run<561>(StreamingLineBuffer_48_buffer_stream[6], StreamingLineBuffer_48_out0_stream_prepad[3], StreamingLineBuffer_48_buffer_stream[8]);
+    StreamingLineBuffer_48_pixel_8.run<561, 3>(StreamingLineBuffer_48_buffer_stream[6], StreamingLineBuffer_48_out0_stream_prepad[3], StreamingLineBuffer_48_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_48_out0_stream_prepad_3," << StreamingLineBuffer_48_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -17134,7 +17181,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_48_pixel_9;
-    StreamingLineBuffer_48_pixel_9.run<562>(StreamingLineBuffer_48_buffer_stream[7], StreamingLineBuffer_48_out0_stream_prepad[2], StreamingLineBuffer_48_buffer_stream[9]);
+    StreamingLineBuffer_48_pixel_9.run<562, 3>(StreamingLineBuffer_48_buffer_stream[7], StreamingLineBuffer_48_out0_stream_prepad[2], StreamingLineBuffer_48_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_48_out0_stream_prepad_2," << StreamingLineBuffer_48_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -17161,7 +17208,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_5;
-    StreamingLineBuffer_49_pixel_5.run<572>(StreamingLineBuffer_49_buffer_stream[3], StreamingLineBuffer_49_out0_stream_prepad[9], StreamingLineBuffer_49_buffer_stream[5]);
+    StreamingLineBuffer_49_pixel_5.run<572, 3>(StreamingLineBuffer_49_buffer_stream[3], StreamingLineBuffer_49_out0_stream_prepad[9], StreamingLineBuffer_49_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_9," << StreamingLineBuffer_49_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -17188,7 +17235,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_8;
-    StreamingLineBuffer_49_pixel_8.run<575>(StreamingLineBuffer_49_buffer_stream[6], StreamingLineBuffer_49_out0_stream_prepad[6], StreamingLineBuffer_49_buffer_stream[9]);
+    StreamingLineBuffer_49_pixel_8.run<575, 3>(StreamingLineBuffer_49_buffer_stream[6], StreamingLineBuffer_49_out0_stream_prepad[6], StreamingLineBuffer_49_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_6," << StreamingLineBuffer_49_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -17215,7 +17262,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_50_pixel_6;
-    StreamingLineBuffer_50_pixel_6.run<589>(StreamingLineBuffer_50_buffer_stream[4], StreamingLineBuffer_50_out0_stream_prepad[5], StreamingLineBuffer_50_buffer_stream[6]);
+    StreamingLineBuffer_50_pixel_6.run<589, 3>(StreamingLineBuffer_50_buffer_stream[4], StreamingLineBuffer_50_out0_stream_prepad[5], StreamingLineBuffer_50_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_50_out0_stream_prepad_5," << StreamingLineBuffer_50_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -17242,7 +17289,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_50_pixel_7;
-    StreamingLineBuffer_50_pixel_7.run<590>(StreamingLineBuffer_50_buffer_stream[5], StreamingLineBuffer_50_out0_stream_prepad[4], StreamingLineBuffer_50_buffer_stream[7]);
+    StreamingLineBuffer_50_pixel_7.run<590, 3>(StreamingLineBuffer_50_buffer_stream[5], StreamingLineBuffer_50_out0_stream_prepad[4], StreamingLineBuffer_50_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_50_out0_stream_prepad_4," << StreamingLineBuffer_50_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -17269,7 +17316,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_48_pixel_10;
-    StreamingLineBuffer_48_pixel_10.run<563>(StreamingLineBuffer_48_buffer_stream[8], StreamingLineBuffer_48_out0_stream_prepad[1]);
+    StreamingLineBuffer_48_pixel_10.run<563, 3>(StreamingLineBuffer_48_buffer_stream[8], StreamingLineBuffer_48_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_48_out0_stream_prepad_1," << StreamingLineBuffer_48_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -17293,7 +17340,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_48_pixel_11;
-    StreamingLineBuffer_48_pixel_11.run<564>(StreamingLineBuffer_48_buffer_stream[9], StreamingLineBuffer_48_out0_stream_prepad[0]);
+    StreamingLineBuffer_48_pixel_11.run<564, 3>(StreamingLineBuffer_48_buffer_stream[9], StreamingLineBuffer_48_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_48_out0_stream_prepad_0," << StreamingLineBuffer_48_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -17317,7 +17364,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_7;
-    StreamingLineBuffer_49_pixel_7.run<574>(StreamingLineBuffer_49_buffer_stream[5], StreamingLineBuffer_49_out0_stream_prepad[7], StreamingLineBuffer_49_buffer_stream[7]);
+    StreamingLineBuffer_49_pixel_7.run<574, 3>(StreamingLineBuffer_49_buffer_stream[5], StreamingLineBuffer_49_out0_stream_prepad[7], StreamingLineBuffer_49_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_7," << StreamingLineBuffer_49_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -17344,7 +17391,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_11;
-    StreamingLineBuffer_49_pixel_11.run<578>(StreamingLineBuffer_49_buffer_stream[9], StreamingLineBuffer_49_out0_stream_prepad[3], StreamingLineBuffer_49_buffer_stream[11]);
+    StreamingLineBuffer_49_pixel_11.run<578, 3>(StreamingLineBuffer_49_buffer_stream[9], StreamingLineBuffer_49_out0_stream_prepad[3], StreamingLineBuffer_49_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_3," << StreamingLineBuffer_49_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -17371,7 +17418,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_50_pixel_8;
-    StreamingLineBuffer_50_pixel_8.run<591>(StreamingLineBuffer_50_buffer_stream[6], StreamingLineBuffer_50_out0_stream_prepad[3], StreamingLineBuffer_50_buffer_stream[8]);
+    StreamingLineBuffer_50_pixel_8.run<591, 3>(StreamingLineBuffer_50_buffer_stream[6], StreamingLineBuffer_50_out0_stream_prepad[3], StreamingLineBuffer_50_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_50_out0_stream_prepad_3," << StreamingLineBuffer_50_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -17398,7 +17445,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_50_pixel_9;
-    StreamingLineBuffer_50_pixel_9.run<592>(StreamingLineBuffer_50_buffer_stream[7], StreamingLineBuffer_50_out0_stream_prepad[2], StreamingLineBuffer_50_buffer_stream[9]);
+    StreamingLineBuffer_50_pixel_9.run<592, 3>(StreamingLineBuffer_50_buffer_stream[7], StreamingLineBuffer_50_out0_stream_prepad[2], StreamingLineBuffer_50_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_50_out0_stream_prepad_2," << StreamingLineBuffer_50_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -17426,7 +17473,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_48_pad;
-    StreamingLineBuffer_48_pad.run<565>(StreamingLineBuffer_48_out0_stream_prepad, StreamingLineBuffer_48_out0_stream);
+    StreamingLineBuffer_48_pad.run<565, 3>(StreamingLineBuffer_48_out0_stream_prepad, StreamingLineBuffer_48_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_48_out0_stream_0," << StreamingLineBuffer_48_out0_stream[0].size() << std::endl;
     #endif
@@ -17450,7 +17497,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_9;
-    StreamingLineBuffer_49_pixel_9.run<576>(StreamingLineBuffer_49_buffer_stream[7], StreamingLineBuffer_49_out0_stream_prepad[5], StreamingLineBuffer_49_buffer_stream[8]);
+    StreamingLineBuffer_49_pixel_9.run<576, 3>(StreamingLineBuffer_49_buffer_stream[7], StreamingLineBuffer_49_out0_stream_prepad[5], StreamingLineBuffer_49_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_5," << StreamingLineBuffer_49_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -17477,7 +17524,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_13;
-    StreamingLineBuffer_49_pixel_13.run<580>(StreamingLineBuffer_49_buffer_stream[11], StreamingLineBuffer_49_out0_stream_prepad[1]);
+    StreamingLineBuffer_49_pixel_13.run<580, 3>(StreamingLineBuffer_49_buffer_stream[11], StreamingLineBuffer_49_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_1," << StreamingLineBuffer_49_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -17501,7 +17548,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_50_pixel_10;
-    StreamingLineBuffer_50_pixel_10.run<593>(StreamingLineBuffer_50_buffer_stream[8], StreamingLineBuffer_50_out0_stream_prepad[1]);
+    StreamingLineBuffer_50_pixel_10.run<593, 3>(StreamingLineBuffer_50_buffer_stream[8], StreamingLineBuffer_50_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_50_out0_stream_prepad_1," << StreamingLineBuffer_50_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -17525,14 +17572,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_50_pixel_11;
-    StreamingLineBuffer_50_pixel_11.run<594>(StreamingLineBuffer_50_buffer_stream[9], StreamingLineBuffer_50_out0_stream_prepad[0]);
+    StreamingLineBuffer_50_pixel_11.run<594, 3>(StreamingLineBuffer_50_buffer_stream[9], StreamingLineBuffer_50_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_50_out0_stream_prepad_0," << StreamingLineBuffer_50_out0_stream_prepad[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_45_weights[1024][5][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_45_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_45_weights dim=2 complete
-    ap_int<15> StreamingConv_45_biases[16][5][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_45_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_45_biases dim=2 complete
     StreamingConv <
@@ -17563,7 +17608,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         5,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_45;
-    StreamingConv_45.run<566>(StreamingLineBuffer_48_out0_stream, StreamingConv_45_weights, StreamingConv_45_biases, StreamingConv_45_out0_stream);
+    StreamingConv_45.run<566, 3>(StreamingLineBuffer_48_out0_stream, StreamingConv_45_weights, StreamingConv_45_biases, StreamingConv_45_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_45_out0_stream_0," << StreamingConv_45_out0_stream[0].size() << std::endl;
     #endif
@@ -17590,7 +17635,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_10;
-    StreamingLineBuffer_49_pixel_10.run<577>(StreamingLineBuffer_49_buffer_stream[8], StreamingLineBuffer_49_out0_stream_prepad[4], StreamingLineBuffer_49_buffer_stream[10]);
+    StreamingLineBuffer_49_pixel_10.run<577, 3>(StreamingLineBuffer_49_buffer_stream[8], StreamingLineBuffer_49_out0_stream_prepad[4], StreamingLineBuffer_49_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_4," << StreamingLineBuffer_49_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -17618,7 +17663,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_50_pad;
-    StreamingLineBuffer_50_pad.run<595>(StreamingLineBuffer_50_out0_stream_prepad, StreamingLineBuffer_50_out0_stream);
+    StreamingLineBuffer_50_pad.run<595, 3>(StreamingLineBuffer_50_out0_stream_prepad, StreamingLineBuffer_50_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_50_out0_stream_0," << StreamingLineBuffer_50_out0_stream[0].size() << std::endl;
     #endif
@@ -17642,17 +17687,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_12;
-    StreamingLineBuffer_49_pixel_12.run<579>(StreamingLineBuffer_49_buffer_stream[10], StreamingLineBuffer_49_out0_stream_prepad[2], StreamingLineBuffer_49_buffer_stream[12]);
+    StreamingLineBuffer_49_pixel_12.run<579, 3>(StreamingLineBuffer_49_buffer_stream[10], StreamingLineBuffer_49_out0_stream_prepad[2], StreamingLineBuffer_49_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_2," << StreamingLineBuffer_49_out0_stream_prepad[2].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_buffer_stream_12," << StreamingLineBuffer_49_buffer_stream[12].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_47_weights[1024][4][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_47_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_47_weights dim=2 complete
-    ap_int<14> StreamingConv_47_biases[16][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_47_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_47_biases dim=2 complete
     StreamingConv <
@@ -17683,7 +17726,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_47;
-    StreamingConv_47.run<597>(StreamingLineBuffer_50_out0_stream, StreamingConv_47_weights, StreamingConv_47_biases, StreamingConv_47_out0_stream);
+    StreamingConv_47.run<597, 3>(StreamingLineBuffer_50_out0_stream, StreamingConv_47_weights, StreamingConv_47_biases, StreamingConv_47_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_47_out0_stream_0," << StreamingConv_47_out0_stream[0].size() << std::endl;
     #endif
@@ -17703,7 +17746,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         5,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_45;
-    StreamingSwish_45.run<598>(StreamingConv_45_out0_stream, StreamingSwish_45_lut, StreamingSwish_45_out0_stream);
+    StreamingSwish_45.run<598, 3>(StreamingConv_45_out0_stream, StreamingSwish_45_lut, StreamingSwish_45_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_45_out0_stream_0," << StreamingSwish_45_out0_stream[0].size() << std::endl;
     #endif
@@ -17730,7 +17773,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_49_pixel_14;
-    StreamingLineBuffer_49_pixel_14.run<581>(StreamingLineBuffer_49_buffer_stream[12], StreamingLineBuffer_49_out0_stream_prepad[0]);
+    StreamingLineBuffer_49_pixel_14.run<581, 3>(StreamingLineBuffer_49_buffer_stream[12], StreamingLineBuffer_49_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_prepad_0," << StreamingLineBuffer_49_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -17747,7 +17790,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_47;
-    StreamingSwish_47.run<600>(StreamingConv_47_out0_stream, StreamingSwish_47_lut, StreamingSwish_47_out0_stream);
+    StreamingSwish_47.run<600, 3>(StreamingConv_47_out0_stream, StreamingSwish_47_lut, StreamingSwish_47_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_47_out0_stream_0," << StreamingSwish_47_out0_stream[0].size() << std::endl;
     #endif
@@ -17768,7 +17811,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         5,  // IN_CH_PAR
         1  // OUT_CH_PAR
     > BandwidthAdjustDecreaseChannels_6;
-    BandwidthAdjustDecreaseChannels_6.run<601>(StreamingSwish_45_out0_stream, BandwidthAdjustDecreaseChannels_6_out0_stream);
+    BandwidthAdjustDecreaseChannels_6.run<601, 3>(StreamingSwish_45_out0_stream, BandwidthAdjustDecreaseChannels_6_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseChannels_6_out0_stream_0," << BandwidthAdjustDecreaseChannels_6_out0_stream[0].size() << std::endl;
     #endif
@@ -17796,7 +17839,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_49_pad;
-    StreamingLineBuffer_49_pad.run<582>(StreamingLineBuffer_49_out0_stream_prepad, StreamingLineBuffer_49_out0_stream);
+    StreamingLineBuffer_49_pad.run<582, 3>(StreamingLineBuffer_49_out0_stream_prepad, StreamingLineBuffer_49_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_49_out0_stream_0," << StreamingLineBuffer_49_out0_stream[0].size() << std::endl;
     #endif
@@ -17814,7 +17857,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         4  // OUT_CH_PAR
     > BandwidthAdjustIncreaseChannels_8;
-    BandwidthAdjustIncreaseChannels_8.run<602>(BandwidthAdjustDecreaseChannels_6_out0_stream, BandwidthAdjustIncreaseChannels_8_out0_stream);
+    BandwidthAdjustIncreaseChannels_8.run<602, 3>(BandwidthAdjustDecreaseChannels_6_out0_stream, BandwidthAdjustIncreaseChannels_8_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseChannels_8_out0_stream_0," << BandwidthAdjustIncreaseChannels_8_out0_stream[0].size() << std::endl;
     #endif
@@ -17841,7 +17884,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_51_pixel_0;
-    StreamingLineBuffer_51_pixel_0.run<604>(StreamingSwish_47_out0_stream[0], StreamingLineBuffer_51_out0_stream_prepad[11], StreamingLineBuffer_51_buffer_stream[0]);
+    StreamingLineBuffer_51_pixel_0.run<604, 3>(StreamingSwish_47_out0_stream[0], StreamingLineBuffer_51_out0_stream_prepad[11], StreamingLineBuffer_51_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_51_out0_stream_prepad_11," << StreamingLineBuffer_51_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -17868,17 +17911,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_51_pixel_1;
-    StreamingLineBuffer_51_pixel_1.run<605>(StreamingSwish_47_out0_stream[1], StreamingLineBuffer_51_out0_stream_prepad[10], StreamingLineBuffer_51_buffer_stream[1]);
+    StreamingLineBuffer_51_pixel_1.run<605, 3>(StreamingSwish_47_out0_stream[1], StreamingLineBuffer_51_out0_stream_prepad[10], StreamingLineBuffer_51_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_51_out0_stream_prepad_10," << StreamingLineBuffer_51_out0_stream_prepad[10].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_51_buffer_stream_1," << StreamingLineBuffer_51_buffer_stream[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_46_weights[4096][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_46_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_46_weights dim=2 complete
-    ap_int<15> StreamingConv_46_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_46_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_46_biases dim=2 complete
     StreamingConv <
@@ -17909,7 +17950,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_46;
-    StreamingConv_46.run<596>(StreamingLineBuffer_49_out0_stream, StreamingConv_46_weights, StreamingConv_46_biases, StreamingConv_46_out0_stream);
+    StreamingConv_46.run<596, 3>(StreamingLineBuffer_49_out0_stream, StreamingConv_46_weights, StreamingConv_46_biases, StreamingConv_46_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_46_out0_stream_0," << StreamingConv_46_out0_stream[0].size() << std::endl;
     #endif
@@ -17936,7 +17977,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_51_pixel_2;
-    StreamingLineBuffer_51_pixel_2.run<606>(StreamingLineBuffer_51_buffer_stream[0], StreamingLineBuffer_51_out0_stream_prepad[9], StreamingLineBuffer_51_buffer_stream[2]);
+    StreamingLineBuffer_51_pixel_2.run<606, 3>(StreamingLineBuffer_51_buffer_stream[0], StreamingLineBuffer_51_out0_stream_prepad[9], StreamingLineBuffer_51_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_51_out0_stream_prepad_9," << StreamingLineBuffer_51_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -17963,7 +18004,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_51_pixel_3;
-    StreamingLineBuffer_51_pixel_3.run<607>(StreamingLineBuffer_51_buffer_stream[1], StreamingLineBuffer_51_out0_stream_prepad[8], StreamingLineBuffer_51_buffer_stream[3]);
+    StreamingLineBuffer_51_pixel_3.run<607, 3>(StreamingLineBuffer_51_buffer_stream[1], StreamingLineBuffer_51_out0_stream_prepad[8], StreamingLineBuffer_51_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_51_out0_stream_prepad_8," << StreamingLineBuffer_51_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -17990,7 +18031,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_52_pixel_0;
-    StreamingLineBuffer_52_pixel_0.run<619>(BandwidthAdjustIncreaseChannels_8_out0_stream[0], StreamingLineBuffer_52_out0_stream_prepad[11], StreamingLineBuffer_52_buffer_stream[0]);
+    StreamingLineBuffer_52_pixel_0.run<619, 3>(BandwidthAdjustIncreaseChannels_8_out0_stream[0], StreamingLineBuffer_52_out0_stream_prepad[11], StreamingLineBuffer_52_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_52_out0_stream_prepad_11," << StreamingLineBuffer_52_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -18017,7 +18058,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_52_pixel_1;
-    StreamingLineBuffer_52_pixel_1.run<620>(BandwidthAdjustIncreaseChannels_8_out0_stream[1], StreamingLineBuffer_52_out0_stream_prepad[10], StreamingLineBuffer_52_buffer_stream[1]);
+    StreamingLineBuffer_52_pixel_1.run<620, 3>(BandwidthAdjustIncreaseChannels_8_out0_stream[1], StreamingLineBuffer_52_out0_stream_prepad[10], StreamingLineBuffer_52_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_52_out0_stream_prepad_10," << StreamingLineBuffer_52_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -18037,7 +18078,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_46;
-    StreamingSwish_46.run<599>(StreamingConv_46_out0_stream, StreamingSwish_46_lut, StreamingSwish_46_out0_stream);
+    StreamingSwish_46.run<599, 3>(StreamingConv_46_out0_stream, StreamingSwish_46_lut, StreamingSwish_46_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_46_out0_stream_0," << StreamingSwish_46_out0_stream[0].size() << std::endl;
     #endif
@@ -18064,7 +18105,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_51_pixel_4;
-    StreamingLineBuffer_51_pixel_4.run<608>(StreamingLineBuffer_51_buffer_stream[2], StreamingLineBuffer_51_out0_stream_prepad[7], StreamingLineBuffer_51_buffer_stream[4]);
+    StreamingLineBuffer_51_pixel_4.run<608, 3>(StreamingLineBuffer_51_buffer_stream[2], StreamingLineBuffer_51_out0_stream_prepad[7], StreamingLineBuffer_51_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_51_out0_stream_prepad_7," << StreamingLineBuffer_51_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -18091,7 +18132,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_51_pixel_5;
-    StreamingLineBuffer_51_pixel_5.run<609>(StreamingLineBuffer_51_buffer_stream[3], StreamingLineBuffer_51_out0_stream_prepad[6], StreamingLineBuffer_51_buffer_stream[5]);
+    StreamingLineBuffer_51_pixel_5.run<609, 3>(StreamingLineBuffer_51_buffer_stream[3], StreamingLineBuffer_51_out0_stream_prepad[6], StreamingLineBuffer_51_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_51_out0_stream_prepad_6," << StreamingLineBuffer_51_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -18118,7 +18159,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_52_pixel_2;
-    StreamingLineBuffer_52_pixel_2.run<621>(StreamingLineBuffer_52_buffer_stream[0], StreamingLineBuffer_52_out0_stream_prepad[9], StreamingLineBuffer_52_buffer_stream[2]);
+    StreamingLineBuffer_52_pixel_2.run<621, 3>(StreamingLineBuffer_52_buffer_stream[0], StreamingLineBuffer_52_out0_stream_prepad[9], StreamingLineBuffer_52_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_52_out0_stream_prepad_9," << StreamingLineBuffer_52_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -18145,7 +18186,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_52_pixel_3;
-    StreamingLineBuffer_52_pixel_3.run<622>(StreamingLineBuffer_52_buffer_stream[1], StreamingLineBuffer_52_out0_stream_prepad[8], StreamingLineBuffer_52_buffer_stream[3]);
+    StreamingLineBuffer_52_pixel_3.run<622, 3>(StreamingLineBuffer_52_buffer_stream[1], StreamingLineBuffer_52_out0_stream_prepad[8], StreamingLineBuffer_52_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_52_out0_stream_prepad_8," << StreamingLineBuffer_52_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -18166,7 +18207,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         2  // OUT_CH_PAR
     > BandwidthAdjustIncreaseChannels_9;
-    BandwidthAdjustIncreaseChannels_9.run<603>(StreamingSwish_46_out0_stream, BandwidthAdjustIncreaseChannels_9_out0_stream);
+    BandwidthAdjustIncreaseChannels_9.run<603, 3>(StreamingSwish_46_out0_stream, BandwidthAdjustIncreaseChannels_9_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseChannels_9_out0_stream_0," << BandwidthAdjustIncreaseChannels_9_out0_stream[0].size() << std::endl;
     #endif
@@ -18193,7 +18234,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_51_pixel_6;
-    StreamingLineBuffer_51_pixel_6.run<610>(StreamingLineBuffer_51_buffer_stream[4], StreamingLineBuffer_51_out0_stream_prepad[5], StreamingLineBuffer_51_buffer_stream[6]);
+    StreamingLineBuffer_51_pixel_6.run<610, 3>(StreamingLineBuffer_51_buffer_stream[4], StreamingLineBuffer_51_out0_stream_prepad[5], StreamingLineBuffer_51_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_51_out0_stream_prepad_5," << StreamingLineBuffer_51_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -18220,7 +18261,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_51_pixel_7;
-    StreamingLineBuffer_51_pixel_7.run<611>(StreamingLineBuffer_51_buffer_stream[5], StreamingLineBuffer_51_out0_stream_prepad[4], StreamingLineBuffer_51_buffer_stream[7]);
+    StreamingLineBuffer_51_pixel_7.run<611, 3>(StreamingLineBuffer_51_buffer_stream[5], StreamingLineBuffer_51_out0_stream_prepad[4], StreamingLineBuffer_51_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_51_out0_stream_prepad_4," << StreamingLineBuffer_51_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -18247,7 +18288,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_52_pixel_4;
-    StreamingLineBuffer_52_pixel_4.run<623>(StreamingLineBuffer_52_buffer_stream[2], StreamingLineBuffer_52_out0_stream_prepad[7], StreamingLineBuffer_52_buffer_stream[4]);
+    StreamingLineBuffer_52_pixel_4.run<623, 3>(StreamingLineBuffer_52_buffer_stream[2], StreamingLineBuffer_52_out0_stream_prepad[7], StreamingLineBuffer_52_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_52_out0_stream_prepad_7," << StreamingLineBuffer_52_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -18274,7 +18315,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_52_pixel_5;
-    StreamingLineBuffer_52_pixel_5.run<624>(StreamingLineBuffer_52_buffer_stream[3], StreamingLineBuffer_52_out0_stream_prepad[6], StreamingLineBuffer_52_buffer_stream[5]);
+    StreamingLineBuffer_52_pixel_5.run<624, 3>(StreamingLineBuffer_52_buffer_stream[3], StreamingLineBuffer_52_out0_stream_prepad[6], StreamingLineBuffer_52_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_52_out0_stream_prepad_6," << StreamingLineBuffer_52_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -18301,7 +18342,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_51_pixel_8;
-    StreamingLineBuffer_51_pixel_8.run<612>(StreamingLineBuffer_51_buffer_stream[6], StreamingLineBuffer_51_out0_stream_prepad[3], StreamingLineBuffer_51_buffer_stream[8]);
+    StreamingLineBuffer_51_pixel_8.run<612, 3>(StreamingLineBuffer_51_buffer_stream[6], StreamingLineBuffer_51_out0_stream_prepad[3], StreamingLineBuffer_51_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_51_out0_stream_prepad_3," << StreamingLineBuffer_51_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -18328,7 +18369,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_51_pixel_9;
-    StreamingLineBuffer_51_pixel_9.run<613>(StreamingLineBuffer_51_buffer_stream[7], StreamingLineBuffer_51_out0_stream_prepad[2], StreamingLineBuffer_51_buffer_stream[9]);
+    StreamingLineBuffer_51_pixel_9.run<613, 3>(StreamingLineBuffer_51_buffer_stream[7], StreamingLineBuffer_51_out0_stream_prepad[2], StreamingLineBuffer_51_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_51_out0_stream_prepad_2," << StreamingLineBuffer_51_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -18348,7 +18389,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingConcat_11;
-    StreamingConcat_11.run<618>(BandwidthAdjustIncreaseChannels_9_out0_stream, TensorDuplicator_18_out1_stream, StreamingConcat_11_out0_stream);
+    StreamingConcat_11.run<618, 3>(BandwidthAdjustIncreaseChannels_9_out0_stream, TensorDuplicator_18_out1_stream, StreamingConcat_11_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_11_out0_stream_0," << StreamingConcat_11_out0_stream[0].size() << std::endl;
     #endif
@@ -18375,7 +18416,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_52_pixel_6;
-    StreamingLineBuffer_52_pixel_6.run<625>(StreamingLineBuffer_52_buffer_stream[4], StreamingLineBuffer_52_out0_stream_prepad[5], StreamingLineBuffer_52_buffer_stream[6]);
+    StreamingLineBuffer_52_pixel_6.run<625, 3>(StreamingLineBuffer_52_buffer_stream[4], StreamingLineBuffer_52_out0_stream_prepad[5], StreamingLineBuffer_52_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_52_out0_stream_prepad_5," << StreamingLineBuffer_52_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -18402,7 +18443,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_52_pixel_7;
-    StreamingLineBuffer_52_pixel_7.run<626>(StreamingLineBuffer_52_buffer_stream[5], StreamingLineBuffer_52_out0_stream_prepad[4], StreamingLineBuffer_52_buffer_stream[7]);
+    StreamingLineBuffer_52_pixel_7.run<626, 3>(StreamingLineBuffer_52_buffer_stream[5], StreamingLineBuffer_52_out0_stream_prepad[4], StreamingLineBuffer_52_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_52_out0_stream_prepad_4," << StreamingLineBuffer_52_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -18429,7 +18470,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_51_pixel_10;
-    StreamingLineBuffer_51_pixel_10.run<614>(StreamingLineBuffer_51_buffer_stream[8], StreamingLineBuffer_51_out0_stream_prepad[1]);
+    StreamingLineBuffer_51_pixel_10.run<614, 3>(StreamingLineBuffer_51_buffer_stream[8], StreamingLineBuffer_51_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_51_out0_stream_prepad_1," << StreamingLineBuffer_51_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -18453,7 +18494,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_51_pixel_11;
-    StreamingLineBuffer_51_pixel_11.run<615>(StreamingLineBuffer_51_buffer_stream[9], StreamingLineBuffer_51_out0_stream_prepad[0]);
+    StreamingLineBuffer_51_pixel_11.run<615, 3>(StreamingLineBuffer_51_buffer_stream[9], StreamingLineBuffer_51_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_51_out0_stream_prepad_0," << StreamingLineBuffer_51_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -18477,7 +18518,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_52_pixel_8;
-    StreamingLineBuffer_52_pixel_8.run<627>(StreamingLineBuffer_52_buffer_stream[6], StreamingLineBuffer_52_out0_stream_prepad[3], StreamingLineBuffer_52_buffer_stream[8]);
+    StreamingLineBuffer_52_pixel_8.run<627, 3>(StreamingLineBuffer_52_buffer_stream[6], StreamingLineBuffer_52_out0_stream_prepad[3], StreamingLineBuffer_52_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_52_out0_stream_prepad_3," << StreamingLineBuffer_52_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -18504,7 +18545,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_52_pixel_9;
-    StreamingLineBuffer_52_pixel_9.run<628>(StreamingLineBuffer_52_buffer_stream[7], StreamingLineBuffer_52_out0_stream_prepad[2], StreamingLineBuffer_52_buffer_stream[9]);
+    StreamingLineBuffer_52_pixel_9.run<628, 3>(StreamingLineBuffer_52_buffer_stream[7], StreamingLineBuffer_52_out0_stream_prepad[2], StreamingLineBuffer_52_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_52_out0_stream_prepad_2," << StreamingLineBuffer_52_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -18519,7 +18560,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_22;
-    TensorDuplicator_22.run<634>(StreamingConcat_11_out0_stream, TensorDuplicator_22_out0_stream, TensorDuplicator_22_out1_stream);
+    TensorDuplicator_22.run<634, 3>(StreamingConcat_11_out0_stream, TensorDuplicator_22_out0_stream, TensorDuplicator_22_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_22_out0_stream_0," << TensorDuplicator_22_out0_stream[0].size() << std::endl;
     #endif
@@ -18553,7 +18594,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_51_pad;
-    StreamingLineBuffer_51_pad.run<616>(StreamingLineBuffer_51_out0_stream_prepad, StreamingLineBuffer_51_out0_stream);
+    StreamingLineBuffer_51_pad.run<616, 3>(StreamingLineBuffer_51_out0_stream_prepad, StreamingLineBuffer_51_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_51_out0_stream_0," << StreamingLineBuffer_51_out0_stream[0].size() << std::endl;
     #endif
@@ -18577,7 +18618,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_52_pixel_10;
-    StreamingLineBuffer_52_pixel_10.run<629>(StreamingLineBuffer_52_buffer_stream[8], StreamingLineBuffer_52_out0_stream_prepad[1]);
+    StreamingLineBuffer_52_pixel_10.run<629, 3>(StreamingLineBuffer_52_buffer_stream[8], StreamingLineBuffer_52_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_52_out0_stream_prepad_1," << StreamingLineBuffer_52_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -18601,7 +18642,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_52_pixel_11;
-    StreamingLineBuffer_52_pixel_11.run<630>(StreamingLineBuffer_52_buffer_stream[9], StreamingLineBuffer_52_out0_stream_prepad[0]);
+    StreamingLineBuffer_52_pixel_11.run<630, 3>(StreamingLineBuffer_52_buffer_stream[9], StreamingLineBuffer_52_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_52_out0_stream_prepad_0," << StreamingLineBuffer_52_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -18625,7 +18666,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_54_pixel_0;
-    StreamingLineBuffer_54_pixel_0.run<639>(TensorDuplicator_22_out0_stream[1], StreamingLineBuffer_54_out0_stream_prepad[1]);
+    StreamingLineBuffer_54_pixel_0.run<639, 3>(TensorDuplicator_22_out0_stream[1], StreamingLineBuffer_54_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_54_out0_stream_prepad_1," << StreamingLineBuffer_54_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -18649,7 +18690,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_54_pixel_1;
-    StreamingLineBuffer_54_pixel_1.run<640>(TensorDuplicator_22_out0_stream[0], StreamingLineBuffer_54_out0_stream_prepad[0]);
+    StreamingLineBuffer_54_pixel_1.run<640, 3>(TensorDuplicator_22_out0_stream[0], StreamingLineBuffer_54_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_54_out0_stream_prepad_0," << StreamingLineBuffer_54_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -18673,7 +18714,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_55_pixel_0;
-    StreamingLineBuffer_55_pixel_0.run<642>(TensorDuplicator_22_out1_stream[1], StreamingLineBuffer_55_out0_stream_prepad[1]);
+    StreamingLineBuffer_55_pixel_0.run<642, 3>(TensorDuplicator_22_out1_stream[1], StreamingLineBuffer_55_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_55_out0_stream_prepad_1," << StreamingLineBuffer_55_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -18697,14 +18738,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_55_pixel_1;
-    StreamingLineBuffer_55_pixel_1.run<643>(TensorDuplicator_22_out1_stream[0], StreamingLineBuffer_55_out0_stream_prepad[0]);
+    StreamingLineBuffer_55_pixel_1.run<643, 3>(TensorDuplicator_22_out1_stream[0], StreamingLineBuffer_55_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_55_out0_stream_prepad_0," << StreamingLineBuffer_55_out0_stream_prepad[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_48_weights[1024][4][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_48_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_48_weights dim=2 complete
-    ap_int<14> StreamingConv_48_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_48_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_48_biases dim=2 complete
     StreamingConv <
@@ -18735,7 +18774,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_48;
-    StreamingConv_48.run<617>(StreamingLineBuffer_51_out0_stream, StreamingConv_48_weights, StreamingConv_48_biases, StreamingConv_48_out0_stream);
+    StreamingConv_48.run<617, 3>(StreamingLineBuffer_51_out0_stream, StreamingConv_48_weights, StreamingConv_48_biases, StreamingConv_48_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_48_out0_stream_0," << StreamingConv_48_out0_stream[0].size() << std::endl;
     #endif
@@ -18763,7 +18802,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_52_pad;
-    StreamingLineBuffer_52_pad.run<631>(StreamingLineBuffer_52_out0_stream_prepad, StreamingLineBuffer_52_out0_stream);
+    StreamingLineBuffer_52_pad.run<631, 3>(StreamingLineBuffer_52_out0_stream_prepad, StreamingLineBuffer_52_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_52_out0_stream_0," << StreamingLineBuffer_52_out0_stream[0].size() << std::endl;
     #endif
@@ -18788,7 +18827,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_54_pad;
-    StreamingLineBuffer_54_pad.run<641>(StreamingLineBuffer_54_out0_stream_prepad, StreamingLineBuffer_54_out0_stream);
+    StreamingLineBuffer_54_pad.run<641, 3>(StreamingLineBuffer_54_out0_stream_prepad, StreamingLineBuffer_54_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_54_out0_stream_0," << StreamingLineBuffer_54_out0_stream[0].size() << std::endl;
     #endif
@@ -18813,14 +18852,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_55_pad;
-    StreamingLineBuffer_55_pad.run<644>(StreamingLineBuffer_55_out0_stream_prepad, StreamingLineBuffer_55_out0_stream);
+    StreamingLineBuffer_55_pad.run<644, 3>(StreamingLineBuffer_55_out0_stream_prepad, StreamingLineBuffer_55_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_55_out0_stream_0," << StreamingLineBuffer_55_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_49_weights[800][8][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_49_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_49_weights dim=2 complete
-    ap_int<15> StreamingConv_49_biases[40][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_49_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_49_biases dim=2 complete
     StreamingConv <
@@ -18851,7 +18888,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_49;
-    StreamingConv_49.run<632>(StreamingLineBuffer_52_out0_stream, StreamingConv_49_weights, StreamingConv_49_biases, StreamingConv_49_out0_stream);
+    StreamingConv_49.run<632, 3>(StreamingLineBuffer_52_out0_stream, StreamingConv_49_weights, StreamingConv_49_biases, StreamingConv_49_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_49_out0_stream_0," << StreamingConv_49_out0_stream[0].size() << std::endl;
     #endif
@@ -18871,17 +18908,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_48;
-    StreamingSwish_48.run<633>(StreamingConv_48_out0_stream, StreamingSwish_48_lut, StreamingSwish_48_out0_stream);
+    StreamingSwish_48.run<633, 3>(StreamingConv_48_out0_stream, StreamingSwish_48_lut, StreamingSwish_48_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_48_out0_stream_0," << StreamingSwish_48_out0_stream[0].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_48_out0_stream_1," << StreamingSwish_48_out0_stream[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_51_weights[4096][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_51_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_51_weights dim=2 complete
-    ap_int<15> StreamingConv_51_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_51_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_51_biases dim=2 complete
     StreamingConv <
@@ -18912,17 +18947,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_51;
-    StreamingConv_51.run<646>(StreamingLineBuffer_54_out0_stream, StreamingConv_51_weights, StreamingConv_51_biases, StreamingConv_51_out0_stream);
+    StreamingConv_51.run<646, 3>(StreamingLineBuffer_54_out0_stream, StreamingConv_51_weights, StreamingConv_51_biases, StreamingConv_51_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_51_out0_stream_0," << StreamingConv_51_out0_stream[0].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_51_out0_stream_1," << StreamingConv_51_out0_stream[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_52_weights[4096][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_52_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_52_weights dim=2 complete
-    ap_int<15> StreamingConv_52_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_52_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_52_biases dim=2 complete
     StreamingConv <
@@ -18953,7 +18986,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_52;
-    StreamingConv_52.run<647>(StreamingLineBuffer_55_out0_stream, StreamingConv_52_weights, StreamingConv_52_biases, StreamingConv_52_out0_stream);
+    StreamingConv_52.run<647, 3>(StreamingLineBuffer_55_out0_stream, StreamingConv_52_weights, StreamingConv_52_biases, StreamingConv_52_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_52_out0_stream_0," << StreamingConv_52_out0_stream[0].size() << std::endl;
     #endif
@@ -18973,7 +19006,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_49;
-    StreamingSwish_49.run<635>(StreamingConv_49_out0_stream, StreamingSwish_49_lut, StreamingSwish_49_out0_stream);
+    StreamingSwish_49.run<635, 3>(StreamingConv_49_out0_stream, StreamingSwish_49_lut, StreamingSwish_49_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_49_out0_stream_0," << StreamingSwish_49_out0_stream[0].size() << std::endl;
     #endif
@@ -19000,7 +19033,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_53_pixel_0;
-    StreamingLineBuffer_53_pixel_0.run<636>(StreamingSwish_48_out0_stream[1], StreamingLineBuffer_53_out0_stream_prepad[1]);
+    StreamingLineBuffer_53_pixel_0.run<636, 3>(StreamingSwish_48_out0_stream[1], StreamingLineBuffer_53_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_53_out0_stream_prepad_1," << StreamingLineBuffer_53_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -19024,7 +19057,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_53_pixel_1;
-    StreamingLineBuffer_53_pixel_1.run<637>(StreamingSwish_48_out0_stream[0], StreamingLineBuffer_53_out0_stream_prepad[0]);
+    StreamingLineBuffer_53_pixel_1.run<637, 3>(StreamingSwish_48_out0_stream[0], StreamingLineBuffer_53_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_53_out0_stream_prepad_0," << StreamingLineBuffer_53_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -19041,7 +19074,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_50;
-    StreamingSwish_50.run<652>(StreamingConv_51_out0_stream, StreamingSwish_50_lut, StreamingSwish_50_out0_stream);
+    StreamingSwish_50.run<652, 3>(StreamingConv_51_out0_stream, StreamingSwish_50_lut, StreamingSwish_50_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_50_out0_stream_0," << StreamingSwish_50_out0_stream[0].size() << std::endl;
     #endif
@@ -19061,7 +19094,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_51;
-    StreamingSwish_51.run<653>(StreamingConv_52_out0_stream, StreamingSwish_51_lut, StreamingSwish_51_out0_stream);
+    StreamingSwish_51.run<653, 3>(StreamingConv_52_out0_stream, StreamingSwish_51_lut, StreamingSwish_51_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_51_out0_stream_0," << StreamingSwish_51_out0_stream[0].size() << std::endl;
     #endif
@@ -19089,7 +19122,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_53_pad;
-    StreamingLineBuffer_53_pad.run<638>(StreamingLineBuffer_53_out0_stream_prepad, StreamingLineBuffer_53_out0_stream);
+    StreamingLineBuffer_53_pad.run<638, 3>(StreamingLineBuffer_53_out0_stream_prepad, StreamingLineBuffer_53_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_53_out0_stream_0," << StreamingLineBuffer_53_out0_stream[0].size() << std::endl;
     #endif
@@ -19113,7 +19146,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_56_pixel_0;
-    StreamingLineBuffer_56_pixel_0.run<648>(StreamingSwish_49_out0_stream[1], StreamingLineBuffer_56_out0_stream_prepad[1]);
+    StreamingLineBuffer_56_pixel_0.run<648, 3>(StreamingSwish_49_out0_stream[1], StreamingLineBuffer_56_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_56_out0_stream_prepad_1," << StreamingLineBuffer_56_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -19137,7 +19170,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_56_pixel_1;
-    StreamingLineBuffer_56_pixel_1.run<649>(StreamingSwish_49_out0_stream[0], StreamingLineBuffer_56_out0_stream_prepad[0]);
+    StreamingLineBuffer_56_pixel_1.run<649, 3>(StreamingSwish_49_out0_stream[0], StreamingLineBuffer_56_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_56_out0_stream_prepad_0," << StreamingLineBuffer_56_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -19161,7 +19194,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_57_pixel_0;
-    StreamingLineBuffer_57_pixel_0.run<655>(StreamingSwish_50_out0_stream[1], StreamingLineBuffer_57_out0_stream_prepad[1]);
+    StreamingLineBuffer_57_pixel_0.run<655, 3>(StreamingSwish_50_out0_stream[1], StreamingLineBuffer_57_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_57_out0_stream_prepad_1," << StreamingLineBuffer_57_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -19185,14 +19218,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_57_pixel_1;
-    StreamingLineBuffer_57_pixel_1.run<656>(StreamingSwish_50_out0_stream[0], StreamingLineBuffer_57_out0_stream_prepad[0]);
+    StreamingLineBuffer_57_pixel_1.run<656, 3>(StreamingSwish_50_out0_stream[0], StreamingLineBuffer_57_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_57_out0_stream_prepad_0," << StreamingLineBuffer_57_out0_stream_prepad[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_50_weights[1024][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_50_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_50_weights dim=2 complete
-    ap_int<13> StreamingConv_50_biases[16][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_50_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_50_biases dim=2 complete
     StreamingConv <
@@ -19223,7 +19254,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_50;
-    StreamingConv_50.run<645>(StreamingLineBuffer_53_out0_stream, StreamingConv_50_weights, StreamingConv_50_biases, StreamingConv_50_out0_stream);
+    StreamingConv_50.run<645, 3>(StreamingLineBuffer_53_out0_stream, StreamingConv_50_weights, StreamingConv_50_biases, StreamingConv_50_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_50_out0_stream_0," << StreamingConv_50_out0_stream[0].size() << std::endl;
     #endif
@@ -19251,7 +19282,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_56_pad;
-    StreamingLineBuffer_56_pad.run<650>(StreamingLineBuffer_56_out0_stream_prepad, StreamingLineBuffer_56_out0_stream);
+    StreamingLineBuffer_56_pad.run<650, 3>(StreamingLineBuffer_56_out0_stream_prepad, StreamingLineBuffer_56_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_56_out0_stream_0," << StreamingLineBuffer_56_out0_stream[0].size() << std::endl;
     #endif
@@ -19276,14 +19307,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_57_pad;
-    StreamingLineBuffer_57_pad.run<657>(StreamingLineBuffer_57_out0_stream_prepad, StreamingLineBuffer_57_out0_stream);
+    StreamingLineBuffer_57_pad.run<657, 3>(StreamingLineBuffer_57_out0_stream_prepad, StreamingLineBuffer_57_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_57_out0_stream_0," << StreamingLineBuffer_57_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_53_weights[800][8][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_53_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_53_weights dim=2 complete
-    ap_int<17> StreamingConv_53_biases[20][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_53_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_53_biases dim=2 complete
     StreamingConv <
@@ -19314,17 +19343,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_53;
-    StreamingConv_53.run<651>(StreamingLineBuffer_56_out0_stream, StreamingConv_53_weights, StreamingConv_53_biases, StreamingConv_53_out0_stream);
+    StreamingConv_53.run<651, 3>(StreamingLineBuffer_56_out0_stream, StreamingConv_53_weights, StreamingConv_53_biases, StreamingConv_53_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_53_out0_stream_0," << StreamingConv_53_out0_stream[0].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_53_out0_stream_1," << StreamingConv_53_out0_stream[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_54_weights[4096][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_54_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_54_weights dim=2 complete
-    ap_int<14> StreamingConv_54_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_54_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_54_biases dim=2 complete
     StreamingConv <
@@ -19355,7 +19382,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_54;
-    StreamingConv_54.run<658>(StreamingLineBuffer_57_out0_stream, StreamingConv_54_weights, StreamingConv_54_biases, StreamingConv_54_out0_stream);
+    StreamingConv_54.run<658, 3>(StreamingLineBuffer_57_out0_stream, StreamingConv_54_weights, StreamingConv_54_biases, StreamingConv_54_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_54_out0_stream_0," << StreamingConv_54_out0_stream[0].size() << std::endl;
     #endif
@@ -19375,7 +19402,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingConcat_12;
-    StreamingConcat_12.run<654>(StreamingConv_50_out0_stream, StreamingConv_53_out0_stream, StreamingConcat_12_out0_stream);
+    StreamingConcat_12.run<654, 3>(StreamingConv_50_out0_stream, StreamingConv_53_out0_stream, StreamingConcat_12_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_12_out0_stream_0," << StreamingConcat_12_out0_stream[0].size() << std::endl;
     #endif
@@ -19395,7 +19422,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_52;
-    StreamingSwish_52.run<661>(StreamingConv_54_out0_stream, StreamingSwish_52_lut, StreamingSwish_52_out0_stream);
+    StreamingSwish_52.run<661, 3>(StreamingConv_54_out0_stream, StreamingSwish_52_lut, StreamingSwish_52_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_52_out0_stream_0," << StreamingSwish_52_out0_stream[0].size() << std::endl;
     #endif
@@ -19416,7 +19443,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // IN_CH_PAR
         4  // OUT_CH_PAR
     > BandwidthAdjustDecreaseStreams_3;
-    BandwidthAdjustDecreaseStreams_3.run<659>(StreamingConcat_12_out0_stream, BandwidthAdjustDecreaseStreams_3_out0_stream);
+    BandwidthAdjustDecreaseStreams_3.run<659, 3>(StreamingConcat_12_out0_stream, BandwidthAdjustDecreaseStreams_3_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseStreams_3_out0_stream_0," << BandwidthAdjustDecreaseStreams_3_out0_stream[0].size() << std::endl;
     #endif
@@ -19440,7 +19467,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_58_pixel_0;
-    StreamingLineBuffer_58_pixel_0.run<663>(StreamingSwish_52_out0_stream[0], StreamingLineBuffer_58_out0_stream_prepad[11], StreamingLineBuffer_58_buffer_stream[0]);
+    StreamingLineBuffer_58_pixel_0.run<663, 3>(StreamingSwish_52_out0_stream[0], StreamingLineBuffer_58_out0_stream_prepad[11], StreamingLineBuffer_58_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_58_out0_stream_prepad_11," << StreamingLineBuffer_58_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -19467,7 +19494,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_58_pixel_1;
-    StreamingLineBuffer_58_pixel_1.run<664>(StreamingSwish_52_out0_stream[1], StreamingLineBuffer_58_out0_stream_prepad[10], StreamingLineBuffer_58_buffer_stream[1]);
+    StreamingLineBuffer_58_pixel_1.run<664, 3>(StreamingSwish_52_out0_stream[1], StreamingLineBuffer_58_out0_stream_prepad[10], StreamingLineBuffer_58_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_58_out0_stream_prepad_10," << StreamingLineBuffer_58_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -19486,7 +19513,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         4  // CH_PAR
     > StreamingReshape_0;
-    StreamingReshape_0.run<660>(BandwidthAdjustDecreaseStreams_3_out0_stream, StreamingReshape_0_out0_stream);
+    StreamingReshape_0.run<660, 3>(BandwidthAdjustDecreaseStreams_3_out0_stream, StreamingReshape_0_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingReshape_0_out0_stream_0," << StreamingReshape_0_out0_stream[0].size() << std::endl;
     #endif
@@ -19510,7 +19537,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_58_pixel_2;
-    StreamingLineBuffer_58_pixel_2.run<665>(StreamingLineBuffer_58_buffer_stream[0], StreamingLineBuffer_58_out0_stream_prepad[9], StreamingLineBuffer_58_buffer_stream[2]);
+    StreamingLineBuffer_58_pixel_2.run<665, 3>(StreamingLineBuffer_58_buffer_stream[0], StreamingLineBuffer_58_out0_stream_prepad[9], StreamingLineBuffer_58_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_58_out0_stream_prepad_9," << StreamingLineBuffer_58_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -19537,7 +19564,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_58_pixel_3;
-    StreamingLineBuffer_58_pixel_3.run<666>(StreamingLineBuffer_58_buffer_stream[1], StreamingLineBuffer_58_out0_stream_prepad[8], StreamingLineBuffer_58_buffer_stream[3]);
+    StreamingLineBuffer_58_pixel_3.run<666, 3>(StreamingLineBuffer_58_buffer_stream[1], StreamingLineBuffer_58_out0_stream_prepad[8], StreamingLineBuffer_58_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_58_out0_stream_prepad_8," << StreamingLineBuffer_58_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -19558,7 +19585,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // IN_CH_PAR
         1  // OUT_CH_PAR
     > BandwidthAdjustDecreaseChannels_7;
-    BandwidthAdjustDecreaseChannels_7.run<662>(StreamingReshape_0_out0_stream, BandwidthAdjustDecreaseChannels_7_out0_stream);
+    BandwidthAdjustDecreaseChannels_7.run<662, 3>(StreamingReshape_0_out0_stream, BandwidthAdjustDecreaseChannels_7_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseChannels_7_out0_stream_0," << BandwidthAdjustDecreaseChannels_7_out0_stream[0].size() << std::endl;
     #endif
@@ -19582,7 +19609,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_58_pixel_4;
-    StreamingLineBuffer_58_pixel_4.run<667>(StreamingLineBuffer_58_buffer_stream[2], StreamingLineBuffer_58_out0_stream_prepad[7], StreamingLineBuffer_58_buffer_stream[4]);
+    StreamingLineBuffer_58_pixel_4.run<667, 3>(StreamingLineBuffer_58_buffer_stream[2], StreamingLineBuffer_58_out0_stream_prepad[7], StreamingLineBuffer_58_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_58_out0_stream_prepad_7," << StreamingLineBuffer_58_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -19609,7 +19636,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_58_pixel_5;
-    StreamingLineBuffer_58_pixel_5.run<668>(StreamingLineBuffer_58_buffer_stream[3], StreamingLineBuffer_58_out0_stream_prepad[6], StreamingLineBuffer_58_buffer_stream[5]);
+    StreamingLineBuffer_58_pixel_5.run<668, 3>(StreamingLineBuffer_58_buffer_stream[3], StreamingLineBuffer_58_out0_stream_prepad[6], StreamingLineBuffer_58_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_58_out0_stream_prepad_6," << StreamingLineBuffer_58_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -19636,7 +19663,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_58_pixel_6;
-    StreamingLineBuffer_58_pixel_6.run<669>(StreamingLineBuffer_58_buffer_stream[4], StreamingLineBuffer_58_out0_stream_prepad[5], StreamingLineBuffer_58_buffer_stream[6]);
+    StreamingLineBuffer_58_pixel_6.run<669, 3>(StreamingLineBuffer_58_buffer_stream[4], StreamingLineBuffer_58_out0_stream_prepad[5], StreamingLineBuffer_58_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_58_out0_stream_prepad_5," << StreamingLineBuffer_58_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -19663,7 +19690,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_58_pixel_7;
-    StreamingLineBuffer_58_pixel_7.run<670>(StreamingLineBuffer_58_buffer_stream[5], StreamingLineBuffer_58_out0_stream_prepad[4], StreamingLineBuffer_58_buffer_stream[7]);
+    StreamingLineBuffer_58_pixel_7.run<670, 3>(StreamingLineBuffer_58_buffer_stream[5], StreamingLineBuffer_58_out0_stream_prepad[4], StreamingLineBuffer_58_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_58_out0_stream_prepad_4," << StreamingLineBuffer_58_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -19690,7 +19717,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_58_pixel_8;
-    StreamingLineBuffer_58_pixel_8.run<671>(StreamingLineBuffer_58_buffer_stream[6], StreamingLineBuffer_58_out0_stream_prepad[3], StreamingLineBuffer_58_buffer_stream[8]);
+    StreamingLineBuffer_58_pixel_8.run<671, 3>(StreamingLineBuffer_58_buffer_stream[6], StreamingLineBuffer_58_out0_stream_prepad[3], StreamingLineBuffer_58_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_58_out0_stream_prepad_3," << StreamingLineBuffer_58_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -19717,7 +19744,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_58_pixel_9;
-    StreamingLineBuffer_58_pixel_9.run<672>(StreamingLineBuffer_58_buffer_stream[7], StreamingLineBuffer_58_out0_stream_prepad[2], StreamingLineBuffer_58_buffer_stream[9]);
+    StreamingLineBuffer_58_pixel_9.run<672, 3>(StreamingLineBuffer_58_buffer_stream[7], StreamingLineBuffer_58_out0_stream_prepad[2], StreamingLineBuffer_58_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_58_out0_stream_prepad_2," << StreamingLineBuffer_58_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -19744,7 +19771,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_58_pixel_10;
-    StreamingLineBuffer_58_pixel_10.run<673>(StreamingLineBuffer_58_buffer_stream[8], StreamingLineBuffer_58_out0_stream_prepad[1]);
+    StreamingLineBuffer_58_pixel_10.run<673, 3>(StreamingLineBuffer_58_buffer_stream[8], StreamingLineBuffer_58_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_58_out0_stream_prepad_1," << StreamingLineBuffer_58_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -19768,7 +19795,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_58_pixel_11;
-    StreamingLineBuffer_58_pixel_11.run<674>(StreamingLineBuffer_58_buffer_stream[9], StreamingLineBuffer_58_out0_stream_prepad[0]);
+    StreamingLineBuffer_58_pixel_11.run<674, 3>(StreamingLineBuffer_58_buffer_stream[9], StreamingLineBuffer_58_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_58_out0_stream_prepad_0," << StreamingLineBuffer_58_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -19793,14 +19820,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_58_pad;
-    StreamingLineBuffer_58_pad.run<675>(StreamingLineBuffer_58_out0_stream_prepad, StreamingLineBuffer_58_out0_stream);
+    StreamingLineBuffer_58_pad.run<675, 3>(StreamingLineBuffer_58_out0_stream_prepad, StreamingLineBuffer_58_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_58_out0_stream_0," << StreamingLineBuffer_58_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_55_weights[4096][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_55_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_55_weights dim=2 complete
-    ap_int<15> StreamingConv_55_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_55_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_55_biases dim=2 complete
     StreamingConv <
@@ -19831,7 +19856,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_55;
-    StreamingConv_55.run<676>(StreamingLineBuffer_58_out0_stream, StreamingConv_55_weights, StreamingConv_55_biases, StreamingConv_55_out0_stream);
+    StreamingConv_55.run<676, 3>(StreamingLineBuffer_58_out0_stream, StreamingConv_55_weights, StreamingConv_55_biases, StreamingConv_55_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_55_out0_stream_0," << StreamingConv_55_out0_stream[0].size() << std::endl;
     #endif
@@ -19851,7 +19876,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_53;
-    StreamingSwish_53.run<677>(StreamingConv_55_out0_stream, StreamingSwish_53_lut, StreamingSwish_53_out0_stream);
+    StreamingSwish_53.run<677, 3>(StreamingConv_55_out0_stream, StreamingSwish_53_lut, StreamingSwish_53_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_53_out0_stream_0," << StreamingSwish_53_out0_stream[0].size() << std::endl;
     #endif
@@ -19871,7 +19896,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingConcat_13;
-    StreamingConcat_13.run<678>(StreamingSwish_53_out0_stream, StreamingSwish_51_out0_stream, StreamingConcat_13_out0_stream);
+    StreamingConcat_13.run<678, 3>(StreamingSwish_53_out0_stream, StreamingSwish_51_out0_stream, StreamingConcat_13_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_13_out0_stream_0," << StreamingConcat_13_out0_stream[0].size() << std::endl;
     #endif
@@ -19892,7 +19917,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         2  // OUT_CH_PAR
     > BandwidthAdjustIncreaseChannels_10;
-    BandwidthAdjustIncreaseChannels_10.run<679>(StreamingConcat_13_out0_stream, BandwidthAdjustIncreaseChannels_10_out0_stream);
+    BandwidthAdjustIncreaseChannels_10.run<679, 3>(StreamingConcat_13_out0_stream, BandwidthAdjustIncreaseChannels_10_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseChannels_10_out0_stream_0," << BandwidthAdjustIncreaseChannels_10_out0_stream[0].size() << std::endl;
     #endif
@@ -19919,7 +19944,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_59_pixel_0;
-    StreamingLineBuffer_59_pixel_0.run<680>(BandwidthAdjustIncreaseChannels_10_out0_stream[1], StreamingLineBuffer_59_out0_stream_prepad[1]);
+    StreamingLineBuffer_59_pixel_0.run<680, 3>(BandwidthAdjustIncreaseChannels_10_out0_stream[1], StreamingLineBuffer_59_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_59_out0_stream_prepad_1," << StreamingLineBuffer_59_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -19943,7 +19968,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_59_pixel_1;
-    StreamingLineBuffer_59_pixel_1.run<681>(BandwidthAdjustIncreaseChannels_10_out0_stream[0], StreamingLineBuffer_59_out0_stream_prepad[0]);
+    StreamingLineBuffer_59_pixel_1.run<681, 3>(BandwidthAdjustIncreaseChannels_10_out0_stream[0], StreamingLineBuffer_59_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_59_out0_stream_prepad_0," << StreamingLineBuffer_59_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -19968,14 +19993,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_59_pad;
-    StreamingLineBuffer_59_pad.run<682>(StreamingLineBuffer_59_out0_stream_prepad, StreamingLineBuffer_59_out0_stream);
+    StreamingLineBuffer_59_pad.run<682, 3>(StreamingLineBuffer_59_out0_stream_prepad, StreamingLineBuffer_59_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_59_out0_stream_0," << StreamingLineBuffer_59_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_56_weights[4096][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_56_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_56_weights dim=2 complete
-    ap_int<14> StreamingConv_56_biases[64][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_56_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_56_biases dim=2 complete
     StreamingConv <
@@ -20006,7 +20029,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_56;
-    StreamingConv_56.run<683>(StreamingLineBuffer_59_out0_stream, StreamingConv_56_weights, StreamingConv_56_biases, StreamingConv_56_out0_stream);
+    StreamingConv_56.run<683, 3>(StreamingLineBuffer_59_out0_stream, StreamingConv_56_weights, StreamingConv_56_biases, StreamingConv_56_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_56_out0_stream_0," << StreamingConv_56_out0_stream[0].size() << std::endl;
     #endif
@@ -20026,7 +20049,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_54;
-    StreamingSwish_54.run<684>(StreamingConv_56_out0_stream, StreamingSwish_54_lut, StreamingSwish_54_out0_stream);
+    StreamingSwish_54.run<684, 3>(StreamingConv_56_out0_stream, StreamingSwish_54_lut, StreamingSwish_54_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_54_out0_stream_0," << StreamingSwish_54_out0_stream[0].size() << std::endl;
     #endif
@@ -20041,7 +20064,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_23;
-    TensorDuplicator_23.run<685>(StreamingSwish_54_out0_stream, TensorDuplicator_23_out0_stream, TensorDuplicator_23_out1_stream);
+    TensorDuplicator_23.run<685, 3>(StreamingSwish_54_out0_stream, TensorDuplicator_23_out0_stream, TensorDuplicator_23_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_23_out0_stream_0," << TensorDuplicator_23_out0_stream[0].size() << std::endl;
     #endif
@@ -20062,7 +20085,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_24;
-    TensorDuplicator_24.run<686>(TensorDuplicator_23_out0_stream, TensorDuplicator_24_out0_stream, TensorDuplicator_24_out1_stream);
+    TensorDuplicator_24.run<686, 3>(TensorDuplicator_23_out0_stream, TensorDuplicator_24_out0_stream, TensorDuplicator_24_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_24_out0_stream_0," << TensorDuplicator_24_out0_stream[0].size() << std::endl;
     #endif
@@ -20095,7 +20118,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_60_pixel_0;
-    StreamingLineBuffer_60_pixel_0.run<687>(TensorDuplicator_23_out1_stream[0], StreamingLineBuffer_60_out0_stream_prepad[11], StreamingLineBuffer_60_buffer_stream[0]);
+    StreamingLineBuffer_60_pixel_0.run<687, 3>(TensorDuplicator_23_out1_stream[0], StreamingLineBuffer_60_out0_stream_prepad[11], StreamingLineBuffer_60_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_60_out0_stream_prepad_11," << StreamingLineBuffer_60_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -20122,7 +20145,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_60_pixel_1;
-    StreamingLineBuffer_60_pixel_1.run<688>(TensorDuplicator_23_out1_stream[1], StreamingLineBuffer_60_out0_stream_prepad[10], StreamingLineBuffer_60_buffer_stream[1]);
+    StreamingLineBuffer_60_pixel_1.run<688, 3>(TensorDuplicator_23_out1_stream[1], StreamingLineBuffer_60_out0_stream_prepad[10], StreamingLineBuffer_60_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_60_out0_stream_prepad_10," << StreamingLineBuffer_60_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -20149,7 +20172,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_60_pixel_2;
-    StreamingLineBuffer_60_pixel_2.run<689>(StreamingLineBuffer_60_buffer_stream[0], StreamingLineBuffer_60_out0_stream_prepad[9], StreamingLineBuffer_60_buffer_stream[2]);
+    StreamingLineBuffer_60_pixel_2.run<689, 3>(StreamingLineBuffer_60_buffer_stream[0], StreamingLineBuffer_60_out0_stream_prepad[9], StreamingLineBuffer_60_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_60_out0_stream_prepad_9," << StreamingLineBuffer_60_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -20176,7 +20199,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_60_pixel_3;
-    StreamingLineBuffer_60_pixel_3.run<690>(StreamingLineBuffer_60_buffer_stream[1], StreamingLineBuffer_60_out0_stream_prepad[8], StreamingLineBuffer_60_buffer_stream[3]);
+    StreamingLineBuffer_60_pixel_3.run<690, 3>(StreamingLineBuffer_60_buffer_stream[1], StreamingLineBuffer_60_out0_stream_prepad[8], StreamingLineBuffer_60_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_60_out0_stream_prepad_8," << StreamingLineBuffer_60_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -20197,7 +20220,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // IN_CH_PAR
         1  // OUT_CH_PAR
     > BandwidthAdjustDecreaseChannels_8;
-    BandwidthAdjustDecreaseChannels_8.run<701>(TensorDuplicator_24_out0_stream, BandwidthAdjustDecreaseChannels_8_out0_stream);
+    BandwidthAdjustDecreaseChannels_8.run<701, 3>(TensorDuplicator_24_out0_stream, BandwidthAdjustDecreaseChannels_8_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseChannels_8_out0_stream_0," << BandwidthAdjustDecreaseChannels_8_out0_stream[0].size() << std::endl;
     #endif
@@ -20224,7 +20247,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_61_pixel_0;
-    StreamingLineBuffer_61_pixel_0.run<702>(TensorDuplicator_24_out1_stream[0], StreamingLineBuffer_61_out0_stream_prepad[11], StreamingLineBuffer_61_buffer_stream[0]);
+    StreamingLineBuffer_61_pixel_0.run<702, 3>(TensorDuplicator_24_out1_stream[0], StreamingLineBuffer_61_out0_stream_prepad[11], StreamingLineBuffer_61_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_61_out0_stream_prepad_11," << StreamingLineBuffer_61_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -20251,7 +20274,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_61_pixel_1;
-    StreamingLineBuffer_61_pixel_1.run<703>(TensorDuplicator_24_out1_stream[1], StreamingLineBuffer_61_out0_stream_prepad[10], StreamingLineBuffer_61_buffer_stream[1]);
+    StreamingLineBuffer_61_pixel_1.run<703, 3>(TensorDuplicator_24_out1_stream[1], StreamingLineBuffer_61_out0_stream_prepad[10], StreamingLineBuffer_61_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_61_out0_stream_prepad_10," << StreamingLineBuffer_61_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -20278,7 +20301,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_60_pixel_4;
-    StreamingLineBuffer_60_pixel_4.run<691>(StreamingLineBuffer_60_buffer_stream[2], StreamingLineBuffer_60_out0_stream_prepad[7], StreamingLineBuffer_60_buffer_stream[4]);
+    StreamingLineBuffer_60_pixel_4.run<691, 3>(StreamingLineBuffer_60_buffer_stream[2], StreamingLineBuffer_60_out0_stream_prepad[7], StreamingLineBuffer_60_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_60_out0_stream_prepad_7," << StreamingLineBuffer_60_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -20305,7 +20328,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_60_pixel_5;
-    StreamingLineBuffer_60_pixel_5.run<692>(StreamingLineBuffer_60_buffer_stream[3], StreamingLineBuffer_60_out0_stream_prepad[6], StreamingLineBuffer_60_buffer_stream[5]);
+    StreamingLineBuffer_60_pixel_5.run<692, 3>(StreamingLineBuffer_60_buffer_stream[3], StreamingLineBuffer_60_out0_stream_prepad[6], StreamingLineBuffer_60_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_60_out0_stream_prepad_6," << StreamingLineBuffer_60_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -20332,7 +20355,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_61_pixel_2;
-    StreamingLineBuffer_61_pixel_2.run<704>(StreamingLineBuffer_61_buffer_stream[0], StreamingLineBuffer_61_out0_stream_prepad[9], StreamingLineBuffer_61_buffer_stream[2]);
+    StreamingLineBuffer_61_pixel_2.run<704, 3>(StreamingLineBuffer_61_buffer_stream[0], StreamingLineBuffer_61_out0_stream_prepad[9], StreamingLineBuffer_61_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_61_out0_stream_prepad_9," << StreamingLineBuffer_61_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -20359,7 +20382,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_61_pixel_3;
-    StreamingLineBuffer_61_pixel_3.run<705>(StreamingLineBuffer_61_buffer_stream[1], StreamingLineBuffer_61_out0_stream_prepad[8], StreamingLineBuffer_61_buffer_stream[3]);
+    StreamingLineBuffer_61_pixel_3.run<705, 3>(StreamingLineBuffer_61_buffer_stream[1], StreamingLineBuffer_61_out0_stream_prepad[8], StreamingLineBuffer_61_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_61_out0_stream_prepad_8," << StreamingLineBuffer_61_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -20386,7 +20409,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_0;
-    StreamingLineBuffer_62_pixel_0.run<717>(BandwidthAdjustDecreaseChannels_8_out0_stream[1], StreamingLineBuffer_62_out0_stream_prepad[14], StreamingLineBuffer_62_buffer_stream[0]);
+    StreamingLineBuffer_62_pixel_0.run<717, 3>(BandwidthAdjustDecreaseChannels_8_out0_stream[1], StreamingLineBuffer_62_out0_stream_prepad[14], StreamingLineBuffer_62_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_14," << StreamingLineBuffer_62_out0_stream_prepad[14].size() << std::endl;
     #endif
@@ -20413,7 +20436,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_1;
-    StreamingLineBuffer_62_pixel_1.run<718>(BandwidthAdjustDecreaseChannels_8_out0_stream[0], StreamingLineBuffer_62_out0_stream_prepad[13], StreamingLineBuffer_62_buffer_stream[1]);
+    StreamingLineBuffer_62_pixel_1.run<718, 3>(BandwidthAdjustDecreaseChannels_8_out0_stream[0], StreamingLineBuffer_62_out0_stream_prepad[13], StreamingLineBuffer_62_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_13," << StreamingLineBuffer_62_out0_stream_prepad[13].size() << std::endl;
     #endif
@@ -20440,7 +20463,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_60_pixel_6;
-    StreamingLineBuffer_60_pixel_6.run<693>(StreamingLineBuffer_60_buffer_stream[4], StreamingLineBuffer_60_out0_stream_prepad[5], StreamingLineBuffer_60_buffer_stream[6]);
+    StreamingLineBuffer_60_pixel_6.run<693, 3>(StreamingLineBuffer_60_buffer_stream[4], StreamingLineBuffer_60_out0_stream_prepad[5], StreamingLineBuffer_60_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_60_out0_stream_prepad_5," << StreamingLineBuffer_60_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -20467,7 +20490,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_60_pixel_7;
-    StreamingLineBuffer_60_pixel_7.run<694>(StreamingLineBuffer_60_buffer_stream[5], StreamingLineBuffer_60_out0_stream_prepad[4], StreamingLineBuffer_60_buffer_stream[7]);
+    StreamingLineBuffer_60_pixel_7.run<694, 3>(StreamingLineBuffer_60_buffer_stream[5], StreamingLineBuffer_60_out0_stream_prepad[4], StreamingLineBuffer_60_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_60_out0_stream_prepad_4," << StreamingLineBuffer_60_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -20494,7 +20517,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_61_pixel_4;
-    StreamingLineBuffer_61_pixel_4.run<706>(StreamingLineBuffer_61_buffer_stream[2], StreamingLineBuffer_61_out0_stream_prepad[7], StreamingLineBuffer_61_buffer_stream[4]);
+    StreamingLineBuffer_61_pixel_4.run<706, 3>(StreamingLineBuffer_61_buffer_stream[2], StreamingLineBuffer_61_out0_stream_prepad[7], StreamingLineBuffer_61_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_61_out0_stream_prepad_7," << StreamingLineBuffer_61_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -20521,7 +20544,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_61_pixel_5;
-    StreamingLineBuffer_61_pixel_5.run<707>(StreamingLineBuffer_61_buffer_stream[3], StreamingLineBuffer_61_out0_stream_prepad[6], StreamingLineBuffer_61_buffer_stream[5]);
+    StreamingLineBuffer_61_pixel_5.run<707, 3>(StreamingLineBuffer_61_buffer_stream[3], StreamingLineBuffer_61_out0_stream_prepad[6], StreamingLineBuffer_61_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_61_out0_stream_prepad_6," << StreamingLineBuffer_61_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -20548,7 +20571,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_2;
-    StreamingLineBuffer_62_pixel_2.run<719>(StreamingLineBuffer_62_buffer_stream[0], StreamingLineBuffer_62_out0_stream_prepad[12], StreamingLineBuffer_62_buffer_stream[2]);
+    StreamingLineBuffer_62_pixel_2.run<719, 3>(StreamingLineBuffer_62_buffer_stream[0], StreamingLineBuffer_62_out0_stream_prepad[12], StreamingLineBuffer_62_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_12," << StreamingLineBuffer_62_out0_stream_prepad[12].size() << std::endl;
     #endif
@@ -20575,7 +20598,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_3;
-    StreamingLineBuffer_62_pixel_3.run<720>(StreamingLineBuffer_62_buffer_stream[1], StreamingLineBuffer_62_out0_stream_prepad[11], StreamingLineBuffer_62_buffer_stream[4]);
+    StreamingLineBuffer_62_pixel_3.run<720, 3>(StreamingLineBuffer_62_buffer_stream[1], StreamingLineBuffer_62_out0_stream_prepad[11], StreamingLineBuffer_62_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_11," << StreamingLineBuffer_62_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -20602,7 +20625,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_60_pixel_8;
-    StreamingLineBuffer_60_pixel_8.run<695>(StreamingLineBuffer_60_buffer_stream[6], StreamingLineBuffer_60_out0_stream_prepad[3], StreamingLineBuffer_60_buffer_stream[8]);
+    StreamingLineBuffer_60_pixel_8.run<695, 3>(StreamingLineBuffer_60_buffer_stream[6], StreamingLineBuffer_60_out0_stream_prepad[3], StreamingLineBuffer_60_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_60_out0_stream_prepad_3," << StreamingLineBuffer_60_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -20629,7 +20652,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_60_pixel_9;
-    StreamingLineBuffer_60_pixel_9.run<696>(StreamingLineBuffer_60_buffer_stream[7], StreamingLineBuffer_60_out0_stream_prepad[2], StreamingLineBuffer_60_buffer_stream[9]);
+    StreamingLineBuffer_60_pixel_9.run<696, 3>(StreamingLineBuffer_60_buffer_stream[7], StreamingLineBuffer_60_out0_stream_prepad[2], StreamingLineBuffer_60_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_60_out0_stream_prepad_2," << StreamingLineBuffer_60_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -20656,7 +20679,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_61_pixel_6;
-    StreamingLineBuffer_61_pixel_6.run<708>(StreamingLineBuffer_61_buffer_stream[4], StreamingLineBuffer_61_out0_stream_prepad[5], StreamingLineBuffer_61_buffer_stream[6]);
+    StreamingLineBuffer_61_pixel_6.run<708, 3>(StreamingLineBuffer_61_buffer_stream[4], StreamingLineBuffer_61_out0_stream_prepad[5], StreamingLineBuffer_61_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_61_out0_stream_prepad_5," << StreamingLineBuffer_61_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -20683,7 +20706,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_61_pixel_7;
-    StreamingLineBuffer_61_pixel_7.run<709>(StreamingLineBuffer_61_buffer_stream[5], StreamingLineBuffer_61_out0_stream_prepad[4], StreamingLineBuffer_61_buffer_stream[7]);
+    StreamingLineBuffer_61_pixel_7.run<709, 3>(StreamingLineBuffer_61_buffer_stream[5], StreamingLineBuffer_61_out0_stream_prepad[4], StreamingLineBuffer_61_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_61_out0_stream_prepad_4," << StreamingLineBuffer_61_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -20710,7 +20733,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_4;
-    StreamingLineBuffer_62_pixel_4.run<721>(StreamingLineBuffer_62_buffer_stream[2], StreamingLineBuffer_62_out0_stream_prepad[10], StreamingLineBuffer_62_buffer_stream[3]);
+    StreamingLineBuffer_62_pixel_4.run<721, 3>(StreamingLineBuffer_62_buffer_stream[2], StreamingLineBuffer_62_out0_stream_prepad[10], StreamingLineBuffer_62_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_10," << StreamingLineBuffer_62_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -20737,7 +20760,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_6;
-    StreamingLineBuffer_62_pixel_6.run<723>(StreamingLineBuffer_62_buffer_stream[4], StreamingLineBuffer_62_out0_stream_prepad[8], StreamingLineBuffer_62_buffer_stream[6]);
+    StreamingLineBuffer_62_pixel_6.run<723, 3>(StreamingLineBuffer_62_buffer_stream[4], StreamingLineBuffer_62_out0_stream_prepad[8], StreamingLineBuffer_62_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_8," << StreamingLineBuffer_62_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -20764,7 +20787,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_60_pixel_10;
-    StreamingLineBuffer_60_pixel_10.run<697>(StreamingLineBuffer_60_buffer_stream[8], StreamingLineBuffer_60_out0_stream_prepad[1]);
+    StreamingLineBuffer_60_pixel_10.run<697, 3>(StreamingLineBuffer_60_buffer_stream[8], StreamingLineBuffer_60_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_60_out0_stream_prepad_1," << StreamingLineBuffer_60_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -20788,7 +20811,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_60_pixel_11;
-    StreamingLineBuffer_60_pixel_11.run<698>(StreamingLineBuffer_60_buffer_stream[9], StreamingLineBuffer_60_out0_stream_prepad[0]);
+    StreamingLineBuffer_60_pixel_11.run<698, 3>(StreamingLineBuffer_60_buffer_stream[9], StreamingLineBuffer_60_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_60_out0_stream_prepad_0," << StreamingLineBuffer_60_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -20812,7 +20835,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_61_pixel_8;
-    StreamingLineBuffer_61_pixel_8.run<710>(StreamingLineBuffer_61_buffer_stream[6], StreamingLineBuffer_61_out0_stream_prepad[3], StreamingLineBuffer_61_buffer_stream[8]);
+    StreamingLineBuffer_61_pixel_8.run<710, 3>(StreamingLineBuffer_61_buffer_stream[6], StreamingLineBuffer_61_out0_stream_prepad[3], StreamingLineBuffer_61_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_61_out0_stream_prepad_3," << StreamingLineBuffer_61_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -20839,7 +20862,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_61_pixel_9;
-    StreamingLineBuffer_61_pixel_9.run<711>(StreamingLineBuffer_61_buffer_stream[7], StreamingLineBuffer_61_out0_stream_prepad[2], StreamingLineBuffer_61_buffer_stream[9]);
+    StreamingLineBuffer_61_pixel_9.run<711, 3>(StreamingLineBuffer_61_buffer_stream[7], StreamingLineBuffer_61_out0_stream_prepad[2], StreamingLineBuffer_61_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_61_out0_stream_prepad_2," << StreamingLineBuffer_61_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -20866,7 +20889,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_5;
-    StreamingLineBuffer_62_pixel_5.run<722>(StreamingLineBuffer_62_buffer_stream[3], StreamingLineBuffer_62_out0_stream_prepad[9], StreamingLineBuffer_62_buffer_stream[5]);
+    StreamingLineBuffer_62_pixel_5.run<722, 3>(StreamingLineBuffer_62_buffer_stream[3], StreamingLineBuffer_62_out0_stream_prepad[9], StreamingLineBuffer_62_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_9," << StreamingLineBuffer_62_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -20893,7 +20916,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_8;
-    StreamingLineBuffer_62_pixel_8.run<725>(StreamingLineBuffer_62_buffer_stream[6], StreamingLineBuffer_62_out0_stream_prepad[6], StreamingLineBuffer_62_buffer_stream[9]);
+    StreamingLineBuffer_62_pixel_8.run<725, 3>(StreamingLineBuffer_62_buffer_stream[6], StreamingLineBuffer_62_out0_stream_prepad[6], StreamingLineBuffer_62_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_6," << StreamingLineBuffer_62_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -20921,7 +20944,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_60_pad;
-    StreamingLineBuffer_60_pad.run<699>(StreamingLineBuffer_60_out0_stream_prepad, StreamingLineBuffer_60_out0_stream);
+    StreamingLineBuffer_60_pad.run<699, 3>(StreamingLineBuffer_60_out0_stream_prepad, StreamingLineBuffer_60_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_60_out0_stream_0," << StreamingLineBuffer_60_out0_stream[0].size() << std::endl;
     #endif
@@ -20945,7 +20968,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_61_pixel_10;
-    StreamingLineBuffer_61_pixel_10.run<712>(StreamingLineBuffer_61_buffer_stream[8], StreamingLineBuffer_61_out0_stream_prepad[1]);
+    StreamingLineBuffer_61_pixel_10.run<712, 3>(StreamingLineBuffer_61_buffer_stream[8], StreamingLineBuffer_61_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_61_out0_stream_prepad_1," << StreamingLineBuffer_61_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -20969,7 +20992,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_61_pixel_11;
-    StreamingLineBuffer_61_pixel_11.run<713>(StreamingLineBuffer_61_buffer_stream[9], StreamingLineBuffer_61_out0_stream_prepad[0]);
+    StreamingLineBuffer_61_pixel_11.run<713, 3>(StreamingLineBuffer_61_buffer_stream[9], StreamingLineBuffer_61_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_61_out0_stream_prepad_0," << StreamingLineBuffer_61_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -20993,7 +21016,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_7;
-    StreamingLineBuffer_62_pixel_7.run<724>(StreamingLineBuffer_62_buffer_stream[5], StreamingLineBuffer_62_out0_stream_prepad[7], StreamingLineBuffer_62_buffer_stream[7]);
+    StreamingLineBuffer_62_pixel_7.run<724, 3>(StreamingLineBuffer_62_buffer_stream[5], StreamingLineBuffer_62_out0_stream_prepad[7], StreamingLineBuffer_62_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_7," << StreamingLineBuffer_62_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -21020,17 +21043,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_11;
-    StreamingLineBuffer_62_pixel_11.run<728>(StreamingLineBuffer_62_buffer_stream[9], StreamingLineBuffer_62_out0_stream_prepad[3], StreamingLineBuffer_62_buffer_stream[11]);
+    StreamingLineBuffer_62_pixel_11.run<728, 3>(StreamingLineBuffer_62_buffer_stream[9], StreamingLineBuffer_62_out0_stream_prepad[3], StreamingLineBuffer_62_buffer_stream[11]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_3," << StreamingLineBuffer_62_out0_stream_prepad[3].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_buffer_stream_11," << StreamingLineBuffer_62_buffer_stream[11].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_57_weights[2560][4][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_57_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_57_weights dim=2 complete
-    ap_int<15> StreamingConv_57_biases[40][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_57_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_57_biases dim=2 complete
     StreamingConv <
@@ -21061,7 +21082,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_57;
-    StreamingConv_57.run<700>(StreamingLineBuffer_60_out0_stream, StreamingConv_57_weights, StreamingConv_57_biases, StreamingConv_57_out0_stream);
+    StreamingConv_57.run<700, 3>(StreamingLineBuffer_60_out0_stream, StreamingConv_57_weights, StreamingConv_57_biases, StreamingConv_57_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_57_out0_stream_0," << StreamingConv_57_out0_stream[0].size() << std::endl;
     #endif
@@ -21089,7 +21110,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_61_pad;
-    StreamingLineBuffer_61_pad.run<714>(StreamingLineBuffer_61_out0_stream_prepad, StreamingLineBuffer_61_out0_stream);
+    StreamingLineBuffer_61_pad.run<714, 3>(StreamingLineBuffer_61_out0_stream_prepad, StreamingLineBuffer_61_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_61_out0_stream_0," << StreamingLineBuffer_61_out0_stream[0].size() << std::endl;
     #endif
@@ -21113,7 +21134,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_9;
-    StreamingLineBuffer_62_pixel_9.run<726>(StreamingLineBuffer_62_buffer_stream[7], StreamingLineBuffer_62_out0_stream_prepad[5], StreamingLineBuffer_62_buffer_stream[8]);
+    StreamingLineBuffer_62_pixel_9.run<726, 3>(StreamingLineBuffer_62_buffer_stream[7], StreamingLineBuffer_62_out0_stream_prepad[5], StreamingLineBuffer_62_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_5," << StreamingLineBuffer_62_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -21140,14 +21161,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_13;
-    StreamingLineBuffer_62_pixel_13.run<730>(StreamingLineBuffer_62_buffer_stream[11], StreamingLineBuffer_62_out0_stream_prepad[1]);
+    StreamingLineBuffer_62_pixel_13.run<730, 3>(StreamingLineBuffer_62_buffer_stream[11], StreamingLineBuffer_62_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_1," << StreamingLineBuffer_62_out0_stream_prepad[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_58_weights[4096][2][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_58_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_58_weights dim=2 complete
-    ap_int<14> StreamingConv_58_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_58_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_58_biases dim=2 complete
     StreamingConv <
@@ -21178,7 +21197,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_58;
-    StreamingConv_58.run<715>(StreamingLineBuffer_61_out0_stream, StreamingConv_58_weights, StreamingConv_58_biases, StreamingConv_58_out0_stream);
+    StreamingConv_58.run<715, 3>(StreamingLineBuffer_61_out0_stream, StreamingConv_58_weights, StreamingConv_58_biases, StreamingConv_58_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_58_out0_stream_0," << StreamingConv_58_out0_stream[0].size() << std::endl;
     #endif
@@ -21198,7 +21217,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_55;
-    StreamingSwish_55.run<716>(StreamingConv_57_out0_stream, StreamingSwish_55_lut, StreamingSwish_55_out0_stream);
+    StreamingSwish_55.run<716, 3>(StreamingConv_57_out0_stream, StreamingSwish_55_lut, StreamingSwish_55_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_55_out0_stream_0," << StreamingSwish_55_out0_stream[0].size() << std::endl;
     #endif
@@ -21225,7 +21244,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_10;
-    StreamingLineBuffer_62_pixel_10.run<727>(StreamingLineBuffer_62_buffer_stream[8], StreamingLineBuffer_62_out0_stream_prepad[4], StreamingLineBuffer_62_buffer_stream[10]);
+    StreamingLineBuffer_62_pixel_10.run<727, 3>(StreamingLineBuffer_62_buffer_stream[8], StreamingLineBuffer_62_out0_stream_prepad[4], StreamingLineBuffer_62_buffer_stream[10]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_4," << StreamingLineBuffer_62_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -21252,7 +21271,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_12;
-    StreamingLineBuffer_62_pixel_12.run<729>(StreamingLineBuffer_62_buffer_stream[10], StreamingLineBuffer_62_out0_stream_prepad[2], StreamingLineBuffer_62_buffer_stream[12]);
+    StreamingLineBuffer_62_pixel_12.run<729, 3>(StreamingLineBuffer_62_buffer_stream[10], StreamingLineBuffer_62_out0_stream_prepad[2], StreamingLineBuffer_62_buffer_stream[12]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_2," << StreamingLineBuffer_62_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -21272,7 +21291,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_56;
-    StreamingSwish_56.run<734>(StreamingConv_58_out0_stream, StreamingSwish_56_lut, StreamingSwish_56_out0_stream);
+    StreamingSwish_56.run<734, 3>(StreamingConv_58_out0_stream, StreamingSwish_56_lut, StreamingSwish_56_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_56_out0_stream_0," << StreamingSwish_56_out0_stream[0].size() << std::endl;
     #endif
@@ -21299,7 +21318,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_63_pixel_0;
-    StreamingLineBuffer_63_pixel_0.run<735>(StreamingSwish_55_out0_stream[0], StreamingLineBuffer_63_out0_stream_prepad[11], StreamingLineBuffer_63_buffer_stream[0]);
+    StreamingLineBuffer_63_pixel_0.run<735, 3>(StreamingSwish_55_out0_stream[0], StreamingLineBuffer_63_out0_stream_prepad[11], StreamingLineBuffer_63_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_63_out0_stream_prepad_11," << StreamingLineBuffer_63_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -21326,7 +21345,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_63_pixel_1;
-    StreamingLineBuffer_63_pixel_1.run<736>(StreamingSwish_55_out0_stream[1], StreamingLineBuffer_63_out0_stream_prepad[10], StreamingLineBuffer_63_buffer_stream[1]);
+    StreamingLineBuffer_63_pixel_1.run<736, 3>(StreamingSwish_55_out0_stream[1], StreamingLineBuffer_63_out0_stream_prepad[10], StreamingLineBuffer_63_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_63_out0_stream_prepad_10," << StreamingLineBuffer_63_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -21353,7 +21372,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_62_pixel_14;
-    StreamingLineBuffer_62_pixel_14.run<731>(StreamingLineBuffer_62_buffer_stream[12], StreamingLineBuffer_62_out0_stream_prepad[0]);
+    StreamingLineBuffer_62_pixel_14.run<731, 3>(StreamingLineBuffer_62_buffer_stream[12], StreamingLineBuffer_62_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_prepad_0," << StreamingLineBuffer_62_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -21377,7 +21396,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_63_pixel_2;
-    StreamingLineBuffer_63_pixel_2.run<737>(StreamingLineBuffer_63_buffer_stream[0], StreamingLineBuffer_63_out0_stream_prepad[9], StreamingLineBuffer_63_buffer_stream[2]);
+    StreamingLineBuffer_63_pixel_2.run<737, 3>(StreamingLineBuffer_63_buffer_stream[0], StreamingLineBuffer_63_out0_stream_prepad[9], StreamingLineBuffer_63_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_63_out0_stream_prepad_9," << StreamingLineBuffer_63_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -21404,7 +21423,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_63_pixel_3;
-    StreamingLineBuffer_63_pixel_3.run<738>(StreamingLineBuffer_63_buffer_stream[1], StreamingLineBuffer_63_out0_stream_prepad[8], StreamingLineBuffer_63_buffer_stream[3]);
+    StreamingLineBuffer_63_pixel_3.run<738, 3>(StreamingLineBuffer_63_buffer_stream[1], StreamingLineBuffer_63_out0_stream_prepad[8], StreamingLineBuffer_63_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_63_out0_stream_prepad_8," << StreamingLineBuffer_63_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -21431,7 +21450,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_64_pixel_0;
-    StreamingLineBuffer_64_pixel_0.run<750>(StreamingSwish_56_out0_stream[0], StreamingLineBuffer_64_out0_stream_prepad[11], StreamingLineBuffer_64_buffer_stream[0]);
+    StreamingLineBuffer_64_pixel_0.run<750, 3>(StreamingSwish_56_out0_stream[0], StreamingLineBuffer_64_out0_stream_prepad[11], StreamingLineBuffer_64_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_64_out0_stream_prepad_11," << StreamingLineBuffer_64_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -21458,7 +21477,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_64_pixel_1;
-    StreamingLineBuffer_64_pixel_1.run<751>(StreamingSwish_56_out0_stream[1], StreamingLineBuffer_64_out0_stream_prepad[10], StreamingLineBuffer_64_buffer_stream[1]);
+    StreamingLineBuffer_64_pixel_1.run<751, 3>(StreamingSwish_56_out0_stream[1], StreamingLineBuffer_64_out0_stream_prepad[10], StreamingLineBuffer_64_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_64_out0_stream_prepad_10," << StreamingLineBuffer_64_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -21486,7 +21505,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_62_pad;
-    StreamingLineBuffer_62_pad.run<732>(StreamingLineBuffer_62_out0_stream_prepad, StreamingLineBuffer_62_out0_stream);
+    StreamingLineBuffer_62_pad.run<732, 3>(StreamingLineBuffer_62_out0_stream_prepad, StreamingLineBuffer_62_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_62_out0_stream_0," << StreamingLineBuffer_62_out0_stream[0].size() << std::endl;
     #endif
@@ -21510,7 +21529,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_63_pixel_4;
-    StreamingLineBuffer_63_pixel_4.run<739>(StreamingLineBuffer_63_buffer_stream[2], StreamingLineBuffer_63_out0_stream_prepad[7], StreamingLineBuffer_63_buffer_stream[4]);
+    StreamingLineBuffer_63_pixel_4.run<739, 3>(StreamingLineBuffer_63_buffer_stream[2], StreamingLineBuffer_63_out0_stream_prepad[7], StreamingLineBuffer_63_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_63_out0_stream_prepad_7," << StreamingLineBuffer_63_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -21537,7 +21556,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_63_pixel_5;
-    StreamingLineBuffer_63_pixel_5.run<740>(StreamingLineBuffer_63_buffer_stream[3], StreamingLineBuffer_63_out0_stream_prepad[6], StreamingLineBuffer_63_buffer_stream[5]);
+    StreamingLineBuffer_63_pixel_5.run<740, 3>(StreamingLineBuffer_63_buffer_stream[3], StreamingLineBuffer_63_out0_stream_prepad[6], StreamingLineBuffer_63_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_63_out0_stream_prepad_6," << StreamingLineBuffer_63_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -21564,7 +21583,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_64_pixel_2;
-    StreamingLineBuffer_64_pixel_2.run<752>(StreamingLineBuffer_64_buffer_stream[0], StreamingLineBuffer_64_out0_stream_prepad[9], StreamingLineBuffer_64_buffer_stream[2]);
+    StreamingLineBuffer_64_pixel_2.run<752, 3>(StreamingLineBuffer_64_buffer_stream[0], StreamingLineBuffer_64_out0_stream_prepad[9], StreamingLineBuffer_64_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_64_out0_stream_prepad_9," << StreamingLineBuffer_64_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -21591,17 +21610,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_64_pixel_3;
-    StreamingLineBuffer_64_pixel_3.run<753>(StreamingLineBuffer_64_buffer_stream[1], StreamingLineBuffer_64_out0_stream_prepad[8], StreamingLineBuffer_64_buffer_stream[3]);
+    StreamingLineBuffer_64_pixel_3.run<753, 3>(StreamingLineBuffer_64_buffer_stream[1], StreamingLineBuffer_64_out0_stream_prepad[8], StreamingLineBuffer_64_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_64_out0_stream_prepad_8," << StreamingLineBuffer_64_out0_stream_prepad[8].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_64_buffer_stream_3," << StreamingLineBuffer_64_buffer_stream[3].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_59_weights[16384][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_59_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_59_weights dim=2 complete
-    ap_int<16> StreamingConv_59_biases[128][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_59_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_59_biases dim=2 complete
     StreamingConv <
@@ -21632,7 +21649,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_59;
-    StreamingConv_59.run<733>(StreamingLineBuffer_62_out0_stream, StreamingConv_59_weights, StreamingConv_59_biases, StreamingConv_59_out0_stream);
+    StreamingConv_59.run<733, 3>(StreamingLineBuffer_62_out0_stream, StreamingConv_59_weights, StreamingConv_59_biases, StreamingConv_59_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_59_out0_stream_0," << StreamingConv_59_out0_stream[0].size() << std::endl;
     #endif
@@ -21659,7 +21676,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_63_pixel_6;
-    StreamingLineBuffer_63_pixel_6.run<741>(StreamingLineBuffer_63_buffer_stream[4], StreamingLineBuffer_63_out0_stream_prepad[5], StreamingLineBuffer_63_buffer_stream[6]);
+    StreamingLineBuffer_63_pixel_6.run<741, 3>(StreamingLineBuffer_63_buffer_stream[4], StreamingLineBuffer_63_out0_stream_prepad[5], StreamingLineBuffer_63_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_63_out0_stream_prepad_5," << StreamingLineBuffer_63_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -21686,7 +21703,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_63_pixel_7;
-    StreamingLineBuffer_63_pixel_7.run<742>(StreamingLineBuffer_63_buffer_stream[5], StreamingLineBuffer_63_out0_stream_prepad[4], StreamingLineBuffer_63_buffer_stream[7]);
+    StreamingLineBuffer_63_pixel_7.run<742, 3>(StreamingLineBuffer_63_buffer_stream[5], StreamingLineBuffer_63_out0_stream_prepad[4], StreamingLineBuffer_63_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_63_out0_stream_prepad_4," << StreamingLineBuffer_63_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -21713,7 +21730,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_64_pixel_4;
-    StreamingLineBuffer_64_pixel_4.run<754>(StreamingLineBuffer_64_buffer_stream[2], StreamingLineBuffer_64_out0_stream_prepad[7], StreamingLineBuffer_64_buffer_stream[4]);
+    StreamingLineBuffer_64_pixel_4.run<754, 3>(StreamingLineBuffer_64_buffer_stream[2], StreamingLineBuffer_64_out0_stream_prepad[7], StreamingLineBuffer_64_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_64_out0_stream_prepad_7," << StreamingLineBuffer_64_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -21740,7 +21757,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_64_pixel_5;
-    StreamingLineBuffer_64_pixel_5.run<755>(StreamingLineBuffer_64_buffer_stream[3], StreamingLineBuffer_64_out0_stream_prepad[6], StreamingLineBuffer_64_buffer_stream[5]);
+    StreamingLineBuffer_64_pixel_5.run<755, 3>(StreamingLineBuffer_64_buffer_stream[3], StreamingLineBuffer_64_out0_stream_prepad[6], StreamingLineBuffer_64_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_64_out0_stream_prepad_6," << StreamingLineBuffer_64_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -21767,7 +21784,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_63_pixel_8;
-    StreamingLineBuffer_63_pixel_8.run<743>(StreamingLineBuffer_63_buffer_stream[6], StreamingLineBuffer_63_out0_stream_prepad[3], StreamingLineBuffer_63_buffer_stream[8]);
+    StreamingLineBuffer_63_pixel_8.run<743, 3>(StreamingLineBuffer_63_buffer_stream[6], StreamingLineBuffer_63_out0_stream_prepad[3], StreamingLineBuffer_63_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_63_out0_stream_prepad_3," << StreamingLineBuffer_63_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -21794,7 +21811,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_63_pixel_9;
-    StreamingLineBuffer_63_pixel_9.run<744>(StreamingLineBuffer_63_buffer_stream[7], StreamingLineBuffer_63_out0_stream_prepad[2], StreamingLineBuffer_63_buffer_stream[9]);
+    StreamingLineBuffer_63_pixel_9.run<744, 3>(StreamingLineBuffer_63_buffer_stream[7], StreamingLineBuffer_63_out0_stream_prepad[2], StreamingLineBuffer_63_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_63_out0_stream_prepad_2," << StreamingLineBuffer_63_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -21814,7 +21831,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_57;
-    StreamingSwish_57.run<749>(StreamingConv_59_out0_stream, StreamingSwish_57_lut, StreamingSwish_57_out0_stream);
+    StreamingSwish_57.run<749, 3>(StreamingConv_59_out0_stream, StreamingSwish_57_lut, StreamingSwish_57_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_57_out0_stream_0," << StreamingSwish_57_out0_stream[0].size() << std::endl;
     #endif
@@ -21841,7 +21858,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_64_pixel_6;
-    StreamingLineBuffer_64_pixel_6.run<756>(StreamingLineBuffer_64_buffer_stream[4], StreamingLineBuffer_64_out0_stream_prepad[5], StreamingLineBuffer_64_buffer_stream[6]);
+    StreamingLineBuffer_64_pixel_6.run<756, 3>(StreamingLineBuffer_64_buffer_stream[4], StreamingLineBuffer_64_out0_stream_prepad[5], StreamingLineBuffer_64_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_64_out0_stream_prepad_5," << StreamingLineBuffer_64_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -21868,7 +21885,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_64_pixel_7;
-    StreamingLineBuffer_64_pixel_7.run<757>(StreamingLineBuffer_64_buffer_stream[5], StreamingLineBuffer_64_out0_stream_prepad[4], StreamingLineBuffer_64_buffer_stream[7]);
+    StreamingLineBuffer_64_pixel_7.run<757, 3>(StreamingLineBuffer_64_buffer_stream[5], StreamingLineBuffer_64_out0_stream_prepad[4], StreamingLineBuffer_64_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_64_out0_stream_prepad_4," << StreamingLineBuffer_64_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -21895,7 +21912,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_63_pixel_10;
-    StreamingLineBuffer_63_pixel_10.run<745>(StreamingLineBuffer_63_buffer_stream[8], StreamingLineBuffer_63_out0_stream_prepad[1]);
+    StreamingLineBuffer_63_pixel_10.run<745, 3>(StreamingLineBuffer_63_buffer_stream[8], StreamingLineBuffer_63_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_63_out0_stream_prepad_1," << StreamingLineBuffer_63_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -21919,7 +21936,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_63_pixel_11;
-    StreamingLineBuffer_63_pixel_11.run<746>(StreamingLineBuffer_63_buffer_stream[9], StreamingLineBuffer_63_out0_stream_prepad[0]);
+    StreamingLineBuffer_63_pixel_11.run<746, 3>(StreamingLineBuffer_63_buffer_stream[9], StreamingLineBuffer_63_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_63_out0_stream_prepad_0," << StreamingLineBuffer_63_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -21943,7 +21960,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_64_pixel_8;
-    StreamingLineBuffer_64_pixel_8.run<758>(StreamingLineBuffer_64_buffer_stream[6], StreamingLineBuffer_64_out0_stream_prepad[3], StreamingLineBuffer_64_buffer_stream[8]);
+    StreamingLineBuffer_64_pixel_8.run<758, 3>(StreamingLineBuffer_64_buffer_stream[6], StreamingLineBuffer_64_out0_stream_prepad[3], StreamingLineBuffer_64_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_64_out0_stream_prepad_3," << StreamingLineBuffer_64_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -21970,7 +21987,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_64_pixel_9;
-    StreamingLineBuffer_64_pixel_9.run<759>(StreamingLineBuffer_64_buffer_stream[7], StreamingLineBuffer_64_out0_stream_prepad[2], StreamingLineBuffer_64_buffer_stream[9]);
+    StreamingLineBuffer_64_pixel_9.run<759, 3>(StreamingLineBuffer_64_buffer_stream[7], StreamingLineBuffer_64_out0_stream_prepad[2], StreamingLineBuffer_64_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_64_out0_stream_prepad_2," << StreamingLineBuffer_64_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -21991,7 +22008,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         2  // OUT_CH_PAR
     > BandwidthAdjustIncreaseChannels_11;
-    BandwidthAdjustIncreaseChannels_11.run<765>(StreamingSwish_57_out0_stream, BandwidthAdjustIncreaseChannels_11_out0_stream);
+    BandwidthAdjustIncreaseChannels_11.run<765, 3>(StreamingSwish_57_out0_stream, BandwidthAdjustIncreaseChannels_11_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseChannels_11_out0_stream_0," << BandwidthAdjustIncreaseChannels_11_out0_stream[0].size() << std::endl;
     #endif
@@ -22019,7 +22036,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_63_pad;
-    StreamingLineBuffer_63_pad.run<747>(StreamingLineBuffer_63_out0_stream_prepad, StreamingLineBuffer_63_out0_stream);
+    StreamingLineBuffer_63_pad.run<747, 3>(StreamingLineBuffer_63_out0_stream_prepad, StreamingLineBuffer_63_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_63_out0_stream_0," << StreamingLineBuffer_63_out0_stream[0].size() << std::endl;
     #endif
@@ -22043,7 +22060,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_64_pixel_10;
-    StreamingLineBuffer_64_pixel_10.run<760>(StreamingLineBuffer_64_buffer_stream[8], StreamingLineBuffer_64_out0_stream_prepad[1]);
+    StreamingLineBuffer_64_pixel_10.run<760, 3>(StreamingLineBuffer_64_buffer_stream[8], StreamingLineBuffer_64_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_64_out0_stream_prepad_1," << StreamingLineBuffer_64_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -22067,7 +22084,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_64_pixel_11;
-    StreamingLineBuffer_64_pixel_11.run<761>(StreamingLineBuffer_64_buffer_stream[9], StreamingLineBuffer_64_out0_stream_prepad[0]);
+    StreamingLineBuffer_64_pixel_11.run<761, 3>(StreamingLineBuffer_64_buffer_stream[9], StreamingLineBuffer_64_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_64_out0_stream_prepad_0," << StreamingLineBuffer_64_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -22084,17 +22101,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingConcat_14;
-    StreamingConcat_14.run<767>(BandwidthAdjustIncreaseChannels_11_out0_stream, BandwidthAdjustIncreaseStreams_0_out0_stream, StreamingConcat_14_out0_stream);
+    StreamingConcat_14.run<767, 3>(BandwidthAdjustIncreaseChannels_11_out0_stream, BandwidthAdjustIncreaseStreams_0_out0_stream, StreamingConcat_14_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_14_out0_stream_0," << StreamingConcat_14_out0_stream[0].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_14_out0_stream_1," << StreamingConcat_14_out0_stream[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_60_weights[3200][2][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_60_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_60_weights dim=2 complete
-    ap_int<13> StreamingConv_60_biases[80][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_60_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_60_biases dim=2 complete
     StreamingConv <
@@ -22125,7 +22140,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_60;
-    StreamingConv_60.run<748>(StreamingLineBuffer_63_out0_stream, StreamingConv_60_weights, StreamingConv_60_biases, StreamingConv_60_out0_stream);
+    StreamingConv_60.run<748, 3>(StreamingLineBuffer_63_out0_stream, StreamingConv_60_weights, StreamingConv_60_biases, StreamingConv_60_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_60_out0_stream_0," << StreamingConv_60_out0_stream[0].size() << std::endl;
     #endif
@@ -22153,7 +22168,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_64_pad;
-    StreamingLineBuffer_64_pad.run<762>(StreamingLineBuffer_64_out0_stream_prepad, StreamingLineBuffer_64_out0_stream);
+    StreamingLineBuffer_64_pad.run<762, 3>(StreamingLineBuffer_64_out0_stream_prepad, StreamingLineBuffer_64_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_64_out0_stream_0," << StreamingLineBuffer_64_out0_stream[0].size() << std::endl;
     #endif
@@ -22165,7 +22180,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_25;
-    TensorDuplicator_25.run<772>(StreamingConcat_14_out0_stream, TensorDuplicator_25_out0_stream, TensorDuplicator_25_out1_stream);
+    TensorDuplicator_25.run<772, 3>(StreamingConcat_14_out0_stream, TensorDuplicator_25_out0_stream, TensorDuplicator_25_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_25_out0_stream_0," << TensorDuplicator_25_out0_stream[0].size() << std::endl;
     #endif
@@ -22178,10 +22193,8 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_25_out1_stream_1," << TensorDuplicator_25_out1_stream[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_61_weights[4096][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_61_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_61_weights dim=2 complete
-    ap_int<12> StreamingConv_61_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_61_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_61_biases dim=2 complete
     StreamingConv <
@@ -22212,7 +22225,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_61;
-    StreamingConv_61.run<763>(StreamingLineBuffer_64_out0_stream, StreamingConv_61_weights, StreamingConv_61_biases, StreamingConv_61_out0_stream);
+    StreamingConv_61.run<763, 3>(StreamingLineBuffer_64_out0_stream, StreamingConv_61_weights, StreamingConv_61_biases, StreamingConv_61_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_61_out0_stream_0," << StreamingConv_61_out0_stream[0].size() << std::endl;
     #endif
@@ -22232,7 +22245,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_58;
-    StreamingSwish_58.run<764>(StreamingConv_60_out0_stream, StreamingSwish_58_lut, StreamingSwish_58_out0_stream);
+    StreamingSwish_58.run<764, 3>(StreamingConv_60_out0_stream, StreamingSwish_58_lut, StreamingSwish_58_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_58_out0_stream_0," << StreamingSwish_58_out0_stream[0].size() << std::endl;
     #endif
@@ -22259,7 +22272,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_67_pixel_0;
-    StreamingLineBuffer_67_pixel_0.run<778>(TensorDuplicator_25_out0_stream[1], StreamingLineBuffer_67_out0_stream_prepad[1]);
+    StreamingLineBuffer_67_pixel_0.run<778, 3>(TensorDuplicator_25_out0_stream[1], StreamingLineBuffer_67_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_67_out0_stream_prepad_1," << StreamingLineBuffer_67_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -22283,7 +22296,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_67_pixel_1;
-    StreamingLineBuffer_67_pixel_1.run<779>(TensorDuplicator_25_out0_stream[0], StreamingLineBuffer_67_out0_stream_prepad[0]);
+    StreamingLineBuffer_67_pixel_1.run<779, 3>(TensorDuplicator_25_out0_stream[0], StreamingLineBuffer_67_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_67_out0_stream_prepad_0," << StreamingLineBuffer_67_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -22307,7 +22320,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_68_pixel_0;
-    StreamingLineBuffer_68_pixel_0.run<781>(TensorDuplicator_25_out1_stream[1], StreamingLineBuffer_68_out0_stream_prepad[1]);
+    StreamingLineBuffer_68_pixel_0.run<781, 3>(TensorDuplicator_25_out1_stream[1], StreamingLineBuffer_68_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_68_out0_stream_prepad_1," << StreamingLineBuffer_68_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -22331,7 +22344,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_68_pixel_1;
-    StreamingLineBuffer_68_pixel_1.run<782>(TensorDuplicator_25_out1_stream[0], StreamingLineBuffer_68_out0_stream_prepad[0]);
+    StreamingLineBuffer_68_pixel_1.run<782, 3>(TensorDuplicator_25_out1_stream[0], StreamingLineBuffer_68_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_68_out0_stream_prepad_0," << StreamingLineBuffer_68_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -22348,7 +22361,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_59;
-    StreamingSwish_59.run<766>(StreamingConv_61_out0_stream, StreamingSwish_59_lut, StreamingSwish_59_out0_stream);
+    StreamingSwish_59.run<766, 3>(StreamingConv_61_out0_stream, StreamingSwish_59_lut, StreamingSwish_59_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_59_out0_stream_0," << StreamingSwish_59_out0_stream[0].size() << std::endl;
     #endif
@@ -22375,7 +22388,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_65_pixel_0;
-    StreamingLineBuffer_65_pixel_0.run<768>(StreamingSwish_58_out0_stream[1], StreamingLineBuffer_65_out0_stream_prepad[1]);
+    StreamingLineBuffer_65_pixel_0.run<768, 3>(StreamingSwish_58_out0_stream[1], StreamingLineBuffer_65_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_65_out0_stream_prepad_1," << StreamingLineBuffer_65_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -22399,7 +22412,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_65_pixel_1;
-    StreamingLineBuffer_65_pixel_1.run<769>(StreamingSwish_58_out0_stream[0], StreamingLineBuffer_65_out0_stream_prepad[0]);
+    StreamingLineBuffer_65_pixel_1.run<769, 3>(StreamingSwish_58_out0_stream[0], StreamingLineBuffer_65_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_65_out0_stream_prepad_0," << StreamingLineBuffer_65_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -22424,7 +22437,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_67_pad;
-    StreamingLineBuffer_67_pad.run<780>(StreamingLineBuffer_67_out0_stream_prepad, StreamingLineBuffer_67_out0_stream);
+    StreamingLineBuffer_67_pad.run<780, 3>(StreamingLineBuffer_67_out0_stream_prepad, StreamingLineBuffer_67_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_67_out0_stream_0," << StreamingLineBuffer_67_out0_stream[0].size() << std::endl;
     #endif
@@ -22449,7 +22462,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_68_pad;
-    StreamingLineBuffer_68_pad.run<783>(StreamingLineBuffer_68_out0_stream_prepad, StreamingLineBuffer_68_out0_stream);
+    StreamingLineBuffer_68_pad.run<783, 3>(StreamingLineBuffer_68_out0_stream_prepad, StreamingLineBuffer_68_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_68_out0_stream_0," << StreamingLineBuffer_68_out0_stream[0].size() << std::endl;
     #endif
@@ -22474,7 +22487,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_65_pad;
-    StreamingLineBuffer_65_pad.run<770>(StreamingLineBuffer_65_out0_stream_prepad, StreamingLineBuffer_65_out0_stream);
+    StreamingLineBuffer_65_pad.run<770, 3>(StreamingLineBuffer_65_out0_stream_prepad, StreamingLineBuffer_65_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_65_out0_stream_0," << StreamingLineBuffer_65_out0_stream[0].size() << std::endl;
     #endif
@@ -22498,7 +22511,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_66_pixel_0;
-    StreamingLineBuffer_66_pixel_0.run<773>(StreamingSwish_59_out0_stream[1], StreamingLineBuffer_66_out0_stream_prepad[1]);
+    StreamingLineBuffer_66_pixel_0.run<773, 3>(StreamingSwish_59_out0_stream[1], StreamingLineBuffer_66_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_66_out0_stream_prepad_1," << StreamingLineBuffer_66_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -22522,14 +22535,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_66_pixel_1;
-    StreamingLineBuffer_66_pixel_1.run<774>(StreamingSwish_59_out0_stream[0], StreamingLineBuffer_66_out0_stream_prepad[0]);
+    StreamingLineBuffer_66_pixel_1.run<774, 3>(StreamingSwish_59_out0_stream[0], StreamingLineBuffer_66_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_66_out0_stream_prepad_0," << StreamingLineBuffer_66_out0_stream_prepad[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_64_weights[16384][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_64_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_64_weights dim=2 complete
-    ap_int<13> StreamingConv_64_biases[128][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_64_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_64_biases dim=2 complete
     StreamingConv <
@@ -22560,17 +22571,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_64;
-    StreamingConv_64.run<785>(StreamingLineBuffer_67_out0_stream, StreamingConv_64_weights, StreamingConv_64_biases, StreamingConv_64_out0_stream);
+    StreamingConv_64.run<785, 3>(StreamingLineBuffer_67_out0_stream, StreamingConv_64_weights, StreamingConv_64_biases, StreamingConv_64_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_64_out0_stream_0," << StreamingConv_64_out0_stream[0].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_64_out0_stream_1," << StreamingConv_64_out0_stream[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_65_weights[16384][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_65_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_65_weights dim=2 complete
-    ap_int<13> StreamingConv_65_biases[128][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_65_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_65_biases dim=2 complete
     StreamingConv <
@@ -22601,17 +22610,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_65;
-    StreamingConv_65.run<786>(StreamingLineBuffer_68_out0_stream, StreamingConv_65_weights, StreamingConv_65_biases, StreamingConv_65_out0_stream);
+    StreamingConv_65.run<786, 3>(StreamingLineBuffer_68_out0_stream, StreamingConv_65_weights, StreamingConv_65_biases, StreamingConv_65_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_65_out0_stream_0," << StreamingConv_65_out0_stream[0].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_65_out0_stream_1," << StreamingConv_65_out0_stream[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_62_weights[3200][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_62_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_62_weights dim=2 complete
-    ap_int<15> StreamingConv_62_biases[40][2][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_62_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_62_biases dim=2 complete
     StreamingConv <
@@ -22642,7 +22649,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_62;
-    StreamingConv_62.run<771>(StreamingLineBuffer_65_out0_stream, StreamingConv_62_weights, StreamingConv_62_biases, StreamingConv_62_out0_stream);
+    StreamingConv_62.run<771, 3>(StreamingLineBuffer_65_out0_stream, StreamingConv_62_weights, StreamingConv_62_biases, StreamingConv_62_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_62_out0_stream_0," << StreamingConv_62_out0_stream[0].size() << std::endl;
     #endif
@@ -22670,7 +22677,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_66_pad;
-    StreamingLineBuffer_66_pad.run<775>(StreamingLineBuffer_66_out0_stream_prepad, StreamingLineBuffer_66_out0_stream);
+    StreamingLineBuffer_66_pad.run<775, 3>(StreamingLineBuffer_66_out0_stream_prepad, StreamingLineBuffer_66_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_66_out0_stream_0," << StreamingLineBuffer_66_out0_stream[0].size() << std::endl;
     #endif
@@ -22687,7 +22694,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_60;
-    StreamingSwish_60.run<788>(StreamingConv_64_out0_stream, StreamingSwish_60_lut, StreamingSwish_60_out0_stream);
+    StreamingSwish_60.run<788, 3>(StreamingConv_64_out0_stream, StreamingSwish_60_lut, StreamingSwish_60_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_60_out0_stream_0," << StreamingSwish_60_out0_stream[0].size() << std::endl;
     #endif
@@ -22707,17 +22714,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_61;
-    StreamingSwish_61.run<789>(StreamingConv_65_out0_stream, StreamingSwish_61_lut, StreamingSwish_61_out0_stream);
+    StreamingSwish_61.run<789, 3>(StreamingConv_65_out0_stream, StreamingSwish_61_lut, StreamingSwish_61_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_61_out0_stream_0," << StreamingSwish_61_out0_stream[0].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_61_out0_stream_1," << StreamingSwish_61_out0_stream[1].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_63_weights[4096][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_63_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_63_weights dim=2 complete
-    ap_int<13> StreamingConv_63_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_63_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_63_biases dim=2 complete
     StreamingConv <
@@ -22748,7 +22753,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_63;
-    StreamingConv_63.run<776>(StreamingLineBuffer_66_out0_stream, StreamingConv_63_weights, StreamingConv_63_biases, StreamingConv_63_out0_stream);
+    StreamingConv_63.run<776, 3>(StreamingLineBuffer_66_out0_stream, StreamingConv_63_weights, StreamingConv_63_biases, StreamingConv_63_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_63_out0_stream_0," << StreamingConv_63_out0_stream[0].size() << std::endl;
     #endif
@@ -22769,7 +22774,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // IN_CH_PAR
         1  // OUT_CH_PAR
     > BandwidthAdjustDecreaseChannels_9;
-    BandwidthAdjustDecreaseChannels_9.run<777>(StreamingConv_62_out0_stream, BandwidthAdjustDecreaseChannels_9_out0_stream);
+    BandwidthAdjustDecreaseChannels_9.run<777, 3>(StreamingConv_62_out0_stream, BandwidthAdjustDecreaseChannels_9_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseChannels_9_out0_stream_0," << BandwidthAdjustDecreaseChannels_9_out0_stream[0].size() << std::endl;
     #endif
@@ -22796,7 +22801,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_69_pixel_0;
-    StreamingLineBuffer_69_pixel_0.run<791>(StreamingSwish_60_out0_stream[1], StreamingLineBuffer_69_out0_stream_prepad[1]);
+    StreamingLineBuffer_69_pixel_0.run<791, 3>(StreamingSwish_60_out0_stream[1], StreamingLineBuffer_69_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_69_out0_stream_prepad_1," << StreamingLineBuffer_69_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -22820,7 +22825,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_69_pixel_1;
-    StreamingLineBuffer_69_pixel_1.run<792>(StreamingSwish_60_out0_stream[0], StreamingLineBuffer_69_out0_stream_prepad[0]);
+    StreamingLineBuffer_69_pixel_1.run<792, 3>(StreamingSwish_60_out0_stream[0], StreamingLineBuffer_69_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_69_out0_stream_prepad_0," << StreamingLineBuffer_69_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -22837,7 +22842,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingConcat_15;
-    StreamingConcat_15.run<784>(StreamingConv_63_out0_stream, BandwidthAdjustDecreaseChannels_9_out0_stream, StreamingConcat_15_out0_stream);
+    StreamingConcat_15.run<784, 3>(StreamingConv_63_out0_stream, BandwidthAdjustDecreaseChannels_9_out0_stream, StreamingConcat_15_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_15_out0_stream_0," << StreamingConcat_15_out0_stream[0].size() << std::endl;
     #endif
@@ -22865,7 +22870,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_69_pad;
-    StreamingLineBuffer_69_pad.run<793>(StreamingLineBuffer_69_out0_stream_prepad, StreamingLineBuffer_69_out0_stream);
+    StreamingLineBuffer_69_pad.run<793, 3>(StreamingLineBuffer_69_out0_stream_prepad, StreamingLineBuffer_69_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_69_out0_stream_0," << StreamingLineBuffer_69_out0_stream[0].size() << std::endl;
     #endif
@@ -22883,14 +22888,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         1  // OUT_CH_PAR
     > BandwidthAdjustDecreaseStreams_4;
-    BandwidthAdjustDecreaseStreams_4.run<787>(StreamingConcat_15_out0_stream, BandwidthAdjustDecreaseStreams_4_out0_stream);
+    BandwidthAdjustDecreaseStreams_4.run<787, 3>(StreamingConcat_15_out0_stream, BandwidthAdjustDecreaseStreams_4_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseStreams_4_out0_stream_0," << BandwidthAdjustDecreaseStreams_4_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_66_weights[16384][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_66_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_66_weights dim=2 complete
-    ap_int<13> StreamingConv_66_biases[128][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_66_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_66_biases dim=2 complete
     StreamingConv <
@@ -22921,7 +22924,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_66;
-    StreamingConv_66.run<794>(StreamingLineBuffer_69_out0_stream, StreamingConv_66_weights, StreamingConv_66_biases, StreamingConv_66_out0_stream);
+    StreamingConv_66.run<794, 3>(StreamingLineBuffer_69_out0_stream, StreamingConv_66_weights, StreamingConv_66_biases, StreamingConv_66_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_66_out0_stream_0," << StreamingConv_66_out0_stream[0].size() << std::endl;
     #endif
@@ -22940,7 +22943,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingReshape_1;
-    StreamingReshape_1.run<790>(BandwidthAdjustDecreaseStreams_4_out0_stream, StreamingReshape_1_out0_stream);
+    StreamingReshape_1.run<790, 3>(BandwidthAdjustDecreaseStreams_4_out0_stream, StreamingReshape_1_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingReshape_1_out0_stream_0," << StreamingReshape_1_out0_stream[0].size() << std::endl;
     #endif
@@ -22957,7 +22960,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_62;
-    StreamingSwish_62.run<796>(StreamingConv_66_out0_stream, StreamingSwish_62_lut, StreamingSwish_62_out0_stream);
+    StreamingSwish_62.run<796, 3>(StreamingConv_66_out0_stream, StreamingSwish_62_lut, StreamingSwish_62_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_62_out0_stream_0," << StreamingSwish_62_out0_stream[0].size() << std::endl;
     #endif
@@ -22977,7 +22980,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingConcat_16;
-    StreamingConcat_16.run<795>(BandwidthAdjustDecreaseChannels_7_out0_stream, StreamingReshape_1_out0_stream, StreamingConcat_16_out0_stream);
+    StreamingConcat_16.run<795, 3>(BandwidthAdjustDecreaseChannels_7_out0_stream, StreamingReshape_1_out0_stream, StreamingConcat_16_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_16_out0_stream_0," << StreamingConcat_16_out0_stream[0].size() << std::endl;
     #endif
@@ -23001,7 +23004,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_70_pixel_0;
-    StreamingLineBuffer_70_pixel_0.run<797>(StreamingSwish_62_out0_stream[0], StreamingLineBuffer_70_out0_stream_prepad[11], StreamingLineBuffer_70_buffer_stream[0]);
+    StreamingLineBuffer_70_pixel_0.run<797, 3>(StreamingSwish_62_out0_stream[0], StreamingLineBuffer_70_out0_stream_prepad[11], StreamingLineBuffer_70_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_70_out0_stream_prepad_11," << StreamingLineBuffer_70_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -23028,7 +23031,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_70_pixel_1;
-    StreamingLineBuffer_70_pixel_1.run<798>(StreamingSwish_62_out0_stream[1], StreamingLineBuffer_70_out0_stream_prepad[10], StreamingLineBuffer_70_buffer_stream[1]);
+    StreamingLineBuffer_70_pixel_1.run<798, 3>(StreamingSwish_62_out0_stream[1], StreamingLineBuffer_70_out0_stream_prepad[10], StreamingLineBuffer_70_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_70_out0_stream_prepad_10," << StreamingLineBuffer_70_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -23055,7 +23058,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_70_pixel_2;
-    StreamingLineBuffer_70_pixel_2.run<799>(StreamingLineBuffer_70_buffer_stream[0], StreamingLineBuffer_70_out0_stream_prepad[9], StreamingLineBuffer_70_buffer_stream[2]);
+    StreamingLineBuffer_70_pixel_2.run<799, 3>(StreamingLineBuffer_70_buffer_stream[0], StreamingLineBuffer_70_out0_stream_prepad[9], StreamingLineBuffer_70_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_70_out0_stream_prepad_9," << StreamingLineBuffer_70_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -23082,7 +23085,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_70_pixel_3;
-    StreamingLineBuffer_70_pixel_3.run<800>(StreamingLineBuffer_70_buffer_stream[1], StreamingLineBuffer_70_out0_stream_prepad[8], StreamingLineBuffer_70_buffer_stream[3]);
+    StreamingLineBuffer_70_pixel_3.run<800, 3>(StreamingLineBuffer_70_buffer_stream[1], StreamingLineBuffer_70_out0_stream_prepad[8], StreamingLineBuffer_70_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_70_out0_stream_prepad_8," << StreamingLineBuffer_70_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -23109,7 +23112,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_70_pixel_4;
-    StreamingLineBuffer_70_pixel_4.run<801>(StreamingLineBuffer_70_buffer_stream[2], StreamingLineBuffer_70_out0_stream_prepad[7], StreamingLineBuffer_70_buffer_stream[4]);
+    StreamingLineBuffer_70_pixel_4.run<801, 3>(StreamingLineBuffer_70_buffer_stream[2], StreamingLineBuffer_70_out0_stream_prepad[7], StreamingLineBuffer_70_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_70_out0_stream_prepad_7," << StreamingLineBuffer_70_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -23136,7 +23139,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_70_pixel_5;
-    StreamingLineBuffer_70_pixel_5.run<802>(StreamingLineBuffer_70_buffer_stream[3], StreamingLineBuffer_70_out0_stream_prepad[6], StreamingLineBuffer_70_buffer_stream[5]);
+    StreamingLineBuffer_70_pixel_5.run<802, 3>(StreamingLineBuffer_70_buffer_stream[3], StreamingLineBuffer_70_out0_stream_prepad[6], StreamingLineBuffer_70_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_70_out0_stream_prepad_6," << StreamingLineBuffer_70_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -23163,7 +23166,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_70_pixel_6;
-    StreamingLineBuffer_70_pixel_6.run<803>(StreamingLineBuffer_70_buffer_stream[4], StreamingLineBuffer_70_out0_stream_prepad[5], StreamingLineBuffer_70_buffer_stream[6]);
+    StreamingLineBuffer_70_pixel_6.run<803, 3>(StreamingLineBuffer_70_buffer_stream[4], StreamingLineBuffer_70_out0_stream_prepad[5], StreamingLineBuffer_70_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_70_out0_stream_prepad_5," << StreamingLineBuffer_70_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -23190,7 +23193,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_70_pixel_7;
-    StreamingLineBuffer_70_pixel_7.run<804>(StreamingLineBuffer_70_buffer_stream[5], StreamingLineBuffer_70_out0_stream_prepad[4], StreamingLineBuffer_70_buffer_stream[7]);
+    StreamingLineBuffer_70_pixel_7.run<804, 3>(StreamingLineBuffer_70_buffer_stream[5], StreamingLineBuffer_70_out0_stream_prepad[4], StreamingLineBuffer_70_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_70_out0_stream_prepad_4," << StreamingLineBuffer_70_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -23217,7 +23220,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_70_pixel_8;
-    StreamingLineBuffer_70_pixel_8.run<805>(StreamingLineBuffer_70_buffer_stream[6], StreamingLineBuffer_70_out0_stream_prepad[3], StreamingLineBuffer_70_buffer_stream[8]);
+    StreamingLineBuffer_70_pixel_8.run<805, 3>(StreamingLineBuffer_70_buffer_stream[6], StreamingLineBuffer_70_out0_stream_prepad[3], StreamingLineBuffer_70_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_70_out0_stream_prepad_3," << StreamingLineBuffer_70_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -23244,7 +23247,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_70_pixel_9;
-    StreamingLineBuffer_70_pixel_9.run<806>(StreamingLineBuffer_70_buffer_stream[7], StreamingLineBuffer_70_out0_stream_prepad[2], StreamingLineBuffer_70_buffer_stream[9]);
+    StreamingLineBuffer_70_pixel_9.run<806, 3>(StreamingLineBuffer_70_buffer_stream[7], StreamingLineBuffer_70_out0_stream_prepad[2], StreamingLineBuffer_70_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_70_out0_stream_prepad_2," << StreamingLineBuffer_70_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -23271,7 +23274,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_70_pixel_10;
-    StreamingLineBuffer_70_pixel_10.run<807>(StreamingLineBuffer_70_buffer_stream[8], StreamingLineBuffer_70_out0_stream_prepad[1]);
+    StreamingLineBuffer_70_pixel_10.run<807, 3>(StreamingLineBuffer_70_buffer_stream[8], StreamingLineBuffer_70_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_70_out0_stream_prepad_1," << StreamingLineBuffer_70_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -23295,7 +23298,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_70_pixel_11;
-    StreamingLineBuffer_70_pixel_11.run<808>(StreamingLineBuffer_70_buffer_stream[9], StreamingLineBuffer_70_out0_stream_prepad[0]);
+    StreamingLineBuffer_70_pixel_11.run<808, 3>(StreamingLineBuffer_70_buffer_stream[9], StreamingLineBuffer_70_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_70_out0_stream_prepad_0," << StreamingLineBuffer_70_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -23320,14 +23323,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_70_pad;
-    StreamingLineBuffer_70_pad.run<809>(StreamingLineBuffer_70_out0_stream_prepad, StreamingLineBuffer_70_out0_stream);
+    StreamingLineBuffer_70_pad.run<809, 3>(StreamingLineBuffer_70_out0_stream_prepad, StreamingLineBuffer_70_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_70_out0_stream_0," << StreamingLineBuffer_70_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_67_weights[16384][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_67_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_67_weights dim=2 complete
-    ap_int<15> StreamingConv_67_biases[128][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_67_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_67_biases dim=2 complete
     StreamingConv <
@@ -23358,7 +23359,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_67;
-    StreamingConv_67.run<810>(StreamingLineBuffer_70_out0_stream, StreamingConv_67_weights, StreamingConv_67_biases, StreamingConv_67_out0_stream);
+    StreamingConv_67.run<810, 3>(StreamingLineBuffer_70_out0_stream, StreamingConv_67_weights, StreamingConv_67_biases, StreamingConv_67_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_67_out0_stream_0," << StreamingConv_67_out0_stream[0].size() << std::endl;
     #endif
@@ -23378,7 +23379,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_63;
-    StreamingSwish_63.run<811>(StreamingConv_67_out0_stream, StreamingSwish_63_lut, StreamingSwish_63_out0_stream);
+    StreamingSwish_63.run<811, 3>(StreamingConv_67_out0_stream, StreamingSwish_63_lut, StreamingSwish_63_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_63_out0_stream_0," << StreamingSwish_63_out0_stream[0].size() << std::endl;
     #endif
@@ -23398,7 +23399,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingConcat_17;
-    StreamingConcat_17.run<812>(StreamingSwish_63_out0_stream, StreamingSwish_61_out0_stream, StreamingConcat_17_out0_stream);
+    StreamingConcat_17.run<812, 3>(StreamingSwish_63_out0_stream, StreamingSwish_61_out0_stream, StreamingConcat_17_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_17_out0_stream_0," << StreamingConcat_17_out0_stream[0].size() << std::endl;
     #endif
@@ -23419,7 +23420,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         4  // OUT_CH_PAR
     > BandwidthAdjustIncreaseChannels_12;
-    BandwidthAdjustIncreaseChannels_12.run<813>(StreamingConcat_17_out0_stream, BandwidthAdjustIncreaseChannels_12_out0_stream);
+    BandwidthAdjustIncreaseChannels_12.run<813, 3>(StreamingConcat_17_out0_stream, BandwidthAdjustIncreaseChannels_12_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseChannels_12_out0_stream_0," << BandwidthAdjustIncreaseChannels_12_out0_stream[0].size() << std::endl;
     #endif
@@ -23446,7 +23447,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_71_pixel_0;
-    StreamingLineBuffer_71_pixel_0.run<814>(BandwidthAdjustIncreaseChannels_12_out0_stream[1], StreamingLineBuffer_71_out0_stream_prepad[1]);
+    StreamingLineBuffer_71_pixel_0.run<814, 3>(BandwidthAdjustIncreaseChannels_12_out0_stream[1], StreamingLineBuffer_71_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_71_out0_stream_prepad_1," << StreamingLineBuffer_71_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -23470,7 +23471,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         4  // CH_PAR
     > StreamingLineBuffer_71_pixel_1;
-    StreamingLineBuffer_71_pixel_1.run<815>(BandwidthAdjustIncreaseChannels_12_out0_stream[0], StreamingLineBuffer_71_out0_stream_prepad[0]);
+    StreamingLineBuffer_71_pixel_1.run<815, 3>(BandwidthAdjustIncreaseChannels_12_out0_stream[0], StreamingLineBuffer_71_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_71_out0_stream_prepad_0," << StreamingLineBuffer_71_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -23495,14 +23496,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         4,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_71_pad;
-    StreamingLineBuffer_71_pad.run<816>(StreamingLineBuffer_71_out0_stream_prepad, StreamingLineBuffer_71_out0_stream);
+    StreamingLineBuffer_71_pad.run<816, 3>(StreamingLineBuffer_71_out0_stream_prepad, StreamingLineBuffer_71_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_71_out0_stream_0," << StreamingLineBuffer_71_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_68_weights[16384][4][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_68_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_68_weights dim=2 complete
-    ap_int<13> StreamingConv_68_biases[256][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_68_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_68_biases dim=2 complete
     StreamingConv <
@@ -23533,7 +23532,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_68;
-    StreamingConv_68.run<817>(StreamingLineBuffer_71_out0_stream, StreamingConv_68_weights, StreamingConv_68_biases, StreamingConv_68_out0_stream);
+    StreamingConv_68.run<817, 3>(StreamingLineBuffer_71_out0_stream, StreamingConv_68_weights, StreamingConv_68_biases, StreamingConv_68_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_68_out0_stream_0," << StreamingConv_68_out0_stream[0].size() << std::endl;
     #endif
@@ -23553,7 +23552,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_64;
-    StreamingSwish_64.run<818>(StreamingConv_68_out0_stream, StreamingSwish_64_lut, StreamingSwish_64_out0_stream);
+    StreamingSwish_64.run<818, 3>(StreamingConv_68_out0_stream, StreamingSwish_64_lut, StreamingSwish_64_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_64_out0_stream_0," << StreamingSwish_64_out0_stream[0].size() << std::endl;
     #endif
@@ -23568,7 +23567,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > TensorDuplicator_26;
-    TensorDuplicator_26.run<819>(StreamingSwish_64_out0_stream, TensorDuplicator_26_out0_stream, TensorDuplicator_26_out1_stream);
+    TensorDuplicator_26.run<819, 3>(StreamingSwish_64_out0_stream, TensorDuplicator_26_out0_stream, TensorDuplicator_26_out1_stream);
     #ifndef __SYNTHESIS__
     std::cout << "TensorDuplicator_26_out0_stream_0," << TensorDuplicator_26_out0_stream[0].size() << std::endl;
     #endif
@@ -23595,7 +23594,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         2  // OUT_CH_PAR
     > BandwidthAdjustIncreaseChannels_13;
-    BandwidthAdjustIncreaseChannels_13.run<820>(TensorDuplicator_26_out1_stream, BandwidthAdjustIncreaseChannels_13_out0_stream);
+    BandwidthAdjustIncreaseChannels_13.run<820, 3>(TensorDuplicator_26_out1_stream, BandwidthAdjustIncreaseChannels_13_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustIncreaseChannels_13_out0_stream_0," << BandwidthAdjustIncreaseChannels_13_out0_stream[0].size() << std::endl;
     #endif
@@ -23622,7 +23621,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_72_pixel_0;
-    StreamingLineBuffer_72_pixel_0.run<821>(TensorDuplicator_26_out0_stream[0], StreamingLineBuffer_72_out0_stream_prepad[11], StreamingLineBuffer_72_buffer_stream[0]);
+    StreamingLineBuffer_72_pixel_0.run<821, 3>(TensorDuplicator_26_out0_stream[0], StreamingLineBuffer_72_out0_stream_prepad[11], StreamingLineBuffer_72_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_72_out0_stream_prepad_11," << StreamingLineBuffer_72_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -23649,7 +23648,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_72_pixel_1;
-    StreamingLineBuffer_72_pixel_1.run<822>(TensorDuplicator_26_out0_stream[1], StreamingLineBuffer_72_out0_stream_prepad[10], StreamingLineBuffer_72_buffer_stream[1]);
+    StreamingLineBuffer_72_pixel_1.run<822, 3>(TensorDuplicator_26_out0_stream[1], StreamingLineBuffer_72_out0_stream_prepad[10], StreamingLineBuffer_72_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_72_out0_stream_prepad_10," << StreamingLineBuffer_72_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -23676,7 +23675,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_72_pixel_2;
-    StreamingLineBuffer_72_pixel_2.run<823>(StreamingLineBuffer_72_buffer_stream[0], StreamingLineBuffer_72_out0_stream_prepad[9], StreamingLineBuffer_72_buffer_stream[2]);
+    StreamingLineBuffer_72_pixel_2.run<823, 3>(StreamingLineBuffer_72_buffer_stream[0], StreamingLineBuffer_72_out0_stream_prepad[9], StreamingLineBuffer_72_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_72_out0_stream_prepad_9," << StreamingLineBuffer_72_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -23703,7 +23702,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_72_pixel_3;
-    StreamingLineBuffer_72_pixel_3.run<824>(StreamingLineBuffer_72_buffer_stream[1], StreamingLineBuffer_72_out0_stream_prepad[8], StreamingLineBuffer_72_buffer_stream[3]);
+    StreamingLineBuffer_72_pixel_3.run<824, 3>(StreamingLineBuffer_72_buffer_stream[1], StreamingLineBuffer_72_out0_stream_prepad[8], StreamingLineBuffer_72_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_72_out0_stream_prepad_8," << StreamingLineBuffer_72_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -23730,7 +23729,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_73_pixel_0;
-    StreamingLineBuffer_73_pixel_0.run<835>(BandwidthAdjustIncreaseChannels_13_out0_stream[0], StreamingLineBuffer_73_out0_stream_prepad[11], StreamingLineBuffer_73_buffer_stream[0]);
+    StreamingLineBuffer_73_pixel_0.run<835, 3>(BandwidthAdjustIncreaseChannels_13_out0_stream[0], StreamingLineBuffer_73_out0_stream_prepad[11], StreamingLineBuffer_73_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_73_out0_stream_prepad_11," << StreamingLineBuffer_73_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -23757,7 +23756,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_73_pixel_1;
-    StreamingLineBuffer_73_pixel_1.run<836>(BandwidthAdjustIncreaseChannels_13_out0_stream[1], StreamingLineBuffer_73_out0_stream_prepad[10], StreamingLineBuffer_73_buffer_stream[1]);
+    StreamingLineBuffer_73_pixel_1.run<836, 3>(BandwidthAdjustIncreaseChannels_13_out0_stream[1], StreamingLineBuffer_73_out0_stream_prepad[10], StreamingLineBuffer_73_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_73_out0_stream_prepad_10," << StreamingLineBuffer_73_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -23784,7 +23783,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_72_pixel_4;
-    StreamingLineBuffer_72_pixel_4.run<825>(StreamingLineBuffer_72_buffer_stream[2], StreamingLineBuffer_72_out0_stream_prepad[7], StreamingLineBuffer_72_buffer_stream[4]);
+    StreamingLineBuffer_72_pixel_4.run<825, 3>(StreamingLineBuffer_72_buffer_stream[2], StreamingLineBuffer_72_out0_stream_prepad[7], StreamingLineBuffer_72_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_72_out0_stream_prepad_7," << StreamingLineBuffer_72_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -23811,7 +23810,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_72_pixel_5;
-    StreamingLineBuffer_72_pixel_5.run<826>(StreamingLineBuffer_72_buffer_stream[3], StreamingLineBuffer_72_out0_stream_prepad[6], StreamingLineBuffer_72_buffer_stream[5]);
+    StreamingLineBuffer_72_pixel_5.run<826, 3>(StreamingLineBuffer_72_buffer_stream[3], StreamingLineBuffer_72_out0_stream_prepad[6], StreamingLineBuffer_72_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_72_out0_stream_prepad_6," << StreamingLineBuffer_72_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -23838,7 +23837,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_73_pixel_2;
-    StreamingLineBuffer_73_pixel_2.run<837>(StreamingLineBuffer_73_buffer_stream[0], StreamingLineBuffer_73_out0_stream_prepad[9], StreamingLineBuffer_73_buffer_stream[2]);
+    StreamingLineBuffer_73_pixel_2.run<837, 3>(StreamingLineBuffer_73_buffer_stream[0], StreamingLineBuffer_73_out0_stream_prepad[9], StreamingLineBuffer_73_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_73_out0_stream_prepad_9," << StreamingLineBuffer_73_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -23865,7 +23864,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_73_pixel_3;
-    StreamingLineBuffer_73_pixel_3.run<838>(StreamingLineBuffer_73_buffer_stream[1], StreamingLineBuffer_73_out0_stream_prepad[8], StreamingLineBuffer_73_buffer_stream[3]);
+    StreamingLineBuffer_73_pixel_3.run<838, 3>(StreamingLineBuffer_73_buffer_stream[1], StreamingLineBuffer_73_out0_stream_prepad[8], StreamingLineBuffer_73_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_73_out0_stream_prepad_8," << StreamingLineBuffer_73_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -23892,7 +23891,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_72_pixel_6;
-    StreamingLineBuffer_72_pixel_6.run<827>(StreamingLineBuffer_72_buffer_stream[4], StreamingLineBuffer_72_out0_stream_prepad[5], StreamingLineBuffer_72_buffer_stream[6]);
+    StreamingLineBuffer_72_pixel_6.run<827, 3>(StreamingLineBuffer_72_buffer_stream[4], StreamingLineBuffer_72_out0_stream_prepad[5], StreamingLineBuffer_72_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_72_out0_stream_prepad_5," << StreamingLineBuffer_72_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -23919,7 +23918,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_72_pixel_7;
-    StreamingLineBuffer_72_pixel_7.run<828>(StreamingLineBuffer_72_buffer_stream[5], StreamingLineBuffer_72_out0_stream_prepad[4], StreamingLineBuffer_72_buffer_stream[7]);
+    StreamingLineBuffer_72_pixel_7.run<828, 3>(StreamingLineBuffer_72_buffer_stream[5], StreamingLineBuffer_72_out0_stream_prepad[4], StreamingLineBuffer_72_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_72_out0_stream_prepad_4," << StreamingLineBuffer_72_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -23946,7 +23945,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_73_pixel_4;
-    StreamingLineBuffer_73_pixel_4.run<839>(StreamingLineBuffer_73_buffer_stream[2], StreamingLineBuffer_73_out0_stream_prepad[7], StreamingLineBuffer_73_buffer_stream[4]);
+    StreamingLineBuffer_73_pixel_4.run<839, 3>(StreamingLineBuffer_73_buffer_stream[2], StreamingLineBuffer_73_out0_stream_prepad[7], StreamingLineBuffer_73_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_73_out0_stream_prepad_7," << StreamingLineBuffer_73_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -23973,7 +23972,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_73_pixel_5;
-    StreamingLineBuffer_73_pixel_5.run<840>(StreamingLineBuffer_73_buffer_stream[3], StreamingLineBuffer_73_out0_stream_prepad[6], StreamingLineBuffer_73_buffer_stream[5]);
+    StreamingLineBuffer_73_pixel_5.run<840, 3>(StreamingLineBuffer_73_buffer_stream[3], StreamingLineBuffer_73_out0_stream_prepad[6], StreamingLineBuffer_73_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_73_out0_stream_prepad_6," << StreamingLineBuffer_73_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -24000,7 +23999,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_72_pixel_8;
-    StreamingLineBuffer_72_pixel_8.run<829>(StreamingLineBuffer_72_buffer_stream[6], StreamingLineBuffer_72_out0_stream_prepad[3], StreamingLineBuffer_72_buffer_stream[8]);
+    StreamingLineBuffer_72_pixel_8.run<829, 3>(StreamingLineBuffer_72_buffer_stream[6], StreamingLineBuffer_72_out0_stream_prepad[3], StreamingLineBuffer_72_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_72_out0_stream_prepad_3," << StreamingLineBuffer_72_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -24027,7 +24026,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_72_pixel_9;
-    StreamingLineBuffer_72_pixel_9.run<830>(StreamingLineBuffer_72_buffer_stream[7], StreamingLineBuffer_72_out0_stream_prepad[2], StreamingLineBuffer_72_buffer_stream[9]);
+    StreamingLineBuffer_72_pixel_9.run<830, 3>(StreamingLineBuffer_72_buffer_stream[7], StreamingLineBuffer_72_out0_stream_prepad[2], StreamingLineBuffer_72_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_72_out0_stream_prepad_2," << StreamingLineBuffer_72_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -24054,7 +24053,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_73_pixel_6;
-    StreamingLineBuffer_73_pixel_6.run<841>(StreamingLineBuffer_73_buffer_stream[4], StreamingLineBuffer_73_out0_stream_prepad[5], StreamingLineBuffer_73_buffer_stream[6]);
+    StreamingLineBuffer_73_pixel_6.run<841, 3>(StreamingLineBuffer_73_buffer_stream[4], StreamingLineBuffer_73_out0_stream_prepad[5], StreamingLineBuffer_73_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_73_out0_stream_prepad_5," << StreamingLineBuffer_73_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -24081,7 +24080,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_73_pixel_7;
-    StreamingLineBuffer_73_pixel_7.run<842>(StreamingLineBuffer_73_buffer_stream[5], StreamingLineBuffer_73_out0_stream_prepad[4], StreamingLineBuffer_73_buffer_stream[7]);
+    StreamingLineBuffer_73_pixel_7.run<842, 3>(StreamingLineBuffer_73_buffer_stream[5], StreamingLineBuffer_73_out0_stream_prepad[4], StreamingLineBuffer_73_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_73_out0_stream_prepad_4," << StreamingLineBuffer_73_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -24108,7 +24107,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_72_pixel_10;
-    StreamingLineBuffer_72_pixel_10.run<831>(StreamingLineBuffer_72_buffer_stream[8], StreamingLineBuffer_72_out0_stream_prepad[1]);
+    StreamingLineBuffer_72_pixel_10.run<831, 3>(StreamingLineBuffer_72_buffer_stream[8], StreamingLineBuffer_72_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_72_out0_stream_prepad_1," << StreamingLineBuffer_72_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -24132,7 +24131,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_72_pixel_11;
-    StreamingLineBuffer_72_pixel_11.run<832>(StreamingLineBuffer_72_buffer_stream[9], StreamingLineBuffer_72_out0_stream_prepad[0]);
+    StreamingLineBuffer_72_pixel_11.run<832, 3>(StreamingLineBuffer_72_buffer_stream[9], StreamingLineBuffer_72_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_72_out0_stream_prepad_0," << StreamingLineBuffer_72_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -24156,7 +24155,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_73_pixel_8;
-    StreamingLineBuffer_73_pixel_8.run<843>(StreamingLineBuffer_73_buffer_stream[6], StreamingLineBuffer_73_out0_stream_prepad[3], StreamingLineBuffer_73_buffer_stream[8]);
+    StreamingLineBuffer_73_pixel_8.run<843, 3>(StreamingLineBuffer_73_buffer_stream[6], StreamingLineBuffer_73_out0_stream_prepad[3], StreamingLineBuffer_73_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_73_out0_stream_prepad_3," << StreamingLineBuffer_73_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -24183,7 +24182,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_73_pixel_9;
-    StreamingLineBuffer_73_pixel_9.run<844>(StreamingLineBuffer_73_buffer_stream[7], StreamingLineBuffer_73_out0_stream_prepad[2], StreamingLineBuffer_73_buffer_stream[9]);
+    StreamingLineBuffer_73_pixel_9.run<844, 3>(StreamingLineBuffer_73_buffer_stream[7], StreamingLineBuffer_73_out0_stream_prepad[2], StreamingLineBuffer_73_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_73_out0_stream_prepad_2," << StreamingLineBuffer_73_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -24211,7 +24210,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_72_pad;
-    StreamingLineBuffer_72_pad.run<833>(StreamingLineBuffer_72_out0_stream_prepad, StreamingLineBuffer_72_out0_stream);
+    StreamingLineBuffer_72_pad.run<833, 3>(StreamingLineBuffer_72_out0_stream_prepad, StreamingLineBuffer_72_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_72_out0_stream_0," << StreamingLineBuffer_72_out0_stream[0].size() << std::endl;
     #endif
@@ -24235,7 +24234,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_73_pixel_10;
-    StreamingLineBuffer_73_pixel_10.run<845>(StreamingLineBuffer_73_buffer_stream[8], StreamingLineBuffer_73_out0_stream_prepad[1]);
+    StreamingLineBuffer_73_pixel_10.run<845, 3>(StreamingLineBuffer_73_buffer_stream[8], StreamingLineBuffer_73_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_73_out0_stream_prepad_1," << StreamingLineBuffer_73_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -24259,14 +24258,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         2  // CH_PAR
     > StreamingLineBuffer_73_pixel_11;
-    StreamingLineBuffer_73_pixel_11.run<846>(StreamingLineBuffer_73_buffer_stream[9], StreamingLineBuffer_73_out0_stream_prepad[0]);
+    StreamingLineBuffer_73_pixel_11.run<846, 3>(StreamingLineBuffer_73_buffer_stream[9], StreamingLineBuffer_73_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_73_out0_stream_prepad_0," << StreamingLineBuffer_73_out0_stream_prepad[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_69_weights[16384][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_69_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_69_weights dim=2 complete
-    ap_int<14> StreamingConv_69_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_69_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_69_biases dim=2 complete
     StreamingConv <
@@ -24297,7 +24294,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_69;
-    StreamingConv_69.run<834>(StreamingLineBuffer_72_out0_stream, StreamingConv_69_weights, StreamingConv_69_biases, StreamingConv_69_out0_stream);
+    StreamingConv_69.run<834, 3>(StreamingLineBuffer_72_out0_stream, StreamingConv_69_weights, StreamingConv_69_biases, StreamingConv_69_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_69_out0_stream_0," << StreamingConv_69_out0_stream[0].size() << std::endl;
     #endif
@@ -24325,14 +24322,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_73_pad;
-    StreamingLineBuffer_73_pad.run<847>(StreamingLineBuffer_73_out0_stream_prepad, StreamingLineBuffer_73_out0_stream);
+    StreamingLineBuffer_73_pad.run<847, 3>(StreamingLineBuffer_73_out0_stream_prepad, StreamingLineBuffer_73_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_73_out0_stream_0," << StreamingLineBuffer_73_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_70_weights[10240][2][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_70_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_70_weights dim=2 complete
-    ap_int<15> StreamingConv_70_biases[80][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_70_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_70_biases dim=2 complete
     StreamingConv <
@@ -24363,7 +24358,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_70;
-    StreamingConv_70.run<848>(StreamingLineBuffer_73_out0_stream, StreamingConv_70_weights, StreamingConv_70_biases, StreamingConv_70_out0_stream);
+    StreamingConv_70.run<848, 3>(StreamingLineBuffer_73_out0_stream, StreamingConv_70_weights, StreamingConv_70_biases, StreamingConv_70_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_70_out0_stream_0," << StreamingConv_70_out0_stream[0].size() << std::endl;
     #endif
@@ -24383,7 +24378,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_65;
-    StreamingSwish_65.run<849>(StreamingConv_69_out0_stream, StreamingSwish_65_lut, StreamingSwish_65_out0_stream);
+    StreamingSwish_65.run<849, 3>(StreamingConv_69_out0_stream, StreamingSwish_65_lut, StreamingSwish_65_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_65_out0_stream_0," << StreamingSwish_65_out0_stream[0].size() << std::endl;
     #endif
@@ -24403,7 +24398,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_66;
-    StreamingSwish_66.run<850>(StreamingConv_70_out0_stream, StreamingSwish_66_lut, StreamingSwish_66_out0_stream);
+    StreamingSwish_66.run<850, 3>(StreamingConv_70_out0_stream, StreamingSwish_66_lut, StreamingSwish_66_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_66_out0_stream_0," << StreamingSwish_66_out0_stream[0].size() << std::endl;
     #endif
@@ -24430,7 +24425,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_74_pixel_0;
-    StreamingLineBuffer_74_pixel_0.run<851>(StreamingSwish_65_out0_stream[0], StreamingLineBuffer_74_out0_stream_prepad[11], StreamingLineBuffer_74_buffer_stream[0]);
+    StreamingLineBuffer_74_pixel_0.run<851, 3>(StreamingSwish_65_out0_stream[0], StreamingLineBuffer_74_out0_stream_prepad[11], StreamingLineBuffer_74_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_74_out0_stream_prepad_11," << StreamingLineBuffer_74_out0_stream_prepad[11].size() << std::endl;
     #endif
@@ -24457,7 +24452,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_74_pixel_1;
-    StreamingLineBuffer_74_pixel_1.run<852>(StreamingSwish_65_out0_stream[1], StreamingLineBuffer_74_out0_stream_prepad[10], StreamingLineBuffer_74_buffer_stream[1]);
+    StreamingLineBuffer_74_pixel_1.run<852, 3>(StreamingSwish_65_out0_stream[1], StreamingLineBuffer_74_out0_stream_prepad[10], StreamingLineBuffer_74_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_74_out0_stream_prepad_10," << StreamingLineBuffer_74_out0_stream_prepad[10].size() << std::endl;
     #endif
@@ -24484,7 +24479,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_74_pixel_2;
-    StreamingLineBuffer_74_pixel_2.run<853>(StreamingLineBuffer_74_buffer_stream[0], StreamingLineBuffer_74_out0_stream_prepad[9], StreamingLineBuffer_74_buffer_stream[2]);
+    StreamingLineBuffer_74_pixel_2.run<853, 3>(StreamingLineBuffer_74_buffer_stream[0], StreamingLineBuffer_74_out0_stream_prepad[9], StreamingLineBuffer_74_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_74_out0_stream_prepad_9," << StreamingLineBuffer_74_out0_stream_prepad[9].size() << std::endl;
     #endif
@@ -24511,7 +24506,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_74_pixel_3;
-    StreamingLineBuffer_74_pixel_3.run<854>(StreamingLineBuffer_74_buffer_stream[1], StreamingLineBuffer_74_out0_stream_prepad[8], StreamingLineBuffer_74_buffer_stream[3]);
+    StreamingLineBuffer_74_pixel_3.run<854, 3>(StreamingLineBuffer_74_buffer_stream[1], StreamingLineBuffer_74_out0_stream_prepad[8], StreamingLineBuffer_74_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_74_out0_stream_prepad_8," << StreamingLineBuffer_74_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -24532,7 +24527,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         1  // OUT_CH_PAR
     > BandwidthAdjustDecreaseStreams_5;
-    BandwidthAdjustDecreaseStreams_5.run<865>(StreamingSwish_66_out0_stream, BandwidthAdjustDecreaseStreams_5_out0_stream);
+    BandwidthAdjustDecreaseStreams_5.run<865, 3>(StreamingSwish_66_out0_stream, BandwidthAdjustDecreaseStreams_5_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseStreams_5_out0_stream_0," << BandwidthAdjustDecreaseStreams_5_out0_stream[0].size() << std::endl;
     #endif
@@ -24556,7 +24551,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_74_pixel_4;
-    StreamingLineBuffer_74_pixel_4.run<855>(StreamingLineBuffer_74_buffer_stream[2], StreamingLineBuffer_74_out0_stream_prepad[7], StreamingLineBuffer_74_buffer_stream[4]);
+    StreamingLineBuffer_74_pixel_4.run<855, 3>(StreamingLineBuffer_74_buffer_stream[2], StreamingLineBuffer_74_out0_stream_prepad[7], StreamingLineBuffer_74_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_74_out0_stream_prepad_7," << StreamingLineBuffer_74_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -24583,7 +24578,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_74_pixel_5;
-    StreamingLineBuffer_74_pixel_5.run<856>(StreamingLineBuffer_74_buffer_stream[3], StreamingLineBuffer_74_out0_stream_prepad[6], StreamingLineBuffer_74_buffer_stream[5]);
+    StreamingLineBuffer_74_pixel_5.run<856, 3>(StreamingLineBuffer_74_buffer_stream[3], StreamingLineBuffer_74_out0_stream_prepad[6], StreamingLineBuffer_74_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_74_out0_stream_prepad_6," << StreamingLineBuffer_74_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -24610,7 +24605,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_75_pixel_0;
-    StreamingLineBuffer_75_pixel_0.run<867>(BandwidthAdjustDecreaseStreams_5_out0_stream[0], StreamingLineBuffer_75_out0_stream_prepad[8], StreamingLineBuffer_75_buffer_stream[0]);
+    StreamingLineBuffer_75_pixel_0.run<867, 3>(BandwidthAdjustDecreaseStreams_5_out0_stream[0], StreamingLineBuffer_75_out0_stream_prepad[8], StreamingLineBuffer_75_buffer_stream[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_75_out0_stream_prepad_8," << StreamingLineBuffer_75_out0_stream_prepad[8].size() << std::endl;
     #endif
@@ -24637,7 +24632,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_74_pixel_6;
-    StreamingLineBuffer_74_pixel_6.run<857>(StreamingLineBuffer_74_buffer_stream[4], StreamingLineBuffer_74_out0_stream_prepad[5], StreamingLineBuffer_74_buffer_stream[6]);
+    StreamingLineBuffer_74_pixel_6.run<857, 3>(StreamingLineBuffer_74_buffer_stream[4], StreamingLineBuffer_74_out0_stream_prepad[5], StreamingLineBuffer_74_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_74_out0_stream_prepad_5," << StreamingLineBuffer_74_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -24664,7 +24659,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_74_pixel_7;
-    StreamingLineBuffer_74_pixel_7.run<858>(StreamingLineBuffer_74_buffer_stream[5], StreamingLineBuffer_74_out0_stream_prepad[4], StreamingLineBuffer_74_buffer_stream[7]);
+    StreamingLineBuffer_74_pixel_7.run<858, 3>(StreamingLineBuffer_74_buffer_stream[5], StreamingLineBuffer_74_out0_stream_prepad[4], StreamingLineBuffer_74_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_74_out0_stream_prepad_4," << StreamingLineBuffer_74_out0_stream_prepad[4].size() << std::endl;
     #endif
@@ -24691,7 +24686,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_75_pixel_1;
-    StreamingLineBuffer_75_pixel_1.run<868>(StreamingLineBuffer_75_buffer_stream[0], StreamingLineBuffer_75_out0_stream_prepad[7], StreamingLineBuffer_75_buffer_stream[1]);
+    StreamingLineBuffer_75_pixel_1.run<868, 3>(StreamingLineBuffer_75_buffer_stream[0], StreamingLineBuffer_75_out0_stream_prepad[7], StreamingLineBuffer_75_buffer_stream[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_75_out0_stream_prepad_7," << StreamingLineBuffer_75_out0_stream_prepad[7].size() << std::endl;
     #endif
@@ -24718,7 +24713,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_74_pixel_8;
-    StreamingLineBuffer_74_pixel_8.run<859>(StreamingLineBuffer_74_buffer_stream[6], StreamingLineBuffer_74_out0_stream_prepad[3], StreamingLineBuffer_74_buffer_stream[8]);
+    StreamingLineBuffer_74_pixel_8.run<859, 3>(StreamingLineBuffer_74_buffer_stream[6], StreamingLineBuffer_74_out0_stream_prepad[3], StreamingLineBuffer_74_buffer_stream[8]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_74_out0_stream_prepad_3," << StreamingLineBuffer_74_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -24745,7 +24740,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_74_pixel_9;
-    StreamingLineBuffer_74_pixel_9.run<860>(StreamingLineBuffer_74_buffer_stream[7], StreamingLineBuffer_74_out0_stream_prepad[2], StreamingLineBuffer_74_buffer_stream[9]);
+    StreamingLineBuffer_74_pixel_9.run<860, 3>(StreamingLineBuffer_74_buffer_stream[7], StreamingLineBuffer_74_out0_stream_prepad[2], StreamingLineBuffer_74_buffer_stream[9]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_74_out0_stream_prepad_2," << StreamingLineBuffer_74_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -24772,7 +24767,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_75_pixel_2;
-    StreamingLineBuffer_75_pixel_2.run<869>(StreamingLineBuffer_75_buffer_stream[1], StreamingLineBuffer_75_out0_stream_prepad[6], StreamingLineBuffer_75_buffer_stream[2]);
+    StreamingLineBuffer_75_pixel_2.run<869, 3>(StreamingLineBuffer_75_buffer_stream[1], StreamingLineBuffer_75_out0_stream_prepad[6], StreamingLineBuffer_75_buffer_stream[2]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_75_out0_stream_prepad_6," << StreamingLineBuffer_75_out0_stream_prepad[6].size() << std::endl;
     #endif
@@ -24799,7 +24794,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_74_pixel_10;
-    StreamingLineBuffer_74_pixel_10.run<861>(StreamingLineBuffer_74_buffer_stream[8], StreamingLineBuffer_74_out0_stream_prepad[1]);
+    StreamingLineBuffer_74_pixel_10.run<861, 3>(StreamingLineBuffer_74_buffer_stream[8], StreamingLineBuffer_74_out0_stream_prepad[1]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_74_out0_stream_prepad_1," << StreamingLineBuffer_74_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -24823,7 +24818,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         2,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_74_pixel_11;
-    StreamingLineBuffer_74_pixel_11.run<862>(StreamingLineBuffer_74_buffer_stream[9], StreamingLineBuffer_74_out0_stream_prepad[0]);
+    StreamingLineBuffer_74_pixel_11.run<862, 3>(StreamingLineBuffer_74_buffer_stream[9], StreamingLineBuffer_74_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_74_out0_stream_prepad_0," << StreamingLineBuffer_74_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -24847,7 +24842,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_75_pixel_3;
-    StreamingLineBuffer_75_pixel_3.run<870>(StreamingLineBuffer_75_buffer_stream[2], StreamingLineBuffer_75_out0_stream_prepad[5], StreamingLineBuffer_75_buffer_stream[3]);
+    StreamingLineBuffer_75_pixel_3.run<870, 3>(StreamingLineBuffer_75_buffer_stream[2], StreamingLineBuffer_75_out0_stream_prepad[5], StreamingLineBuffer_75_buffer_stream[3]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_75_out0_stream_prepad_5," << StreamingLineBuffer_75_out0_stream_prepad[5].size() << std::endl;
     #endif
@@ -24875,7 +24870,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_74_pad;
-    StreamingLineBuffer_74_pad.run<863>(StreamingLineBuffer_74_out0_stream_prepad, StreamingLineBuffer_74_out0_stream);
+    StreamingLineBuffer_74_pad.run<863, 3>(StreamingLineBuffer_74_out0_stream_prepad, StreamingLineBuffer_74_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_74_out0_stream_0," << StreamingLineBuffer_74_out0_stream[0].size() << std::endl;
     #endif
@@ -24899,17 +24894,15 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_75_pixel_4;
-    StreamingLineBuffer_75_pixel_4.run<871>(StreamingLineBuffer_75_buffer_stream[3], StreamingLineBuffer_75_out0_stream_prepad[4], StreamingLineBuffer_75_buffer_stream[4]);
+    StreamingLineBuffer_75_pixel_4.run<871, 3>(StreamingLineBuffer_75_buffer_stream[3], StreamingLineBuffer_75_out0_stream_prepad[4], StreamingLineBuffer_75_buffer_stream[4]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_75_out0_stream_prepad_4," << StreamingLineBuffer_75_out0_stream_prepad[4].size() << std::endl;
     #endif
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_75_buffer_stream_4," << StreamingLineBuffer_75_buffer_stream[4].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_71_weights[4096][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_71_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_71_weights dim=2 complete
-    ap_int<13> StreamingConv_71_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_71_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_71_biases dim=2 complete
     StreamingConv <
@@ -24940,7 +24933,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         2  // W_PAR
     > StreamingConv_71;
-    StreamingConv_71.run<864>(StreamingLineBuffer_74_out0_stream, StreamingConv_71_weights, StreamingConv_71_biases, StreamingConv_71_out0_stream);
+    StreamingConv_71.run<864, 3>(StreamingLineBuffer_74_out0_stream, StreamingConv_71_weights, StreamingConv_71_biases, StreamingConv_71_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_71_out0_stream_0," << StreamingConv_71_out0_stream[0].size() << std::endl;
     #endif
@@ -24967,7 +24960,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_75_pixel_5;
-    StreamingLineBuffer_75_pixel_5.run<872>(StreamingLineBuffer_75_buffer_stream[4], StreamingLineBuffer_75_out0_stream_prepad[3], StreamingLineBuffer_75_buffer_stream[5]);
+    StreamingLineBuffer_75_pixel_5.run<872, 3>(StreamingLineBuffer_75_buffer_stream[4], StreamingLineBuffer_75_out0_stream_prepad[3], StreamingLineBuffer_75_buffer_stream[5]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_75_out0_stream_prepad_3," << StreamingLineBuffer_75_out0_stream_prepad[3].size() << std::endl;
     #endif
@@ -24987,7 +24980,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         2  // W_PAR
     > StreamingSwish_67;
-    StreamingSwish_67.run<866>(StreamingConv_71_out0_stream, StreamingSwish_67_lut, StreamingSwish_67_out0_stream);
+    StreamingSwish_67.run<866, 3>(StreamingConv_71_out0_stream, StreamingSwish_67_lut, StreamingSwish_67_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_67_out0_stream_0," << StreamingSwish_67_out0_stream[0].size() << std::endl;
     #endif
@@ -25014,7 +25007,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_75_pixel_6;
-    StreamingLineBuffer_75_pixel_6.run<873>(StreamingLineBuffer_75_buffer_stream[5], StreamingLineBuffer_75_out0_stream_prepad[2], StreamingLineBuffer_75_buffer_stream[6]);
+    StreamingLineBuffer_75_pixel_6.run<873, 3>(StreamingLineBuffer_75_buffer_stream[5], StreamingLineBuffer_75_out0_stream_prepad[2], StreamingLineBuffer_75_buffer_stream[6]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_75_out0_stream_prepad_2," << StreamingLineBuffer_75_out0_stream_prepad[2].size() << std::endl;
     #endif
@@ -25041,7 +25034,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_75_pixel_7;
-    StreamingLineBuffer_75_pixel_7.run<874>(StreamingLineBuffer_75_buffer_stream[6], StreamingLineBuffer_75_out0_stream_prepad[1], StreamingLineBuffer_75_buffer_stream[7]);
+    StreamingLineBuffer_75_pixel_7.run<874, 3>(StreamingLineBuffer_75_buffer_stream[6], StreamingLineBuffer_75_out0_stream_prepad[1], StreamingLineBuffer_75_buffer_stream[7]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_75_out0_stream_prepad_1," << StreamingLineBuffer_75_out0_stream_prepad[1].size() << std::endl;
     #endif
@@ -25062,7 +25055,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // IN_CH_PAR
         1  // OUT_CH_PAR
     > BandwidthAdjustDecreaseStreams_6;
-    BandwidthAdjustDecreaseStreams_6.run<878>(StreamingSwish_67_out0_stream, BandwidthAdjustDecreaseStreams_6_out0_stream);
+    BandwidthAdjustDecreaseStreams_6.run<878, 3>(StreamingSwish_67_out0_stream, BandwidthAdjustDecreaseStreams_6_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "BandwidthAdjustDecreaseStreams_6_out0_stream_0," << BandwidthAdjustDecreaseStreams_6_out0_stream[0].size() << std::endl;
     #endif
@@ -25086,7 +25079,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_75_pixel_8;
-    StreamingLineBuffer_75_pixel_8.run<875>(StreamingLineBuffer_75_buffer_stream[7], StreamingLineBuffer_75_out0_stream_prepad[0]);
+    StreamingLineBuffer_75_pixel_8.run<875, 3>(StreamingLineBuffer_75_buffer_stream[7], StreamingLineBuffer_75_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_75_out0_stream_prepad_0," << StreamingLineBuffer_75_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -25110,7 +25103,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_76_pixel_0;
-    StreamingLineBuffer_76_pixel_0.run<880>(BandwidthAdjustDecreaseStreams_6_out0_stream[0], StreamingLineBuffer_76_out0_stream_prepad[0]);
+    StreamingLineBuffer_76_pixel_0.run<880, 3>(BandwidthAdjustDecreaseStreams_6_out0_stream[0], StreamingLineBuffer_76_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_76_out0_stream_prepad_0," << StreamingLineBuffer_76_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -25135,7 +25128,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_75_pad;
-    StreamingLineBuffer_75_pad.run<876>(StreamingLineBuffer_75_out0_stream_prepad, StreamingLineBuffer_75_out0_stream);
+    StreamingLineBuffer_75_pad.run<876, 3>(StreamingLineBuffer_75_out0_stream_prepad, StreamingLineBuffer_75_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_75_out0_stream_0," << StreamingLineBuffer_75_out0_stream[0].size() << std::endl;
     #endif
@@ -25160,14 +25153,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_76_pad;
-    StreamingLineBuffer_76_pad.run<881>(StreamingLineBuffer_76_out0_stream_prepad, StreamingLineBuffer_76_out0_stream);
+    StreamingLineBuffer_76_pad.run<881, 3>(StreamingLineBuffer_76_out0_stream_prepad, StreamingLineBuffer_76_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_76_out0_stream_0," << StreamingLineBuffer_76_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_72_weights[6400][1][9];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_72_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_72_weights dim=2 complete
-    ap_int<13> StreamingConv_72_biases[80][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_72_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_72_biases dim=2 complete
     StreamingConv <
@@ -25198,14 +25189,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         1  // W_PAR
     > StreamingConv_72;
-    StreamingConv_72.run<877>(StreamingLineBuffer_75_out0_stream, StreamingConv_72_weights, StreamingConv_72_biases, StreamingConv_72_out0_stream);
+    StreamingConv_72.run<877, 3>(StreamingLineBuffer_75_out0_stream, StreamingConv_72_weights, StreamingConv_72_biases, StreamingConv_72_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_72_out0_stream_0," << StreamingConv_72_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_73_weights[4096][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_73_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_73_weights dim=2 complete
-    ap_int<13> StreamingConv_73_biases[64][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_73_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_73_biases dim=2 complete
     StreamingConv <
@@ -25236,7 +25225,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         1  // W_PAR
     > StreamingConv_73;
-    StreamingConv_73.run<882>(StreamingLineBuffer_76_out0_stream, StreamingConv_73_weights, StreamingConv_73_biases, StreamingConv_73_out0_stream);
+    StreamingConv_73.run<882, 3>(StreamingLineBuffer_76_out0_stream, StreamingConv_73_weights, StreamingConv_73_biases, StreamingConv_73_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_73_out0_stream_0," << StreamingConv_73_out0_stream[0].size() << std::endl;
     #endif
@@ -25253,7 +25242,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         1  // W_PAR
     > StreamingSwish_68;
-    StreamingSwish_68.run<879>(StreamingConv_72_out0_stream, StreamingSwish_68_lut, StreamingSwish_68_out0_stream);
+    StreamingSwish_68.run<879, 3>(StreamingConv_72_out0_stream, StreamingSwish_68_lut, StreamingSwish_68_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingSwish_68_out0_stream_0," << StreamingSwish_68_out0_stream[0].size() << std::endl;
     #endif
@@ -25277,7 +25266,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingLineBuffer_77_pixel_0;
-    StreamingLineBuffer_77_pixel_0.run<883>(StreamingSwish_68_out0_stream[0], StreamingLineBuffer_77_out0_stream_prepad[0]);
+    StreamingLineBuffer_77_pixel_0.run<883, 3>(StreamingSwish_68_out0_stream[0], StreamingLineBuffer_77_out0_stream_prepad[0]);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_77_out0_stream_prepad_0," << StreamingLineBuffer_77_out0_stream_prepad[0].size() << std::endl;
     #endif
@@ -25302,14 +25291,12 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // CH_PAR
         0  // PAD_VALUE
     > StreamingLineBuffer_77_pad;
-    StreamingLineBuffer_77_pad.run<884>(StreamingLineBuffer_77_out0_stream_prepad, StreamingLineBuffer_77_out0_stream);
+    StreamingLineBuffer_77_pad.run<884, 3>(StreamingLineBuffer_77_out0_stream_prepad, StreamingLineBuffer_77_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingLineBuffer_77_out0_stream_0," << StreamingLineBuffer_77_out0_stream[0].size() << std::endl;
     #endif
-    ap_int<8> StreamingConv_74_weights[6400][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_74_weights dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_74_weights dim=2 complete
-    ap_int<15> StreamingConv_74_biases[80][1][1];
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_74_biases dim=3 complete
     #pragma HLS ARRAY_RESHAPE variable=StreamingConv_74_biases dim=2 complete
     StreamingConv <
@@ -25340,7 +25327,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // OUT_CH_PAR
         1  // W_PAR
     > StreamingConv_74;
-    StreamingConv_74.run<885>(StreamingLineBuffer_77_out0_stream, StreamingConv_74_weights, StreamingConv_74_biases, StreamingConv_74_out0_stream);
+    StreamingConv_74.run<885, 3>(StreamingLineBuffer_77_out0_stream, StreamingConv_74_weights, StreamingConv_74_biases, StreamingConv_74_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConv_74_out0_stream_0," << StreamingConv_74_out0_stream[0].size() << std::endl;
     #endif
@@ -25357,7 +25344,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingConcat_18;
-    StreamingConcat_18.run<886>(StreamingConv_73_out0_stream, StreamingConv_74_out0_stream, StreamingConcat_18_out0_stream);
+    StreamingConcat_18.run<886, 3>(StreamingConv_73_out0_stream, StreamingConv_74_out0_stream, StreamingConcat_18_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_18_out0_stream_0," << StreamingConcat_18_out0_stream[0].size() << std::endl;
     #endif
@@ -25373,7 +25360,7 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingReshape_2;
-    StreamingReshape_2.run<887>(StreamingConcat_18_out0_stream, StreamingReshape_2_out0_stream);
+    StreamingReshape_2.run<887, 3>(StreamingConcat_18_out0_stream, StreamingReshape_2_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingReshape_2_out0_stream_0," << StreamingReshape_2_out0_stream[0].size() << std::endl;
     #endif
@@ -25390,23 +25377,9 @@ void yolov5nu(hls::stream<ap_axiu<128, 0, 0, 0>>& global_in, hls::stream<ap_axiu
         1,  // W_PAR
         1  // CH_PAR
     > StreamingConcat_19;
-    StreamingConcat_19.run<888>(StreamingConcat_16_out0_stream, StreamingReshape_2_out0_stream, StreamingConcat_19_out0_stream);
+    StreamingConcat_19.run<888, 3>(StreamingConcat_16_out0_stream, StreamingReshape_2_out0_stream, StreamingConcat_19_out0_stream);
     #ifndef __SYNTHESIS__
     std::cout << "StreamingConcat_19_out0_stream_0," << StreamingConcat_19_out0_stream[0].size() << std::endl;
     #endif
-    StreamToNHWC <
-        std::array<ap_int<8>, 1>,  // TInputStruct
-        ap_int<8>,  // TInput
-        ap_axiu<128, 0, 0, 0>,  // TOutputStruct
-        ap_uint<128>,  // TOutput
-        DequantQuantEqual<ap_int<8>>,  // Quantizer
-        1209600,  // ITER
-        16,  // DATA_PER_WORD
-        8400,  // HEIGHT
-        1,  // WIDTH
-        144,  // CH
-        1,  // IN_W_PAR
-        1  // IN_CH_PAR
-    > StreamToNHWC_0;
-    StreamToNHWC_0.run<889>(StreamingConcat_19_out0_stream, global_out);
+    s2mm<ap_int<8>, 1, 1, 1209600, 3>(StreamingConcat_19_out0_stream, out_data);
 }

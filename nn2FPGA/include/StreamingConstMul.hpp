@@ -46,15 +46,17 @@ public:
 public:
   StreamingConstMul() = default;
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWordA> i_dataA[W_PAR],
            const TInputB constant_input,
            hls::stream<TOutputWord> o_data[W_PAR]) {
-  STREAMINGADD_RUN_LOOP:
-    for (size_t i = 0; i < IN_HEIGHT * IN_WIDTH * IN_CH / (CH_PAR * W_PAR);
-         i++) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+    STREAMINGADD_RUN_LOOP:
+      for (size_t i = 0; i < IN_HEIGHT * IN_WIDTH * IN_CH / (CH_PAR * W_PAR);
+           i++) {
 #pragma HLS PIPELINE II = 1
-      StreamingConstMul::pipeline_body(i_dataA, constant_input, o_data);
+        StreamingConstMul::pipeline_body(i_dataA, constant_input, o_data);
+      }
     }
   }
 

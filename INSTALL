@@ -4,7 +4,27 @@
 
 Place the artifact on a Linux machine with AMD Vitis HLS 2023.2 installed.
 
-## 2. Check the Environment
+If you plan to reproduce the Table II resource section, ensure that Vivado 2023.2
+and a valid ZCU102 license are also installed.
+
+An optional Docker environment is provided under
+`artifact/docker/ubuntu22-vitis/` if you prefer to run the artifact inside a
+container with host-mounted Xilinx tools.
+
+## 2. Before Starting, Set Up FIFOAdvisor
+
+Before running the artifact workflows, initialize the FIFOAdvisor environment
+from the repository root:
+
+```bash
+source artifact/fifoadvisor/setup_env.sh
+```
+
+This script creates the required environment and installs FIFOAdvisor
+automatically. It also installs the LightningSim package declared in
+`artifact/fifoadvisor/environment.yml`.
+
+## 3. Check the Environment
 
 From the repository root, run:
 
@@ -14,24 +34,6 @@ artifact/check_environment.sh
 
 The script checks for the expected repository layout and reports whether
 `vitis_hls` is available on `PATH`.
-
-## 3. Run an STE Model
-
-Run the STE model for a benchmark, for example:
-
-```bash
-artifact/run_ste.sh ResNet8
-```
-
-Valid benchmark names are:
-
-- `ResNet8`
-- `ResNet20`
-- `MobileNetV2`
-- `YOLOv5nu`
-- `YOLOv10n`
-
-Each run produces `fifo_depth.json` in the corresponding `STE/` directory.
 
 ## 4. Reproduce Table I
 
@@ -46,29 +48,65 @@ artifact/table1/run_table1.py
 To run one benchmark:
 
 ```bash
-artifact/table1/run_table1.py ResNet8
+artifact/table1/run_table1.py --benchmark ResNet8
 ```
 
 MobileNetV2 and the YOLO benchmarks can take days to complete in HLS/cosim,
 depending on the machine and Vitis installation.
 
-## 5. Expected Results
+## 5. Reproduce Table II
 
-The expected proposed-method FIFO memory sizes from Table II are summarized in:
-
-```bash
-artifact/expected_ste_results.md
-```
-
-The coverage of each paper table is documented in:
+Run the proposed-method FIFO size and timing flow for all benchmarks:
 
 ```bash
-artifact/table_coverage.md
+artifact/table2/run_table2_ste.py
 ```
 
-## 6. Optional HLS C Simulation
+To run one benchmark:
 
-Each benchmark also contains a `script.tcl` file for Vitis HLS. The default flow
-keeps `csim_design`, `csynth_design`, `cosim_design`, and `export_design`
-commented. Reviewers may uncomment the desired commands depending on the part of
-the HLS flow they want to run.
+```bash
+artifact/table2/run_table2_ste.py --benchmark ResNet8
+```
+
+Run the FIFOAdvisor comparison flow for all benchmarks:
+
+```bash
+artifact/table2/run_table2_fifoadvisor.py
+```
+
+To run one benchmark:
+
+```bash
+artifact/table2/run_table2_fifoadvisor.py --benchmark ResNet8
+```
+
+Run the Table II resource flow for all benchmarks:
+
+```bash
+artifact/table2/run_table2_resources.py
+```
+
+To run one benchmark:
+
+```bash
+artifact/table2/run_table2_resources.py --benchmark ResNet8
+```
+
+The Table II resource section additionally requires Vivado 2023.2 and a valid
+ZCU102 license.
+
+## 6. Reproduce Table III
+
+Run the Table III flow for all benchmarks:
+
+```bash
+artifact/table3/run_table3.py
+```
+
+To run one benchmark:
+
+```bash
+artifact/table3/run_table3.py --benchmark ResNet8
+```
+
+Outputs are written under `artifact/table3/results/`.

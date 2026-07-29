@@ -132,7 +132,7 @@ public : StreamingMemory() = default;
     st.init(pipeline_depth);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_shift_data[1],
            hls::stream<TWindow> o_data[1],
            hls::stream<TInputWord> o_shift_data[1]) {
@@ -155,11 +155,13 @@ public : StreamingMemory() = default;
     }
     initialized_flag = true;
 
-    for (size_t i_hw = 0; i_hw < TIMES; i_hw++) {
-    STREAMINGMEMORY_RUN_LOOP:
-      for (size_t i_ch_groups = 0; i_ch_groups < CH_GROUPS; i_ch_groups++) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_hw = 0; i_hw < TIMES; i_hw++) {
+      STREAMINGMEMORY_RUN_LOOP:
+        for (size_t i_ch_groups = 0; i_ch_groups < CH_GROUPS; i_ch_groups++) {
 #pragma HLS pipeline II = 1
-        StreamingMemory::pipeline_body(o_data, mem[i_ch_groups]);
+          StreamingMemory::pipeline_body(o_data, mem[i_ch_groups]);
+        }
       }
     }
   }
@@ -172,7 +174,7 @@ public : StreamingMemory() = default;
     return step(o_data);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_shift_data[1],
            hls::stream<TWindow> o_data[1]) {
     static TOutput mem[CH_GROUPS][WORD_PAR][ARRAY_PAR];
@@ -186,11 +188,13 @@ public : StreamingMemory() = default;
     }
     initialized_flag = true;
 
-    for (size_t i_hw = 0; i_hw < TIMES; i_hw++) {
-    STREAMINGMEMORY_RUN_LOOP:
-      for (size_t i_ch_groups = 0; i_ch_groups < CH_GROUPS; i_ch_groups++) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_hw = 0; i_hw < TIMES; i_hw++) {
+      STREAMINGMEMORY_RUN_LOOP:
+        for (size_t i_ch_groups = 0; i_ch_groups < CH_GROUPS; i_ch_groups++) {
 #pragma HLS pipeline II = 1
-        StreamingMemory::pipeline_body(o_data, mem[i_ch_groups]);
+          StreamingMemory::pipeline_body(o_data, mem[i_ch_groups]);
+        }
       }
     }
   }
@@ -201,17 +205,19 @@ public : StreamingMemory() = default;
     return step(o_data);
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TWindow> o_data[1]) {
     static TOutput mem[CH_GROUPS][WORD_PAR][ARRAY_PAR];
 #pragma HLS array_reshape variable = mem dim = 3 complete
 #pragma HLS array_reshape variable = mem dim = 2 complete
 
-    for (size_t i_hw = 0; i_hw < TIMES; i_hw++) {
-    STREAMINGMEMORY_RUN_LOOP:
-      for (size_t i_ch_groups = 0; i_ch_groups < CH_GROUPS; i_ch_groups++) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_hw = 0; i_hw < TIMES; i_hw++) {
+      STREAMINGMEMORY_RUN_LOOP:
+        for (size_t i_ch_groups = 0; i_ch_groups < CH_GROUPS; i_ch_groups++) {
 #pragma HLS pipeline II = 1
-        StreamingMemory::pipeline_body(o_data, mem[i_ch_groups]);
+          StreamingMemory::pipeline_body(o_data, mem[i_ch_groups]);
+        }
       }
     }
   }

@@ -173,16 +173,18 @@ public:
     return st.actor_status;
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_data[1],
            hls::stream<TOutputWord> o_data_q[2],
            hls::stream<TOutputWord> o_data_k[2],
            hls::stream<TOutputWord> o_data_v[2]) {
-    for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH; i_hw++) {
-    STREAMINGSPLITCHANNELS_RUN_LOOP:
-      for (size_t i_ch = 0; i_ch < IN_CH; i_ch += REDUCE_PAR) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH; i_hw++) {
+      STREAMINGSPLITCHANNELS_RUN_LOOP:
+        for (size_t i_ch = 0; i_ch < IN_CH; i_ch += REDUCE_PAR) {
 #pragma HLS PIPELINE II = 1
-        pipeline_body(i_data, o_data_q, o_data_k, o_data_v, i_ch);
+          pipeline_body(i_data, o_data_q, o_data_k, o_data_v, i_ch);
+        }
       }
     }
   }
@@ -326,14 +328,16 @@ public:
     return st.actor_status;
   }
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> i_data[2],
            hls::stream<TOutputWord> o_data[1]) {
-    for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH; i_hw++) {
-    STREAMINGSPLITCHANNELS_RUN_LOOP:
-      for (size_t i_ch = 0; i_ch < IN_CH; i_ch += REDUCE_PAR) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      for (size_t i_hw = 0; i_hw < IN_HEIGHT * IN_WIDTH; i_hw++) {
+      STREAMINGSPLITCHANNELS_RUN_LOOP:
+        for (size_t i_ch = 0; i_ch < IN_CH; i_ch += REDUCE_PAR) {
 #pragma HLS PIPELINE II = 1
-        pipeline_body(i_data, o_data, i_ch);
+          pipeline_body(i_data, o_data, i_ch);
+        }
       }
     }
   }

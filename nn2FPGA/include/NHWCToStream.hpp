@@ -71,26 +71,28 @@ public:
 
   NHWCToStream() = default;
 
-  template <size_t HLS_TAG>
+  template <size_t HLS_TAG, size_t BATCH = 1>
   void run(hls::stream<TInputWord> &input_data_stream,
            hls::stream<TOutputWord> output_data_stream[OUT_W_PAR]) {
-    TOutput circular_buffer[DATA_PER_WORD * 2];
-    char head = 0; // Head index for circular buffer
-    char tail = 0; // Tail index for circular buffer
-    char size = 0; // Current size of the circular buffer
-    bool static only_once_flag = false;
-    if (!only_once_flag) {
+    for (size_t batch = 0; batch < BATCH; batch++) {
+      TOutput circular_buffer[DATA_PER_WORD * 2];
+      char head = 0; // Head index for circular buffer
+      char tail = 0; // Tail index for circular buffer
+      char size = 0; // Current size of the circular buffer
+      bool static only_once_flag = false;
+      if (!only_once_flag) {
 
-      // Loop through the word packets of the output tensor.
-    NHWC_TO_STREAM_MAINLOOP:
-      for (size_t i_output_word = 0; i_output_word < ITER; i_output_word++) {
+        // Loop through the word packets of the output tensor.
+      NHWC_TO_STREAM_MAINLOOP:
+        for (size_t i_output_word = 0; i_output_word < ITER; i_output_word++) {
 #pragma HLS pipeline II = 1
-        NHWCToStream::pipeline_body(input_data_stream, output_data_stream,
-                                    circular_buffer, head, size, tail);
+          NHWCToStream::pipeline_body(input_data_stream, output_data_stream,
+                                      circular_buffer, head, size, tail);
+        }
       }
+      if (ONLY_ONCE)
+        only_once_flag = true;
     }
-    if (ONLY_ONCE)
-      only_once_flag = true;
   }
 
   struct StepState {

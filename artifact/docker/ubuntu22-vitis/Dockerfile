@@ -42,6 +42,8 @@ ENV LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8 \
     LANGUAGE=en_US:en
 
+ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libc.so.6:/usr/lib/x86_64-linux-gnu/libudev.so.1
+
 RUN groupadd --gid ${HOST_GID} ${USERNAME} \
     && useradd --uid ${HOST_UID} --gid ${HOST_GID} --create-home --shell /bin/bash ${USERNAME} \
     && mkdir -p /workspace \
