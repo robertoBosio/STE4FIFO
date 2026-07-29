@@ -31,6 +31,7 @@ if [[ ! -f "$ste_dir/run_ste.tcl" ]]; then
 fi
 
 printf 'Running STE for %s...\n' "$benchmark"
+rm -f "$ste_dir/fifo_depth.json"
 (
   cd "$ste_dir"
   vitis_hls -f run_ste.tcl

@@ -93,6 +93,7 @@ def write_csv(payload: dict) -> Path:
             fieldnames=[
                 "benchmark",
                 "naive_size_bytes",
+                "technique",
                 "technique_label",
                 "final_time_seconds",
                 "final_size_bytes",
