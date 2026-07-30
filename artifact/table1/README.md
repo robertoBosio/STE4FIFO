@@ -16,7 +16,7 @@ artifact/table1/run_table1.py
 To run one benchmark:
 
 ```bash
-artifact/table1/run_table1.py ResNet8
+artifact/table1/run_table1.py --benchmark ResNet8
 ```
 
 MobileNetV2 and the YOLO benchmarks can take days to complete in HLS/cosim,
